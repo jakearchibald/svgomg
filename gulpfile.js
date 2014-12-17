@@ -103,7 +103,8 @@ function bundle(bundler, outputFile) {
 }
 
 var bundlers = {
-  'page.js': createBundler('./src/js/page/index.js')
+  'page.js': createBundler('./src/js/page/index.js'),
+  'svgo-worker.js': createBundler('./src/js/svgo-worker/index.js')
 };
 
 gulp.task('copy:js', function () {
