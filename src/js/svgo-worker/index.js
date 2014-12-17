@@ -66,6 +66,7 @@ self.onmessage = function(event) {
   svg2js(event.data.data, function(svgjs) {
     if (svgjs.error) {
       self.postMessage({
+        _id: event.data._id,
         error: svgjs.error
       });
       return;
@@ -76,6 +77,7 @@ self.onmessage = function(event) {
     var svg = js2svg(svgjs);
 
     self.postMessage({
+      _id: event.data._id,
       result: svg
     });
   });
