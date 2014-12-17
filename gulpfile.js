@@ -73,10 +73,19 @@ gulp.task('copy:misc', function () {
 });
 
 function createBundler(src) {
-  var b = browserify({ cache: {}, packageCache: {}, fullPaths: true });
-  b.transform({
-    global: true
-  }, 'uglifyify');
+  var b;
+  if (plugins.util.env.production) {
+    b = browserify();
+    b.transform({
+      global: true
+    }, 'uglifyify');
+  }
+  else {
+    b = browserify({
+      cache: {}, packageCache: {}, fullPaths: true,
+      debug: true
+    });
+  }
   b.add(src);
   return b;
 }

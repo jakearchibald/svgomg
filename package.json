@@ -21,8 +21,8 @@
   },
   "private": true,
   "scripts": {
-    "build": "gulp build",
+    "build": "gulp build --production",
     "serve": "gulp serve",
-    "test": "gulp build"
+    "test": "gulp build --production"
   }
 }
