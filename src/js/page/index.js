@@ -5,17 +5,32 @@ var failString = '<not-svg></ok>';
 
 var svgo = require('./svgo');
 var gzip = require('./gzip');
+var svgOuput = new (require('./ui/svg-output'));
+var codeOutput = new (require('./ui/code-output'));
+var downloadButton = new (require('./ui/download-button'));
+var results = new (require('./ui/results'));
 
-svgo.process(testSvg).then(function(result) {
-  console.log(testSvg.length, result.data.length);
-  return gzip.compress(result.data);
-}).then(function(result) {
-  console.log(result.byteLength);
-  var a = document.createElement('a');
-  a.textContent = 'download';
-  a.download = 'output.svgz';
-  a.href = URL.createObjectURL(new Blob([result], {type: "image/svg+xml"}));
-  document.body.appendChild(a);
-}).catch(function(e) {
-  console.log(e);
-});
+document.body.appendChild(results.container);
+document.body.appendChild(downloadButton.container);
+document.body.appendChild(svgOuput.container);
+document.body.appendChild(codeOutput.container);
+
+function compress(svgStr) {
+  var originalSize = gzip.compress(svgStr);
+
+  svgo.process(svgStr).then(function(result) {
+    svgOuput.setSvg(result.data);
+    codeOutput.setCode(result.data);
+    return gzip.compress(result.data);
+  }).then(function(result) {
+    originalSize.then(function(originalSize) {
+      results.update(originalSize.byteLength, result.byteLength);
+    });
+    downloadButton.setDownload("output.svgz", result);
+  }).catch(function(e) {
+    console.log(e);
+    throw e;
+  });
+}
+
+compress(testSvg);
