@@ -17,7 +17,9 @@
     "merge-stream": "^0.1.6",
     "svgo": "~0.5.0",
     "pako": "~0.2.5",
-    "uglifyify": "^2.6.0"
+    "uglifyify": "^2.6.0",
+    "6to5ify": "^2.0.0",
+    "6to5": "^1.15.0"
   },
   "private": true,
   "scripts": {

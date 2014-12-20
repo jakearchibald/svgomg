@@ -9,6 +9,7 @@ var buffer = require('vinyl-buffer');
 var watchify = require('watchify');
 var browserify = require('browserify');
 var uglifyify = require('uglifyify');
+var to5ify = require("6to5ify");
 var runSequence = require('run-sequence');  // Temporary solution until Gulp 4
                                             // https://github.com/gulpjs/gulp/issues/355
 
@@ -74,11 +75,9 @@ gulp.task('copy:misc', function () {
 
 function createBundler(src) {
   var b;
+
   if (plugins.util.env.production) {
     b = browserify();
-    b.transform({
-      global: true
-    }, 'uglifyify');
   }
   else {
     b = browserify({
@@ -86,6 +85,17 @@ function createBundler(src) {
       debug: true
     });
   }
+
+  b.transform(to5ify.configure({
+    experimental: true
+  }));
+
+  if (plugins.util.env.production) {
+    b.transform({
+      global: true
+    }, 'uglifyify');
+  }
+
   b.add(src);
   return b;
 }

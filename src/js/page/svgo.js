@@ -1,15 +1,15 @@
-var WorkerMessenger = require('./worker-messenger');
+"use strict";
 
-function Svgo() {
-  WorkerMessenger.call(this, 'js/svgo-worker.js');
+class Svgo extends require('./worker-messenger') {
+  constructor() {
+    super('js/svgo-worker.js');
+  }
+
+  process(svgData) {
+    return this._requestResponse({
+      data: svgData
+    });
+  }
 }
-
-var SvgoProto = Svgo.prototype = Object.create(WorkerMessenger.prototype);
-
-SvgoProto.process = function(svgData) {
-  return this._requestResponse({
-    data: svgData
-  });
-};
 
 module.exports = new Svgo();

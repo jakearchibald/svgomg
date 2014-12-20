@@ -14,34 +14,34 @@ function humanSize(bytes) { // TODO: I'm sure there's a better version of this
   }
 }
 
-function Results() {
-  this.container = utils.strToEl(
-    '<div class="results">' +
-      '<span class="size"></span>' +
-      ' <span class="diff"></span>' +
-    '</div>' +
-  '');
-  this._sizeEl = this.container.querySelector('.size');
-  this._diffEl = this.container.querySelector('.diff');
+class Results {
+  constructor() {
+    this.container = utils.strToEl(`
+      <div class="results">
+        <span class="size"></span>
+        <span class="diff"></span>
+      </div>
+    `);
+    this._sizeEl = this.container.querySelector('.size');
+    this._diffEl = this.container.querySelector('.diff');
+  }
+
+  update(originalSize, finalSize) {
+    this._sizeEl.textContent = humanSize(finalSize);
+
+    if (!finalSize) {
+      this._diffEl.textContent = '';
+    }
+    else if (finalSize == originalSize) {
+      this._diffEl.textContent = 'no change';
+    }
+    else if (finalSize > originalSize) {
+      this._diffEl.textContent = round(finalSize / originalSize * 100 - 100, 2) + '% increase';
+    }
+    else {
+      this._diffEl.textContent = round(100 - finalSize / originalSize * 100, 2) + '% saving';
+    }
+  }
 }
-
-var ResultsProto = Results.prototype;
-
-ResultsProto.update = function(originalSize, finalSize) {
-  this._sizeEl.textContent = humanSize(finalSize);
-
-  if (!finalSize) {
-    this._diffEl.textContent = '';
-  }
-  else if (finalSize == originalSize) {
-    this._diffEl.textContent = 'no change';
-  }
-  else if (finalSize > originalSize) {
-    this._diffEl.textContent = round(finalSize / originalSize * 100 - 100, 2) + '% increase';
-  }
-  else {
-    this._diffEl.textContent = round(100 - finalSize / originalSize * 100, 2) + '% saving';
-  }
-};
 
 module.exports = Results;

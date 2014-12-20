@@ -1,17 +1,18 @@
 var utils = require('../utils');
 
-function SvgOutput() {
-  this.container = utils.strToEl('<div class="svg-output"></div>');
-  this._svgContainer = utils.strToEl('<div class="svg"></div>');
-  this._state = {};
+class SvgOutput {
+  constructor() {
+    this.container = utils.strToEl(`
+      <div class="svg-output">
+        <div class="svg-container"></div>
+      </div>
+    `);
+    this._svgContainer = this.container.querySelector('.svg-container');
+  }
 
-  this.container.appendChild(this._svgContainer);
+  setSvg(svgStr) {
+    this._svgContainer.innerHTML = svgStr;
+  }
 }
-
-var SvgOutputProto = SvgOutput.prototype;
-
-SvgOutputProto.setSvg = function(svgStr) {
-  this._svgContainer.innerHTML = svgStr;
-};
 
 module.exports = SvgOutput;
