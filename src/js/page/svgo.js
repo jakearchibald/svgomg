@@ -5,9 +5,16 @@ class Svgo extends require('./worker-messenger') {
     super('js/svgo-worker.js');
   }
 
+  load(svgText) {
+    return this._requestResponse({
+      action: 'load',
+      data: svgText
+    });
+  }
+
   process(svgData) {
     return this._requestResponse({
-      data: svgData
+      action: 'process'
     });
   }
 }

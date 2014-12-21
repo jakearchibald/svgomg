@@ -12,19 +12,19 @@ class WorkerMessenger {
   }
 
   _onMessage(event) {
-    if (!event.data._id) {
+    if (!event.data.id) {
       console.log("Unexpected message", event);
       return;
     }
 
-    var resolver = this._pending[event.data._id];
+    var resolver = this._pending[event.data.id];
 
     if (!resolver) {
       console.log("No resolver for", event);
       return;
     }
 
-    delete this._pending[event.data._id];
+    delete this._pending[event.data.id];
 
     if (event.data.error) {
       resolver[1](new Error(event.data.error));
@@ -37,7 +37,7 @@ class WorkerMessenger {
   _requestResponse(message) {
     var workerMessenger = this;
     var requestId = ++this._requestId;
-    message._id = requestId;
+    message.id = requestId;
 
     return new Promise(function(resolve, reject) {
       workerMessenger._pending[requestId] = [resolve, reject];

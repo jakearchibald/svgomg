@@ -4,14 +4,16 @@ class SvgOutput {
   constructor() {
     this.container = utils.strToEl(`
       <div class="svg-output">
-        <div class="svg-container"></div>
+        <iframe class="svg-container" sandbox="allow-scripts"></iframe>
       </div>
     `);
     this._svgContainer = this.container.querySelector('.svg-container');
   }
 
-  setSvg(svgStr) {
-    this._svgContainer.innerHTML = svgStr;
+  setSvg(url, width, height) {
+    this._svgContainer.src = url;
+    this._svgContainer.width = width;
+    this._svgContainer.height = height;
   }
 }
 

@@ -1,5 +1,7 @@
+"use strict";
+
 var svg2js = require('svgo/lib/svgo/svg2js');
-var jsApi = require('svgo/lib/svgo/jsAPI.js');
+var JsApi = require('svgo/lib/svgo/jsAPI.js');
 var js2svg = require('svgo/lib/svgo/js2svg');
 var plugins = require('svgo/lib/svgo/plugins');
 
@@ -52,33 +54,91 @@ function optimizePluginsArray(plugins) {
     }
 
     prev = item;
-
     return true;
-
   });
 
   return plugins;
 }
 
-pluginsData = optimizePluginsArray(pluginsData);
+function deepAddJsApiProto(arr) {
+  for (var item of arr) {
+    item.__proto__ = JsApi.prototype;
+    if (item.content) deepAddJsApiProto(item.content);
+  }
+}
+
+function deepClone(obj) {
+  // This seems fast enough
+  var newObj = JSON.parse(JSON.stringify(obj));
+  // But we need to repair the JsApi bits:
+  deepAddJsApiProto(newObj.content);
+  return newObj;
+}
+
+var optimisedPluginsData = optimizePluginsArray(pluginsData);
+var parsedSvg;
+
+function getDimensions(parsedSvg) {
+  var svgEl = parsedSvg.content[0];
+
+  if (!svgEl.isElem('svg')) {
+    return {};
+  }
+
+  if (svgEl.hasAttr('width') && svgEl.hasAttr('height')) {
+    return {
+      width: parseFloat(svgEl.attr('width').value),
+      height: parseFloat(svgEl.attr('height').value)
+    };
+  }
+
+  if (svgEl.hasAttr('viewBox')) {
+    let viewBox = svgEl.attr('viewBox').value.split(/(?:,\s*|\s+)/);
+    return {
+      width: parseFloat(viewBox[2]),
+      height: parseFloat(viewBox[3])
+    };
+  }
+
+  return {};
+}
+
+var actions = {
+  load(eventData) {
+    svg2js(eventData.data, function(p) {
+      parsedSvg = p;
+
+      if (parsedSvg.error) {
+        throw Error(parsedSvg.error);
+      }
+
+      var svgEl = parsedSvg.content[0];
+
+      return getDimensions(parsedSvg);
+    });
+  },
+  process(eventData) {
+    var svg = deepClone(parsedSvg);
+    plugins(svg, optimisedPluginsData);
+
+    return {
+      data: js2svg(svg).data,
+      info: getDimensions(svg)
+    };
+  }
+};
 
 self.onmessage = function(event) {
-  svg2js(event.data.data, function(svgjs) {
-    if (svgjs.error) {
-      self.postMessage({
-        _id: event.data._id,
-        error: svgjs.error
-      });
-      return;
-    }
-
-    plugins(svgjs, pluginsData);
-
-    var svg = js2svg(svgjs);
-
+  try {
     self.postMessage({
-      _id: event.data._id,
-      result: svg
+      id: event.data.id,
+      result: actions[event.data.action](event.data)
     });
-  });
+  }
+  catch(e) {
+    self.postMessage({
+      id: event.data.id,
+      error: e.message
+    });
+  }
 };

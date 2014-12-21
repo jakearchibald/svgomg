@@ -1,7 +1,7 @@
 .svg-output {
-  & svg {
-    width: 640px;
-    height: 480px;
+  & .svg-container {
+    border: none;
+    overflow: none;
   }
 }
 
