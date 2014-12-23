@@ -21,10 +21,16 @@ document.body.appendChild(downloadButton.container);
 document.body.appendChild(svgOuput.container);
 document.body.appendChild(codeOutput.container);
 
-async function compress(inputSvg) {
-  var loadResult = await svgo.load(await inputSvg.text);
-  var svgoResult = await svgo.process();
-  var outputSvg = new SvgFile(svgoResult.data);
+var input = new SvgFile(testSvgNoWidthHeight);
+var inputLoadPromise = input.text.then(t => svgo.load(t));
+var outputSvg;
+
+async function compress(inputSvg, settings) {
+  var loadResult = await inputLoadPromise;
+  var svgoResult = await svgo.process(settings);
+
+  if (outputSvg) outputSvg.release();
+  outputSvg = new SvgFile(svgoResult.data);
   
   svgOuput.setSvg(await outputSvg.url(), svgoResult.info.width, svgoResult.info.height);
   codeOutput.setCode(svgoResult.data);
@@ -36,4 +42,26 @@ async function compress(inputSvg) {
   );
 }
 
-compress(new SvgFile(testSvgNoWidthHeight));
+var settingsEl = document.querySelector('.settings');
+var pluginInputs = Array.prototype.slice.call(
+  document.querySelectorAll('.settings .plugins input')
+);
+
+function getSettings() {
+  var settings = {
+    plugins: {}
+  };
+  
+  pluginInputs.forEach(function(inputEl) {
+    settings.plugins[inputEl.name] = inputEl.checked;
+  });
+
+  return settings;
+}
+
+settingsEl.addEventListener('change', function(event) {
+  compress(input, getSettings());
+});
+
+
+compress(input, getSettings());

@@ -23,6 +23,15 @@ gulp.task('clean', function (done) {
   require('del')(['build'], done);
 });
 
+var svgoConfig;
+gulp.task('get-svgo-config', function(done) {
+  svgoConfig = JSON.parse(fs.readFileSync("./src/config.json"));
+  svgoConfig.plugins.forEach(function(plugin) {
+    plugin.active = require('svgo/plugins/' + plugin.id).active;
+  });
+  done();
+});
+
 gulp.task('copy', [
   'copy:css',
   'copy:html',
@@ -38,11 +47,16 @@ gulp.task('copy:css', function () {
     .pipe(reload({stream: true}));
 });
 
-gulp.task('copy:html', function () {
+gulp.task('copy:html', ['get-svgo-config'], function () {
   return gulp.src([
     // Copy all `.html` files
     'src/*.html',
-  ]).pipe(plugins.htmlmin({
+  ])
+  .pipe(plugins.swig({
+    defaults: { cache: false },
+    data: svgoConfig
+  }))
+  .pipe(plugins.htmlmin({
     // In-depth information about the options:
     // https://github.com/kangax/html-minifier#options-quick-reference
     collapseBooleanAttributes: true,
@@ -138,7 +152,7 @@ gulp.task('browser-sync', function() {
 
 gulp.task('watch', function () {
   gulp.watch(['src/**/*.scss'], ['copy:css']);
-  gulp.watch(['src/*.html'], ['copy:html']);
+  gulp.watch(['src/*.html', 'src/plugin-data.json'], ['copy:html']);
   gulp.watch(['src/img/**', 'src/demos/**'], ['copy:misc', reload]);
 
   Object.keys(bundlers).forEach(function(key) {

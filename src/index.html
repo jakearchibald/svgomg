@@ -6,6 +6,20 @@
   </head>
   <body>
     <h1>Hello!</h1>
+    <div class="settings">
+      <div class="plugins">
+        {% for plugin in plugins %}
+          <div>
+            <label>
+              <input type="checkbox"
+                     name="{{ plugin.id }}"
+                     {% if plugin.active %}checked{% endif %}>
+              {{ plugin.name }}
+            </label>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
     <script src="js/page.js"></script>
   </body>
 </html>

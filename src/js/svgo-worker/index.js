@@ -5,40 +5,40 @@ var JsApi = require('svgo/lib/svgo/jsAPI.js');
 var js2svg = require('svgo/lib/svgo/js2svg');
 var plugins = require('svgo/lib/svgo/plugins');
 
-var pluginsData = [
-  require('svgo/plugins/removeDoctype'),
-  require('svgo/plugins/removeXMLProcInst'),
-  require('svgo/plugins/removeComments'),
-  require('svgo/plugins/removeMetadata'),
-  require('svgo/plugins/removeEditorsNSData'),
-  require('svgo/plugins/cleanupAttrs'),
-  require('svgo/plugins/convertStyleToAttrs'),
-  require('svgo/plugins/removeRasterImages'),
-  require('svgo/plugins/cleanupNumericValues'),
-  require('svgo/plugins/convertColors'),
-  require('svgo/plugins/removeUnknownsAndDefaults'),
-  require('svgo/plugins/removeNonInheritableGroupAttrs'),
-  require('svgo/plugins/removeUselessStrokeAndFill'),
-  require('svgo/plugins/removeViewBox'),
-  require('svgo/plugins/cleanupEnableBackground'),
-  require('svgo/plugins/removeHiddenElems'),
-  require('svgo/plugins/removeEmptyText'),
-  require('svgo/plugins/convertShapeToPath'),
-  require('svgo/plugins/moveElemsAttrsToGroup'),
-  require('svgo/plugins/moveGroupAttrsToElems'),
-  require('svgo/plugins/collapseGroups'),
-  require('svgo/plugins/convertPathData'),
-  require('svgo/plugins/convertTransform'),
-  require('svgo/plugins/removeEmptyAttrs'),
-  require('svgo/plugins/removeEmptyContainers'),
-  require('svgo/plugins/mergePaths'),
-  require('svgo/plugins/cleanupIDs'),
-  require('svgo/plugins/removeUnusedNS'),
-  require('svgo/plugins/transformsWithOnePath'),
-  require('svgo/plugins/sortAttrs'),
-  require('svgo/plugins/removeTitle'),
-  require('svgo/plugins/removeDesc')
-];
+var pluginsData = {
+  removeDoctype: require('svgo/plugins/removeDoctype'),
+  removeXMLProcInst: require('svgo/plugins/removeXMLProcInst'),
+  removeComments: require('svgo/plugins/removeComments'),
+  removeMetadata: require('svgo/plugins/removeMetadata'),
+  removeEditorsNSData: require('svgo/plugins/removeEditorsNSData'),
+  cleanupAttrs: require('svgo/plugins/cleanupAttrs'),
+  convertStyleToAttrs: require('svgo/plugins/convertStyleToAttrs'),
+  removeRasterImages: require('svgo/plugins/removeRasterImages'),
+  cleanupNumericValues: require('svgo/plugins/cleanupNumericValues'),
+  convertColors: require('svgo/plugins/convertColors'),
+  removeUnknownsAndDefaults: require('svgo/plugins/removeUnknownsAndDefaults'),
+  removeNonInheritableGroupAttrs: require('svgo/plugins/removeNonInheritableGroupAttrs'),
+  removeUselessStrokeAndFill: require('svgo/plugins/removeUselessStrokeAndFill'),
+  removeViewBox: require('svgo/plugins/removeViewBox'),
+  cleanupEnableBackground: require('svgo/plugins/cleanupEnableBackground'),
+  removeHiddenElems: require('svgo/plugins/removeHiddenElems'),
+  removeEmptyText: require('svgo/plugins/removeEmptyText'),
+  convertShapeToPath: require('svgo/plugins/convertShapeToPath'),
+  moveElemsAttrsToGroup: require('svgo/plugins/moveElemsAttrsToGroup'),
+  moveGroupAttrsToElems: require('svgo/plugins/moveGroupAttrsToElems'),
+  collapseGroups: require('svgo/plugins/collapseGroups'),
+  convertPathData: require('svgo/plugins/convertPathData'),
+  convertTransform: require('svgo/plugins/convertTransform'),
+  removeEmptyAttrs: require('svgo/plugins/removeEmptyAttrs'),
+  removeEmptyContainers: require('svgo/plugins/removeEmptyContainers'),
+  mergePaths: require('svgo/plugins/mergePaths'),
+  cleanupIDs: require('svgo/plugins/cleanupIDs'),
+  removeUnusedNS: require('svgo/plugins/removeUnusedNS'),
+  transformsWithOnePath: require('svgo/plugins/transformsWithOnePath'),
+  sortAttrs: require('svgo/plugins/sortAttrs'),
+  removeTitle: require('svgo/plugins/removeTitle'),
+  removeDesc: require('svgo/plugins/removeDesc')
+};
 
 function optimizePluginsArray(plugins) {
   var prev;
@@ -60,22 +60,25 @@ function optimizePluginsArray(plugins) {
   return plugins;
 }
 
-function deepAddJsApiProto(arr) {
-  for (var item of arr) {
-    item.__proto__ = JsApi.prototype;
-    if (item.content) deepAddJsApiProto(item.content);
-  }
-}
 
-function deepClone(obj) {
+function cloneParsedSvg(obj) {
   // This seems fast enough
   var newObj = JSON.parse(JSON.stringify(obj));
+
   // But we need to repair the JsApi bits:
-  deepAddJsApiProto(newObj.content);
+  newObj.content.forEach(function addJsApiProto(item) {
+    item.__proto__ = JsApi.prototype;
+    if (item.content) {
+      item.content.forEach(addJsApiProto);
+    }
+  });
+
   return newObj;
 }
 
-var optimisedPluginsData = optimizePluginsArray(pluginsData);
+var optimisedPluginsData = optimizePluginsArray(
+  Object.keys(pluginsData).map(p => pluginsData[p])
+);
 var parsedSvg;
 
 function getDimensions(parsedSvg) {
@@ -104,8 +107,8 @@ function getDimensions(parsedSvg) {
 }
 
 var actions = {
-  load(eventData) {
-    svg2js(eventData.data, function(p) {
+  load({data}) {
+    svg2js(data, function(p) {
       parsedSvg = p;
 
       if (parsedSvg.error) {
@@ -117,8 +120,13 @@ var actions = {
       return getDimensions(parsedSvg);
     });
   },
-  process(eventData) {
-    var svg = deepClone(parsedSvg);
+  process({settings}) {
+    // activate/deactivate plugins
+    Object.keys(settings.plugins).forEach(function(pluginName) {
+      pluginsData[pluginName].active = settings.plugins[pluginName];
+    });
+
+    var svg = cloneParsedSvg(parsedSvg);
     plugins(svg, optimisedPluginsData);
 
     return {

@@ -1,0 +1,132 @@
+{
+  "plugins": [
+    {
+      "id": "cleanupAttrs",
+      "name": "Cleanup attribute whitespace"
+    },
+    {
+      "id": "cleanupEnableBackground",
+      "name": "Remove/tidy enable-background"
+    },
+    {
+      "id": "cleanupIDs",
+      "name": "Clean IDs"
+    },
+    {
+      "id": "cleanupNumericValues",
+      "name": "Round/rewrite numbers"
+    },
+    {
+      "id": "collapseGroups",
+      "name": "Collapse useless groups"
+    },
+    {
+      "id": "convertColors",
+      "name": "Minify colours"
+    },
+    {
+      "id": "convertPathData",
+      "name": "Round/rewrite paths"
+    },
+    {
+      "id": "convertShapeToPath",
+      "name": "Shapes to (smaller) paths"
+    },
+    {
+      "id": "convertStyleToAttrs",
+      "name": "Style to attributes"
+    },
+    {
+      "id": "convertTransform",
+      "name": "Round/rewrite transforms"
+    },
+    {
+      "id": "mergePaths",
+      "name": "Merge paths"
+    },
+    {
+      "id": "moveElemsAttrsToGroup",
+      "name": "Move attrs to parent group"
+    },
+    {
+      "id": "moveGroupAttrsToElems",
+      "name": "Move group attrs to elements"
+    },
+    {
+      "id": "removeComments",
+      "name": "Remove comments"
+    },
+    {
+      "id": "removeDesc",
+      "name": "Remove <desc>"
+    },
+    {
+      "id": "removeDoctype",
+      "name": "Remove doctype"
+    },
+    {
+      "id": "removeEditorsNSData",
+      "name": "Remove editor data"
+    },
+    {
+      "id": "removeEmptyAttrs",
+      "name": "Remove empty attrs"
+    },
+    {
+      "id": "removeEmptyContainers",
+      "name": "Remove empty containers"
+    },
+    {
+      "id": "removeEmptyText",
+      "name": "Remove empty text"
+    },
+    {
+      "id": "removeHiddenElems",
+      "name": "Remove hidden elements"
+    },
+    {
+      "id": "removeMetadata",
+      "name": "Remove <metadata>"
+    },
+    {
+      "id": "removeNonInheritableGroupAttrs",
+      "name": "Remove unneeded group attrs"
+    },
+    {
+      "id": "removeRasterImages",
+      "name": "Remove raster images"
+    },
+    {
+      "id": "removeTitle",
+      "name": "Remove <title>"
+    },
+    {
+      "id": "removeUnknownsAndDefaults",
+      "name": "Remove unknowns & defaults"
+    },
+    {
+      "id": "removeUnusedNS",
+      "name": "Remove unused namespaces"
+    },
+    {
+      "id": "removeUselessStrokeAndFill",
+      "name": "Remove useless stroke & fill"
+    },
+    {
+      "id": "removeViewBox",
+      "name": "Remove viewBox"
+    },
+    {
+      "id": "removeXMLProcInst",
+      "name": "Remove XML instructions"
+    },
+    {
+      "id": "sortAttrs",
+      "name": "Sort attrs"
+    },
+    {
+      "id": "transformsWithOnePath",
+      "name": "Optimise single-path SVG"
+    }
+  ]
+}

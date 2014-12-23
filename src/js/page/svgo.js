@@ -12,9 +12,10 @@ class Svgo extends require('./worker-messenger') {
     });
   }
 
-  process(svgData) {
+  process(settings) {
     return this._requestResponse({
-      action: 'process'
+      action: 'process',
+      settings
     });
   }
 }
