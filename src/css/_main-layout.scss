@@ -4,21 +4,27 @@
   @include display-flex;
   @include flex-flow(column);
 
-  @media (min-width: 500px) {
-    @include flex-flow(row);
-  }
+}
+
+.toolbar {
 }
 
 .settings {
   overflow: auto;
-  min-height: 200px;
 
-  @media (min-width: 500px) {
+  @media (min-width: 640px) {
     min-width: 15em;
   }
 
-  @media (min-width: 800px) {
+  @media (min-width: 900px) {
     margin: 30px;
+    border-radius: 2px;
+
+    & > * {
+      // unfortunately boosts scrolling performance in Chrome/Safari
+      // this is due to the border radius
+      -webkit-transform: translateZ(0);
+    }
   }
 }
 
@@ -26,15 +32,9 @@
   @include flex(1);
   @include display-flex;
   @include flex-flow(column);
-  @include min-height-min-content;
 
-  @media (min-width: 500px) {
-    @include order(1);
-  }
-
-  @media (min-width: 800px) {
-    margin: 30px;
-    margin-left: 0;
+  @media (min-width: 640px) {
+    @include flex-flow(row);
   }
 }
 
@@ -54,7 +54,7 @@
 .toolbar {
   box-shadow: 0 0px 11px rgba(0, 0, 0, 0.4);
 
-  @media (min-width: 800px) {
+  @media (min-width: 900px) {
     box-shadow: 0 4px 11px rgba(0, 0, 0, 0.3);
   }
 }

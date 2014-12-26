@@ -1,6 +1,8 @@
 // app
   .app {
-    background: #efefef;
+    background: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2"><path d="M1 2V0h1v1H0v1z" fill-opacity=".05"/></svg>');
+    background-size: 16px 16px;
+    background-color: #f2f2f2;
   }
 
 // settings
@@ -72,11 +74,19 @@
   .toolbar {
     background: #00796B;
     color: #fff;
+    @include display-flex;
+    @include align-items(center);
 
     // this is temp
     & .toolbar-item {
       font-size: 1rem;
       padding: 0.8em 1em;
+    }
+
+    & .status {
+      @include flex(1);
+      padding: 0.8em 1em;
+      text-align: right;
     }
   }
 
@@ -95,4 +105,9 @@
     @include display-flex;
     @include align-items(center);
     @include justify-content(center);
+  }
+
+  .svg-container {
+    border: none;
+    overflow: none;
   }

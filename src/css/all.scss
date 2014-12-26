@@ -2,24 +2,3 @@
 @import 'global';
 @import 'main-layout';
 @import 'components';
-
-
-// Temp stuff:
-
-html {
-  //background: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="2" height="2" fill-opacity=".2"><path d="M0 1h2v1H1V0H0z" fill="#fff"/><path d="M1 2V0h1v1H0v1z"/></svg>');
-  background-size: 16px 16px;
-}
-
-.svg-output {
-  & .svg-container {
-    border: none;
-    overflow: none;
-  }
-}
-
-.code-output {
-  & pre {
-    white-space: normal;
-  }
-}

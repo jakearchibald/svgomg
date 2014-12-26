@@ -8,23 +8,26 @@
   </head>
   <body>
     <div class="app">
-      <div class="main">
-        <div class="toolbar"><div class="toolbar-item">Toolbar text</div></div>
-        <div class="output"></div>
+      <div class="toolbar">
+        <div class="toolbar-item">Toolbar text</div>
+        <div class="status"></div>
       </div>
-      <div class="settings">
-        <div class="plugins">
-          {% for plugin in plugins %}
-            <div>
-              <label class="main-setting-item">
-                <input type="checkbox"
-                       name="{{ plugin.id }}"
-                       {% if plugin.active %}checked{% endif %}>
-                <span class="material-switch"></span>
-                {{ plugin.name }}
-              </label>
-            </div>
-          {% endfor %}
+      <div class="main">
+        <div class="output"></div>
+        <div class="settings">
+          <div class="plugins">
+            {% for plugin in plugins %}
+              <div>
+                <label class="main-setting-item">
+                  <input type="checkbox"
+                         name="{{ plugin.id }}"
+                         {% if plugin.active %}checked{% endif %}>
+                  <span class="material-switch"></span>
+                  {{ plugin.name }}
+                </label>
+              </div>
+            {% endfor %}
+          </div>
         </div>
       </div>
     </div>
