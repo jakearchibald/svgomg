@@ -1,0 +1,42 @@
+.app {
+  height: 100%;
+  overflow: hidden;
+  @include display-flex;
+  @include flex-flow(column);
+
+  @media (min-width: 500px) {
+    @include flex-flow(row);
+  }
+}
+
+.options {
+  overflow: auto;
+  min-height: 200px;
+
+  @media (min-width: 500px) {
+    min-width: 15em;
+  }
+
+  @media (min-width: 800px) {
+    margin: 30px;
+  }
+}
+
+.main {
+  @include flex(1);
+  @include display-flex;
+  @include flex-flow(column);
+
+  @media (min-width: 500px) {
+    @include order(1);
+  }
+
+  @media (min-width: 800px) {
+    margin: 30px;
+    margin-left: 0;
+  }
+}
+
+.output {
+  @include flex(1);
+}

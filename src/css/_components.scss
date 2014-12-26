@@ -1,0 +1,17 @@
+.app {
+  background: #ccc;
+}
+
+.options {
+  background: #00796B;
+}
+
+.toolbar {
+  background: #fff;
+
+  // this is temp
+  & .toolbar-item {
+    font-size: 1rem;
+    padding: 0.8em 1em;
+  }
+}
