@@ -1,17 +1,98 @@
-.app {
-  background: #ccc;
-}
-
-.options {
-  background: #00796B;
-}
-
-.toolbar {
-  background: #fff;
-
-  // this is temp
-  & .toolbar-item {
-    font-size: 1rem;
-    padding: 0.8em 1em;
+// app
+  .app {
+    background: #efefef;
   }
-}
+
+// settings
+  .settings {
+    background: #fff;
+  }
+
+  .main-setting-item {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 16px;
+    height: 48px;
+    box-sizing: border-box;
+    @include display-flex;
+    @include align-items(center);
+
+    & input {
+      display: none;
+    }
+  }
+
+  .material-switch {
+    display: block;
+    width: 37px;
+    height: 14px;
+    position: relative;
+    margin-right: 19px;
+
+    &::before {
+      border-radius: 19px;
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 1px;
+      right: 1px;
+      background: rgba(#000, 0.26);
+      transition: all 0.15s ease-out;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      background: #fafafa;
+      box-shadow: 0 1px 3px rgba(#000, 0.5);
+      transition: all 0.15s ease-out;
+    }
+
+    :checked + & {
+      &::before {
+        background: rgba(#009688, 0.5);
+      }
+
+      &::after {
+        @include transform(translate(17px, 0));
+        background: #009688;
+      }
+    }
+  }
+
+// toolbar
+  .toolbar {
+    background: #00796B;
+    color: #fff;
+
+    // this is temp
+    & .toolbar-item {
+      font-size: 1rem;
+      padding: 0.8em 1em;
+    }
+  }
+
+// output
+  .output {
+    position: relative;
+  }
+
+  .svg-output {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    @include display-flex;
+    @include align-items(center);
+    @include justify-content(center);
+  }

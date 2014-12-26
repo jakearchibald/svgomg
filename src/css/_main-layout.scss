@@ -9,7 +9,7 @@
   }
 }
 
-.options {
+.settings {
   overflow: auto;
   min-height: 200px;
 
@@ -26,6 +26,7 @@
   @include flex(1);
   @include display-flex;
   @include flex-flow(column);
+  @include min-height-min-content;
 
   @media (min-width: 500px) {
     @include order(1);
@@ -39,4 +40,21 @@
 
 .output {
   @include flex(1);
+  min-height: 300px;
+}
+
+// so these UI elements are above output
+.toolbar,
+.settings {
+  z-index: 1;
+}
+
+// shadows
+.settings,
+.toolbar {
+  box-shadow: 0 0px 11px rgba(0, 0, 0, 0.4);
+
+  @media (min-width: 800px) {
+    box-shadow: 0 4px 11px rgba(0, 0, 0, 0.3);
+  }
 }

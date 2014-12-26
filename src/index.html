@@ -12,23 +12,25 @@
         <div class="toolbar"><div class="toolbar-item">Toolbar text</div></div>
         <div class="output"></div>
       </div>
-      <div class="options"></div>
-    </div>
-    <!--<h1>Hello!</h1>
-    <div class="settings">
-      <div class="plugins">
-        {% for plugin in plugins %}
-          <div>
-            <label>
-              <input type="checkbox"
-                     name="{{ plugin.id }}"
-                     {% if plugin.active %}checked{% endif %}>
-              {{ plugin.name }}
-            </label>
-          </div>
-        {% endfor %}
+      <div class="settings">
+        <div class="plugins">
+          {% for plugin in plugins %}
+            <div>
+              <label class="main-setting-item">
+                <input type="checkbox"
+                       name="{{ plugin.id }}"
+                       {% if plugin.active %}checked{% endif %}>
+                <span class="material-switch"></span>
+                {{ plugin.name }}
+              </label>
+            </div>
+          {% endfor %}
+        </div>
       </div>
     </div>
-    <script src="js/page.js"></script>-->
+    <script src="js/page.js"></script>
+    <!--<h1>Hello!</h1>
+    <div class="settings">
+    </div>-->
   </body>
 </html>

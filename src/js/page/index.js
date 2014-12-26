@@ -17,12 +17,12 @@ var codeOutput = new (require('./ui/code-output'));
 var downloadButton = new (require('./ui/download-button'));
 var results = new (require('./ui/results'));
 
-document.body.appendChild(results.container);
-document.body.appendChild(downloadButton.container);
-document.body.appendChild(svgOuput.container);
-document.body.appendChild(codeOutput.container);
+//document.body.appendChild(results.container);
+//document.body.appendChild(downloadButton.container);
+document.querySelector('.output').appendChild(svgOuput.container);
+//document.body.appendChild(codeOutput.container);
 
-var input = new SvgFile(bgSvg);
+var input = new SvgFile(testSvg);
 var inputLoadPromise = input.text.then(t => svgo.load(t));
 var outputSvg;
 
@@ -59,6 +59,10 @@ function getSettings() {
 
   return settings;
 }
+
+settingsEl.addEventListener('mousedown', function(event) {
+  event.preventDefault();
+});
 
 settingsEl.addEventListener('change', function(event) {
   compress(input, getSettings());
