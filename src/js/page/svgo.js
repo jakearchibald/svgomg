@@ -3,6 +3,8 @@
 class Svgo extends require('./worker-messenger') {
   constructor() {
     super('js/svgo-worker.js');
+    this._multiPass = false;
+    this._abortMultiPassResolver = null;
   }
 
   load(svgText) {
@@ -13,6 +15,9 @@ class Svgo extends require('./worker-messenger') {
   }
 
   async process(settings, itterationCallback) {
+    await this.abortCurrent();
+    this._multiPass = settings.multipass;
+
     var result = await this._requestResponse({
       action: 'process',
       settings
@@ -22,6 +27,11 @@ class Svgo extends require('./worker-messenger') {
 
     if (settings.multipass) {
       while (result = await this.nextPass()) {
+        if (this._abortMultiPassResolver) {
+          this._abortMultiPassResolver();
+          this._abortMultiPassResolver = null;
+          break;
+        }
         itterationCallback(result);
       }
     }
@@ -31,6 +41,14 @@ class Svgo extends require('./worker-messenger') {
     return this._requestResponse({
       action: 'nextPass'
     });
+  }
+
+  async abortCurrent() {
+    if (!this._multiPass) {
+      return;
+    }
+
+    new Promise(r => this._abortMultiPassResolver = r);
   }
 }
 
