@@ -15,7 +15,7 @@ before_install:
 
 env:
   global:
-    - secure: "TODO"
+    - secure: "DveZCfI3pSFOI2/GhZZ7UMVH4fEGdalDT/Q83p2jDuX9Vr96eT3VcnPxb9TBMudL/1dl4BmVuz87siRJJ2EMoZ6OxqR0rhFRGdUn5tY5SxC/kJxwcjEeQWC+E3axziNMOj4njIdByI9a1WyDTikoV+wtz7wr8e9vqCpBYkchgSc="
 
 git:
   depth: 10
