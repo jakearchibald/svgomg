@@ -28,11 +28,19 @@ class Svgo extends require('./worker-messenger') {
     if (settings.multipass) {
       while (result = await this.nextPass()) {
         if (this._abortMultiPassResolver) {
+          this._multiPass = false;
           this._abortMultiPassResolver();
           this._abortMultiPassResolver = null;
           break;
         }
         itterationCallback(result);
+      }
+      this._multiPass = false;
+      
+      if (this._abortMultiPassResolver) {
+        this._abortMultiPassResolver();
+        this._abortMultiPassResolver = null;
+        break;
       }
     }
   }
