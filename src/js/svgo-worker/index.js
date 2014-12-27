@@ -128,9 +128,19 @@ var actions = {
 
     var svg = cloneParsedSvg(parsedSvg);
     plugins(svg, optimisedPluginsData);
+    var svgData = js2svg(svg).data;
+    var dataLength;
+
+    if (settings.multipass) {
+      do {
+        dataLength = svgData.length;
+        plugins(svg, optimisedPluginsData);
+        svgData = js2svg(svg).data;
+      } while (dataLength != svgData.length);
+    }
 
     return {
-      data: js2svg(svg).data,
+      data: svgData,
       info: getDimensions(svg)
     };
   }

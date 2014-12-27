@@ -42,6 +42,11 @@ class Results {
       this._diffEl.textContent = round(100 - finalSize / originalSize * 100, 2) + '% saving';
     }
   }
+
+  working() {
+    this._sizeEl.textContent = 'Working…';
+    this._diffEl.textContent = '';
+  }
 }
 
 module.exports = Results;

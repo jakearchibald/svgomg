@@ -753,6 +753,7 @@ var inputLoadPromise = input.text.then(t => svgo.load(t));
 var outputSvg;
 
 async function compress(inputSvg, settings) {
+  results.working();
   var loadResult = await inputLoadPromise;
   var svgoResult = await svgo.process(settings);
 
@@ -773,12 +774,19 @@ var settingsEl = document.querySelector('.settings');
 var pluginInputs = Array.prototype.slice.call(
   document.querySelectorAll('.settings .plugins input')
 );
+var miscInputs = Array.prototype.slice.call(
+  document.querySelectorAll('.settings .misc input')
+);
 
 function getSettings() {
   var settings = {
     plugins: {}
   };
   
+  miscInputs.forEach(function(inputEl) {
+    settings[inputEl.name] = inputEl.checked;
+  });
+
   pluginInputs.forEach(function(inputEl) {
     settings.plugins[inputEl.name] = inputEl.checked;
   });
