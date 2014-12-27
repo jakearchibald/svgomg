@@ -30,7 +30,11 @@ class SvgFile {
     this._url = null;  
   }
 
-  compressedSize() {
+  size(compress) {
+    if (!compress) {
+      return this.text.then(t => t.length);
+    }
+
     if (!this._compressedSize) {
       this._compressedSize = this.text
         .then(t => gzip.compress(t))

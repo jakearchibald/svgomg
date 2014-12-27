@@ -758,8 +758,8 @@ async function compress(inputSvg, settings) {
   if (settings.original) {
     svgOuput.setSvg(await inputSvg.url(), loadResult.width, loadResult.height);
     results.update(
-      await inputSvg.compressedSize(),
-      await inputSvg.compressedSize()
+      await inputSvg.size(settings.gzip),
+      await inputSvg.size(settings.gzip)
     );
     return;
   }
@@ -775,8 +775,8 @@ async function compress(inputSvg, settings) {
   downloadButton.setDownload(inputSvg.name, await outputSvg.url());
 
   results.update(
-    await inputSvg.compressedSize(),
-    await outputSvg.compressedSize()
+    await inputSvg.size(settings.gzip),
+    await outputSvg.size(settings.gzip)
   );
 }
 
