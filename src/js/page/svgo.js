@@ -18,6 +18,12 @@ class Svgo extends require('./worker-messenger') {
       settings
     });
   }
+
+  nextPass(settings) {
+    return this._requestResponse({
+      action: 'nextPass'
+    });
+  }
 }
 
 module.exports = new Svgo();

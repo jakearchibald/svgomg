@@ -16,8 +16,31 @@ document.querySelector('.status').appendChild(results.container);
 document.querySelector('.output').appendChild(svgOuput.container);
 //document.body.appendChild(codeOutput.container);
 
+var pluginInputs = Array.prototype.slice.call(
+  document.querySelectorAll('.settings .plugins input')
+);
+var miscInputs = Array.prototype.slice.call(
+  document.querySelectorAll('.settings .misc input')
+);
+
+function getSettings() {
+  var settings = {
+    plugins: {}
+  };
+  
+  miscInputs.forEach(function(inputEl) {
+    settings[inputEl.name] = inputEl.checked;
+  });
+
+  pluginInputs.forEach(function(inputEl) {
+    settings.plugins[inputEl.name] = inputEl.checked;
+  });
+
+  return settings;
+}
+
 (async function() {
-  var input = new SvgFile(await utils.get('test-svgs/flag.svg'));
+  var input = new SvgFile(await utils.get('test-svgs/tiger.svg'));
   var inputLoadPromise = input.text.then(t => svgo.load(t));
   var outputSvg;
 
@@ -34,44 +57,32 @@ document.querySelector('.output').appendChild(svgOuput.container);
     }
 
     results.working();
+
+    async function update() {
+      if (outputSvg) outputSvg.release();
+      outputSvg = new SvgFile(svgoResult.data);
+      
+      svgOuput.setSvg(await outputSvg.url(), svgoResult.info.width, svgoResult.info.height);
+      codeOutput.setCode(svgoResult.data);
+      downloadButton.setDownload(inputSvg.name, await outputSvg.url());
+
+      results.update(
+        await inputSvg.size(settings.gzip),
+        await outputSvg.size(settings.gzip)
+      );
+    }
+
     var svgoResult = await svgo.process(settings);
+    update();
 
-    if (outputSvg) outputSvg.release();
-    outputSvg = new SvgFile(svgoResult.data);
-    
-    svgOuput.setSvg(await outputSvg.url(), svgoResult.info.width, svgoResult.info.height);
-    codeOutput.setCode(svgoResult.data);
-    downloadButton.setDownload(inputSvg.name, await outputSvg.url());
-
-    results.update(
-      await inputSvg.size(settings.gzip),
-      await outputSvg.size(settings.gzip)
-    );
+    if (settings.multipass) {
+      while (svgoResult = await svgo.nextPass()) {
+        update();
+      }
+    }
   }
 
   var settingsEl = document.querySelector('.settings');
-  var pluginInputs = Array.prototype.slice.call(
-    document.querySelectorAll('.settings .plugins input')
-  );
-  var miscInputs = Array.prototype.slice.call(
-    document.querySelectorAll('.settings .misc input')
-  );
-
-  function getSettings() {
-    var settings = {
-      plugins: {}
-    };
-    
-    miscInputs.forEach(function(inputEl) {
-      settings[inputEl.name] = inputEl.checked;
-    });
-
-    pluginInputs.forEach(function(inputEl) {
-      settings.plugins[inputEl.name] = inputEl.checked;
-    });
-
-    return settings;
-  }
 
   settingsEl.addEventListener('mousedown', function(event) {
     event.preventDefault();
