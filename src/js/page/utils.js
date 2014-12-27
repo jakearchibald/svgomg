@@ -16,6 +16,20 @@
   return r;
 };*/
 
+exports.toArray = function toArray(obj) {
+  return Array.prototype.slice.apply(obj);
+};
+
+exports.domReady = new Promise(function(resolve) {
+  function checkState() {
+    if (document.readyState != 'loading') {
+      resolve();
+    }
+  }
+  document.addEventListener('readystatechange', checkState);
+  checkState();
+});
+
 exports.get = function get(url) {
   return new Promise(function(resolve, reject) {
     var req = new XMLHttpRequest();

@@ -124,7 +124,7 @@ function* multipassCompress(settings) {
 
     yield {
       data: svgData,
-      info: getDimensions(svg)
+      dimensions: getDimensions(svg)
     };
 
   }

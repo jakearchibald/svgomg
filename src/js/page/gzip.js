@@ -12,4 +12,4 @@ class Gzip extends require('./worker-messenger') {
   }
 }
 
-module.exports = new Gzip();
+module.exports = Gzip;

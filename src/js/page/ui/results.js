@@ -26,20 +26,22 @@ class Results {
     this._diffEl = this.container.querySelector('.diff');
   }
 
-  update(originalSize, finalSize) {
-    this._sizeEl.textContent = humanSize(finalSize);
-
-    if (!finalSize) {
+  update({size, comparisonSize}) {
+    this._sizeEl.textContent = humanSize(size);
+    
+    // just displaying a single size?
+    if (!comparisonSize) {
       this._diffEl.textContent = '';
+      return;
     }
-    else if (finalSize == originalSize) {
+    else if (size == comparisonSize) {
       this._diffEl.textContent = 'no change';
     }
-    else if (finalSize > originalSize) {
-      this._diffEl.textContent = round(finalSize / originalSize * 100 - 100, 2) + '% increase';
+    else if (size > comparisonSize) {
+      this._diffEl.textContent = round(size / comparisonSize * 100 - 100, 2) + '% increase';
     }
     else {
-      this._diffEl.textContent = round(100 - finalSize / originalSize * 100, 2) + '% saving';
+      this._diffEl.textContent = round(100 - size / comparisonSize * 100, 2) + '% saving';
     }
   }
 
