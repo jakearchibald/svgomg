@@ -6,9 +6,6 @@
 
 }
 
-.toolbar {
-}
-
 .settings {
   overflow: auto;
 
@@ -32,6 +29,8 @@
   @include flex(1);
   @include display-flex;
   @include flex-flow(column);
+  // Firefox needs this to limit size of main
+  overflow: hidden;
 
   @media (min-width: 640px) {
     @include flex-flow(row);
