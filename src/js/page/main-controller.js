@@ -73,23 +73,13 @@ class MainController {
 
     this._resultsUi.working();
 
-    var svgoResult = await svgo.process(settings);
-
-    var update = _ => {
+    await svgo.process(settings, svgoResult => {
       this._updateOutputFile(new SvgFile(svgoResult.data));
       this._updateForFile(this._outputSvg, svgoResult.dimensions, {
         compareToFile: this._inputSvg,
         gzip: settings.gzip
-      }); 
-    }
-
-    update();
-
-    if (settings.multipass) {
-      while (svgoResult = await svgo.nextPass()) {
-        update();
-      }
-    }
+      });
+    });
   }
 
   _updateOutputFile(newOutput) {

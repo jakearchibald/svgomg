@@ -12,11 +12,19 @@ class Svgo extends require('./worker-messenger') {
     });
   }
 
-  process(settings) {
-    return this._requestResponse({
+  async process(settings, itterationCallback) {
+    var result = await this._requestResponse({
       action: 'process',
       settings
     });
+
+    itterationCallback(result);
+
+    if (settings.multipass) {
+      while (result = await this.nextPass()) {
+        itterationCallback(result);
+      }
+    }
   }
 
   nextPass() {
