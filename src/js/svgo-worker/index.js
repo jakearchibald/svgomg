@@ -82,9 +82,11 @@ var optimisedPluginsData = optimizePluginsArray(
 var parsedSvg;
 
 function getDimensions(parsedSvg) {
-  var svgEl = parsedSvg.content[0];
+  var svgEl = parsedSvg.content.filter(function(el) {
+    return el.isElem('svg');
+  })[0];
 
-  if (!svgEl.isElem('svg')) {
+  if (!svgEl) {
     return {};
   }
 
@@ -97,6 +99,7 @@ function getDimensions(parsedSvg) {
 
   if (svgEl.hasAttr('viewBox')) {
     let viewBox = svgEl.attr('viewBox').value.split(/(?:,\s*|\s+)/);
+
     return {
       width: parseFloat(viewBox[2]),
       height: parseFloat(viewBox[3])
@@ -110,15 +113,13 @@ var actions = {
   load({data}) {
     svg2js(data, function(p) {
       parsedSvg = p;
-
-      if (parsedSvg.error) {
-        throw Error(parsedSvg.error);
-      }
-
-      var svgEl = parsedSvg.content[0];
-
-      return getDimensions(parsedSvg);
     });
+    
+    if (parsedSvg.error) {
+      throw Error(parsedSvg.error);
+    }
+
+    return getDimensions(parsedSvg);
   },
   process({settings}) {
     // activate/deactivate plugins
