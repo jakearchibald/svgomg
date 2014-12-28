@@ -29,19 +29,29 @@ class Settings extends (require('events').EventEmitter) {
   }
 
   getSettings() {
-    var ouput = {
+    // fingerprint is used for cache lookups
+    var fingerprint = [];
+
+    var output = {
       plugins: {}
     };
     
     this._miscInputs.forEach(function(inputEl) {
-      ouput[inputEl.name] = inputEl.checked;
+      if (inputEl.name != 'gzip' && inputEl.name != 'original') {
+        fingerprint.push(Number(inputEl.checked));
+      }
+      
+      output[inputEl.name] = inputEl.checked;
     });
 
     this._pluginInputs.forEach(function(inputEl) {
-      ouput.plugins[inputEl.name] = inputEl.checked;
+      fingerprint.push(Number(inputEl.checked));
+      output.plugins[inputEl.name] = inputEl.checked;
     });
 
-    return ouput;
+    output.fingerprint = fingerprint.join();
+
+    return output;
   }
 }
 

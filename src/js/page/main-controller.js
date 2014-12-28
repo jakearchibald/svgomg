@@ -20,7 +20,7 @@ class MainController {
     // state
     this._inputSvg = null;
     this._inputDimensions = null;
-    this._outputSvg = null;
+    this._cache = new (require('./results-cache'))(10);
 
     utils.domReady.then(_ => {
       document.querySelector('.status').appendChild(this._resultsUi.container);
@@ -31,7 +31,7 @@ class MainController {
       // TODO: replace this with sub-controller for file input
       utils.get('test-svgs/tiger.svg').then(text => {
         this._onInputChange({
-          svgFile: new SvgFile(text)
+          data: text
         });
       });
     });
@@ -42,11 +42,9 @@ class MainController {
   }
 
   async _onInputChange(event) {
-    this._inputSvg = event.svgFile;
-
     // TODO: this will become part of the file input loader
     try {
-      this._inputDimensions = await svgo.load(this._inputSvg.text);
+      this._inputSvg = await svgo.load(event.data);
     }
     catch(e) {
       this._handleError(e);
@@ -64,8 +62,20 @@ class MainController {
   async _compressSvg() {
     var settings = this._settingsUi.getSettings();
 
+    await svgo.abortCurrent();
+
     if (settings.original) {
-      this._updateForFile(this._inputSvg, this._inputDimensions, {
+      this._updateForFile(this._inputSvg, {
+        gzip: settings.gzip
+      });
+      return;
+    }
+
+    var cacheMatch = this._cache.match(settings.fingerprint);
+
+    if (cacheMatch) {
+      this._updateForFile(cacheMatch, {
+        compareToFile: this._inputSvg,
         gzip: settings.gzip
       });
       return;
@@ -73,22 +83,23 @@ class MainController {
 
     this._resultsUi.working();
 
-    await svgo.process(settings, svgoResult => {
-      this._updateOutputFile(new SvgFile(svgoResult.data));
-      this._updateForFile(this._outputSvg, svgoResult.dimensions, {
-        compareToFile: this._inputSvg,
-        gzip: settings.gzip
+    try {
+      var finalResultFile = await svgo.process(settings, resultFile => {
+        this._updateForFile(resultFile, {
+          compareToFile: this._inputSvg,
+          gzip: settings.gzip
+        });
       });
-    });
+
+      this._cache.add(settings.fingerprint, finalResultFile);
+    }
+    catch(e) {
+      if (e.message != "Abort") throw e;
+    }
   }
 
-  _updateOutputFile(newOutput) {
-    if (this._outputSvg) this._outputSvg.release();
-    this._outputSvg = newOutput;
-  }
-
-  async _updateForFile(svgFile, dimensions, {compareToFile, gzip}) {
-    this._svgOuputUi.setSvg(svgFile.url, dimensions);
+  async _updateForFile(svgFile, {compareToFile, gzip}) {
+    this._svgOuputUi.setSvg(svgFile.url, svgFile.width, svgFile.height);
     this._codeOutputUi.setCode(svgFile.text);
     this._downloadButtonUi.setDownload(svgFile.name, svgFile.url);
 

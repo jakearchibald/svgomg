@@ -1,5 +1,7 @@
 "use strict";
 
+var SvgFile = require('./svg-file');
+
 class Svgo extends require('./worker-messenger') {
   constructor() {
     super('js/svgo-worker.js');
@@ -11,6 +13,8 @@ class Svgo extends require('./worker-messenger') {
     return this._requestResponse({
       action: 'load',
       data: svgText
+    }).then(({width, height}) => {
+      return new SvgFile(svgText, width, height);
     });
   }
 
@@ -22,8 +26,9 @@ class Svgo extends require('./worker-messenger') {
       action: 'process',
       settings
     });
+    var resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
 
-    itterationCallback(result);
+    itterationCallback(resultFile);
 
     if (settings.multipass) {
       while (result = await this.nextPass()) {
@@ -31,9 +36,10 @@ class Svgo extends require('./worker-messenger') {
           this._multiPass = false;
           this._abortMultiPassResolver();
           this._abortMultiPassResolver = null;
-          break;
+          throw Error('Abort');
         }
-        itterationCallback(result);
+        resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
+        itterationCallback(resultFile);
       }
       this._multiPass = false;
 
@@ -42,6 +48,9 @@ class Svgo extends require('./worker-messenger') {
         this._abortMultiPassResolver = null;
       }
     }
+
+    // return final result
+    return resultFile;
   }
 
   nextPass() {

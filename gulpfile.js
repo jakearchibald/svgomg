@@ -120,10 +120,11 @@ function bundle(bundler, outputFile) {
     .on('error', plugins.util.log.bind(plugins.util, 'Browserify Error'))
     .pipe(source(outputFile))
     .pipe(buffer())
-    .pipe(plugins.sourcemaps.init({loadMaps: true})) // loads map from browserify file
+    .pipe(plugins.sourcemaps.init({ loadMaps: true })) // loads map from browserify file
     .pipe(plugins.sourcemaps.write('./')) // writes .map file
+    .pipe(plugins.size({ gzip: true, title: outputFile }))
     .pipe(gulp.dest('build/js'))
-    .pipe(reload({stream: true}));
+    .pipe(reload({ stream: true }));
 }
 
 var bundlers = {

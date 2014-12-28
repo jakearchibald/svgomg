@@ -16,16 +16,18 @@ function readFileAsText(file) {
 }
 
 class SvgFile {
-  static async fromFile(file) {
+  // TODO: nah, this shouldn't be here, move to utils?
+  /*static async fromFile(file) {
     var text = await readFileAsText(file);
     return new SvgFile(text, name);
-  }
+  }*/
 
-  constructor(text, name) {
+  constructor(text, width, height) {
     this.text = text;
-    this.name = name || 'image.svg';
     this._compressedSize = null;
-    this._url = null;  
+    this._url = null;
+    this.width = width;
+    this.height = height;
   }
 
   async size({ compress }) {

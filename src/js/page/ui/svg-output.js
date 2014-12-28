@@ -10,7 +10,7 @@ class SvgOutput {
     this._svgContainer = this.container.querySelector('.svg-container');
   }
 
-  setSvg(url, {width, height}) {
+  setSvg(url, width, height) {
     this._svgContainer.src = url;
     this._svgContainer.width = width;
     this._svgContainer.height = height;

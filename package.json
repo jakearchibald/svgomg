@@ -20,7 +20,8 @@
     "uglifyify": "^2.6.0",
     "6to5": "^1.15.0",
     "6to5ify": "^2.0.0",
-    "gulp-swig": "^0.7.4"
+    "gulp-swig": "^0.7.4",
+    "gulp-size": "^1.1.0"
   },
   "private": true,
   "scripts": {
