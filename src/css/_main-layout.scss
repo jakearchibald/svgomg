@@ -15,6 +15,7 @@
   @media (min-width: 900px) {
     margin: 30px;
     border-radius: 2px;
+    border: 1px solid #d7d7d7;
 
     & > * {
       // unfortunately boosts scrolling performance in Chrome/Safari
@@ -39,6 +40,24 @@
 .output {
   @include flex(1);
   min-height: 300px;
+  position: relative;
+
+  & .floating-action-button {
+    position: absolute;
+    z-index: 2;
+    bottom: -28px;
+    right: 13px;
+
+    @media (min-width: 640px) {
+      right: 30px;
+      bottom: 30px;
+    }
+
+    @media (min-width: 900px) {
+      right: 0;
+      bottom: 30px;
+    }
+  }
 }
 
 // so these UI elements are above output
@@ -52,7 +71,7 @@
 .toolbar {
   box-shadow: 0 0px 11px rgba(0, 0, 0, 0.4);
 
-  @media (min-width: 900px) {
+  @media (min-width: 640px) {
     box-shadow: 0 4px 11px rgba(0, 0, 0, 0.3);
   }
 }

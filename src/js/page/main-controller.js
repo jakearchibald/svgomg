@@ -23,9 +23,10 @@ class MainController {
     this._cache = new (require('./results-cache'))(10);
 
     utils.domReady.then(_ => {
+      var output = document.querySelector('.output');
       document.querySelector('.status').appendChild(this._resultsUi.container);
-      //document.body.appendChild(this._downloadButtonUi.container);
-      document.querySelector('.output').appendChild(this._svgOuputUi.container);
+      output.appendChild(this._downloadButtonUi.container);
+      output.appendChild(this._svgOuputUi.container);
       //document.body.appendChild(this._codeOutputUi.container);
 
       // TODO: replace this with sub-controller for file input
