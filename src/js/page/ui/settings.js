@@ -17,11 +17,18 @@ class Settings extends (require('events').EventEmitter) {
       var settingsEl = document.querySelector('.settings');
 
       settingsEl.addEventListener('change', e => this._onChange(e));
+      settingsEl.addEventListener('wheel', e => this._onMouseWheel(e));
       
       // Stop double-tap text selection.
       // This stops all text selection which is kinda sad.
       settingsEl.addEventListener('mousedown', e => e.preventDefault());
     });
+  }
+
+  _onMouseWheel(event) {
+    // prevents bounce effect on desktop
+    event.preventDefault();
+    event.currentTarget.scrollTop += event.deltaY;
   }
 
   _onChange(event) {
