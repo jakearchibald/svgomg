@@ -53,13 +53,19 @@
   }
 
   @mixin keyframes($name) {
-    @-webkit-keyframes $name { @content; }
-    @keyframes         $name { @content; }
+    @-webkit-keyframes #{$name} { @content; }
+    @keyframes         #{$name} { @content; }
   }
 
   @mixin transform($spec...) {
     @each $prefix in -webkit-, '' {
       #{$prefix}transform: $spec;
+    }
+  }
+
+  @mixin filter($spec...) {
+    @each $prefix in -webkit-, '' {
+      #{$prefix}filter: $spec;
     }
   }
 

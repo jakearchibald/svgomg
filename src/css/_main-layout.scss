@@ -1,4 +1,4 @@
-.app {
+.app-output {
   height: 100%;
   overflow: hidden;
   @include display-flex;
@@ -61,8 +61,10 @@
 }
 
 // so these UI elements are above output
-.toolbar,
-.settings {
+.toolbar {
+  z-index: 2;
+}
+.setting {
   z-index: 1;
 }
 
@@ -75,3 +77,74 @@
     box-shadow: 0 4px 11px rgba(0, 0, 0, 0.3);
   }
 }
+
+// initial state
+  @include keyframes(untransform) {
+    to {
+      @include transform(none);
+    }
+  }
+
+  @include keyframes(unfilter) {
+    to {
+      @include filter(none);
+      opacity: 1;
+    }
+  }
+
+  .app-output {
+    & .toolbar {
+      @include transform(translateY(-110%));
+    }
+
+    & .settings {
+      @include transform(translateY(110%));
+
+      @media (min-width: 640px) {
+        @include transform(translateX(115%));
+      }
+    }
+
+    & .floating-action-button {
+      @include transform(translateX(74px));
+
+      @media (min-width: 640px) {
+        @include transform(translateY(89px));
+      }
+    }
+
+    & .svg-output {
+      @include filter(contrast(0%) brightness(200%) saturate(100%));
+      opacity: 0;
+    }
+
+    &.active {
+      & .toolbar {
+        @include animation(untransform 0.2s ease-out both);
+      }
+
+      & .settings {
+        @include animation(untransform 0.3s ease-out 0.05s both);
+
+        @media (min-width: 640px) and (max-width: 900px) {
+          @include animation(untransform 0.3s ease-out 0.2s both);
+        }
+      }
+
+      & .floating-action-button {
+        @include animation(untransform 0.2s ease-out 0.2s both);
+
+        @media (min-width: 640px) and (max-width: 900px) {
+          @include animation(untransform 0.2s ease-out 0.4s both);
+        }
+      }
+
+      & .svg-output {
+        @include animation(unfilter 0.5s ease-out 0.5s both);
+
+        @media (min-width: 640px) and (max-width: 900px) {
+          @include animation(unfilter 0.5s ease-out 0.6s both);
+        }
+      }
+    }
+  }

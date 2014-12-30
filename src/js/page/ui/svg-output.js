@@ -7,6 +7,7 @@ class SvgOutput {
         <iframe class="svg-container" sandbox="allow-scripts"></iframe>
       </div>
     `);
+
     this._svgContainer = this.container.querySelector('.svg-container');
   }
 
@@ -14,6 +15,17 @@ class SvgOutput {
     this._svgContainer.src = url;
     this._svgContainer.width = width;
     this._svgContainer.height = height;
+    return this._nextLoadPromise();
+  }
+
+  _nextLoadPromise() {
+    return new Promise(resolve => {
+      var onload = _ => {
+        this._svgContainer.removeEventListener('load', onload);
+        resolve();
+      }
+      this._svgContainer.addEventListener('load', onload);
+    });
   }
 }
 

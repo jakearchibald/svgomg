@@ -7,6 +7,8 @@ var SvgFile = require('./svg-file');
 
 class MainController {
   constructor() {
+    this._container = null;
+
     // ui components
     this._svgOuputUi = new (require('./ui/svg-output'));
     this._codeOutputUi = new (require('./ui/code-output'));
@@ -18,12 +20,16 @@ class MainController {
     this._settingsUi.on('change', _ => this._onSettingsChange());
 
     // state
+    this._inputFilename = 'image.svg';
     this._inputSvg = null;
     this._inputDimensions = null;
     this._cache = new (require('./results-cache'))(10);
 
     utils.domReady.then(_ => {
       var output = document.querySelector('.output');
+
+      this._container = document.querySelector('.app-output');
+
       document.querySelector('.status').appendChild(this._resultsUi.container);
       output.appendChild(this._downloadButtonUi.container);
       output.appendChild(this._svgOuputUi.container);
@@ -32,7 +38,8 @@ class MainController {
       // TODO: replace this with sub-controller for file input
       utils.get('test-svgs/tiger.svg').then(text => {
         this._onInputChange({
-          data: text
+          data: text,
+          filename: 'tiger.svg'
         });
       });
     });
@@ -46,6 +53,7 @@ class MainController {
     // TODO: this will become part of the file input loader
     try {
       this._inputSvg = await svgo.load(event.data);
+      this._inputFilename = event.filename;
     }
     catch(e) {
       this._handleError(e);
@@ -100,9 +108,12 @@ class MainController {
   }
 
   async _updateForFile(svgFile, {compareToFile, gzip}) {
-    this._svgOuputUi.setSvg(svgFile.url, svgFile.width, svgFile.height);
+    this._svgOuputUi.setSvg(svgFile.url, svgFile.width, svgFile.height).then(_ => {
+      this._container.classList.add('active');
+    });
+
     this._codeOutputUi.setCode(svgFile.text);
-    this._downloadButtonUi.setDownload(svgFile.name, svgFile.url);
+    this._downloadButtonUi.setDownload(this._inputFilename, svgFile.url);
 
     this._resultsUi.update({
       comparisonSize: compareToFile && (await compareToFile.size({ compress: gzip })),
