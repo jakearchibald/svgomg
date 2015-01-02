@@ -2,26 +2,7 @@
 
 var gzip = new (require('./gzip'));
 
-function readFileAsText(file) {
-  return new Promise(function(resolve, reject) {
-    var reader = new FileReader();
-    reader.readAsText(file);
-    reader.onerror = function() {
-      reject(reader.error);
-    };
-    reader.onload = function() {
-      resolve(reader.result);
-    };
-  });
-}
-
 class SvgFile {
-  // TODO: nah, this shouldn't be here, move to utils?
-  /*static async fromFile(file) {
-    var text = await readFileAsText(file);
-    return new SvgFile(text, name);
-  }*/
-
   constructor(text, width, height) {
     this.text = text;
     this._compressedSize = null;

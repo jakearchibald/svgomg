@@ -81,3 +81,16 @@ exports.escapeHtmlTag = function(strings, ...values) {
   values = values.map(exports.escapeHtml);
   return strings.reduce((str, val, i) => str += val + (values[i] || ''), '');
 };
+
+exports.readFileAsText = function readFileAsText(file) {
+  return new Promise(function(resolve, reject) {
+    var reader = new FileReader();
+    reader.readAsText(file);
+    reader.onerror = function() {
+      reject(reader.error);
+    };
+    reader.onload = function() {
+      resolve(reader.result);
+    };
+  });
+}

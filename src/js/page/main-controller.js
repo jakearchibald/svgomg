@@ -16,8 +16,12 @@ class MainController {
     this._resultsUi = new (require('./ui/results'));
     this._settingsUi = new (require('./ui/settings'));
 
+    // sub controllers
+    this._introController = new (require('./intro-controller'));
+
     // ui events
     this._settingsUi.on('change', _ => this._onSettingsChange());
+    this._introController.on('load', e => this._onInputChange(e));
 
     // state
     this._inputFilename = 'image.svg';
@@ -34,14 +38,6 @@ class MainController {
       output.appendChild(this._downloadButtonUi.container);
       output.appendChild(this._svgOuputUi.container);
       //document.body.appendChild(this._codeOutputUi.container);
-
-      // TODO: replace this with sub-controller for file input
-      utils.get('test-svgs/tiger.svg').then(text => {
-        this._onInputChange({
-          data: text,
-          filename: 'tiger.svg'
-        });
-      });
     });
   }
 
@@ -110,6 +106,7 @@ class MainController {
   async _updateForFile(svgFile, {compareToFile, gzip}) {
     this._svgOuputUi.setSvg(svgFile.url, svgFile.width, svgFile.height).then(_ => {
       this._container.classList.add('active');
+      this._introController.container.classList.remove('active');
     });
 
     this._codeOutputUi.setCode(svgFile.text);
