@@ -10,16 +10,9 @@ class DownloadButton {
     `);
   }
 
-  setDownload(filename, content) {
+  setDownload(filename, url) {
     this.container.download = filename;
-
-    if (this.container.href) {
-      URL.revokeObjectURL(this.container.href);
-    }
-
-    this.container.href = URL.createObjectURL(
-      new Blob([content], {type: "image/svg+xml"})
-    );
+    this.container.href = url;
   }
 }
 
