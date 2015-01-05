@@ -63,6 +63,12 @@
     }
   }
 
+  @mixin transform-origin($spec...) {
+    @each $prefix in -webkit-, '' {
+      #{$prefix}transform-origin: $spec;
+    }
+  }
+
   @mixin filter($spec...) {
     @each $prefix in -webkit-, '' {
       #{$prefix}filter: $spec;

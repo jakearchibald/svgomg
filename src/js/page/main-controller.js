@@ -15,13 +15,11 @@ class MainController {
     this._downloadButtonUi = new (require('./ui/download-button'));
     this._resultsUi = new (require('./ui/results'));
     this._settingsUi = new (require('./ui/settings'));
-
-    // sub controllers
-    this._introController = new (require('./intro-controller'));
+    this._mainMenuUi = new (require('./ui/main-menu'));
 
     // ui events
     this._settingsUi.on('change', _ => this._onSettingsChange());
-    this._introController.on('load', e => this._onInputChange(e));
+    this._mainMenuUi.on('svgDataLoad', e => this._onInputChange(e));
 
     // state
     this._inputFilename = 'image.svg';
@@ -38,6 +36,12 @@ class MainController {
       output.appendChild(this._downloadButtonUi.container);
       output.appendChild(this._svgOuputUi.container);
       //document.body.appendChild(this._codeOutputUi.container);
+
+      return;
+      utils.get('test-svgs/tiger.svg').then(t => this._onInputChange({
+        data: t,
+        filename: 'test.svg'
+      }))
     });
   }
 
@@ -46,7 +50,6 @@ class MainController {
   }
 
   async _onInputChange(event) {
-    // TODO: this will become part of the file input loader
     try {
       this._inputSvg = await svgo.load(event.data);
       this._inputFilename = event.filename;
@@ -56,6 +59,7 @@ class MainController {
       return;
     }
 
+    this._cache.purge();
     this._compressSvg();
   }
 
@@ -106,7 +110,8 @@ class MainController {
   async _updateForFile(svgFile, {compareToFile, gzip}) {
     this._svgOuputUi.setSvg(svgFile.url, svgFile.width, svgFile.height).then(_ => {
       this._container.classList.add('active');
-      this._introController.container.classList.remove('active');
+      this._mainMenuUi.allowHide = true;
+      this._mainMenuUi.hide();
     });
 
     this._codeOutputUi.setCode(svgFile.text);

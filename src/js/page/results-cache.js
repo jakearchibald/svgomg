@@ -3,10 +3,10 @@
 class ResultsCache {
   constructor(size) {
     this._size = size;
-    this.reset();
+    this.purge();
   }
 
-  reset() {
+  purge() {
     this._fingerprints = [];
     this._files = [];
     this._index = 0;

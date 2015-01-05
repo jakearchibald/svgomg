@@ -1,5 +1,4 @@
 .app-output {
-  pointer-events: all;
   height: 100%;
   overflow: hidden;
   @include display-flex;
@@ -120,8 +119,6 @@
     }
 
     &.active {
-      pointer-events: all;
-
       & .toolbar {
         @include animation(untransform 0.2s ease-out both);
       }

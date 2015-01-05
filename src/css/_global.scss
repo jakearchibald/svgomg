@@ -10,3 +10,8 @@ html, body {
   background-size: 16px 16px;
   background-color: #f2f2f2;
 }
+
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
