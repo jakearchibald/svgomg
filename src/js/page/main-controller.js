@@ -36,12 +36,6 @@ class MainController {
       output.appendChild(this._downloadButtonUi.container);
       output.appendChild(this._svgOuputUi.container);
       //document.body.appendChild(this._codeOutputUi.container);
-
-      return;
-      utils.get('test-svgs/tiger.svg').then(t => this._onInputChange({
-        data: t,
-        filename: 'test.svg'
-      }))
     });
   }
 

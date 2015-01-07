@@ -46,9 +46,9 @@
     }
   }
 
-  @mixin animation($type) {
+  @mixin animation($spec...) {
     @each $prefix in -webkit-, '' {
-      #{$prefix}animation: $type;
+      #{$prefix}animation: $spec;
     }
   }
 
