@@ -16,6 +16,7 @@ class MainController {
     this._resultsUi = new (require('./ui/results'));
     this._settingsUi = new (require('./ui/settings'));
     this._mainMenuUi = new (require('./ui/main-menu'));
+    this._toastsUi = new (require('./ui/toasts'));
 
     // ui events
     this._settingsUi.on('change', _ => this._onSettingsChange());
@@ -36,6 +37,7 @@ class MainController {
       output.appendChild(this._downloadButtonUi.container);
       output.appendChild(this._svgOuputUi.container);
       //document.body.appendChild(this._codeOutputUi.container);
+      this._container.appendChild(this._toastsUi.container);
     });
   }
 
@@ -49,6 +51,8 @@ class MainController {
       this._inputFilename = event.filename;
     }
     catch(e) {
+      e.message = "Load failed: " + e.message;
+      this._mainMenuUi.stopSpinner();
       this._handleError(e);
       return;
     }
@@ -58,7 +62,7 @@ class MainController {
   }
 
   _handleError(e) {
-    // TODO: some UI for this
+    this._toastsUi.show(e.message);
     console.error(e);
   }
 
@@ -97,7 +101,10 @@ class MainController {
       this._cache.add(settings.fingerprint, finalResultFile);
     }
     catch(e) {
-      if (e.message != "Abort") throw e;
+      if (e.message != "abort") {
+        e.message = "Minifying error: " + e.message;
+        this._handleError(e);
+      }
     }
   }
 

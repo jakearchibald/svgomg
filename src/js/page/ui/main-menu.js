@@ -16,6 +16,7 @@ class MainMenu extends (require('events').EventEmitter) {
       this._pasteInput = document.querySelector('.paste-input');
       this._loadDemoBtn = document.querySelector('.load-demo');
       this._selectFileBtn = document.querySelector('.select-file');
+      this._pasteLabel = document.querySelector('.menu-input');
 
       document.querySelector('.menu-btn')
         .addEventListener('click', e => this._onMenuButtonClick(e));
@@ -59,10 +60,13 @@ class MainMenu extends (require('events').EventEmitter) {
   }
 
   _onTextInputChange(event) {
-    var val = this._pasteInput.value;
+    var val = this._pasteInput.value.trim();
 
     if (val.indexOf('</svg>') != -1) {
       this._pasteInput.value = '';
+
+      this._pasteLabel.appendChild(this._spinner.container);
+      this._spinner.show();
 
       this.emit('svgDataLoad', {
         data: val,

@@ -94,3 +94,17 @@ exports.readFileAsText = function readFileAsText(file) {
     };
   });
 }
+
+exports.transitionToClass = function(el, className) {
+  return new Promise(resolve => {
+    var listener = event => {
+      if (event.target != el) return;
+      el.removeEventListener('webkitTransitionEnd', listener);
+      el.removeEventListener('transitionend', listener);
+      resolve();
+    };
+    el.addEventListener('webkitTransitionEnd', listener);
+    el.addEventListener('transitionend', listener);
+    el.classList.add(className);
+  })
+};

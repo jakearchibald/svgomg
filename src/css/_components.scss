@@ -268,6 +268,7 @@
         left: 0;
       }
 
+      & textarea,
       & input {
         font: inherit;
         border: none;
@@ -276,6 +277,7 @@
         margin: 0;
         opacity: 0;
         cursor: inherit;
+        resize: none;
 
         &:focus {
           outline: none;
@@ -320,6 +322,15 @@
     from { @include transform(rotate(-130deg)); }
     50% { @include transform(rotate(5deg)); }
     to { @include transform(rotate(-130deg)); }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
   @keyframes fade-out {
@@ -419,4 +430,44 @@
     border-color: #4285f4;
     /* durations: 4 * ARCTIME */
     @include animation(fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both);
+  }
+
+// toasts
+  .toasts {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    z-index: 3;
+  }
+
+  .toast {
+    color: #fff;
+    background: #323232;
+    padding: 14px 29px;
+    min-width: 288px;
+    max-width: 568px;
+    border-radius: 2px;
+
+    @include display-flex;
+    @include animation(fade-in 0.5s ease-out);
+    @include transition(opacity 0.3s ease-out);
+
+    &.hide {
+      opacity: 0;
+    }
+
+    & .toast-content {
+      margin-right: 24px;
+    }
+
+    & button {
+      margin: 0 0 0 auto;
+      color: #00BCD4;
+      text-transform: uppercase;
+
+      &:focus {
+        outline: none;
+        color: #fff;
+      }
+    }
   }

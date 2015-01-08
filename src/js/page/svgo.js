@@ -36,7 +36,7 @@ class Svgo extends require('./worker-messenger') {
           this._multiPass = false;
           this._abortMultiPassResolver();
           this._abortMultiPassResolver = null;
-          throw Error('Abort');
+          throw Error('abort');
         }
         resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
         itterationCallback(resultFile);

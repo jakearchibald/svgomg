@@ -1,3 +1,3 @@
 'use strict';
-require("6to5/lib/6to5/transformation/transformers/es6-generators/runtime");
+require("regenerator/runtime");
 new (require('./main-controller'));

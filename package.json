@@ -3,7 +3,7 @@
     "browser-sync": "^1.7.0",
     "del": "^1.1.0",
     "gulp": "^3.8.10",
-    "gulp-filter": "^1.0.2",
+    "gulp-filter": "^2.0.0",
     "gulp-htmlmin": "^0.2.0",
     "gulp-load-plugins": "^0.8.0",
     "gulp-ruby-sass": "^0.7.1",
@@ -13,13 +13,12 @@
     "vinyl-buffer": "^1.0.0",
     "gulp-sourcemaps": "^1.2.8",
     "watchify": "^2.2.1",
-    "browserify": "^7.0.2",
+    "browserify": "^8.0.0",
     "merge-stream": "^0.1.6",
-    "svgo": "~0.5.0",
-    "pako": "~0.2.5",
+    "svgo": "^0.5.0",
+    "pako": "^0.2.5",
     "uglifyify": "^2.6.0",
-    "6to5": "^1.15.0",
-    "6to5ify": "^2.0.0",
+    "6to5ify": "^3.1.0",
     "gulp-swig": "^0.7.4",
     "gulp-size": "^1.1.0"
   },
@@ -28,5 +27,8 @@
     "build": "gulp build --production",
     "serve": "gulp serve",
     "test": "gulp build --production"
+  },
+  "dependencies": {
+    "regenerator": "~0.8.3"
   }
 }
