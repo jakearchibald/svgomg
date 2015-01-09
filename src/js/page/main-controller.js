@@ -58,7 +58,11 @@ class MainController {
     }
 
     this._cache.purge();
-    this._compressSvg();
+    await this._compressSvg();
+
+    this._container.classList.add('active');
+    this._mainMenuUi.allowHide = true;
+    this._mainMenuUi.hide();
   }
 
   _handleError(e) {
@@ -109,11 +113,7 @@ class MainController {
   }
 
   async _updateForFile(svgFile, {compareToFile, gzip}) {
-    this._svgOuputUi.setSvg(svgFile.url, svgFile.width, svgFile.height).then(_ => {
-      this._container.classList.add('active');
-      this._mainMenuUi.allowHide = true;
-      this._mainMenuUi.hide();
-    });
+    this._svgOuputUi.setSvg(svgFile.url, svgFile.width, svgFile.height);
 
     this._codeOutputUi.setCode(svgFile.text);
     this._downloadButtonUi.setDownload(this._inputFilename, svgFile.url);
