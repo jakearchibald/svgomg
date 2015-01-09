@@ -435,9 +435,17 @@
 // toasts
   .toasts {
     position: absolute;
-    bottom: 30px;
-    left: 30px;
     z-index: 3;
+
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    @media (min-width: 640px) {
+      bottom: 30px;
+      left: 30px;
+      right: auto;
+    }
   }
 
   .toast {
@@ -464,6 +472,7 @@
       margin: 0 0 0 auto;
       color: #00BCD4;
       text-transform: uppercase;
+      @include min-width-min-content;
 
       &:focus {
         outline: none;
