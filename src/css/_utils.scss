@@ -101,6 +101,11 @@
       #{$prefix}flex-flow: $spec;
     }
   }
+  @mixin flex-shrink($spec...) {
+    @each $prefix in -webkit-, '' {
+      #{$prefix}flex-shrink: $spec;
+    }
+  }
   @mixin align-items($spec...) {
     @each $prefix in -webkit-, '' {
       #{$prefix}align-items: $spec;

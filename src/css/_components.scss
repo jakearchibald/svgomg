@@ -248,6 +248,7 @@
         height: 24px;
         opacity: 0.54;
         margin-right: 32px;
+        @include flex-shrink(0);
       }
 
       & .spinner {
@@ -278,6 +279,7 @@
         opacity: 0;
         cursor: inherit;
         resize: none;
+        width: 100%;
 
         &:focus {
           outline: none;
@@ -452,13 +454,16 @@
     color: #fff;
     background: #323232;
     padding: 14px 29px;
-    min-width: 288px;
-    max-width: 568px;
-    border-radius: 2px;
 
     @include display-flex;
     @include animation(fade-in 0.5s ease-out);
     @include transition(opacity 0.3s ease-out);
+
+    @media (min-width: 640px) {
+      min-width: 288px;
+      max-width: 568px;
+      border-radius: 2px;
+    }
 
     &.hide {
       opacity: 0;

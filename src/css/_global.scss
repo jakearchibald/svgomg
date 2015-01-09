@@ -11,7 +11,9 @@ html, body {
   background-color: #f2f2f2;
 }
 
-button::-moz-focus-inner {
-  border: 0;
-  padding: 0;
+button, textarea {
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
 }
