@@ -6,7 +6,8 @@ class Svgo extends require('./worker-messenger') {
   constructor() {
     super('js/svgo-worker.js');
     this._multiPass = false;
-    this._abortMultiPassResolver = null;
+    this._abortOnNextItter = false;
+    this._currentJob = Promise.resolve();
   }
 
   load(svgText) {
@@ -18,39 +19,32 @@ class Svgo extends require('./worker-messenger') {
     });
   }
 
-  async process(settings, itterationCallback) {
-    await this.abortCurrent();
-    this._multiPass = settings.multipass;
+  process(settings, itterationCallback) {
+    return this._currentJob = this.abortCurrent().then(async _ => {
+      this._abortOnNextItter = false;
 
-    var result = await this._requestResponse({
-      action: 'process',
-      settings
-    });
-    var resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
+      var result = await this._requestResponse({
+        action: 'process',
+        settings
+      });
 
-    itterationCallback(resultFile);
+      var resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
 
-    if (settings.multipass) {
-      while (result = await this.nextPass()) {
-        if (this._abortMultiPassResolver) {
-          this._multiPass = false;
-          this._abortMultiPassResolver();
-          this._abortMultiPassResolver = null;
-          throw Error('abort');
+      itterationCallback(resultFile);
+
+      if (settings.multipass) {
+        while (result = await this.nextPass()) {
+          if (this._abortOnNextItter) {
+            throw Error('abort');
+          }
+          resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
+          itterationCallback(resultFile);
         }
-        resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
-        itterationCallback(resultFile);
       }
-      this._multiPass = false;
 
-      if (this._abortMultiPassResolver) {
-        this._abortMultiPassResolver();
-        this._abortMultiPassResolver = null;
-      }
-    }
-
-    // return final result
-    return resultFile;
+      // return final result
+      return resultFile;
+    });
   }
 
   nextPass() {
@@ -60,11 +54,11 @@ class Svgo extends require('./worker-messenger') {
   }
 
   async abortCurrent() {
-    if (!this._multiPass) {
-      return;
-    }
+    this._abortOnNextItter = true;
 
-    new Promise(r => this._abortMultiPassResolver = r);
+    try {
+      await this._currentJob;
+    } catch(e){}
   }
 }
 

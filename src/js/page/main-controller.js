@@ -27,6 +27,7 @@ class MainController {
     this._inputSvg = null;
     this._inputDimensions = null;
     this._cache = new (require('./results-cache'))(10);
+    this._latestCompressJobId = 0;
 
     utils.domReady.then(_ => {
       var output = document.querySelector('.output');
@@ -71,9 +72,16 @@ class MainController {
   }
 
   async _compressSvg() {
+    var thisJobId = this._latestCompressJobId = Math.random();
     var settings = this._settingsUi.getSettings();
 
     await svgo.abortCurrent();
+
+    if (thisJobId != this._latestCompressJobId) {
+      // while we've been waiting, there's been a newer call
+      // to _compressSvg, we don't need to do anything
+      return;
+    }
 
     if (settings.original) {
       this._updateForFile(this._inputSvg, {
@@ -101,11 +109,10 @@ class MainController {
           gzip: settings.gzip
         });
       });
-
       this._cache.add(settings.fingerprint, finalResultFile);
     }
     catch(e) {
-      if (e.message != "abort") {
+      if (e.message != "abort") { // TODO: should really be switching on error type
         e.message = "Minifying error: " + e.message;
         this._handleError(e);
       }

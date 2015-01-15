@@ -28,8 +28,6 @@ class MainMenu extends (require('events').EventEmitter) {
       this._loadDemoBtn.addEventListener('click', e => this._onLoadDemoClick(e));
       this._selectFileInput.addEventListener('change', e => this._onFileInputChange(e));
       this._pasteInput.addEventListener('input', e => this._onTextInputChange(e));
-
-      //document.querySelector('.load-demo').appendChild(new Spinner().container);
     });
   }
 
