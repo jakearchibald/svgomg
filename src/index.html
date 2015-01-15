@@ -63,21 +63,30 @@
             <div>
               <label class="main-setting-item">
                 <input type="checkbox" name="original">
-                <span class="material-switch"></span>
+                <span class="material-switch">
+                  <span class="track"></span>
+                  <span class="handle"></span>
+                </span>
                 Show original
               </label>
             </div>
             <div>
               <label class="main-setting-item">
                 <input type="checkbox" name="gzip" checked>
-                <span class="material-switch"></span>
+                <span class="material-switch">
+                  <span class="track"></span>
+                  <span class="handle"></span>
+                </span>
                 Compare gzipped
               </label>
             </div>
             <div>
               <label class="main-setting-item">
                 <input type="checkbox" name="multipass">
-                <span class="material-switch"></span>
+                <span class="material-switch">
+                  <span class="track"></span>
+                  <span class="handle"></span>
+                </span>
                 Multipass
               </label>
             </div>
@@ -89,7 +98,10 @@
                   <input type="checkbox"
                          name="{{ plugin.id }}"
                          {% if plugin.active %}checked{% endif %}>
-                  <span class="material-switch"></span>
+                  <span class="material-switch">
+                    <span class="track"></span>
+                    <span class="handle"></span>
+                  </span>
                   {{ plugin.name }}
                 </label>
               </div>
