@@ -112,6 +112,8 @@
       cursor: inherit;
       resize: none;
       width: 100%;
+      height: 1.3em;
+      overflow: hidden;
 
       &:focus {
         outline: none;

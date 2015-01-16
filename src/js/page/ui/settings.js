@@ -36,9 +36,12 @@ class Settings extends (require('events').EventEmitter) {
   }
 
   _onMouseWheel(event) {
-    // prevents bounce effect on desktop
-    event.preventDefault();
-    event.currentTarget.scrollTop += event.deltaY;
+    // Prevents bounce effect on desktop.
+    // Firefox uses DELTA_LINE on a mouse wheel, ignore it
+    if (!event.deltaMode) { // 0 is "pixels"
+      event.preventDefault();
+      event.currentTarget.scrollTop += event.deltaY;
+    }
   }
 
   _onChange(event) {
