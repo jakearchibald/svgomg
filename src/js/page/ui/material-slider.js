@@ -25,8 +25,18 @@ class MaterialSlider {
     // events
     rangeEl.addEventListener('input', e => this._onInputChange(e));
     this.container.addEventListener('mousedown', e => this._onMouseDown(e));
+    this.range.addEventListener('touchstart', e => this._onRangeTouchStart(e));
+    this.range.addEventListener('touchend', e => this._onRangeTouchEnd(e));
 
     this._setPosition();
+  }
+
+  _onRangeTouchStart(event) {
+    this.range.focus();
+  }
+
+  _onRangeTouchEnd(event) {
+    this.range.blur();
   }
 
   _onMouseDown(event) {
