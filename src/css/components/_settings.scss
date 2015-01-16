@@ -1,0 +1,23 @@
+.settings {
+  background: #fff;
+}
+
+.setting-item-toggle {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  padding: 16px;
+  height: 48px;
+  box-sizing: border-box;
+
+  @include display-flex;
+  @include align-items(center);
+
+  & input[type=checkbox] {
+    display: none;
+  }
+}
+
+.setting-item-range {
+  padding: 16px;
+}

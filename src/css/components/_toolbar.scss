@@ -1,0 +1,28 @@
+.toolbar {
+  background: #3F51B5;
+  color: #fff;
+  @include display-flex;
+  @include align-items(center);
+
+  & .status {
+    @include flex(1);
+    padding: 0.8em 1em;
+    text-align: right;
+  }
+}
+
+.menu-toolbar-item {
+  & button {
+    padding: 10px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  & svg {
+    width: 24px;
+    height: 24px;
+    fill: #fff;
+  }
+}

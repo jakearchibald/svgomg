@@ -1,6 +1,7 @@
 "use strict"
 
 var utils = require('../utils');
+var Slider = require('./material-slider');
 
 class Settings extends (require('events').EventEmitter) {
   constructor() {
@@ -14,14 +15,23 @@ class Settings extends (require('events').EventEmitter) {
         document.querySelectorAll('.settings .misc input')
       );
 
+      utils.toArray(
+        document.querySelectorAll('.settings .material-slider')
+      ).forEach(el => new Slider(el));
+
       var settingsEl = document.querySelector('.settings');
 
       settingsEl.addEventListener('change', e => this._onChange(e));
+      settingsEl.addEventListener('input', e => this._onChange(e));
       settingsEl.addEventListener('wheel', e => this._onMouseWheel(e));
       
       // Stop double-tap text selection.
       // This stops all text selection which is kinda sad.
-      settingsEl.addEventListener('mousedown', e => e.preventDefault());
+      // I think this code will bite me.
+      settingsEl.addEventListener('mousedown', e => {
+        if (utils.closest(e.target, 'input[type=range]')) return;
+        e.preventDefault();
+      });
     });
   }
 
@@ -32,6 +42,12 @@ class Settings extends (require('events').EventEmitter) {
   }
 
   _onChange(event) {
+    if (event.type == 'change' && event.target.type == 'range') {
+      // for ranges, the change event is just a dupe of the
+      // final input event
+      return;
+    }
+
     this.emit('change');
   }
 
@@ -45,10 +61,20 @@ class Settings extends (require('events').EventEmitter) {
     
     this._miscInputs.forEach(function(inputEl) {
       if (inputEl.name != 'gzip' && inputEl.name != 'original') {
-        fingerprint.push(Number(inputEl.checked));
+        if (inputEl.type == 'checkbox') {
+          fingerprint.push(Number(inputEl.checked));
+        }
+        else {
+          fingerprint.push('|' + inputEl.value + '|');
+        }
       }
       
-      output[inputEl.name] = inputEl.checked;
+      if (inputEl.type == 'checkbox') {
+        output[inputEl.name] = inputEl.checked;
+      }
+      else {
+        output[inputEl.name] = inputEl.value;
+      }
     });
 
     this._pluginInputs.forEach(function(inputEl) {

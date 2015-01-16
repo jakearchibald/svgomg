@@ -109,8 +109,20 @@ function getDimensions(parsedSvg) {
 
 function* multipassCompress(settings) {
   // activate/deactivate plugins
-  Object.keys(settings.plugins).forEach(function(pluginName) {
+  Object.keys(settings.plugins).forEach(pluginName => {
     pluginsData[pluginName].active = settings.plugins[pluginName];
+  });
+
+  // float precision
+  [
+    'cleanupNumericValues',
+    'convertPathData',
+    // Not including this by default, it seems to break SVGs really badly at lower numbers.
+    // TODO: make "use global precision" off by default when it comes to transforms
+    //'convertTransform',
+    'transformsWithOnePath'
+  ].forEach(pluginName => {
+    pluginsData[pluginName].params.floatPrecision = Number(settings.floatPrecision);
   });
 
   var svg = cloneParsedSvg(parsedSvg);

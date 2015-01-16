@@ -1,21 +1,5 @@
 "use strict";
 
-/*exports.defaults = function defaults(opts, defaultOpts) {
-  var r = {};
-
-  for (var key in defaultOpts) if (defaultOpts.hasOwnProperty(key)) {
-    r[key] = defaultOpts[key];
-  }
-
-  if (!opts) { return r; }
-
-  for (key in opts) if (opts.hasOwnProperty(key)) {
-    r[key] = opts[key];
-  }
-
-  return r;
-};*/
-
 exports.toArray = function toArray(obj) {
   return Array.prototype.slice.apply(obj);
 };
@@ -107,4 +91,19 @@ exports.transitionToClass = function(el, className) {
     el.addEventListener('transitionend', listener);
     el.classList.add(className);
   })
+};
+
+exports.closest = function(el, selector) {
+  if (el.closest) {
+    return el.closest(selector);
+  }
+
+  var matches = el.matches || el.msMatchesSelector;
+
+  do {
+    if (el.nodeType != 1) continue;
+    if (matches.call(el, selector)) return el;
+  } while (el = el.parentNode);
+
+  return undefined;
 };

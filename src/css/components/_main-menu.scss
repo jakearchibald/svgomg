@@ -1,0 +1,131 @@
+.main-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 3;
+
+  &.hidden {
+    pointer-events: none;
+
+    & .overlay {
+      opacity: 0;
+    }
+
+    & .menu {
+      @include transform(translateX(-110%));
+    }
+  }
+
+  & .menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    min-width: 264px;
+    width: 40%;
+    max-width: 340px;
+    background: #fff;
+    box-shadow: 3px 0 16px rgba(0, 0, 0, 0.4);
+    will-change: transform;
+
+    @include transition-transform(0.2s ease-out);
+  }
+
+  & .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(#000, 0.4);
+    will-change: opacity;
+    @include transition(opacity 0.2s ease-in-out);
+  }
+
+  & ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  & li {
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+
+  & .menu-item {
+    padding: 0 16px;
+    width: 100%;
+    min-height: 48px;
+    box-sizing: border-box;
+    @include display-flex;
+    @include align-items(center);
+
+    &:link,
+    &:visited {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    &:focus,
+    &:hover {
+      outline: none;
+      background: rgba(#000, 0.1);
+    }
+
+    & .icon {
+      width: 24px;
+      height: 24px;
+      opacity: 0.54;
+      margin-right: 32px;
+      @include flex-shrink(0);
+    }
+
+    & .spinner {
+      margin: 0 0 0 auto;
+    }
+  }
+
+  & .menu-input {
+    cursor: pointer;
+
+    & .input-area {
+      position: relative;
+      white-space: nowrap;
+    }
+
+    & .label-txt {
+      position: absolute;
+      left: 0;
+    }
+
+    & textarea,
+    & input {
+      font: inherit;
+      border: none;
+      background: none;
+      padding: 0;
+      margin: 0;
+      opacity: 0;
+      cursor: inherit;
+      resize: none;
+      width: 100%;
+
+      &:focus {
+        outline: none;
+        opacity: 1;
+
+        & + .label-txt {
+          opacity: 0;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  & .select-file-input {
+    display: none;
+  }
+}

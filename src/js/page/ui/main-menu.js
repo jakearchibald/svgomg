@@ -101,8 +101,11 @@ class MainMenu extends (require('events').EventEmitter) {
     this._loadDemoBtn.appendChild(this._spinner.container);
     this._spinner.show();
 
+    // load a simpler image if shift is held down - quicker for testing :D
+    var url = event.shiftKey ? 'test-svgs/github.svg' : 'test-svgs/car.svg'
+
     this.emit('svgDataLoad', {
-      data: await utils.get('test-svgs/car.svg'),
+      data: await utils.get(url),
       filename: 'car.svg'
     });
   }

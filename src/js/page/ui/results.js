@@ -1,4 +1,5 @@
 var utils = require('../utils');
+var Spinner = require('./spinner');
 
 function round(num, places) {
   var mult = Math.pow(10, places);
@@ -24,6 +25,9 @@ class Results {
     `);
     this._sizeEl = this.container.querySelector('.size');
     this._diffEl = this.container.querySelector('.diff');
+    //var spinner = new Spinner();
+    //this.container.appendChild(spinner.container);
+    //spinner.show();
   }
 
   update({size, comparisonSize}) {

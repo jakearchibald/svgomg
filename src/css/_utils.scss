@@ -40,6 +40,12 @@
     }
   }
 
+  @mixin transition-transform($spec...) {
+    @each $prefix in -webkit-, '' {
+      #{$prefix}transition: #{$prefix}transform $spec;
+    }
+  }
+
   @mixin transition-property($spec...) {
     @each $prefix in -webkit-, '' {
       #{$prefix}transition-property: $spec;
