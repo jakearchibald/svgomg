@@ -59,7 +59,8 @@
       <div class="main">
         <div class="output"></div>
         <div class="settings">
-          <div class="misc">
+          <section class="global">
+            <h1 class="settings-sub-heading">Global settings</h1>
             <div>
               <label class="setting-item-toggle">
                 <input type="checkbox" name="original">
@@ -82,13 +83,14 @@
               </label>
             </div>
             <div>
-              <label class="setting-item-range material-slider">
-                Float precision
+              <label class="setting-item-range">
+                <div class="label-text">Precision</div>
                 <input type="range" min="1" max="8" step="1" value="3" name="floatPrecision">
               </label>
             </div>
-          </div>
-          <div class="plugins">
+          </section>
+          <section class="plugins">
+            <h1 class="settings-sub-heading">Features</h1>
             {% for plugin in plugins %}
               <div>
                 <label class="setting-item-toggle">
@@ -100,7 +102,7 @@
                 </label>
               </div>
             {% endfor %}
-          </div>
+          </section>
         </div>
       </div>
     </div>

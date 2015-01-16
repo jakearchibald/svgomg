@@ -1,14 +1,14 @@
 .settings {
   background: #fff;
+  @include user-select(none);
 }
 
 .setting-item-toggle {
   position: relative;
   display: block;
   cursor: pointer;
-  padding: 16px;
-  height: 48px;
-  box-sizing: border-box;
+  padding: 0 16px;
+  height: 51px;
 
   @include display-flex;
   @include align-items(center);
@@ -19,5 +19,24 @@
 }
 
 .setting-item-range {
-  padding: 16px;
+  padding: 10px 16px 20px;
+  @include display-flex;
+  @include flex-flow(column);
+  @include justify-content(center);
+
+  & .label-text {
+    margin-bottom: 0.7em;
+  }
+}
+
+.settings > section:not(:first-child) {
+  border-top: 1px solid #e7e7e7;
+}
+
+.settings-sub-heading {
+  margin: 0;
+  padding: 12px 16px 16px;
+  font-weight: normal;
+  font-size: 0.9rem;
+  color: #898989;
 }

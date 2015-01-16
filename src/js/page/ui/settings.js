@@ -11,12 +11,12 @@ class Settings extends (require('events').EventEmitter) {
       this._pluginInputs = utils.toArray(
         document.querySelectorAll('.settings .plugins input')
       );
-      this._miscInputs = utils.toArray(
-        document.querySelectorAll('.settings .misc input')
+      this._globalInputs = utils.toArray(
+        document.querySelectorAll('.settings .global input')
       );
 
       utils.toArray(
-        document.querySelectorAll('.settings .material-slider')
+        document.querySelectorAll('.settings input[type=range]')
       ).forEach(el => new Slider(el));
 
       var settingsEl = document.querySelector('.settings');
@@ -59,7 +59,7 @@ class Settings extends (require('events').EventEmitter) {
       plugins: {}
     };
     
-    this._miscInputs.forEach(function(inputEl) {
+    this._globalInputs.forEach(function(inputEl) {
       if (inputEl.name != 'gzip' && inputEl.name != 'original') {
         if (inputEl.type == 'checkbox') {
           fingerprint.push(Number(inputEl.checked));
