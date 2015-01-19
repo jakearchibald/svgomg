@@ -81,7 +81,8 @@
 // initial state
   @include keyframes(untransform) {
     to {
-      @include transform(none);
+      // translateZ required to make Safari layer in the right order
+      @include transform(translateZ(0));
     }
   }
 

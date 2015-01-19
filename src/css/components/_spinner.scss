@@ -1,8 +1,8 @@
-@keyframes container-rotate {
+@include keyframes(container-rotate) {
   to { @include transform(rotate(360deg)) }
 }
 
-@keyframes fill-unfill-rotate {
+@include keyframes(fill-unfill-rotate) {
   12.5% { @include transform(rotate(135deg));  } /* 0.5 * ARCSIZE */
   25%   { @include transform(rotate(270deg));  } /* 1   * ARCSIZE */
   37.5% { @include transform(rotate(405deg));  } /* 1.5 * ARCSIZE */
@@ -13,19 +13,19 @@
   to    { @include transform(rotate(1080deg)); } /* 4   * ARCSIZE */
 }
 
-@keyframes left-spin {
+@include keyframes(left-spin) {
   from { @include transform(rotate(130deg)); }
   50% { @include transform(rotate(-5deg)); }
   to { @include transform(rotate(130deg)); }
 }
 
-@keyframes right-spin {
+@include keyframes(right-spin) {
   from { @include transform(rotate(-130deg)); }
   50% { @include transform(rotate(5deg)); }
   to { @include transform(rotate(-130deg)); }
 }
 
-@keyframes fade-in {
+@include keyframes(fade-in) {
   from {
     opacity: 0;
   }
@@ -34,7 +34,7 @@
   }
 }
 
-@keyframes fade-out {
+@include keyframes(fade-out) {
   from {
     opacity: 1;
   }
@@ -62,7 +62,6 @@
     border-color: inherit;
     border-bottom-color: transparent !important;
     border-radius: 50%;
-    animation: none;
   }
 
   // Patch the gap that appear between the two adjacent div.circle-clipper while the

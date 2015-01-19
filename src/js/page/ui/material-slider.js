@@ -40,10 +40,11 @@ class MaterialSlider {
   }
 
   _onRangeMouseDown(event) {
-    this.range.focus();
+    this.range.classList.add('active');
 
     var upListener = e => {
       this.range.blur();
+      this.range.classList.remove('active');
       document.removeEventListener('mouseup', upListener);
     }
     document.addEventListener('mouseup', upListener);

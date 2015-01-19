@@ -69,7 +69,8 @@
     opacity: 0;
   }
 
-  & :focus + .track {
+  & :focus + .track,
+  & .active + .track {
     & .handle {
       @include transform(translate(-50%, -145%) translateZ(0));
     }
