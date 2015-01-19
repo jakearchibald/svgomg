@@ -33,7 +33,7 @@ exports.get = function get(url) {
     
     req.send();
   });
-}
+};
 
 exports.strToEl = (function () {
   var tmpEl = document.createElement('div');

@@ -130,7 +130,8 @@ function bundle(bundler, outputFile) {
 var bundlers = {
   'page.js': createBundler('./src/js/page/index.js'),
   'svgo-worker.js': createBundler('./src/js/svgo-worker/index.js'),
-  'gzip-worker.js': createBundler('./src/js/gzip-worker/index.js')
+  'gzip-worker.js': createBundler('./src/js/gzip-worker/index.js'),
+  'promise-polyfill.js': createBundler('./src/js/promise-polyfill/index.js')
 };
 
 gulp.task('copy:js', function () {

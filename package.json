@@ -20,15 +20,14 @@
     "uglifyify": "^2.6.0",
     "6to5ify": "^3.1.0",
     "gulp-swig": "^0.7.4",
-    "gulp-size": "^1.1.0"
+    "gulp-size": "^1.1.0",
+    "regenerator": "^0.8.3",
+    "es6-promise": "^2.0.1"
   },
   "private": true,
   "scripts": {
     "build": "gulp build --production",
     "serve": "gulp serve",
     "test": "gulp build --production"
-  },
-  "dependencies": {
-    "regenerator": "~0.8.3"
   }
 }
