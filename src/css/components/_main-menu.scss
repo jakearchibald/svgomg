@@ -8,14 +8,6 @@
 
   &.hidden {
     pointer-events: none;
-
-    & .overlay {
-      opacity: 0;
-    }
-
-    & .menu {
-      @include transform(translateX(-110%));
-    }
   }
 
   & .menu {
@@ -29,8 +21,13 @@
     background: #fff;
     box-shadow: 3px 0 16px rgba(0, 0, 0, 0.4);
     will-change: transform;
-
-    @include transition-transform(0.2s ease-out);
+  
+    &.transition {
+      @include transition-transform(0.2s ease-out);
+    }
+    &.hidden {
+      @include transform(translateX(-110%));
+    }
   }
 
   & .overlay {
@@ -41,7 +38,13 @@
     right: 0;
     background: rgba(#000, 0.4);
     will-change: opacity;
-    @include transition(opacity 0.2s ease-in-out);
+
+    &.transition {
+      @include transition(opacity 0.2s ease-in-out);
+    }
+    &.hidden {
+      opacity: 0;
+    }
   }
 
   & ul {

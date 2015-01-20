@@ -17,12 +17,13 @@ class MainMenu extends (require('events').EventEmitter) {
       this._loadDemoBtn = document.querySelector('.load-demo');
       this._selectFileBtn = document.querySelector('.select-file');
       this._pasteLabel = document.querySelector('.menu-input');
+      this._overlay = this.container.querySelector('.overlay');
+      this._menu = this.container.querySelector('.menu');
 
       document.querySelector('.menu-btn')
         .addEventListener('click', e => this._onMenuButtonClick(e));
 
-      this.container.querySelector('.overlay')
-        .addEventListener('click', e => this._onOverlayClick(e));
+      this._overlay.addEventListener('click', e => this._onOverlayClick(e));
 
       this._selectFileBtn.addEventListener('click', e => this._onSelectFileClick(e));
       this._loadDemoBtn.addEventListener('click', e => this._onLoadDemoClick(e));
@@ -33,6 +34,8 @@ class MainMenu extends (require('events').EventEmitter) {
 
   show() {
     this.container.classList.remove('hidden');
+    utils.transitionFromClass(this._overlay, 'hidden');
+    utils.transitionFromClass(this._menu, 'hidden');
   }
 
   hide() {
@@ -41,6 +44,8 @@ class MainMenu extends (require('events').EventEmitter) {
     }
     this.stopSpinner();
     this.container.classList.add('hidden');
+    utils.transitionToClass(this._overlay, 'hidden');
+    utils.transitionToClass(this._menu, 'hidden');
   }
 
   stopSpinner() {

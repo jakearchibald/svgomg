@@ -6,8 +6,6 @@
 }
 
 .settings {
-  overflow: auto;
-
   @media (min-width: 640px) {
     min-width: 15em;
   }
@@ -79,73 +77,75 @@
 }
 
 // initial state
-  @include keyframes(untransform) {
-    to {
+  .toolbar {
+    @include transform(translateY(-110%));
+
+    &.transition {
+      @include transition-transform(0.2s ease-out);
+    }
+
+    &.active {
       // translateZ required to make Safari layer in the right order
       @include transform(translateZ(0));
     }
   }
 
-  @include keyframes(unfilter) {
-    to {
-      @include filter(none);
-      opacity: 1;
-    }
-  }
+  .settings {
+    @include transform(translateY(110%));
 
-  .app-output {
-    & .toolbar {
-      @include transform(translateY(-110%));
+    @media (min-width: 640px) {
+      @include transform(translateX(115%));
     }
 
-    & .settings {
-      @include transform(translateY(110%));
+    &.transition {
+      @include transition-transform(0.3s ease-out 0.05s);
 
-      @media (min-width: 640px) {
-        @include transform(translateX(115%));
+      @media (min-width: 640px) and (max-width: 900px) {
+        @include transition-transform(0.3s ease-out 0.2s);
       }
-    }
-
-    & .floating-action-button {
-      @include transform(translateX(74px));
-
-      @media (min-width: 640px) {
-        @include transform(translateY(89px));
-      }
-    }
-
-    & .svg-output {
-      @include filter(contrast(0%) brightness(150%) saturate(100%));
-      opacity: 0;
     }
 
     &.active {
-      & .toolbar {
-        @include animation(untransform 0.2s ease-out both);
+      // translateZ required to make Safari layer in the right order
+      @include transform(translateZ(0));
+    }
+  }
+
+  .floating-action-button {
+    @include transform(translateX(74px));
+
+    @media (min-width: 640px) {
+      @include transform(translateY(89px));
+    }
+
+    &.transition {
+      @include transition-transform(0.2s ease-out 0.2);
+
+      @media (min-width: 640px) and (max-width: 900px) {
+        @include transition-transform(0.2s ease-out 0.4);
       }
+    }
 
-      & .settings {
-        @include animation(untransform 0.3s ease-out 0.05s both);
+    &.active {
+      // translateZ required to make Safari layer in the right order
+      @include transform(translateZ(0));
+    }
+  }
 
-        @media (min-width: 640px) and (max-width: 900px) {
-          @include animation(untransform 0.3s ease-out 0.2s both);
-        }
+  .svg-output {
+    @include filter(contrast(0%) brightness(150%) saturate(100%));
+    opacity: 0;
+
+    &.transition {
+      @include transition(all 0.5s ease-out 0.5s);
+      
+      @media (min-width: 640px) and (max-width: 900px) {
+        @include transition(all 0.5s ease-out 0.6s);
       }
+    }
 
-      & .floating-action-button {
-        @include animation(untransform 0.2s ease-out 0.2s both);
-
-        @media (min-width: 640px) and (max-width: 900px) {
-          @include animation(untransform 0.2s ease-out 0.4s both);
-        }
-      }
-
-      & .svg-output {
-        @include animation(unfilter 0.5s ease-out 0.5s both);
-
-        @media (min-width: 640px) and (max-width: 900px) {
-          @include animation(unfilter 0.5s ease-out 0.6s both);
-        }
-      }
+    &.active {
+      opacity: 1;
+      @include filter(none);
     }
   }

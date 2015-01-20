@@ -79,19 +79,37 @@ exports.readFileAsText = function readFileAsText(file) {
   });
 }
 
-exports.transitionToClass = function(el, className) {
-  return new Promise(resolve => {
-    var listener = event => {
-      if (event.target != el) return;
-      el.removeEventListener('webkitTransitionEnd', listener);
-      el.removeEventListener('transitionend', listener);
-      resolve();
-    };
-    el.addEventListener('webkitTransitionEnd', listener);
-    el.addEventListener('transitionend', listener);
-    el.classList.add(className);
-  })
-};
+function transitionClassFunc({removeClass = false}={}) {
+  return function(el, className = 'active', transitionClass = 'transition') {
+    if (removeClass) {
+      if (!el.classList.contains(className)) return Promise.resolve();
+    }
+    else {
+      if (el.classList.contains(className)) return Promise.resolve();
+    }
+
+    return new Promise(resolve => {
+      var listener = event => {
+        if (event.target != el) return;
+        el.removeEventListener('webkitTransitionEnd', listener);
+        el.removeEventListener('transitionend', listener);
+        el.classList.remove(transitionClass);
+        resolve();
+      };
+
+      el.classList.add(transitionClass);
+
+      requestAnimationFrame(_ => {
+        el.addEventListener('webkitTransitionEnd', listener);
+        el.addEventListener('transitionend', listener);
+        el.classList[removeClass ? 'remove' : 'add'](className);
+      });
+    });
+  }
+}
+
+exports.transitionToClass = transitionClassFunc();
+exports.transitionFromClass = transitionClassFunc({removeClass: true});
 
 exports.closest = function(el, selector) {
   if (el.closest) {

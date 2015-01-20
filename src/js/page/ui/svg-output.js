@@ -27,6 +27,10 @@ class SvgOutput {
       this._svgContainer.addEventListener('load', onload);
     });
   }
+  
+  activate() {
+    return utils.transitionToClass(this.container);
+  }
 }
 
 module.exports = SvgOutput;

@@ -19,16 +19,16 @@ class Settings extends (require('events').EventEmitter) {
         document.querySelectorAll('.settings input[type=range]')
       ).forEach(el => new Slider(el));
 
-      var settingsEl = document.querySelector('.settings');
+      this.container = document.querySelector('.settings');
 
-      settingsEl.addEventListener('change', e => this._onChange(e));
-      settingsEl.addEventListener('input', e => this._onChange(e));
-      settingsEl.addEventListener('wheel', e => this._onMouseWheel(e));
+      this.container.addEventListener('change', e => this._onChange(e));
+      this.container.addEventListener('input', e => this._onChange(e));
+      this.container.addEventListener('wheel', e => this._onMouseWheel(e));
       
       // Stop double-tap text selection.
       // This stops all text selection which is kinda sad.
       // I think this code will bite me.
-      settingsEl.addEventListener('mousedown', e => {
+      this.container.addEventListener('mousedown', e => {
         if (utils.closest(e.target, 'input[type=range]')) return;
         e.preventDefault();
       });
@@ -88,6 +88,10 @@ class Settings extends (require('events').EventEmitter) {
     output.fingerprint = fingerprint.join();
 
     return output;
+  }
+
+  activate() {
+    return utils.transitionToClass(this.container);
   }
 }
 

@@ -14,6 +14,10 @@ class DownloadButton {
     this.container.download = filename;
     this.container.href = url;
   }
+
+  activate() {
+    return utils.transitionToClass(this.container);
+  }
 }
 
 module.exports = DownloadButton;

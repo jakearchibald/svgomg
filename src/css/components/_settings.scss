@@ -1,6 +1,9 @@
 .settings {
   background: #fff;
   @include user-select(none);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .setting-item-toggle {

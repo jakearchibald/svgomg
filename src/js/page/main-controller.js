@@ -63,7 +63,12 @@ class MainController {
     var firstItteration = true;
     this._compressSvg(_ => {
       if (firstItteration) {
-        this._container.classList.add('active');
+
+        utils.transitionToClass(document.querySelector('.toolbar'));
+        this._downloadButtonUi.activate();
+        this._svgOuputUi.activate();
+        this._settingsUi.activate();
+
         this._mainMenuUi.allowHide = true;
         this._mainMenuUi.hide();
         firstItteration = false;

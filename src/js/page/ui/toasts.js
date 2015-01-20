@@ -30,7 +30,7 @@ class Toast {
 
   hide() {
     clearTimeout(this._hideTimeout);
-    this._answerResolve('');
+    this._answerResolve();
     return utils.transitionToClass(this.container, 'hide');
   }
 }
