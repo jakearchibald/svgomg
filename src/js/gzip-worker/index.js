@@ -6,7 +6,7 @@ self.onmessage = function(event) {
     self.postMessage({
       id: event.data.id,
       result: result
-    }, [result]);
+    });
   }
   catch (error) {
     self.postMessage({
