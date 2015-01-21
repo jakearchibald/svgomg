@@ -45,7 +45,8 @@ class Settings extends (require('events').EventEmitter) {
   }
 
   _onChange(event) {
-    if (event.type == 'change' && event.target.type == 'range') {
+    // IE fires the change event rather than input for ranges
+    if (!utils.isIe && event.type == 'change' && event.target.type == 'range') {
       // for ranges, the change event is just a dupe of the
       // final input event
       return;

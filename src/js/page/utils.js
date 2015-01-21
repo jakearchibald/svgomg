@@ -125,3 +125,6 @@ exports.closest = function(el, selector) {
 
   return undefined;
 };
+
+// I hate that I have to do this
+exports.isIe = (navigator.userAgent.indexOf('Trident/') !== -1);

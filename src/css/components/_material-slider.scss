@@ -67,6 +67,11 @@
     }
     @include transform(translateY(-50%));
     opacity: 0;
+    
+    // remove tooltip in IE
+    &::-ms-tooltip {
+      display: none;
+    }
   }
 
   & :focus + .track,

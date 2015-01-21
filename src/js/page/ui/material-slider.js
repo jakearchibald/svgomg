@@ -23,7 +23,10 @@ class MaterialSlider {
     this.container.insertBefore(rangeEl, this.container.firstChild);
 
     // events
-    rangeEl.addEventListener('input', e => this._onInputChange(e));
+    // thanks IE
+    var rangeChangeEvent = utils.isIe ? 'change' : 'input';
+
+    rangeEl.addEventListener(rangeChangeEvent, e => this._onInputChange(e));
     this.range.addEventListener('mousedown', e => this._onRangeMouseDown(e));
     this.range.addEventListener('touchstart', e => this._onRangeTouchStart(e));
     this.range.addEventListener('touchend', e => this._onRangeTouchEnd(e));
@@ -43,7 +46,10 @@ class MaterialSlider {
     this.range.classList.add('active');
 
     var upListener = e => {
-      this.range.blur();
+      // IE requires me to do this. Pah.
+      requestAnimationFrame(_ => {
+        this.range.blur();
+      })
       this.range.classList.remove('active');
       document.removeEventListener('mouseup', upListener);
     }
