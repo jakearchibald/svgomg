@@ -6,7 +6,8 @@ class SvgFile {
   constructor(text, width, height) {
     this.text = text;
     this._compressedSize = null;
-    this._url = null;
+    this._url = '';
+    this._urlBlob = null;
     this.width = width;
     this.height = height;
   }
@@ -26,9 +27,10 @@ class SvgFile {
 
   get url() {
     if (!this._url) {
-      this._url = URL.createObjectURL(
-        new Blob([this.text], {type: "image/svg+xml"})
-      );
+      // IE GCs blobs once they're out of reference, even if they
+      // have an object url, so we have to keep in in reference.
+      this._urlBlob = new Blob([this.text], {type: "image/svg+xml"});
+      this._url = URL.createObjectURL(this._urlBlob);
     }
 
     return this._url;
@@ -39,6 +41,7 @@ class SvgFile {
       return;
     }
 
+    this._urlBlob = null;
     URL.revokeObjectURL(this._url);
   }
 }
