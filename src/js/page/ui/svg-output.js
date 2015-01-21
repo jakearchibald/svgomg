@@ -2,11 +2,22 @@ var utils = require('../utils');
 
 class SvgOutput {
   constructor() {
-    this.container = utils.strToEl(`
-      <div class="svg-output">
-        <iframe class="svg-container" sandbox="allow-scripts"></iframe>
-      </div>
-    `);
+    if (utils.isIe) {
+      // IE doesn't support blob URLs in iframes.
+      // Using img works around it, but means scripting doesn't work.
+      this.container = utils.strToEl(
+        '<div class="svg-output">' +
+          '<img class="svg-container">' +
+        '</div>' +
+      '');
+    }
+    else {
+      this.container = utils.strToEl(
+        '<div class="svg-output">' +
+          '<iframe class="svg-container" sandbox="allow-scripts"></iframe>' +
+        '</div>' +
+      '');
+    }
 
     this._svgContainer = this.container.querySelector('.svg-container');
   }
