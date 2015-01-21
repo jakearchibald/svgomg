@@ -41,7 +41,9 @@ exports.strToEl = (function () {
     var r;
     tmpEl.innerHTML = str;
     r = tmpEl.children[0];
-    tmpEl.innerHTML = '';
+    while (tmpEl.firstChild) {
+      tmpEl.removeChild(tmpEl.firstChild);
+    }
     return r;
   };
 }());
