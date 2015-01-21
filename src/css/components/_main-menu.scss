@@ -61,7 +61,8 @@
   & .menu-item {
     padding: 0 16px;
     width: 100%;
-    min-height: 48px;
+    // I want this to be min-height, but IE breaks layout if I do
+    height: 48px;
     box-sizing: border-box;
     @include display-flex;
     @include align-items(center);
