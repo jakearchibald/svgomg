@@ -41,8 +41,11 @@ class Toasts {
   }
 
   // TODO: try using destructuring with opts
-  show(message, opts={}) {
-    var toast = new Toast(message, opts.duration || 0, opts.buttons || ['dismiss']);
+  show(message, {
+    duration = 0,
+    buttons = ['dismiss']
+  }={}) {
+    var toast = new Toast(message, duration, buttons);
     this.container.appendChild(toast.container);
 
     toast.answer.then(_ => toast.hide()).then(_ => {

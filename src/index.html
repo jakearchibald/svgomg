@@ -127,6 +127,29 @@
           </section>
         </div>
       </div>
+      <div class="preloader">
+        <div class="spinner">
+          <div class="spinner-container">
+            <div class="spinner-layer">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div>
+              <div class="gap-patch">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-clipper right">
+                <div class="circle"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p>Sorry, wasn't ready…</p>
+      </div>
+      <script>
+        document.querySelector('.preloader').addEventListener('click', function(event) {
+          this.className = 'preloader active';
+        });
+      </script>
     </div>
   </body>
 </html>

@@ -1,0 +1,31 @@
+.preloader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(#000, 0.7);
+  z-index: 3;
+  color: #fff;
+  opacity: 0;
+
+  @include display-flex;
+  @include flex-flow(column);
+  @include align-items(center);
+  @include justify-content(center);
+
+  @include transition(opacity 0.2s ease-out);
+
+  &.active {
+    opacity: 1;
+
+    & .spinner {
+      display: block;
+    }
+  }
+
+  & .spinner {
+    display: none;
+    border-color: #fff;
+  }
+}

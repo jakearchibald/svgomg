@@ -18,6 +18,7 @@ class MainController {
     this._mainMenuUi = new (require('./ui/main-menu'));
     this._toastsUi = new (require('./ui/toasts'));
     this._dropUi = new (require('./ui/file-drop'));
+    this._preloaderUi = new (require('./ui/preloader'));
 
     // ui events
     this._settingsUi.on('change', _ => this._onSettingsChange());
@@ -42,6 +43,13 @@ class MainController {
       //document.body.appendChild(this._codeOutputUi.container);
       this._container.appendChild(this._toastsUi.container);
       this._container.appendChild(this._dropUi.container);
+
+      // someone managed to hit the preloader, aww
+      if (this._preloaderUi.activated) {
+        this._toastsUi.show("Ready now!", {
+          duration: 3000
+        });
+      }
     });
   }
 
