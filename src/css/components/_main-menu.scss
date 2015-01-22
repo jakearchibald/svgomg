@@ -21,6 +21,11 @@
     background: #fff;
     box-shadow: 3px 0 16px rgba(0, 0, 0, 0.4);
     will-change: transform;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+    @include display-flex;
+    @include flex-flow(column);
   
     &.transition {
       @include transition-transform(0.2s ease-out);
@@ -133,5 +138,24 @@
 
   & .select-file-input {
     display: none;
+  }
+}
+
+.menu-footer-notes {
+  padding: 0 16px;
+  margin-top: auto;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #8E8E8E;
+
+  & a:link,
+  & a:visited {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  & a:hover,
+  & a:active {
+    color: #000;
   }
 }
