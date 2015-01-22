@@ -6,7 +6,10 @@
 }
 
 .settings {
+  @include flex(0.9);
+
   @media (min-width: 640px) {
+    @include flex(none);
     min-width: 15em;
   }
 
@@ -37,7 +40,6 @@
 
 .output {
   @include flex(1);
-  min-height: 300px;
   position: relative;
 
   & .floating-action-button {
