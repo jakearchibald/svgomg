@@ -1,0 +1,30 @@
+.drop-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(#000, 0.7);
+  z-index: 3;
+  text-align: center;
+  color: #fff;
+  font-size: 4.8rem;
+  font-size: 17vw;
+
+  pointer-events: none;
+  display: none;
+  opacity: 0;
+
+  @include align-items(center);
+  @include justify-content(center);
+
+  &.transition {
+    @include display-flex;
+    @include transition(opacity 0.2s ease-out);
+  }
+
+  &.active {
+    @include display-flex;
+    opacity: 1;
+  }
+}

@@ -17,10 +17,12 @@ class MainController {
     this._settingsUi = new (require('./ui/settings'));
     this._mainMenuUi = new (require('./ui/main-menu'));
     this._toastsUi = new (require('./ui/toasts'));
+    this._dropUi = new (require('./ui/file-drop'));
 
     // ui events
     this._settingsUi.on('change', _ => this._onSettingsChange());
     this._mainMenuUi.on('svgDataLoad', e => this._onInputChange(e));
+    this._dropUi.on('svgDataLoad', e => this._onInputChange(e));
 
     // state
     this._inputFilename = 'image.svg';
@@ -39,6 +41,7 @@ class MainController {
       output.appendChild(this._svgOuputUi.container);
       //document.body.appendChild(this._codeOutputUi.container);
       this._container.appendChild(this._toastsUi.container);
+      this._container.appendChild(this._dropUi.container);
     });
   }
 
