@@ -88,8 +88,10 @@ class MainController {
 
       if (newWorker.state == 'installed' && navigator.serviceWorker.controller) {
         var activeVersion = await storage.get('active-version');
+        
+        // activeVersion is undefined for sw-null
         // if the main version has changed, bail
-        if (activeVersion.split('.')[0] != self.version.split('.')[0]) return;
+        if (activeVersion && activeVersion.split('.')[0] != self.version.split('.')[0]) return;
 
         // if the user hasn't interacted yet, do a sneaky reload
         if (!this._userHasInteracted) {
