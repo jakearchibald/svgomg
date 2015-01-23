@@ -122,7 +122,7 @@ class MainController {
       return;
     }
 
-    this._resultsUi.working();
+    this._downloadButtonUi.working();
 
     try {
       var finalResultFile = await svgo.process(settings, resultFile => {
@@ -140,6 +140,8 @@ class MainController {
         this._handleError(e);
       }
     }
+
+    this._downloadButtonUi.done();
   }
 
   async _updateForFile(svgFile, {compareToFile, gzip}) {

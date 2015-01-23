@@ -1,5 +1,4 @@
 var utils = require('../utils');
-var Spinner = require('./spinner');
 
 function round(num, places) {
   var mult = Math.pow(10, places);
@@ -19,18 +18,12 @@ class Results {
   constructor() {
     this.container = utils.strToEl(
       '<div class="results">' +
-        '<svg viewBox="0 0 14 13" class="arrow"><path d="M14 6h-4V0H4v6H0l7 7 7-7z"/></svg>' +
-        '<span>' +
-          '<span class="size"></span> ' +
-          '<span class="diff"></span>' +
-        '</span>' +
+        '<span class="size"></span>' +
+        '<span class="diff"></span>' +
       '</div>' +
     '');
     this._sizeEl = this.container.querySelector('.size');
     this._diffEl = this.container.querySelector('.diff');
-    //var spinner = new Spinner();
-    //this.container.appendChild(spinner.container);
-    //spinner.show();
   }
 
   update({size, comparisonSize}) {
@@ -42,19 +35,14 @@ class Results {
       return;
     }
     else if (size == comparisonSize) {
-      this._diffEl.textContent = 'no change';
+      this._diffEl.textContent = ' - no change';
     }
     else if (size > comparisonSize) {
-      this._diffEl.textContent = round(size / comparisonSize * 100 - 100, 2) + '% increase';
+      this._diffEl.textContent = ' - ' + round(size / comparisonSize * 100 - 100, 2) + '% increase';
     }
     else {
-      this._diffEl.textContent = round(100 - size / comparisonSize * 100, 2) + '% saving';
+      this._diffEl.textContent = ' - ' + round(100 - size / comparisonSize * 100, 2) + '% saving';
     }
-  }
-
-  working() {
-    this._sizeEl.textContent = 'Working…';
-    this._diffEl.textContent = '';
   }
 }
 

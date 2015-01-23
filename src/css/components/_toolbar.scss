@@ -6,14 +6,14 @@
 
   & .status {
     position: relative;
-    margin-left: auto;
+    margin: 0 16px 0 auto;
     text-align: right;
   }
 }
 
 .menu-toolbar-item {
   & button {
-    padding: 10px;
+    padding: 10px 12px;
 
     &:focus {
       outline: none;
