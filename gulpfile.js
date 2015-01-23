@@ -137,7 +137,7 @@ var bundlers = {
   'js/svgo-worker.js': createBundler('./src/js/svgo-worker/index.js'),
   'js/gzip-worker.js': createBundler('./src/js/gzip-worker/index.js'),
   'js/promise-polyfill.js': createBundler('./src/js/promise-polyfill/index.js'),
-  'sw.js': createBundler('./src/js/sw/index.js')
+  'sw.js': plugins.util.env['disable-sw'] ? createBundler('./empty.js') : createBundler('./src/js/sw/index.js')
 };
 
 gulp.task('copy:js', function () {
