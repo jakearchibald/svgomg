@@ -109,10 +109,18 @@ class MainMenu extends (require('events').EventEmitter) {
     // load a simpler image if shift is held down - quicker for testing :D
     var url = event.shiftKey ? 'test-svgs/github.svg' : 'test-svgs/car.svg'
 
-    this.emit('svgDataLoad', {
-      data: await utils.get(url),
-      filename: 'car.svg'
-    });
+    try {
+      this.emit('svgDataLoad', {
+        data: await utils.get(url),
+        filename: 'car.svg'
+      });
+    }
+    catch (error) {
+      this.stopSpinner();
+      this.emit('error', {
+        error: Error("Couldn't fetch demo SVG")
+      });
+    }
   }
 }
 

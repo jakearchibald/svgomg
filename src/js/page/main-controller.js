@@ -24,6 +24,7 @@ class MainController {
     this._settingsUi.on('change', _ => this._onSettingsChange());
     this._mainMenuUi.on('svgDataLoad', e => this._onInputChange(e));
     this._dropUi.on('svgDataLoad', e => this._onInputChange(e));
+    this._mainMenuUi.on('error', ({error}) => this._handleError(error));
 
     // state
     this._inputFilename = 'image.svg';

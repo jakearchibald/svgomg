@@ -114,7 +114,11 @@ function createBundler(src) {
   return b;
 }
 
-function bundle(bundler, outputFile) {
+function bundle(bundler, outputPath) {
+  var splitPath = outputPath.split('/');
+  var outputFile = splitPath[splitPath.length - 1];
+  var outputDir = splitPath.slice(0, -1).join('/');
+
   return bundler.bundle()
     // log errors if they happen
     .on('error', plugins.util.log.bind(plugins.util, 'Browserify Error'))
@@ -123,15 +127,16 @@ function bundle(bundler, outputFile) {
     .pipe(plugins.sourcemaps.init({ loadMaps: true })) // loads map from browserify file
     .pipe(plugins.sourcemaps.write('./')) // writes .map file
     .pipe(plugins.size({ gzip: true, title: outputFile }))
-    .pipe(gulp.dest('build/js'))
+    .pipe(gulp.dest('build/' + outputDir))
     .pipe(reload({ stream: true }));
 }
 
 var bundlers = {
-  'page.js': createBundler('./src/js/page/index.js'),
-  'svgo-worker.js': createBundler('./src/js/svgo-worker/index.js'),
-  'gzip-worker.js': createBundler('./src/js/gzip-worker/index.js'),
-  'promise-polyfill.js': createBundler('./src/js/promise-polyfill/index.js')
+  'js/page.js': createBundler('./src/js/page/index.js'),
+  'js/svgo-worker.js': createBundler('./src/js/svgo-worker/index.js'),
+  'js/gzip-worker.js': createBundler('./src/js/gzip-worker/index.js'),
+  'js/promise-polyfill.js': createBundler('./src/js/promise-polyfill/index.js'),
+  'sw.js': createBundler('./src/js/sw/index.js')
 };
 
 gulp.task('copy:js', function () {
@@ -150,7 +155,6 @@ gulp.task('browser-sync', function() {
     open: false
   });
 });
-
 
 gulp.task('watch', function () {
   gulp.watch(['src/**/*.scss'], ['copy:css']);

@@ -40,7 +40,6 @@ class Toasts {
     this.container = utils.strToEl("<div class='toasts'></div>");
   }
 
-  // TODO: try using destructuring with opts
   show(message, {
     duration = 0,
     buttons = ['dismiss']
