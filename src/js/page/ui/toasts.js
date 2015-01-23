@@ -13,15 +13,15 @@ class Toast {
 
     this.answer = new Promise(r => this._answerResolve = r);
 
-    for (var button of buttons) {
-      let buttonEl = document.createElement('button');
+    buttons.forEach(button => {
+      var buttonEl = document.createElement('button');
       buttonEl.className = 'unbutton';
       buttonEl.textContent = button;
       buttonEl.addEventListener('click', event => {
         this._answerResolve(button);
       });
       this.container.appendChild(buttonEl);
-    }
+    });
 
     if (duration) {
       this._hideTimeout = setTimeout(_ => this.hide(), duration);

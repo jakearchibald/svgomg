@@ -23,10 +23,11 @@ gulp.task('clean', function (done) {
   require('del')(['build'], done);
 });
 
-var svgoConfig;
-gulp.task('get-svgo-config', function(done) {
-  svgoConfig = JSON.parse(fs.readFileSync("./src/config.json"));
-  svgoConfig.plugins.forEach(function(plugin) {
+var pageData;
+gulp.task('get-page-data', function(done) {
+  pageData = JSON.parse(fs.readFileSync("./src/config.json"));
+  pageData.changelog = JSON.parse(fs.readFileSync("./src/changelog.json"));
+  pageData.plugins.forEach(function(plugin) {
     plugin.active = require('svgo/plugins/' + plugin.id).active;
   });
   done();
@@ -47,14 +48,14 @@ gulp.task('copy:css', function () {
     .pipe(reload({stream: true}));
 });
 
-gulp.task('copy:html', ['get-svgo-config'], function () {
+gulp.task('copy:html', ['get-page-data'], function () {
   return gulp.src([
     // Copy all `.html` files
     'src/*.html',
   ])
   .pipe(plugins.swig({
     defaults: { cache: false },
-    data: svgoConfig
+    data: pageData
   }))
   .pipe(plugins.htmlmin({
     // In-depth information about the options:
@@ -158,8 +159,7 @@ gulp.task('browser-sync', function() {
 
 gulp.task('watch', function () {
   gulp.watch(['src/**/*.scss'], ['copy:css']);
-  gulp.watch(['src/*.html', 'src/plugin-data.json'], ['copy:html']);
-  gulp.watch(['src/img/**', 'src/demos/**'], ['copy:misc', reload]);
+  gulp.watch(['src/*.html', 'src/plugin-data.json', 'src/changelog.json'], ['copy:misc', 'copy:html']);
 
   Object.keys(bundlers).forEach(function(key) {
     var watchifyBundler = watchify(bundlers[key]);

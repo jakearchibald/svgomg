@@ -33,6 +33,10 @@
     &.hidden {
       @include transform(translateX(-110%));
     }
+
+    & > * {
+      @include min-height-min-content;
+    }
   }
 
   & .overlay {

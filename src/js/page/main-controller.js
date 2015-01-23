@@ -2,6 +2,7 @@
 
 var utils = require('./utils');
 var svgo = new (require('./svgo'));
+var storage = require('../utils/storage');
 
 var SvgFile = require('./svg-file');
 
@@ -19,6 +20,7 @@ class MainController {
     this._toastsUi = new (require('./ui/toasts'));
     this._dropUi = new (require('./ui/file-drop'));
     this._preloaderUi = new (require('./ui/preloader'));
+    this._changelogUi = new (require('./ui/changelog'))(self.version);
 
     // ui events
     this._settingsUi.on('change', _ => this._onSettingsChange());
@@ -32,10 +34,26 @@ class MainController {
     this._inputDimensions = null;
     this._cache = new (require('./results-cache'))(10);
     this._latestCompressJobId = 0;
+    this._userHasInteracted = false;
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js', {
+        scope: './'
+      }).then(registration => {
+        registration.addEventListener('updatefound', _ => this._onUpdateFound(registration));
+      });
+    }
+
+    // tell the user about the latest update
+    storage.get('last-seen-version').then(lastSeenVersion => {
+      if (lastSeenVersion) {
+        this._changelogUi.showLogFrom(lastSeenVersion);
+      }
+      storage.set('last-seen-version', self.version);
+    });
 
     utils.domReady.then(_ => {
       var output = document.querySelector('.output');
-
       this._container = document.querySelector('.app-output');
 
       document.querySelector('.status').appendChild(this._resultsUi.container);
@@ -44,6 +62,7 @@ class MainController {
       //document.body.appendChild(this._codeOutputUi.container);
       this._container.appendChild(this._toastsUi.container);
       this._container.appendChild(this._dropUi.container);
+      document.querySelector('.menu-extra').appendChild(this._changelogUi.container);
 
       // someone managed to hit the preloader, aww
       if (this._preloaderUi.activated) {
@@ -54,11 +73,51 @@ class MainController {
     });
   }
 
+  _onUpdateFound(registration) {
+    var newWorker = registration.installing;
+
+    registration.installing.addEventListener('statechange', async _ => {
+      // the very first activation!
+      // tell the user stuff works offline
+      if (newWorker.state == 'activated' && !navigator.serviceWorker.controller) {
+        this._toastsUi.show("Ready to work offline", {
+          duration: 5000
+        });
+        return;
+      }
+
+      if (newWorker.state == 'installed' && navigator.serviceWorker.controller) {
+        var activeVersion = await storage.get('active-version');
+        // if the main version has changed, bail
+        if (activeVersion.split('.')[0] != self.version.split('.')[0]) return;
+
+        // if the user hasn't interacted yet, do a sneaky reload
+        if (!this._userHasInteracted) {
+          location.reload();
+          return;
+        }
+
+        // otherwise, show the user an alert
+        var toast = this._toastsUi.show("Update available", {
+          buttons: ['reload', 'dismiss']
+        });
+
+        var answer = await toast.answer;
+
+        if (answer == 'reload') {
+          location.reload();
+        }
+      }
+    });
+  }
+
   _onSettingsChange() {
     this._compressSvg();
   }
 
   async _onInputChange(event) {
+    this._userHasInteracted = true;
+
     try {
       this._inputSvg = await svgo.load(event.data);
       this._inputFilename = event.filename;
