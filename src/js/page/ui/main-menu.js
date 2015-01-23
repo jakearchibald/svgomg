@@ -67,6 +67,7 @@ class MainMenu extends (require('events').EventEmitter) {
 
     if (val.indexOf('</svg>') != -1) {
       this._pasteInput.value = '';
+      this._pasteInput.blur();
 
       this._pasteLabel.appendChild(this._spinner.container);
       this._spinner.show();
