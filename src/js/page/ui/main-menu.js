@@ -106,13 +106,26 @@ class MainMenu extends (require('events').EventEmitter) {
     event.target.blur();
     this._loadDemoBtn.appendChild(this._spinner.container);
     this._spinner.show();
+    var urlToLoad;
+    var complexSvg = 'test-svgs/car.svg';
+    // TODO: find a more colourful simple SVG, maybe a car too?
+    var simpleSvg = 'test-svgs/github.svg';
 
     // load a simpler image if shift is held down - quicker for testing :D
-    var url = event.shiftKey ? 'test-svgs/github.svg' : 'test-svgs/car.svg'
+    if (event.shiftKey) {
+      urlToLoad = simpleSvg;
+    }
+    else if (window.matchMedia("(min-width: 640px)").matches) {
+      urlToLoad = complexSvg;
+    }
+    else {
+      // give 'mobiles' the simple svg, they struggle with the car a bit
+      urlToLoad = simpleSvg;
+    }
 
     try {
       this.emit('svgDataLoad', {
-        data: await utils.get(url),
+        data: await utils.get(urlToLoad),
         filename: 'car.svg'
       });
     }
