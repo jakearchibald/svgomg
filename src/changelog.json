@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.0.1",
+    "changes": [
+      "Layout fixes.",
+      "Better mobile keyboard handling.",
+      "A lighter demo SVG for mobile.",
+      "Fixing drag & drop."
+    ]
+  },
+  {
     "version": "1.0.0",
     "changes": [
       "First release."
