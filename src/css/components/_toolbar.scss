@@ -5,8 +5,8 @@
   @include align-items(center);
 
   & .status {
-    @include flex(1);
-    padding: 0.8em 1em;
+    position: relative;
+    margin-left: auto;
     text-align: right;
   }
 }

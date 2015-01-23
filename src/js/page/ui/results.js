@@ -17,12 +17,15 @@ function humanSize(bytes) { // TODO: I'm sure there's a better version of this
 
 class Results {
   constructor() {
-    this.container = utils.strToEl(`
-      <div class="results">
-        <span class="size"></span>
-        <span class="diff"></span>
-      </div>
-    `);
+    this.container = utils.strToEl(
+      '<div class="results">' +
+        '<svg viewBox="0 0 14 13" class="arrow"><path d="M14 6h-4V0H4v6H0l7 7 7-7z"/></svg>' +
+        '<span>' +
+          '<span class="size"></span> ' +
+          '<span class="diff"></span>' +
+        '</span>' +
+      '</div>' +
+    '');
     this._sizeEl = this.container.querySelector('.size');
     this._diffEl = this.container.querySelector('.diff');
     //var spinner = new Spinner();
