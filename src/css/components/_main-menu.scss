@@ -93,10 +93,11 @@
       height: 24px;
       opacity: 0.54;
       margin-right: 32px;
-      @include flex-shrink(0);
+      @include flex(none);
     }
 
     & .spinner {
+      @include flex(none);
       margin: 0 0 0 auto;
     }
   }
@@ -112,10 +113,12 @@
     & .label-txt {
       position: absolute;
       left: 0;
+      top: 0;
     }
 
     & textarea,
     & input {
+      display: block;
       font: inherit;
       border: none;
       background: none;
