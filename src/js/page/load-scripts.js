@@ -6,6 +6,8 @@ module.exports = function loadScript(urls, yeyCallback, neyCallback) {
   var count = urls.length;
   var errored = false;
 
+  if (urls.length == 0) return yeyCallback();
+
   urls.forEach(url => {
     var script = document.createElement('script');
     script.onload = function() {
@@ -19,5 +21,5 @@ module.exports = function loadScript(urls, yeyCallback, neyCallback) {
     };
     script.src = url;
     document.head.insertBefore(script, document.head.firstChild);
-  })
+  });
 };

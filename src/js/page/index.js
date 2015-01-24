@@ -1,16 +1,19 @@
 'use strict';
 var loadScripts = require("./load-scripts");
-
-function init() {
-  require("regenerator/runtime");
-  new (require('./main-controller'));
-}
+var polyfillsNeeded = [];
 
 if (!window.Promise) { // IE :(
-  loadScripts(['js/promise-polyfill.js'], init, function() {
-    console.error("Failed to load polyfills");
-  });
+  polyfillsNeeded.push('js/promise-polyfill.js');
 }
-else {
-  init();
+
+// I'm sure user-agent sniffing will be fiiiiine
+if (/(iPhone|iPad);/.test(navigator.userAgent)) {
+  polyfillsNeeded.push('js/fastclick.js');
 }
+
+loadScripts(polyfillsNeeded, function() {
+  require("regenerator/runtime");
+  new (require('./main-controller'));
+}, function() {
+  console.error("Failed to load polyfills");
+});
