@@ -63,8 +63,25 @@ self.addEventListener('activate', function(event) {
   event.waitUntil(activate());
 });
 
+async function handleFontRequest(request) {
+  var match = await caches.match(request);
+  if (match) return match;
+  var response = await fetch(request.clone());
+  var fontCache = await caches.open('svgomg-fonts');
+  fontCache.put(request, response.clone());
+  return response;
+}
+
 self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    caches.match(event.request).then(r => r || fetch(event.request))
-  );
+  var url = new URL(event.request.url);
+
+  if (url.host == 'fonts.googleapis.com' || url.host == 'fonts.gstatic.com') {
+    event.respondWith(handleFontRequest(event.request));
+  }
+  else {
+    event.respondWith(
+      caches.match(event.request).then(r => r || fetch(event.request))
+    );
+  }
+
 });

@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.0.2",
+    "changes": [
+      "Caching fonts for offline use."
+    ]
+  },
+  {
     "version": "1.0.1",
     "changes": [
       "Layout fixes.",
