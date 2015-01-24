@@ -4,7 +4,8 @@
     "changes": [
       "Caching fonts for offline use.",
       "Removing tap delay on iPhone/iPad.",
-      "Fixing iOS add-to-homescreen."
+      "Fixing iOS add-to-homescreen.",
+      "Better mobile demo image."
     ]
   },
   {

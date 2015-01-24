@@ -108,8 +108,7 @@ class MainMenu extends (require('events').EventEmitter) {
     this._spinner.show();
     var urlToLoad;
     var complexSvg = 'test-svgs/car.svg';
-    // TODO: find a more colourful simple SVG, maybe a car too?
-    var simpleSvg = 'test-svgs/github.svg';
+    var simpleSvg = 'test-svgs/car-lite.svg';
 
     // load a simpler image if shift is held down - quicker for testing :D
     if (event.shiftKey) {
