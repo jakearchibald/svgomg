@@ -2,7 +2,9 @@
   {
     "version": "1.0.2",
     "changes": [
-      "Caching fonts for offline use."
+      "Caching fonts for offline use.",
+      "Removing tap delay on iPhone/iPad.",
+      "Fixing iOS add-to-homescreen."
     ]
   },
   {
