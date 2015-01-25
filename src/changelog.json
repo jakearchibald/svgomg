@@ -2,7 +2,8 @@
   {
     "version": "1.0.3",
     "changes": [
-      "Fixing SVG output in Firefox"
+      "Fixing SVG output in Firefox",
+      "Fixing checkered background in IE"
     ]
   },
   {
