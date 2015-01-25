@@ -1,9 +1,15 @@
 [
   {
+    "version": "1.0.4",
+    "changes": [
+      "Fixing checkered background in IE.",
+      "Improving slider touch interaction."
+    ]
+  },
+  {
     "version": "1.0.3",
     "changes": [
-      "Fixing SVG output in Firefox",
-      "Fixing checkered background in IE"
+      "Fixing SVG output in Firefox."
     ]
   },
   {

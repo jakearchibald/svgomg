@@ -7,6 +7,8 @@ class Settings extends (require('events').EventEmitter) {
   constructor() {
     super();
 
+    this._throttleTimeout = null;
+
     utils.domReady.then(_ => {
       this._pluginInputs = utils.toArray(
         document.querySelectorAll('.settings .plugins input')
@@ -52,7 +54,16 @@ class Settings extends (require('events').EventEmitter) {
       return;
     }
 
-    this.emit('change');
+    clearTimeout(this._throttleTimeout);
+
+    // throttle range
+    if (event.target.type == 'range') {
+      this._throttleTimeout = setTimeout(_ => this.emit('change'), 150);
+    }
+    else {
+      this.emit('change');
+    }
+
   }
 
   getSettings() {
