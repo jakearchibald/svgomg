@@ -2,8 +2,7 @@
   {
     "version": "1.0.3",
     "changes": [
-      "Fixing SVG output in Firefox",
-      "Allowing scripting in SVGs in IE"
+      "Fixing SVG output in Firefox"
     ]
   },
   {
