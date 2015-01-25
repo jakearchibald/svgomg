@@ -4,7 +4,7 @@ class SvgOutput {
   constructor() {
     if (utils.isIe) {
       // IE doesn't support datauris or blob urls in iframe :(
-      // TODO: feature detect this
+      // TODO: feature detect this & report bug
       this.container = utils.strToEl(
         '<div class="svg-output">' +
           '<img class="svg-container">' +
@@ -25,9 +25,9 @@ class SvgOutput {
   setSvg(svgFile) {
     // I would rather use blob urls, but they don't work in Firefox
     // All the internal refs break.
-    // TODO: file bug reports for this & IE
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=1125667
     var nextLoad = this._nextLoadPromise();
-    this._svgContainer.src = "data:image/svg+xml;charset=utf-8;base64," + btoa(svgFile.text);
+    this._svgContainer.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgFile.text);
     this._svgContainer.width = svgFile.width;
     this._svgContainer.height = svgFile.height;
     return nextLoad;
