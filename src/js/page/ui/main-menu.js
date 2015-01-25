@@ -130,8 +130,18 @@ class MainMenu extends (require('events').EventEmitter) {
     }
     catch (error) {
       this.stopSpinner();
+
+      var e;
+
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        e = Error("Demo not available offline");
+      }
+      else {
+        e = Error("Couldn't fetch demo SVG");
+      }
+
       this.emit('error', {
-        error: Error("Couldn't fetch demo SVG")
+        error: e
       });
     }
   }
