@@ -2,31 +2,25 @@ var utils = require('../utils');
 
 class SvgOutput {
   constructor() {
-    if (utils.isIe) {
-      // IE doesn't support blob URLs in iframes.
-      // Using img works around it, but means scripting doesn't work.
-      this.container = utils.strToEl(
-        '<div class="svg-output">' +
-          '<img class="svg-container">' +
-        '</div>' +
-      '');
-    }
-    else {
-      this.container = utils.strToEl(
-        '<div class="svg-output">' +
-          '<iframe class="svg-container" sandbox="allow-scripts"></iframe>' +
-        '</div>' +
-      '');
-    }
+    this.container = utils.strToEl(
+      '<div class="svg-output">' +
+        '<iframe class="svg-container" sandbox="allow-scripts"></iframe>' +
+      '</div>' +
+    '');
 
     this._svgContainer = this.container.querySelector('.svg-container');
   }
 
-  setSvg(url, width, height) {
-    this._svgContainer.src = url;
-    this._svgContainer.width = width;
-    this._svgContainer.height = height;
-    return this._nextLoadPromise();
+  setSvg(svgFile) {
+    // I would rather use blob urls, but they don't work in Firefox
+    // All the internal refs break.
+    // IE doesn't support them at all
+    // TODO: file bug reports for both
+    var nextLoad = this._nextLoadPromise();
+    this._svgContainer.src = "data:image/svg+xml;charset=utf-8;base64," + btoa(svgFile.text);
+    this._svgContainer.width = svgFile.width;
+    this._svgContainer.height = svgFile.height;
+    return nextLoad;
   }
 
   _nextLoadPromise() {

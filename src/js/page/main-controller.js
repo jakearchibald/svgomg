@@ -207,9 +207,9 @@ class MainController {
   }
 
   async _updateForFile(svgFile, {compareToFile, gzip}) {
-    this._svgOuputUi.setSvg(svgFile.url, svgFile.width, svgFile.height);
+    this._svgOuputUi.setSvg(svgFile);
 
-    this._codeOutputUi.setCode(svgFile.text);
+    //this._codeOutputUi.setCode(svgFile.text);
     this._downloadButtonUi.setDownload(this._inputFilename, svgFile.url);
 
     this._resultsUi.update({

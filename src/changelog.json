@@ -1,5 +1,12 @@
 [
   {
+    "version": "1.0.3",
+    "changes": [
+      "Fixing SVG output in Firefox",
+      "Allowing scripting in SVGs in IE"
+    ]
+  },
+  {
     "version": "1.0.2",
     "changes": [
       "Caching fonts for offline use.",
