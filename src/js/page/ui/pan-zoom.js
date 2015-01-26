@@ -134,7 +134,11 @@ class PanZoom {
       this._target.style.WebkitTransform = this._target.style.transform
         = 'translate3d(' + this._dx + 'px, ' + this._dy + 'px, 0) scale(' + this._scale + ')';
 
-      this._highQualityTimeout = setTimeout(_ => requestAnimationFrame(_ => this._update(true)), 300);
+      // This works great on desktop, but seems to kill mobile.
+      // TODO: is there a better way?
+      if (window.matchMedia("(min-width: 640px)").matches) {
+        this._highQualityTimeout = setTimeout(_ => requestAnimationFrame(_ => this._update(true)), 300);
+      }
     }
   }
 
