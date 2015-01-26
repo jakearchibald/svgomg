@@ -126,6 +126,10 @@ class PanZoom {
   _update(highQuality, debounceHigh) {
     clearTimeout(this._highQualityTimeout);
 
+    this._target.style.WebkitTransform = this._target.style.transform
+      = 'translate3d(' + this._dx + 'px, ' + this._dy + 'px, 0) scale(' + this._scale + ')';
+
+    /*
     if (highQuality) {
       this._target.style.WebkitTransform = this._target.style.transform
         = 'translate(' + this._dx + 'px, ' + this._dy + 'px) scale(' + this._scale + ')';
@@ -139,7 +143,7 @@ class PanZoom {
       if (debounceHigh && window.matchMedia("(min-width: 640px)").matches) {
         this._highQualityTimeout = setTimeout(_ => requestAnimationFrame(_ => this._update(true)), 300);
       }
-    }
+    }*/
   }
 
   _onPointerUp(event) {

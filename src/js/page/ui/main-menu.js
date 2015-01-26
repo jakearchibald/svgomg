@@ -110,6 +110,7 @@ class MainMenu extends (require('events').EventEmitter) {
     var complexSvg = 'test-svgs/car.svg';
     var simpleSvg = 'test-svgs/car-lite.svg';
 
+    /*
     // load a simpler image if shift is held down - quicker for testing :D
     if (event.shiftKey) {
       urlToLoad = simpleSvg;
@@ -121,6 +122,10 @@ class MainMenu extends (require('events').EventEmitter) {
       // give 'mobiles' the simple svg, they struggle with the car a bit
       urlToLoad = simpleSvg;
     }
+    */
+
+    // simple all the way, for now
+    urlToLoad = simpleSvg;
 
     try {
       this.emit('svgDataLoad', {
