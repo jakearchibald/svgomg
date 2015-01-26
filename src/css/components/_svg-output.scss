@@ -1,0 +1,38 @@
+.output {
+  @include user-select(none);
+}
+
+.svg-output {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.svg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  @include transform(translateZ(0));
+}
+
+.svg-frame {
+  border: none;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+  @include transform(translate(-50%, -50%));
+}
+
+.svg-clickjacker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

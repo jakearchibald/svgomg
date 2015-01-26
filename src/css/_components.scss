@@ -9,32 +9,10 @@
 @import 'components/drop-overlay';
 @import 'components/preloader';
 @import 'components/changelog';
+@import 'components/svg-output';
 
 // app
   .app-output {
-  }
-
-// output
-  .output {
-  }
-
-  .svg-output {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    @include transform(translateZ(0));
-  }
-
-  .svg-container {
-    border: none;
-    overflow: hidden;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    pointer-events: none;
-    @include transform(translate(-50%, -50%));
   }
 
 // buttons
