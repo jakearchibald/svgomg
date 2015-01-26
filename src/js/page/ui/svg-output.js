@@ -22,6 +22,8 @@ class SvgOutput {
 
 
     this._svgFrame = this.container.querySelector('.svg-frame');
+    this._svgFrame.scrolling = 'no';
+
     this._svgContainer = this.container.querySelector('.svg-container');
 
     utils.domReady.then(_ => {
