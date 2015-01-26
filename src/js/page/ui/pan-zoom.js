@@ -51,8 +51,24 @@ class PanZoom {
       this[funcName] = this[funcName].bind(this);
     })
 
+    // bound events
     eventArea.addEventListener('mousedown', this._onPointerDown);
     eventArea.addEventListener('touchstart', this._onPointerDown);
+
+    // unbonud
+    eventArea.addEventListener('wheel', e => this._onWheel(e));
+  }
+
+  _onWheel(event) {
+    var boundingRect = this._target.getBoundingClientRect();
+    if (!event.deltaMode) { // 0 is "pixels"
+      event.preventDefault();
+      var scaleDiff = (event.deltaY / 300) + 1;
+      this._scale *= scaleDiff;
+      this._dx -= (event.pageX - boundingRect.left) * (scaleDiff - 1);
+      this._dy -= (event.pageY - boundingRect.top) * (scaleDiff - 1);
+      this._update();
+    }
   }
 
   _onFirstPointerDown(event) {
@@ -93,10 +109,13 @@ class PanZoom {
       //this._scale = 1;
     }
 
+    this._update();
+    this._lastPoints = points;
+  }
+
+  _update() {
     this._target.style.WebkitTransform = this._target.style.transform
       = 'translate3d(' + this._dx + 'px, ' + this._dy + 'px, 0) scale(' + this._scale + ')';
-
-    this._lastPoints = points;
   }
 
   _onPointerUp(event) {
