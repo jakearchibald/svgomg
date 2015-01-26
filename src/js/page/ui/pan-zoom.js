@@ -89,6 +89,7 @@ class PanZoom {
   }
 
   _onPointerDown(event) {
+    if (event.type == 'mousedown' && event.which != 1) return;
     if (!this._shouldCaptureFunc(event.target)) return;
     event.preventDefault();
 
