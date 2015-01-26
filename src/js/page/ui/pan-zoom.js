@@ -60,8 +60,11 @@ class PanZoom {
   }
 
   _onWheel(event) {
+    if (!this._shouldCaptureFunc(event.target)) return;
+
     var boundingRect = this._target.getBoundingClientRect();
     if (!event.deltaMode) { // 0 is "pixels"
+      // TODO: handle other modes
       event.preventDefault();
       var scaleDiff = (event.deltaY / 300) + 1;
       this._scale *= scaleDiff;

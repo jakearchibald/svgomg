@@ -1,5 +1,5 @@
 var utils = require('../utils');
-var PanZoom = require('./pan-zoom')
+var PanZoom = require('./pan-zoom');
 
 class SvgOutput {
   constructor() {
@@ -28,7 +28,7 @@ class SvgOutput {
       this._panZoom = new PanZoom(this._svgContainer, {
         eventArea: document.querySelector('.main'),
         shouldCaptureFunc: function(el) {
-          return !utils.closest(event.target, '.settings, a');
+          return !utils.closest(el, '.settings, a');
         }
       });
     });
