@@ -59,6 +59,13 @@ class PanZoom {
     eventArea.addEventListener('wheel', e => this._onWheel(e));
   }
 
+  reset() {
+    this._dx = 0;
+    this._dy = 0;
+    this._scale = 1;
+    this._update();
+  }
+
   _onWheel(event) {
     if (!this._shouldCaptureFunc(event.target)) return;
 

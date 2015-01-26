@@ -45,6 +45,10 @@ class SvgOutput {
     return nextLoad;
   }
 
+  reset() {
+    this._panZoom.reset();
+  }
+
   _nextLoadPromise() {
     return new Promise(resolve => {
       var onload = _ => {

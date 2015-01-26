@@ -136,7 +136,8 @@ class MainController {
     var firstItteration = true;
     this._compressSvg(_ => {
       if (firstItteration) {
-
+        this._svgOuputUi.reset();
+        
         utils.transitionToClass(document.querySelector('.toolbar'));
         this._downloadButtonUi.activate();
         this._svgOuputUi.activate();
