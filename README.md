@@ -4,4 +4,4 @@
 
 # Feature requests
 
-It's early days for this project, so it's missing important features such as code output view, pan & zoom of the image, detailed options for each plugin etc. [Check out the issues](https://github.com/jakearchibald/svgomg/issues) for planned features or suggest your own!
+It's early days for this project, so it's missing important features such as code output view & detailed options for each plugin. [Check out the issues](https://github.com/jakearchibald/svgomg/issues) to see what's planned, or suggest ideas of your own!
