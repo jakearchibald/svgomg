@@ -1,17 +1,31 @@
 var utils = require('../utils');
 
-function getXYFromEvent(event) {
+function getXY(obj) {
+  return {
+    x: obj.pageX,
+    y: obj.pageY
+  };
+}
+
+function touchDistance(touch1, touch2) {
+  var dx = Math.abs(touch2.x - touch1.x);
+  var dy = Math.abs(touch2.y - touch1.y);
+  return Math.sqrt(dx*dx + dy*dy);
+}
+
+function getMidpoint(point1, point2) {
+  return {
+    x: (point1.x + point2.x) / 2,
+    y: (point1.y + point2.y) / 2
+  };
+}
+
+function getPoints(event) {
   if (event.touches) {
-    return {
-      x: event.touches[0].pageX,
-      y: event.touches[0].pageY
-    };
+    return Array.prototype.map.call(event.touches, getXY);
   }
   else {
-    return {
-      x: event.pageX,
-      y: event.pageY
-    };
+    return [getXY(event)];
   }
 }
 
@@ -24,9 +38,9 @@ class PanZoom {
     this._shouldCaptureFunc = shouldCaptureFunc;
     this._dx = 0;
     this._dy = 0;
-    this._active = false;
-    this._pointerStart = null;
-    this._dStart = null;
+    this._scale = 1;
+    this._active = 0;
+    this._lastPoints = [];
 
     // bind
     [
@@ -42,13 +56,6 @@ class PanZoom {
   }
 
   _onFirstPointerDown(event) {
-    this._active = true;
-    this._pointerStart = getXYFromEvent(event);
-    this._dStart = {
-      x: this._dx,
-      y: this._dy
-    }
-
     document.addEventListener('mousemove', this._onPointerMove);
     document.addEventListener('mouseup', this._onPointerUp);
     document.addEventListener('touchmove', this._onPointerMove);
@@ -58,26 +65,54 @@ class PanZoom {
   _onPointerDown(event) {
     if (!this._shouldCaptureFunc(event.target)) return;
     event.preventDefault();
+
+    this._lastPoints = getPoints(event);
+    this._active++;
     
-    if (!this._active) this._onFirstPointerDown(event);
+    if (this._active === 1) {
+      this._onFirstPointerDown(event);
+    }
   }
 
   _onPointerMove(event) {
     event.preventDefault();
-    var {x, y} = getXYFromEvent(event);
-    this._dx = x - this._pointerStart.x + this._dStart.x;
-    this._dy = y - this._pointerStart.y + this._dStart.y;
+    var points = getPoints(event);
+    var averagePoint = points.reduce(getMidpoint);
+    var averageLastPoint = this._lastPoints.reduce(getMidpoint);
+    var boundingRect = this._target.getBoundingClientRect();
+    console.log();
+
+    this._dx += averagePoint.x - averageLastPoint.x;
+    this._dy += averagePoint.y - averageLastPoint.y;
+
+    if (points[1]) {
+      var scaleDiff = touchDistance(points[0], points[1]) / touchDistance(this._lastPoints[0], this._lastPoints[1]);
+      this._scale *= scaleDiff;
+      this._dx -= (averagePoint.x - boundingRect.left) * (scaleDiff - 1);
+      this._dy -= (averagePoint.y - boundingRect.top) * (scaleDiff - 1);
+      //this._scale = 1;
+    }
+
     this._target.style.WebkitTransform = this._target.style.transform
-      = 'translate3d(' + this._dx + 'px, ' + this._dy + 'px, 0)';
+      = 'translate3d(' + this._dx + 'px, ' + this._dy + 'px, 0) scale(' + this._scale + ')';
+
+    this._lastPoints = points;
   }
 
   _onPointerUp(event) {
     event.preventDefault();
+    this._active--;
+    this._lastPoints.pop();
+
+    if (this._active) {
+      this._lastPoints = getPoints(event);
+      return;
+    }
+
     document.removeEventListener('mousemove', this._onPointerMove);
     document.removeEventListener('mouseup', this._onPointerUp);
     document.removeEventListener('touchmove', this._onPointerMove);
     document.removeEventListener('touchend', this._onPointerUp);
-    this._active = false;
   }
 }
 
