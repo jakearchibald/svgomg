@@ -1,19 +1,5 @@
 var utils = require('../utils');
-
-function getXYFromEvent(event) {
-  if (event.touches) {
-    return {
-      x: event.touches[0].pageX,
-      y: event.touches[0].pageY
-    };
-  }
-  else {
-    return {
-      x: event.pageX,
-      y: event.pageY
-    };
-  }
-}
+var PanZoom = require('./pan-zoom')
 
 class SvgOutput {
   constructor() {
@@ -34,49 +20,18 @@ class SvgOutput {
       '</div>' +
     '');
 
+
     this._svgFrame = this.container.querySelector('.svg-frame');
     this._svgContainer = this.container.querySelector('.svg-container');
-    this._dx = 0;
-    this._dy = 0;
 
     utils.domReady.then(_ => {
-      var main = document.querySelector('.main');
-      main.addEventListener('mousedown', e => this._onPointerDown(e));
-      main.addEventListener('touchstart', e => this._onPointerDown(e));
+      this._panZoom = new PanZoom(this._svgContainer, {
+        eventArea: document.querySelector('.main'),
+        shouldCaptureFunc: function(el) {
+          return !utils.closest(event.target, '.settings, a');
+        }
+      });
     });
-  }
-
-  _onPointerDown(event) {
-    if (utils.closest(event.target, '.settings, a')) return;
-
-    event.preventDefault();
-
-    var mouseStart = getXYFromEvent(event);
-    var startDx = this._dx;
-    var startDy = this._dy;
-
-    var pointerMove = event => {
-      event.preventDefault();
-      var {x, y} = getXYFromEvent(event);
-
-      this._dx = x - mouseStart.x + startDx;
-      this._dy = y - mouseStart.y + startDy;
-      this._svgContainer.style.WebkitTransform = this._svgContainer.style.transform
-        = 'translate3d(' + this._dx + 'px, ' + this._dy + 'px, 0)';
-    };
-
-    var pointerUp = event => {
-      event.preventDefault();
-      document.removeEventListener('mousemove', pointerMove);
-      document.removeEventListener('mouseup', pointerUp);
-      document.removeEventListener('touchmove', pointerMove);
-      document.removeEventListener('touchend', pointerUp);
-    };
-
-    document.addEventListener('mousemove', pointerMove);
-    document.addEventListener('mouseup', pointerUp);
-    document.addEventListener('touchmove', pointerMove);
-    document.addEventListener('touchend', pointerUp);
   }
 
   setSvg(svgFile) {
