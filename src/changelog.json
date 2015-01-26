@@ -1,5 +1,12 @@
 [
   {
+    "version": "1.1.2",
+    "changes": [
+      "Sharper rendering in Chrome & Safari.",
+      "Fixed right mouse button issue."
+    ]
+  },
+  {
     "version": "1.1.1",
     "changes": [
       "Reset zooming on image load."

@@ -41,6 +41,7 @@ class PanZoom {
     this._scale = 1;
     this._active = 0;
     this._lastPoints = [];
+    this._highQualityTimeout = null;
 
     // bind
     [
@@ -63,7 +64,7 @@ class PanZoom {
     this._dx = 0;
     this._dy = 0;
     this._scale = 1;
-    this._update();
+    this._update(true);
   }
 
   _onWheel(event) {
@@ -107,7 +108,6 @@ class PanZoom {
     var averagePoint = points.reduce(getMidpoint);
     var averageLastPoint = this._lastPoints.reduce(getMidpoint);
     var boundingRect = this._target.getBoundingClientRect();
-    console.log();
 
     this._dx += averagePoint.x - averageLastPoint.x;
     this._dy += averagePoint.y - averageLastPoint.y;
@@ -117,16 +117,25 @@ class PanZoom {
       this._scale *= scaleDiff;
       this._dx -= (averagePoint.x - boundingRect.left) * (scaleDiff - 1);
       this._dy -= (averagePoint.y - boundingRect.top) * (scaleDiff - 1);
-      //this._scale = 1;
     }
 
     this._update();
     this._lastPoints = points;
   }
 
-  _update() {
-    this._target.style.WebkitTransform = this._target.style.transform
-      = 'translate3d(' + this._dx + 'px, ' + this._dy + 'px, 0) scale(' + this._scale + ')';
+  _update(highQuality) {
+    clearTimeout(this._highQualityTimeout);
+
+    if (highQuality) {
+      this._target.style.WebkitTransform = this._target.style.transform
+        = 'translate(' + this._dx + 'px, ' + this._dy + 'px) scale(' + this._scale + ')';
+    }
+    else {
+      this._target.style.WebkitTransform = this._target.style.transform
+        = 'translate3d(' + this._dx + 'px, ' + this._dy + 'px, 0) scale(' + this._scale + ')';
+
+      this._highQualityTimeout = setTimeout(_ => requestAnimationFrame(_ => this._update(true)), 300);
+    }
   }
 
   _onPointerUp(event) {
