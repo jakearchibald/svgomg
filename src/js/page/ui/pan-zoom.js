@@ -64,7 +64,7 @@ class PanZoom {
     this._dx = 0;
     this._dy = 0;
     this._scale = 1;
-    this._update(true);
+    this._update(false, false);
   }
 
   _onWheel(event) {
@@ -78,7 +78,7 @@ class PanZoom {
       this._scale *= scaleDiff;
       this._dx -= (event.pageX - boundingRect.left) * (scaleDiff - 1);
       this._dy -= (event.pageY - boundingRect.top) * (scaleDiff - 1);
-      this._update();
+      this._update(false, true);
     }
   }
 
@@ -119,11 +119,11 @@ class PanZoom {
       this._dy -= (averagePoint.y - boundingRect.top) * (scaleDiff - 1);
     }
 
-    this._update();
+    this._update(false, true);
     this._lastPoints = points;
   }
 
-  _update(highQuality) {
+  _update(highQuality, debounceHigh) {
     clearTimeout(this._highQualityTimeout);
 
     if (highQuality) {
@@ -136,7 +136,7 @@ class PanZoom {
 
       // This works great on desktop, but seems to kill mobile.
       // TODO: is there a better way?
-      if (window.matchMedia("(min-width: 640px)").matches) {
+      if (debounceHigh && window.matchMedia("(min-width: 640px)").matches) {
         this._highQualityTimeout = setTimeout(_ => requestAnimationFrame(_ => this._update(true)), 300);
       }
     }
