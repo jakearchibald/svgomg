@@ -82,6 +82,10 @@ class PanZoom {
     delta = Math.max(Math.min(delta, 60), -60);
 
     var scaleDiff = (delta / 300) + 1;
+
+    // avoid to-small values
+    if (this._scale * scaleDiff < 0.05) return;
+
     this._scale *= scaleDiff;
     this._dx -= (event.pageX - boundingRect.left) * (scaleDiff - 1);
     this._dy -= (event.pageY - boundingRect.top) * (scaleDiff - 1);

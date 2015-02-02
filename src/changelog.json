@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.1.6",
+    "changes": [
+      "Fix zooming with mouse wheels."
+    ]
+  },
+  {
     "version": "1.1.5",
     "changes": [
       "Removing erroneous scrollbars in Firefox."
