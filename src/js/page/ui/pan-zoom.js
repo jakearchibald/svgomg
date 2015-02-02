@@ -41,7 +41,6 @@ class PanZoom {
     this._scale = 1;
     this._active = 0;
     this._lastPoints = [];
-    this._highQualityTimeout = null;
 
     // bind
     [
@@ -64,7 +63,7 @@ class PanZoom {
     this._dx = 0;
     this._dy = 0;
     this._scale = 1;
-    this._update(false, false);
+    this._update();
   }
 
   _onWheel(event) {
@@ -123,31 +122,13 @@ class PanZoom {
       this._dy -= (averagePoint.y - boundingRect.top) * (scaleDiff - 1);
     }
 
-    this._update(false, true);
+    this._update();
     this._lastPoints = points;
   }
 
-  _update(highQuality, debounceHigh) {
-    clearTimeout(this._highQualityTimeout);
-
+  _update() {
     this._target.style.WebkitTransform = this._target.style.transform
       = 'translate3d(' + this._dx + 'px, ' + this._dy + 'px, 0) scale(' + this._scale + ')';
-
-    /*
-    if (highQuality) {
-      this._target.style.WebkitTransform = this._target.style.transform
-        = 'translate(' + this._dx + 'px, ' + this._dy + 'px) scale(' + this._scale + ')';
-    }
-    else {
-      this._target.style.WebkitTransform = this._target.style.transform
-        = 'translate3d(' + this._dx + 'px, ' + this._dy + 'px, 0) scale(' + this._scale + ')';
-
-      // This works great on desktop, but seems to kill mobile.
-      // TODO: is there a better way?
-      if (debounceHigh && window.matchMedia("(min-width: 640px)").matches) {
-        this._highQualityTimeout = setTimeout(_ => requestAnimationFrame(_ => this._update(true)), 300);
-      }
-    }*/
   }
 
   _onPointerUp(event) {
