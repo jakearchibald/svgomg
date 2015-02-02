@@ -68,21 +68,24 @@ class PanZoom {
 
   _onWheel(event) {
     if (!this._shouldCaptureFunc(event.target)) return;
+    event.preventDefault();
 
     var boundingRect = this._target.getBoundingClientRect();
-    var delta;
+    var delta = event.deltaY;
 
-    if (!event.deltaMode) { // 0 is "pixels"
-      // TODO: handle other modes
-      event.preventDefault();
-      // stop mouse wheel producing huge values
-      delta = Math.max(Math.min(event.deltaY, 60), -60);
-      var scaleDiff = (delta / 300) + 1;
-      this._scale *= scaleDiff;
-      this._dx -= (event.pageX - boundingRect.left) * (scaleDiff - 1);
-      this._dy -= (event.pageY - boundingRect.top) * (scaleDiff - 1);
-      this._update(false, true);
+    if (event.deltaMode === 1) { // 1 is "lines", 0 is "pixels"
+      // Firefox uses "lines" when mouse is connected
+      delta *= 15;
     }
+
+    // stop mouse wheel producing huge values
+    delta = Math.max(Math.min(delta, 60), -60);
+
+    var scaleDiff = (delta / 300) + 1;
+    this._scale *= scaleDiff;
+    this._dx -= (event.pageX - boundingRect.left) * (scaleDiff - 1);
+    this._dy -= (event.pageY - boundingRect.top) * (scaleDiff - 1);
+    this._update();
   }
 
   _onFirstPointerDown(event) {
