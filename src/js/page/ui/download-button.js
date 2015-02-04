@@ -13,7 +13,6 @@ class DownloadButton {
     '');
     this._spinner = new Spinner();
     this.container.appendChild(this._spinner.container);
-    this._spinner.show();
   }
 
   setDownload(filename, url) {
