@@ -7,6 +7,7 @@
 
 .settings {
   @include flex(0.9);
+  overflow: hidden;
 
   @media (min-width: 640px) {
     @include flex(none);
@@ -18,7 +19,7 @@
     border-radius: 2px;
     border: 1px solid #d7d7d7;
 
-    & > * {
+    & .setting-scroller > * {
       // unfortunately boosts scrolling performance in Chrome/Safari
       // this is due to the border radius
       -webkit-transform: translateZ(0);
@@ -41,22 +42,28 @@
 .output {
   @include flex(1);
   position: relative;
+}
 
-  & .floating-action-button {
-    position: absolute;
-    z-index: 2;
-    bottom: -28px;
-    right: 13px;
+.action-button-container {
+  position: absolute;
+  z-index: 2;
+  bottom: -28px;
+  right: 13px;
 
-    @media (min-width: 640px) {
-      right: 30px;
-      bottom: 30px;
+  @media (min-width: 640px) {
+    right: 30px;
+    bottom: 30px;
+    @include display-flex;
+    @include align-items(center);
+
+    & .results-container {
+      margin-right: -15px;
     }
+  }
 
-    @media (min-width: 900px) {
-      right: 0;
-      bottom: 30px;
-    }
+  @media (min-width: 900px) {
+    right: 0;
+    bottom: 30px;
   }
 }
 
@@ -113,7 +120,7 @@
     }
   }
 
-  .floating-action-button {
+  .action-button-container {
     @include transform(translateX(74px));
 
     @media (min-width: 640px) {

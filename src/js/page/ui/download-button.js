@@ -20,10 +20,6 @@ class DownloadButton {
     this.container.href = url;
   }
 
-  activate() {
-    return utils.transitionToClass(this.container);
-  }
-
   working() {
     this._spinner.show(500);
   }

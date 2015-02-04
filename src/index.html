@@ -83,55 +83,61 @@
             </svg>
           </button>
         </div>
-        <div class="status"></div>
       </div>
       <div class="main">
-        <div class="output"></div>
+        <div class="output">
+          <div class="action-button-container">
+            <div class="results-container"></div>
+          </div>
+        </div>
         <div class="settings">
-          <section class="global">
-            <h1 class="settings-sub-heading">Global settings</h1>
-            <div>
-              <label class="setting-item-toggle">
-                <input type="checkbox" name="original">
-                {% include "partials/material-switch.html" %}
-                Show original
-              </label>
-            </div>
-            <div>
-              <label class="setting-item-toggle">
-                <input type="checkbox" name="gzip" checked>
-                {% include "partials/material-switch.html" %}
-                Compare gzipped
-              </label>
-            </div>
-            <div>
-              <label class="setting-item-toggle">
-                <input type="checkbox" name="multipass">
-                {% include "partials/material-switch.html" %}
-                Multipass
-              </label>
-            </div>
-            <div>
-              <label class="setting-item-range">
-                <div class="label-text">Precision</div>
-                <input type="range" min="1" max="8" step="1" value="3" name="floatPrecision">
-              </label>
-            </div>
-          </section>
-          <section class="plugins">
-            <h1 class="settings-sub-heading">Features</h1>
-            {% for plugin in plugins %}
+          <div class="results-container-mobile"></div>
+          <div class="settings-scroller">
+            <section class="global">
+              <h1 class="settings-sub-heading">Global settings</h1>
               <div>
                 <label class="setting-item-toggle">
-                  <input type="checkbox"
-                         name="{{ plugin.id }}"
-                         {% if plugin.active %}checked{% endif %}>
+                  <input type="checkbox" name="original">
                   {% include "partials/material-switch.html" %}
-                  {{ plugin.name }}
+                  Show original
                 </label>
               </div>
-            {% endfor %}
-          </section>
+              <div>
+                <label class="setting-item-toggle">
+                  <input type="checkbox" name="gzip" checked>
+                  {% include "partials/material-switch.html" %}
+                  Compare gzipped
+                </label>
+              </div>
+              <div>
+                <label class="setting-item-toggle">
+                  <input type="checkbox" name="multipass">
+                  {% include "partials/material-switch.html" %}
+                  Multipass
+                </label>
+              </div>
+              <div>
+                <label class="setting-item-range">
+                  <div class="label-text">Precision</div>
+                  <input type="range" min="1" max="8" step="1" value="3" name="floatPrecision">
+                </label>
+              </div>
+            </section>
+            <section class="plugins">
+              <h1 class="settings-sub-heading">Features</h1>
+              {% for plugin in plugins %}
+                <div>
+                  <label class="setting-item-toggle">
+                    <input type="checkbox"
+                           name="{{ plugin.id }}"
+                           {% if plugin.active %}checked{% endif %}>
+                    {% include "partials/material-switch.html" %}
+                    {{ plugin.name }}
+                  </label>
+                </div>
+              {% endfor %}
+            </section>
+          </div>
         </div>
       </div>
       <div class="preloader">

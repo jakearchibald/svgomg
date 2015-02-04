@@ -4,6 +4,7 @@
   border-radius: 28px;
   background: #00BCD4;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+  position: relative;
   
   @include display-flex;
   @include align-items(center);

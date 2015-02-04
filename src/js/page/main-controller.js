@@ -21,6 +21,7 @@ class MainController {
     this._dropUi = new (require('./ui/file-drop'));
     this._preloaderUi = new (require('./ui/preloader'));
     this._changelogUi = new (require('./ui/changelog'))(self.version);
+    this._resultsContainerUi = new (require('./ui/results-container'))(this._resultsUi);
 
     // ui events
     this._settingsUi.on('change', _ => this._onSettingsChange());
@@ -56,8 +57,7 @@ class MainController {
       var output = document.querySelector('.output');
       this._container = document.querySelector('.app-output');
 
-      document.querySelector('.status').appendChild(this._resultsUi.container);
-      output.appendChild(this._downloadButtonUi.container);
+      document.querySelector('.action-button-container').appendChild(this._downloadButtonUi.container);
       output.appendChild(this._svgOuputUi.container);
       //document.body.appendChild(this._codeOutputUi.container);
       this._container.appendChild(this._toastsUi.container);
@@ -138,8 +138,9 @@ class MainController {
       if (firstItteration) {
         this._svgOuputUi.reset();
         
+        // TODO: create a class for the introing elements
         utils.transitionToClass(document.querySelector('.toolbar'));
-        this._downloadButtonUi.activate();
+        utils.transitionToClass(document.querySelector('.action-button-container'));
         this._svgOuputUi.activate();
         this._settingsUi.activate();
 

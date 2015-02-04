@@ -22,15 +22,16 @@ class Settings extends (require('events').EventEmitter) {
       ).forEach(el => new Slider(el));
 
       this.container = document.querySelector('.settings');
+      this._scroller = document.querySelector('.settings-scroller');
 
       this.container.addEventListener('change', e => this._onChange(e));
       this.container.addEventListener('input', e => this._onChange(e));
-      this.container.addEventListener('wheel', e => this._onMouseWheel(e));
+      this._scroller.addEventListener('wheel', e => this._onMouseWheel(e));
       
       // Stop double-tap text selection.
       // This stops all text selection which is kinda sad.
       // I think this code will bite me.
-      this.container.addEventListener('mousedown', e => {
+      this._scroller.addEventListener('mousedown', e => {
         if (utils.closest(e.target, 'input[type=range]')) return;
         e.preventDefault();
       });

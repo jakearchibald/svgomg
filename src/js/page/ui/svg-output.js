@@ -30,7 +30,7 @@ class SvgOutput {
       this._panZoom = new PanZoom(this._svgContainer, {
         eventArea: document.querySelector('.main'),
         shouldCaptureFunc: function(el) {
-          return !utils.closest(el, '.settings, a');
+          return !utils.closest(el, '.settings, .action-button-container');
         }
       });
     });
