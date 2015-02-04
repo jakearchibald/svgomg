@@ -121,10 +121,10 @@
     }
 
     &.transition {
-      @include transition-transform(0.2s ease-out 0.2);
+      @include transition-transform(0.2s ease-out 0.2s);
 
       @media (min-width: 640px) and (max-width: 900px) {
-        @include transition-transform(0.2s ease-out 0.4);
+        @include transition-transform(0.2s ease-out 0.4s);
       }
     }
 
