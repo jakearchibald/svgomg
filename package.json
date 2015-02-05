@@ -23,7 +23,8 @@
     "gulp-size": "^1.1.0",
     "regenerator": "^0.8.3",
     "es6-promise": "^2.0.1",
-    "fastclick": "^1.0.3"
+    "fastclick": "^1.0.3",
+    "prismjs": "git+https://github.com/LeaVerou/prism.git#gh-pages"
   },
   "private": true,
   "scripts": {

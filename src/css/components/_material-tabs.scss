@@ -1,0 +1,36 @@
+.material-tabs {
+  @include display-flex;
+  @include align-self(stretch);
+  text-transform: uppercase;
+  overflow: hidden;
+  position: relative;
+  line-height: 1;
+  font-size: 0.9rem;
+
+  & input {
+    display: none;
+  }
+}
+
+.material-tab {
+  @include display-flex;
+  @include align-items(center);
+  fill: #fff;
+  padding: 0 24px;
+  cursor: pointer;
+  position: relative;
+
+  & .selected {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #00BCD4;
+    opacity: 0;
+  }
+
+  & :checked + .selected {
+    opacity: 1;
+  }
+}

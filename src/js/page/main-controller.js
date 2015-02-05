@@ -70,6 +70,14 @@ class MainController {
           duration: 3000
         });
       }
+
+      // for testing
+      async _ => {
+        this._onInputChange({
+          data: await utils.get('test-svgs/car-lite.svg'),
+          filename: 'car.svg'
+        });
+      }();
     });
   }
 
