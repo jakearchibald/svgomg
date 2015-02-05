@@ -31,7 +31,6 @@ class MainController {
     // state
     this._inputFilename = 'image.svg';
     this._inputSvg = null;
-    this._inputDimensions = null;
     this._cache = new (require('./results-cache'))(10);
     this._latestCompressJobId = 0;
     this._userHasInteracted = false;
