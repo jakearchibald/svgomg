@@ -10,9 +10,6 @@ after_success:
                     --distribution-branch "gh-pages"
                     --source-branch "master"
 
-before_install:
-  - gem install sass compass
-
 env:
   global:
     - secure: "CguKtZSKYsXk2etsFE7FMejylxCWNycuozhKWdAkZF4Dc0LbRFEXSHHB6vaEaa7BO0HbyYTkCx4aWiztVDdPeSAERmeCITteKKs6pew1uDVGLOlOlOP/wpQgrL9mOl74yPyKSV9fHMLakeOKQlY/2fVeQ0m1GGerGBuslLSSygE="
