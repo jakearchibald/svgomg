@@ -141,7 +141,7 @@
     }
   }
 
-  .svg-output {
+  .output-switcher {
     @include filter(contrast(0%) brightness(150%) saturate(100%));
     opacity: 0;
 

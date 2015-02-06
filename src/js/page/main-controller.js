@@ -12,8 +12,7 @@ class MainController {
 
     // ui components
     this._mainUi = null;
-    this._svgOuputUi = new (require('./ui/svg-output'));
-    this._codeOutputUi = new (require('./ui/code-output'));
+    this._outputUi = new (require('./ui/output'));
     this._downloadButtonUi = new (require('./ui/download-button'));
     this._resultsUi = new (require('./ui/results'));
     this._settingsUi = new (require('./ui/settings'));
@@ -54,20 +53,18 @@ class MainController {
     });
 
     utils.domReady.then(_ => {
-      var output = document.querySelector('.output');
       this._container = document.querySelector('.app-output');
 
       // elements for intro anim
       this._mainUi = new (require('./ui/main-ui'))(
         document.querySelector('.toolbar'),
         document.querySelector('.action-button-container'),
-        this._svgOuputUi.container,
+        this._outputUi.container,
         this._settingsUi.container
       );
 
       document.querySelector('.action-button-container').appendChild(this._downloadButtonUi.container);
-      output.appendChild(this._svgOuputUi.container);
-      //document.body.appendChild(this._codeOutputUi.container);
+      document.querySelector('.output').appendChild(this._outputUi.container);
       this._container.appendChild(this._toastsUi.container);
       this._container.appendChild(this._dropUi.container);
       document.querySelector('.menu-extra').appendChild(this._changelogUi.container);
@@ -152,7 +149,7 @@ class MainController {
     var firstItteration = true;
     this._compressSvg(_ => {
       if (firstItteration) {
-        this._svgOuputUi.reset();
+        this._outputUi.reset();
         this._mainUi.activate();
         this._mainMenuUi.allowHide = true;
         this._mainMenuUi.hide();
@@ -219,9 +216,7 @@ class MainController {
   }
 
   async _updateForFile(svgFile, {compareToFile, gzip}) {
-    this._svgOuputUi.setSvg(svgFile);
-
-    //this._codeOutputUi.setCode(svgFile.text);
+    this._outputUi.update(svgFile);
     this._downloadButtonUi.setDownload(this._inputFilename, svgFile.url);
 
     this._resultsUi.update({
