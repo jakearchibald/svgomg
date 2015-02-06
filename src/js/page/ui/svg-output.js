@@ -60,10 +60,6 @@ class SvgOutput {
       this._svgFrame.addEventListener('load', onload);
     });
   }
-  
-  activate() {
-    return utils.transitionToClass(this.container);
-  }
 }
 
 module.exports = SvgOutput;

@@ -11,6 +11,7 @@ class MainController {
     this._container = null;
 
     // ui components
+    this._mainUi = null;
     this._svgOuputUi = new (require('./ui/svg-output'));
     this._codeOutputUi = new (require('./ui/code-output'));
     this._downloadButtonUi = new (require('./ui/download-button'));
@@ -55,6 +56,14 @@ class MainController {
     utils.domReady.then(_ => {
       var output = document.querySelector('.output');
       this._container = document.querySelector('.app-output');
+
+      // elements for intro anim
+      this._mainUi = new (require('./ui/main-ui'))(
+        document.querySelector('.toolbar'),
+        document.querySelector('.action-button-container'),
+        this._svgOuputUi.container,
+        this._settingsUi.container
+      );
 
       document.querySelector('.action-button-container').appendChild(this._downloadButtonUi.container);
       output.appendChild(this._svgOuputUi.container);
@@ -144,13 +153,7 @@ class MainController {
     this._compressSvg(_ => {
       if (firstItteration) {
         this._svgOuputUi.reset();
-        
-        // TODO: create a class for the introing elements
-        utils.transitionToClass(document.querySelector('.toolbar'));
-        utils.transitionToClass(document.querySelector('.action-button-container'));
-        this._svgOuputUi.activate();
-        this._settingsUi.activate();
-
+        this._mainUi.activate();
         this._mainMenuUi.allowHide = true;
         this._mainMenuUi.hide();
         firstItteration = false;

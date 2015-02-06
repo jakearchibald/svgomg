@@ -102,10 +102,6 @@ class Settings extends (require('events').EventEmitter) {
 
     return output;
   }
-
-  activate() {
-    return utils.transitionToClass(this.container);
-  }
 }
 
 module.exports = Settings;
