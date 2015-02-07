@@ -22,12 +22,14 @@ class MainController {
     this._preloaderUi = new (require('./ui/preloader'));
     this._changelogUi = new (require('./ui/changelog'))(self.version);
     this._resultsContainerUi = new (require('./ui/results-container'))(this._resultsUi);
+    this._viewTogglerUi = new (require('./ui/view-toggler'));
 
     // ui events
     this._settingsUi.on('change', _ => this._onSettingsChange());
     this._mainMenuUi.on('svgDataLoad', e => this._onInputChange(e));
     this._dropUi.on('svgDataLoad', e => this._onInputChange(e));
     this._mainMenuUi.on('error', ({error}) => this._handleError(error));
+    this._viewTogglerUi.on('change', e => this._onViewSelectionChange(e));
 
     // state
     this._inputFilename = 'image.svg';
@@ -84,6 +86,10 @@ class MainController {
         });
       }();
     });
+  }
+
+  _onViewSelectionChange(event) {
+    this._outputUi.set(event.value);
   }
 
   _onUpdateFound(registration) {

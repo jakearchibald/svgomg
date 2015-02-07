@@ -24,7 +24,7 @@
     <link rel="icon" href="imgs/icon.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="SVGOMG">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata" rel="stylesheet" type="text/css">
     <script src="js/page.js" async></script>
   </head>
   <body>
@@ -83,7 +83,7 @@
             </svg>
           </button>
         </div>
-        <div class="material-tabs">
+        <form class="material-tabs view-toggler">
           <label class="material-tab">
             <input type="radio" name="output" value="image" checked>
             <span class="selected"></span>
@@ -94,12 +94,7 @@
             <span class="selected"></span>
             Code
           </label>
-          <label class="material-tab">
-            <input type="radio" name="output" value="code">
-            <span class="selected"></span>
-            CMD
-          </label>
-        </div>
+        </form>
       </div>
       <div class="main">
         <div class="output">

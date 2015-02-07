@@ -28,10 +28,7 @@ class SvgOutput {
 
     utils.domReady.then(_ => {
       this._panZoom = new PanZoom(this._svgContainer, {
-        eventArea: document.querySelector('.main'),
-        shouldCaptureFunc: function(el) {
-          return !utils.closest(el, '.settings, .action-button-container');
-        }
+        eventArea: this.container
       });
     });
   }
@@ -48,6 +45,7 @@ class SvgOutput {
   }
 
   reset() {
+    this._svgFrame.src = "about:blank";
     this._panZoom.reset();
   }
 
