@@ -1,4 +1,5 @@
 var utils = require('../utils');
+var prism = new (require('../prism'));
 
 class CodeOutput {
   constructor() {
@@ -10,8 +11,8 @@ class CodeOutput {
     this._codeEl = this.container.querySelector('code');
   }
 
-  setSvg(svgFile) {
-    this._codeEl.textContent = svgFile.text;
+  async setSvg(svgFile) {
+    this._codeEl.innerHTML = await prism.highlight(svgFile.text);
   }
 }
 
