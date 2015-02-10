@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.2.0",
+    "changes": [
+      "Code view."
+    ]
+  },
+  {
     "version": "1.1.7",
     "changes": [
       "Performance improvements."
