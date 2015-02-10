@@ -78,6 +78,7 @@ class MainController {
         });
       }
 
+      /*
       // for testing
       async _ => {
         this._onInputChange({
@@ -85,6 +86,7 @@ class MainController {
           filename: 'car.svg'
         });
       }();
+      */
     });
   }
 
