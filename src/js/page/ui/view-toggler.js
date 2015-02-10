@@ -6,6 +6,10 @@ class ViewToggler extends (require('events').EventEmitter) {
 
     utils.domReady.then(_ => {
       this.container = document.querySelector('.view-toggler');
+
+      // stop browsers remembering previous form state
+      this.container.output[0].checked = true;
+
       this.container.addEventListener('change', e => this._onChange(e));
     });
   }
