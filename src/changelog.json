@@ -2,7 +2,8 @@
   {
     "version": "1.2.0",
     "changes": [
-      "Code view."
+      "Code view.",
+      "Prettify code option."
     ]
   },
   {
