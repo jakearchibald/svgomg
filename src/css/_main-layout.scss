@@ -18,12 +18,6 @@
     margin: 30px;
     border-radius: 2px;
     border: 1px solid #d7d7d7;
-
-    & .setting-scroller > * {
-      // unfortunately boosts scrolling performance in Chrome/Safari
-      // this is due to the border radius
-      -webkit-transform: translateZ(0);
-    }
   }
 }
 

@@ -10,6 +10,7 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   @include flex(1);
+  @include transform(translateZ(0));
 }
 
 .setting-item-toggle {

@@ -5,9 +5,11 @@
   right: 0;
   bottom: 0;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
   color: #f8f8f2;
   background: rgba(#000, 0.8);
   opacity: 0;
+  @include transform(translateZ(0));
 
   &.transition {
     @include transition(opacity 0.2s ease-in-out);
