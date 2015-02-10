@@ -12,7 +12,7 @@ class Output {
     };
 
     this._svgFile = null;
-    this.set('image');
+    this.set('image', {noAnimate: true});
   }
 
   update(svgFile) {
@@ -24,15 +24,39 @@ class Output {
     this._types[this._activeType].reset();
   }
 
-  set(type) {
+  async set(type, {
+    noAnimate = false
+  }={}) {
+    var toRemove;
+    var toAdd;
+
     if (this._activeType) {
-      this.container.removeChild(this._types[this._activeType].container);
+      toRemove = this._types[this._activeType].container;
     }
 
     this._activeType = type;
-    this.container.appendChild(this._types[this._activeType].container);
+    toAdd = this._types[this._activeType].container;
+    this.container.appendChild(toAdd);
 
-    if (this._svgFile) this.update(this._svgFile);
+    if (this._svgFile) await this.update(this._svgFile);
+
+    if (noAnimate) {
+      toAdd.classList.add('active');
+      if (toRemove) toRemove.classList.remove('active');
+    }
+    else {
+      let transitions = [
+        utils.transitionToClass(toAdd)
+      ];
+
+      if (toRemove) transitions.push(utils.transitionFromClass(toRemove));
+
+      await Promise.all(transitions);
+    }
+
+    if (toRemove) {
+      this.container.removeChild(toRemove);
+    }
   }
 }
 

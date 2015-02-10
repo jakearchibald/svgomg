@@ -5,18 +5,41 @@
   right: 0;
   bottom: 0;
   overflow: auto;
-  background: #000;
   color: #f8f8f2;
+  background: rgba(#000, 0.8);
+  opacity: 0;
+
+  &.transition {
+    @include transition(opacity 0.2s ease-in-out);
+  }
+
+  &.active {
+    opacity: 1;
+  }
 
   & code {
-    font-family: Inconsolata;
+    font-family: Inconsolata, monospace;
     line-height: 1.5;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
+    display: block;
+    padding: 14px;
+  }
+
+  @media (min-width: 900px) {
+    width: 100vw;
+
+    & code {
+      padding: 30px 14px;
+      font-size: 0.8rem;
+      // This is a hack
+      padding-right: 380px;
+    }
   }
 
   & pre {
     margin: 0;
     white-space: pre-wrap;
+    word-wrap: break-word;
   }
 }
 

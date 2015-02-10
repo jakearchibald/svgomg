@@ -14,6 +14,10 @@ class CodeOutput {
   async setSvg(svgFile) {
     this._codeEl.innerHTML = await prism.highlight(svgFile.text);
   }
+
+  reset() {
+    this._codeEl.innerHTML = '';
+  }
 }
 
 module.exports = CodeOutput;
