@@ -12,6 +12,7 @@ class Output {
     };
 
     this._svgFile = null;
+    this._switchQueue = Promise.resolve();
     this.set('image', {noAnimate: true});
   }
 
@@ -24,39 +25,41 @@ class Output {
     this._types[this._activeType].reset();
   }
 
-  async set(type, {
+  set(type, {
     noAnimate = false
   }={}) {
-    var toRemove;
-    var toAdd;
+    return this._switchQueue = this._switchQueue.then(async _ => {
+      var toRemove;
+      var toAdd;
 
-    if (this._activeType) {
-      toRemove = this._types[this._activeType].container;
-    }
+      if (this._activeType) {
+        toRemove = this._types[this._activeType].container;
+      }
 
-    this._activeType = type;
-    toAdd = this._types[this._activeType].container;
-    this.container.appendChild(toAdd);
+      this._activeType = type;
+      toAdd = this._types[this._activeType].container;
+      this.container.appendChild(toAdd);
 
-    if (this._svgFile) await this.update(this._svgFile);
+      if (this._svgFile) await this.update(this._svgFile);
 
-    if (noAnimate) {
-      toAdd.classList.add('active');
-      if (toRemove) toRemove.classList.remove('active');
-    }
-    else {
-      let transitions = [
-        utils.transitionToClass(toAdd)
-      ];
+      if (noAnimate) {
+        toAdd.classList.add('active');
+        if (toRemove) toRemove.classList.remove('active');
+      }
+      else {
+        let transitions = [
+          utils.transitionToClass(toAdd)
+        ];
 
-      if (toRemove) transitions.push(utils.transitionFromClass(toRemove));
+        if (toRemove) transitions.push(utils.transitionFromClass(toRemove));
 
-      await Promise.all(transitions);
-    }
+        await Promise.all(transitions);
+      }
 
-    if (toRemove) {
-      this.container.removeChild(toRemove);
-    }
+      if (toRemove) {
+        this.container.removeChild(toRemove);
+      }
+    })
   }
 }
 
