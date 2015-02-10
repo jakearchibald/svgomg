@@ -1,9 +1,16 @@
 .settings {
   background: #fff;
+  @include display-flex;
+  @include flex-flow(column);
   @include user-select(none);
+}
+
+.settings-scroller {
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  @include flex(1);
+  @include transform(translateZ(0));
 }
 
 .setting-item-toggle {

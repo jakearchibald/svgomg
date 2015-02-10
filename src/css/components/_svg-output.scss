@@ -1,13 +1,19 @@
-.output {
-  @include user-select(none);
-}
-
 .svg-output {
+  @include user-select(none);
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  opacity: 0;
+
+  &.transition {
+    @include transition(opacity 0.2s ease-in-out);
+  }
+
+  &.active {
+    opacity: 1;
+  }
 }
 
 .svg-container {

@@ -3,12 +3,6 @@
   color: #fff;
   @include display-flex;
   @include align-items(center);
-
-  & .status {
-    position: relative;
-    margin: 0 16px 0 auto;
-    text-align: right;
-  }
 }
 
 .menu-toolbar-item {

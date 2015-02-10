@@ -132,7 +132,10 @@ function* multipassCompress(settings) {
   while (svgData === undefined || svgData.length != previousDataLength) {
     previousDataLength = svgData && svgData.length;
     plugins(svg, optimisedPluginsData);
-    svgData = js2svg(svg).data;
+    svgData = js2svg(svg, {
+      indent: '  ',
+      pretty: settings.pretty
+    }).data;
 
     yield {
       data: svgData,

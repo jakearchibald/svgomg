@@ -130,3 +130,16 @@ exports.closest = function(el, selector) {
 
 // I hate that I have to do this
 exports.isIe = (navigator.userAgent.indexOf('Trident/') !== -1);
+
+exports.loadCss = function(url) {
+  return new Promise((resolve, reject) => {
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = url;
+
+    link.addEventListener('load', _ => resolve());
+    link.addEventListener('error', _ => reject());
+
+    document.head.appendChild(link);
+  });
+};

@@ -11,8 +11,8 @@ class MainController {
     this._container = null;
 
     // ui components
-    this._svgOuputUi = new (require('./ui/svg-output'));
-    this._codeOutputUi = new (require('./ui/code-output'));
+    this._mainUi = null;
+    this._outputUi = new (require('./ui/output'));
     this._downloadButtonUi = new (require('./ui/download-button'));
     this._resultsUi = new (require('./ui/results'));
     this._settingsUi = new (require('./ui/settings'));
@@ -21,12 +21,15 @@ class MainController {
     this._dropUi = new (require('./ui/file-drop'));
     this._preloaderUi = new (require('./ui/preloader'));
     this._changelogUi = new (require('./ui/changelog'))(self.version);
+    this._resultsContainerUi = new (require('./ui/results-container'))(this._resultsUi);
+    this._viewTogglerUi = new (require('./ui/view-toggler'));
 
     // ui events
     this._settingsUi.on('change', _ => this._onSettingsChange());
     this._mainMenuUi.on('svgDataLoad', e => this._onInputChange(e));
     this._dropUi.on('svgDataLoad', e => this._onInputChange(e));
     this._mainMenuUi.on('error', ({error}) => this._handleError(error));
+    this._viewTogglerUi.on('change', e => this._onViewSelectionChange(e));
 
     // state
     this._inputFilename = 'image.svg';
@@ -52,13 +55,18 @@ class MainController {
     });
 
     utils.domReady.then(_ => {
-      var output = document.querySelector('.output');
       this._container = document.querySelector('.app-output');
 
-      document.querySelector('.status').appendChild(this._resultsUi.container);
-      output.appendChild(this._downloadButtonUi.container);
-      output.appendChild(this._svgOuputUi.container);
-      //document.body.appendChild(this._codeOutputUi.container);
+      // elements for intro anim
+      this._mainUi = new (require('./ui/main-ui'))(
+        document.querySelector('.toolbar'),
+        document.querySelector('.action-button-container'),
+        this._outputUi.container,
+        this._settingsUi.container
+      );
+
+      document.querySelector('.action-button-container').appendChild(this._downloadButtonUi.container);
+      document.querySelector('.output').appendChild(this._outputUi.container);
       this._container.appendChild(this._toastsUi.container);
       this._container.appendChild(this._dropUi.container);
       document.querySelector('.menu-extra').appendChild(this._changelogUi.container);
@@ -69,7 +77,21 @@ class MainController {
           duration: 3000
         });
       }
+
+      /*
+      // for testing
+      async _ => {
+        this._onInputChange({
+          data: await utils.get('test-svgs/car-lite.svg'),
+          filename: 'car.svg'
+        });
+      }();
+      */
     });
+  }
+
+  _onViewSelectionChange(event) {
+    this._outputUi.set(event.value);
   }
 
   _onUpdateFound(registration) {
@@ -135,13 +157,8 @@ class MainController {
     var firstItteration = true;
     this._compressSvg(_ => {
       if (firstItteration) {
-        this._svgOuputUi.reset();
-        
-        utils.transitionToClass(document.querySelector('.toolbar'));
-        this._downloadButtonUi.activate();
-        this._svgOuputUi.activate();
-        this._settingsUi.activate();
-
+        this._outputUi.reset();
+        this._mainUi.activate();
         this._mainMenuUi.allowHide = true;
         this._mainMenuUi.hide();
         firstItteration = false;
@@ -207,9 +224,7 @@ class MainController {
   }
 
   async _updateForFile(svgFile, {compareToFile, gzip}) {
-    this._svgOuputUi.setSvg(svgFile);
-
-    //this._codeOutputUi.setCode(svgFile.text);
+    this._outputUi.update(svgFile);
     this._downloadButtonUi.setDownload(this._inputFilename, svgFile.url);
 
     this._resultsUi.update({

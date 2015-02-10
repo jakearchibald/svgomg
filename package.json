@@ -18,6 +18,7 @@
     "gulp-util": "^3.0.1",
     "merge-stream": "^0.1.6",
     "pako": "^0.2.5",
+    "prismjs": "git+https://github.com/LeaVerou/prism.git#gh-pages",
     "regenerator": "^0.8.3",
     "run-sequence": "^1.0.1",
     "svgo": "^0.5.0",

@@ -124,6 +124,11 @@
       #{$prefix}align-items: $spec;
     }
   }
+  @mixin align-self($spec...) {
+    @each $prefix in -webkit-, '' {
+      #{$prefix}align-self: $spec;
+    }
+  }
   @mixin order($spec...) {
     @each $prefix in -webkit-, '' {
       #{$prefix}order: $spec;

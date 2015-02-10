@@ -23,6 +23,7 @@ self.addEventListener('install', function(event) {
       'css/all.css',
       'js/gzip-worker.js',
       'js/page.js',
+      'js/prism-worker.js',
       'js/svgo-worker.js',
       'changelog.json'
     ]);

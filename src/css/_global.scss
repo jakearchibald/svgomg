@@ -12,6 +12,15 @@ html, body {
   background-color: #f2f2f2;
 }
 
+pre,
+code,
+kbd,
+samp,
+tt{
+  font-family:monospace,monospace;
+  font-size:1em;
+}
+
 button, textarea {
   &::-moz-focus-inner {
     border: 0;
