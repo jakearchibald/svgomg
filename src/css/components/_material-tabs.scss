@@ -1,4 +1,5 @@
 .material-tabs {
+  @include user-select(none);
   @include display-flex;
   @include align-self(stretch);
   text-transform: uppercase;
