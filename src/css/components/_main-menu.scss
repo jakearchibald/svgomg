@@ -5,6 +5,11 @@
   bottom: 0;
   right: 0;
   z-index: 3;
+  font-family: sans-serif;
+
+  &.use-font {
+    font-family: inherit;
+  }
 
   &.hidden {
     pointer-events: none;

@@ -41,7 +41,7 @@ gulp.task('copy', [
 ]);
 
 gulp.task('copy:css', function () {
-  return gulp.src('src/css/all.scss')
+  return gulp.src('src/css/*.scss')
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.sass({ outputStyle: 'compressed' }))
     .pipe(plugins.sourcemaps.write('./'))
@@ -50,7 +50,7 @@ gulp.task('copy:css', function () {
     .pipe(reload({stream: true}));
 });
 
-gulp.task('copy:html', ['get-page-data'], function () {
+gulp.task('copy:html', ['get-page-data', 'copy:css'], function () {
   return gulp.src([
     // Copy all `.html` files
     'src/*.html',

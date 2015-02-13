@@ -2,12 +2,10 @@
 @import 'components/material-switch';
 @import 'components/toolbar';
 @import 'components/floating-action-button';
-@import 'components/main-menu';
 @import 'components/spinner';
 @import 'components/toasts';
 @import 'components/material-slider';
 @import 'components/drop-overlay';
-@import 'components/preloader';
 @import 'components/changelog';
 @import 'components/svg-output';
 @import 'components/material-tabs';
@@ -17,16 +15,4 @@
 
 // app
   .app-output {
-  }
-
-// buttons
-  .unbutton {
-    display: inline-block;
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    font: inherit;
-    cursor: pointer;
-    white-space: nowrap;
   }
