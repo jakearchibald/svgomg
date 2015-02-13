@@ -42,7 +42,9 @@ gulp.task('copy', [
 
 gulp.task('copy:css', function () {
   return gulp.src('src/css/all.scss')
-    .pipe(plugins.sass({ style: 'compressed' }))
+    .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.sass({ outputStyle: 'compressed' }))
+    .pipe(plugins.sourcemaps.write('./'))
     .pipe(gulp.dest('build/css'))
     .pipe(plugins.filter('**/*.css'))
     .pipe(reload({stream: true}));
