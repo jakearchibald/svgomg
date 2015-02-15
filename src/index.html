@@ -45,7 +45,7 @@
             ss.media = "all";
           }
           else {
-            setTimeout( toggleMedia );
+            requestAnimationFrame(toggleMedia);
           }
         }
         toggleMedia();
@@ -58,9 +58,16 @@
           document.querySelector('.main-menu').classList.add('use-font');
         }
         else {
-          document.fonts.load("1px roboto").then(function() {
-            document.querySelector('.main-menu').classList.add('use-font');
-          });
+          function loadFont() {
+            document.fonts.load("1px roboto").then(function(fontsLoaded) {
+              // timing issue where font css hasn't loaded yet
+              if (!fontsLoaded[0]) {
+                return requestAnimationFrame(loadFont);
+              }
+              document.querySelector('.main-menu').classList.add('use-font');
+            });
+          }
+          loadFont();
         }
       });
     </script>
