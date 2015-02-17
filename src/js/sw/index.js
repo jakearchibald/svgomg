@@ -25,7 +25,8 @@ self.addEventListener('install', function(event) {
       'js/page.js',
       'js/prism-worker.js',
       'js/svgo-worker.js',
-      'changelog.json'
+      'changelog.json',
+      new Request('https://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata', {mode: 'no-cors'})
     ]);
 
     var activeVersion = await activeVersionPromise;
@@ -76,7 +77,7 @@ async function handleFontRequest(request) {
 self.addEventListener('fetch', function(event) {
   var url = new URL(event.request.url);
 
-  if (url.host == 'fonts.googleapis.com' || url.host == 'fonts.gstatic.com') {
+  if (url.host == 'fonts.gstatic.com') {
     event.respondWith(handleFontRequest(event.request));
   }
   else {
@@ -84,5 +85,4 @@ self.addEventListener('fetch', function(event) {
       caches.match(event.request).then(r => r || fetch(event.request))
     );
   }
-
 });
