@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.2.2",
+    "changes": [
+      "Better font loading."
+    ]
+  },
+  {
     "version": "1.2.1",
     "changes": [
       "Lots of performance improvements."

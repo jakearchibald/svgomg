@@ -25,7 +25,7 @@
   </head>
   <body>
     <div class="app-output">
-      <div class="main-menu">
+      <div class="main-menu hide-font">
         <div class="overlay"></div>
         <nav class="menu">
           <ul>
@@ -213,23 +213,40 @@
         }
 
         loadCSS("css/all.css");
-        loadCSS("https://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata", function() {
-          if (!('fonts' in document)) {
-            document.querySelector('.main-menu').classList.add('use-font');
+        loadCSS("https://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata");
+        
+        (function() {
+          var menu = document.querySelector('.main-menu');
+          var timedout = false;
+
+          if (!document.fonts) {
+            // if I can't controll the loading, no webfont in the menu for you
+            menu.classList.remove('hide-font');
           }
+          // check to see if font's already loaded/local
+          else if (document.fonts.check("1px roboto")) {
+            menu.classList.add('use-font');
+            menu.classList.remove('hide-font');
+          }
+          // load the font
           else {
+            setTimeout(function() {
+              timedout = true;
+              menu.classList.remove('hide-font');
+            }, 300);
+
             function loadFont() {
               document.fonts.load("1px roboto").then(function(fontsLoaded) {
-                // timing issue where font css hasn't loaded yet
-                if (!fontsLoaded[0]) {
-                  return requestAnimationFrame(loadFont);
-                }
-                document.querySelector('.main-menu').classList.add('use-font');
+                if (timedout) return;
+                // font css hasn't loaded yet
+                if (!fontsLoaded[0]) return requestAnimationFrame(loadFont);
+                menu.classList.add('use-font');
+                menu.classList.remove('hide-font');
               });
             }
             loadFont();
           }
-        });
+        }());
       </script>
     </div>
   </body>
