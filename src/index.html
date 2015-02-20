@@ -219,32 +219,12 @@
           var menu = document.querySelector('.main-menu');
           var timedout = false;
 
-          if (!document.fonts) {
-            // if I can't controll the loading, no webfont in the menu for you
-            menu.classList.remove('hide-font');
-          }
-          // check to see if font's already loaded/local
-          else if (document.fonts.check("1px roboto")) {
+          menu.classList.remove('hide-font');
+          
+          if (document.fonts && document.fonts.check("1px roboto")) {
+            // Web fonts have TOO much of an impact on first-render performance
+            // Only going to use them in the menu if the user has it locally
             menu.classList.add('use-font');
-            menu.classList.remove('hide-font');
-          }
-          // load the font
-          else {
-            setTimeout(function() {
-              timedout = true;
-              menu.classList.remove('hide-font');
-            }, 300);
-
-            function loadFont() {
-              document.fonts.load("1px roboto").then(function(fontsLoaded) {
-                if (timedout) return;
-                // font css hasn't loaded yet
-                if (!fontsLoaded[0]) return requestAnimationFrame(loadFont);
-                menu.classList.add('use-font');
-                menu.classList.remove('hide-font');
-              });
-            }
-            loadFont();
           }
         }());
       </script>
