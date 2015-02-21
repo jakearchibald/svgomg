@@ -8,6 +8,7 @@
   z-index: 3;
   color: #fff;
   opacity: 0;
+  font-family: sans-serif;
 
   @include display-flex;
   @include flex-flow(column);
