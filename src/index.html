@@ -23,7 +23,7 @@
   </head>
   <body>
     <div class="app-output">
-      <div class="main-menu hide-font">
+      <div class="main-menu">
         <div class="overlay"></div>
         <nav class="menu">
           <ul>
@@ -213,19 +213,6 @@
         requestAnimationFrame(function() {
           loadCSS("css/all.css");
           loadCSS("https://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata");
-          
-          (function() {
-            var menu = document.querySelector('.main-menu');
-            var timedout = false;
-
-            menu.classList.remove('hide-font');
-            
-            if (document.fonts && document.fonts.check("1px roboto")) {
-              // Web fonts have TOO much of an impact on first-render performance
-              // Only going to use them in the menu if the user has it locally
-              menu.classList.add('use-font');
-            }
-          }());
 
           [
             'js/page.js',
