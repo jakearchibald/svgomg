@@ -225,9 +225,18 @@
             menu.classList.add('use-font');
           }
         }());
+
+        requestAnimationFrame(function() {
+          [
+            'js/page.js',
+            '//www.google-analytics.com/analytics.js'
+          ].forEach(function(url) {
+            var s = document.createElement('script');
+            s.src = url;
+            document.head.appendChild(s);
+          })
+        });
       </script>
-      <script async src="js/page.js"></script>
-      <script async src='//www.google-analytics.com/analytics.js'></script>
     </div>
   </body>
 </html>
