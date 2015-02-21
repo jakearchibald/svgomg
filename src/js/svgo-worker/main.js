@@ -1,6 +1,6 @@
 
 var svg2js = require('svgo/lib/svgo/svg2js');
-var JsApi = require('svgo/lib/svgo/jsAPI.js');
+var JsApi = require('svgo/lib/svgo/jsAPI');
 var js2svg = require('svgo/lib/svgo/js2svg');
 var plugins = require('svgo/lib/svgo/plugins');
 
