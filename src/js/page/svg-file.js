@@ -7,7 +7,7 @@ class SvgFile {
     this.text = text;
     this._compressedSize = null;
     this._url = '';
-    this._urlBlob = null;
+    this._blob = null;
     this.width = width;
     this.height = height;
   }
@@ -25,14 +25,20 @@ class SvgFile {
     return this._compressedSize;
   }
 
-  get url() {
-    if (!this._url) {
-      // IE GCs blobs once they're out of reference, even if they
-      // have an object url, so we have to keep in in reference.
-      this._urlBlob = new Blob([this.text], {type: "image/svg+xml"});
-      this._url = URL.createObjectURL(this._urlBlob);
-    }
+  _create() {
+    // IE GCs blobs once they're out of reference, even if they
+    // have an object url, so we have to keep in in reference.
+    this._blob = new Blob([this.text], {type: "image/svg+xml"});
+    this._url = URL.createObjectURL(this._blob);
+  }
 
+  get blob() {
+    if (!this._blob) this._create();
+    return this._blob;
+  }
+
+  get url() {
+    if (!this._url) this._create();
     return this._url;
   }
 
@@ -41,7 +47,7 @@ class SvgFile {
       return;
     }
 
-    this._urlBlob = null;
+    this._blob = null;
     URL.revokeObjectURL(this._url);
   }
 }

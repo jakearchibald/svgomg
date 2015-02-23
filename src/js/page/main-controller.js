@@ -225,7 +225,7 @@ class MainController {
 
   async _updateForFile(svgFile, {compareToFile, gzip}) {
     this._outputUi.update(svgFile);
-    this._downloadButtonUi.setDownload(this._inputFilename, svgFile.url);
+    this._downloadButtonUi.setDownload(this._inputFilename, svgFile);
 
     this._resultsUi.update({
       comparisonSize: compareToFile && (await compareToFile.size({ compress: gzip })),

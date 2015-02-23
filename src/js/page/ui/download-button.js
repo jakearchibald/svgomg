@@ -13,11 +13,23 @@ class DownloadButton {
     '');
     this._spinner = new Spinner();
     this.container.appendChild(this._spinner.container);
+    this._svgFile = null;
+
+    // IE compat
+    if ('msSaveBlob' in navigator) {
+      this.container.addEventListener('click', event => {
+        event.preventDefault();
+        navigator.msSaveBlob(this._svgFile.blob, this.container.download);
+      });
+    }
   }
 
-  setDownload(filename, url) {
+  setDownload(filename, svgFile) {
     this.container.download = filename;
-    this.container.href = url;
+    this.container.href = svgFile.url;
+
+    // for IE compat
+    this._svgFile = svgFile;
   }
 
   working() {

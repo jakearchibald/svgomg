@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.2.4",
+    "changes": [
+      "Download button now works in IE."
+    ]
+  },
+  {
     "version": "1.2.3",
     "changes": [
       "Fixing bug introduced by browserify."
