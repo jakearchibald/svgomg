@@ -5,5 +5,6 @@
     "src": "imgs/icon.png",
     "sizes": "192x192"
   }],
+  "display": "standalone",
   "start_url": "./"
 }
