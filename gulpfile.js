@@ -28,7 +28,14 @@ gulp.task('get-page-data', function(done) {
   pageData = JSON.parse(fs.readFileSync("./src/config.json"));
   pageData.changelog = JSON.parse(fs.readFileSync("./src/changelog.json"));
   pageData.plugins.forEach(function(plugin) {
-    plugin.active = require('svgo/plugins/' + plugin.id).active;
+    if (plugin.id === 'removeHiddenElems') {
+      // TODO: remove this when fixed
+      // This breaks the demo image in 0.5.1
+      plugin.active = false;
+    }
+    else {
+      plugin.active = require('svgo/plugins/' + plugin.id).active;
+    }
   });
   done();
 });
