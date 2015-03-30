@@ -13,6 +13,10 @@
       "name": "Clean IDs"
     },
     {
+      "id": "cleanupListOfValues",
+      "name": "Round/rewrite number lists"
+    },
+    {
       "id": "cleanupNumericValues",
       "name": "Round/rewrite numbers"
     },
@@ -103,6 +107,10 @@
     {
       "id": "removeUnknownsAndDefaults",
       "name": "Remove unknowns & defaults"
+    },
+    {
+      "id": "removeUselessDefs",
+      "name": "Remove unused defs"
     },
     {
       "id": "removeUnusedNS",

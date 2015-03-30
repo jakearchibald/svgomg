@@ -4,6 +4,7 @@ var JsApi = require('svgo/lib/svgo/jsAPI');
 var js2svg = require('svgo/lib/svgo/js2svg');
 var plugins = require('svgo/lib/svgo/plugins');
 
+// the order is from https://github.com/svg/svgo/blob/master/.svgo.yml
 var pluginsData = {
   removeDoctype: require('svgo/plugins/removeDoctype'),
   removeXMLProcInst: require('svgo/plugins/removeXMLProcInst'),
@@ -12,8 +13,11 @@ var pluginsData = {
   removeEditorsNSData: require('svgo/plugins/removeEditorsNSData'),
   cleanupAttrs: require('svgo/plugins/cleanupAttrs'),
   convertStyleToAttrs: require('svgo/plugins/convertStyleToAttrs'),
+  cleanupIDs: require('svgo/plugins/cleanupIDs'),
   removeRasterImages: require('svgo/plugins/removeRasterImages'),
+  removeUselessDefs: require('svgo/plugins/removeUselessDefs'),
   cleanupNumericValues: require('svgo/plugins/cleanupNumericValues'),
+  cleanupListOfValues: require('svgo/plugins/cleanupListOfValues'),
   convertColors: require('svgo/plugins/convertColors'),
   removeUnknownsAndDefaults: require('svgo/plugins/removeUnknownsAndDefaults'),
   removeNonInheritableGroupAttrs: require('svgo/plugins/removeNonInheritableGroupAttrs'),
@@ -31,7 +35,6 @@ var pluginsData = {
   removeEmptyAttrs: require('svgo/plugins/removeEmptyAttrs'),
   removeEmptyContainers: require('svgo/plugins/removeEmptyContainers'),
   mergePaths: require('svgo/plugins/mergePaths'),
-  cleanupIDs: require('svgo/plugins/cleanupIDs'),
   removeUnusedNS: require('svgo/plugins/removeUnusedNS'),
   transformsWithOnePath: require('svgo/plugins/transformsWithOnePath'),
   sortAttrs: require('svgo/plugins/sortAttrs'),
@@ -68,7 +71,10 @@ function cloneParsedSvg(obj) {
   newObj.content.forEach(function addJsApiProto(item) {
     item.__proto__ = JsApi.prototype;
     if (item.content) {
-      item.content.forEach(addJsApiProto);
+      item.content.forEach(function(childItem) {
+        addJsApiProto(childItem);
+        childItem.parentNode = item;
+      });
     }
   });
 
@@ -116,6 +122,7 @@ function* multipassCompress(settings) {
   // float precision
   [
     'cleanupNumericValues',
+    'cleanupListOfValues',
     'convertPathData',
     // Not including this by default, it seems to break SVGs really badly at lower numbers.
     // TODO: make "use global precision" off by default when it comes to transforms
