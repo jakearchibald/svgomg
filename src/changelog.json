@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.4.0",
+    "changes": [
+      "Updated to SVGO v0.5.1, bringing:",
+      "Remove useless defs option",
+      "Round number in number lists",
+      "And loads of fixes!"
+    ]
+  },
+  {
     "version": "1.3.0",
     "changes": [
       "Using manifest spec for icons etc."

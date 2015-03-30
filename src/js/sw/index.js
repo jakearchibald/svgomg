@@ -32,13 +32,8 @@ self.addEventListener('install', function(event) {
     var activeVersion = await activeVersionPromise;
 
     if (!activeVersion || activeVersion.split('.')[0] === version.split('.')[0]) {
-      if (self.skipWaiting) {
-        self.skipWaiting();
-      }
-      // We'll cheat a bit for Chrome 40.
-      // We'll pretend we activated, even though the old
-      // SW is still doing the controlling.
-      await activate();
+      // wrapping in an if while Chrome 40 is still around.
+      if (self.skipWaiting) self.skipWaiting();
     }
   }());
 });
@@ -47,22 +42,20 @@ var expectedCaches = [
   'svgomg-static-' + cacheVerion,
 ];
 
-async function activate() {
-  // remove caches beginning "svgomg-" that aren't in
-  // expectedCaches
-  var cacheNames = await caches.keys();
-  for (var cacheName of cacheNames) {
-    if (!/^svgomg-/.test(cacheName)) continue;
-    if (expectedCaches.indexOf(cacheName) == -1) {
-      await caches.delete(cacheName);
-    }
-  }
-
-  await storage.set('active-version', version);
-}
-
 self.addEventListener('activate', function(event) {
-  event.waitUntil(activate());
+  event.waitUntil(async _ => {
+    // remove caches beginning "svgomg-" that aren't in
+    // expectedCaches
+    var cacheNames = await caches.keys();
+    for (var cacheName of cacheNames) {
+      if (!/^svgomg-/.test(cacheName)) continue;
+      if (expectedCaches.indexOf(cacheName) == -1) {
+        await caches.delete(cacheName);
+      }
+    }
+
+    await storage.set('active-version', version);
+  });
 });
 
 async function handleFontRequest(request) {
