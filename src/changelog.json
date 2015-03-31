@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.4.1",
+    "changes": [
+      "Fixes to 'remove hidden items'"
+    ]
+  },
+  {
     "version": "1.4.0",
     "changes": [
       "Updated to SVGO v0.5.1, bringing:",

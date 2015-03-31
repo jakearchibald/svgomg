@@ -21,7 +21,7 @@
     "prismjs": "git+https://github.com/LeaVerou/prism.git#gh-pages",
     "regenerator": "^0.8.3",
     "run-sequence": "^1.0.1",
-    "svgo": "^0.5.0",
+    "svgo": "git+https://github.com/svg/svgo.git#5c08d7bc49be9c8c6494d4743b9579365389031d",
     "uglifyify": "^2.6.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",

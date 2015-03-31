@@ -62,25 +62,6 @@ function optimizePluginsArray(plugins) {
   return plugins;
 }
 
-
-function cloneParsedSvg(obj) {
-  // This seems fast enough
-  var newObj = JSON.parse(JSON.stringify(obj));
-
-  // But we need to repair the JsApi bits:
-  newObj.content.forEach(function addJsApiProto(item) {
-    item.__proto__ = JsApi.prototype;
-    if (item.content) {
-      item.content.forEach(function(childItem) {
-        addJsApiProto(childItem);
-        childItem.parentNode = item;
-      });
-    }
-  });
-
-  return newObj;
-}
-
 var optimisedPluginsData = optimizePluginsArray(
   Object.keys(pluginsData).map(p => pluginsData[p])
 );
@@ -132,7 +113,7 @@ function* multipassCompress(settings) {
     pluginsData[pluginName].params.floatPrecision = Number(settings.floatPrecision);
   });
 
-  var svg = cloneParsedSvg(parsedSvg);
+  var svg = parsedSvg.clone();
   var svgData;
   var previousDataLength;
 
