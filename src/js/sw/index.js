@@ -55,7 +55,7 @@ self.addEventListener('activate', function(event) {
     }
 
     await storage.set('active-version', version);
-  });
+  }());
 });
 
 async function handleFontRequest(request) {

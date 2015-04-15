@@ -1,16 +1,22 @@
 [
   {
+    "version": "1.4.2",
+    "changes": [
+      "Better cache cleanup."
+    ]
+  },
+  {
     "version": "1.4.1",
     "changes": [
-      "Fixes to 'remove hidden items'"
+      "Fixes to 'remove hidden items'."
     ]
   },
   {
     "version": "1.4.0",
     "changes": [
       "Updated to SVGO v0.5.1, bringing:",
-      "Remove useless defs option",
-      "Round number in number lists",
+      "Remove useless defs option.",
+      "Round number in number lists.",
       "And loads of fixes!"
     ]
   },
