@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.4.3",
+    "changes": [
+      "Working around layout bug in Chrome beta."
+    ]
+  },
+  {
     "version": "1.4.2",
     "changes": [
       "Better cache cleanup."

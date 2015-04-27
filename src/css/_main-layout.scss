@@ -36,6 +36,8 @@
 .output {
   @include flex(1);
   position: relative;
+  // TODO: working around weird Chrome beta bug
+  min-height: 230px;
 }
 
 .action-button-container {
