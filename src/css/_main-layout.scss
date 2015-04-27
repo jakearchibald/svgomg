@@ -6,7 +6,7 @@
 }
 
 .settings {
-  @include flex(0.9);
+  @include flex(0.9 1 0);
   overflow: hidden;
 
   @media (min-width: 640px) {
@@ -34,10 +34,8 @@
 }
 
 .output {
-  @include flex(1);
+  @include flex(1 1 0);
   position: relative;
-  // TODO: working around weird Chrome beta bug
-  min-height: 230px;
 }
 
 .action-button-container {

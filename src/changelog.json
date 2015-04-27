@@ -2,7 +2,7 @@
   {
     "version": "1.4.3",
     "changes": [
-      "Working around layout bug in Chrome beta."
+      "Fixing layout in Chrome beta."
     ]
   },
   {
