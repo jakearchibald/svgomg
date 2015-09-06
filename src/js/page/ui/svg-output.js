@@ -13,10 +13,10 @@ class SvgOutput {
       '<div class="svg-output">' +
         '<div class="svg-container">' +
           frameHtml +
-          // Stop touches going into the iframe.
-          // pointer-events + touch + iframe doesn't work in Chrome :(
-          '<div class="svg-clickjacker"></div>' +
         '</div>' +
+        // Stop touches going into the iframe.
+        // pointer-events + touch + iframe doesn't work in Chrome :(
+        '<div class="svg-clickjacker"></div>' +
       '</div>' +
     '');
 

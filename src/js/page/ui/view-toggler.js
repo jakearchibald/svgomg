@@ -2,6 +2,7 @@ var utils = require('../utils');
 
 class ViewToggler extends (require('events').EventEmitter) {
   constructor() {
+    super();
     this.container = null;
 
     utils.domReady.then(_ => {

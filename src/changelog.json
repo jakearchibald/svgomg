@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.5.0",
+    "changes": [
+      "Updating SVGO"
+    ]
+  },
+  {
     "version": "1.4.3",
     "changes": [
       "Fixing layout in Chrome beta."

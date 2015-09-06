@@ -65,6 +65,10 @@
       "name": "Remove <desc>"
     },
     {
+      "id": "removeDimensions",
+      "name": "Prefer viewBox to width/height"
+    },
+    {
       "id": "removeDoctype",
       "name": "Remove doctype"
     },

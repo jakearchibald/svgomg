@@ -9,7 +9,8 @@ var buffer = require('vinyl-buffer');
 var watchify = require('watchify');
 var browserify = require('browserify');
 var uglifyify = require('uglifyify');
-var to5ify = require("6to5ify");
+var babelify = require("babelify");
+var assign = require('lodash/object/assign');
 var runSequence = require('run-sequence');  // Temporary solution until Gulp 4
                                             // https://github.com/gulpjs/gulp/issues/355
 
@@ -33,24 +34,18 @@ gulp.task('get-page-data', function(done) {
   done();
 });
 
-gulp.task('copy', [
-  'copy:css',
-  'copy:html',
-  'copy:js',
-  'copy:misc'
-]);
-
-gulp.task('copy:css', function () {
+gulp.task('css', function () {
   return gulp.src('src/css/*.scss')
-    //.pipe(plugins.sourcemaps.init())
+    .pipe(plugins.sass.sync().on('error', plugins.sass.logError))
+    .pipe(plugins.sourcemaps.init())
     .pipe(plugins.sass({ outputStyle: 'compressed' }))
-    //.pipe(plugins.sourcemaps.write('./'))
-    .pipe(gulp.dest('build/css'))
+    .pipe(plugins.sourcemaps.write('./'))
+    .pipe(gulp.dest('build/css/'))
     .pipe(plugins.filter('**/*.css'))
     .pipe(reload({stream: true}));
 });
 
-gulp.task('copy:html', ['get-page-data', 'copy:css'], function () {
+gulp.task('html', ['get-page-data', 'css'], function () {
   return gulp.src([
     // Copy all `.html` files
     'src/*.html',
@@ -60,25 +55,19 @@ gulp.task('copy:html', ['get-page-data', 'copy:css'], function () {
     data: pageData
   }))
   .pipe(plugins.htmlmin({
-    // In-depth information about the options:
-    // https://github.com/kangax/html-minifier#options-quick-reference
-    collapseBooleanAttributes: true,
-    collapseWhitespace: true,
-    minifyJS: true,
-    removeAttributeQuotes: true,
     removeComments: true,
-    removeEmptyAttributes: true,
-    removeOptionalTags: true,
+    removeCommentsFromCDATA: true,
+    removeCDATASectionsFromCDATA: true,
+    collapseWhitespace: true,
+    collapseBooleanAttributes: true,
+    removeAttributeQuotes: true,
     removeRedundantAttributes: true,
-    // Prevent html-minifier from breaking the SVGs
-    // https://github.com/kangax/html-minifier/issues/285
-    keepClosingSlash: true,
-    caseSensitive: true
+    minifyJS: true
   })).pipe(gulp.dest('build'))
     .pipe(reload({stream: true}));
 });
 
-gulp.task('copy:misc', function () {
+gulp.task('copy', function () {
   return gulp.src([
     // Copy all files
     'src/**',
@@ -90,21 +79,16 @@ gulp.task('copy:misc', function () {
   ]).pipe(gulp.dest('build'));
 });
 
-function createBundler(src) {
-  var b;
+function createBundle(src) {
+  var customOpts = {
+    entries: [src],
+    debug: true
+  };
+  var opts = assign({}, watchify.args, customOpts);
+  var b = watchify(browserify(opts));
 
-  if (plugins.util.env.production) {
-    b = browserify();
-  }
-  else {
-    b = browserify({
-      cache: {}, packageCache: {}, fullPaths: true,
-      debug: true
-    });
-  }
-
-  b.transform(to5ify.configure({
-    experimental: true
+  b.transform(babelify.configure({
+    stage: 1
   }));
 
   if (plugins.util.env.production) {
@@ -113,41 +97,44 @@ function createBundler(src) {
     }, 'uglifyify');
   }
 
-  b.add(src);
+  b.on('log', plugins.util.log);
   return b;
 }
 
-function bundle(bundler, outputPath) {
+function bundle(b, outputPath) {
   var splitPath = outputPath.split('/');
   var outputFile = splitPath[splitPath.length - 1];
   var outputDir = splitPath.slice(0, -1).join('/');
 
-  return bundler.bundle()
+  return b.bundle()
     // log errors if they happen
     .on('error', plugins.util.log.bind(plugins.util, 'Browserify Error'))
     .pipe(source(outputFile))
+    // optional, remove if you don't need to buffer file contents
     .pipe(buffer())
-    .pipe(plugins.sourcemaps.init({ loadMaps: true })) // loads map from browserify file
+    // optional, remove if you dont want sourcemaps
+    .pipe(plugins.sourcemaps.init({loadMaps: true})) // loads map from browserify file
+       // Add transformation tasks to the pipeline here.
     .pipe(plugins.sourcemaps.write('./')) // writes .map file
     .pipe(plugins.size({ gzip: true, title: outputFile }))
     .pipe(gulp.dest('build/' + outputDir))
     .pipe(reload({ stream: true }));
 }
 
-var bundlers = {
-  'js/page.js': createBundler('./src/js/page/index.js'),
-  'js/svgo-worker.js': createBundler('./src/js/svgo-worker/index.js'),
-  'js/gzip-worker.js': createBundler('./src/js/gzip-worker/index.js'),
-  'js/prism-worker.js': createBundler('./src/js/prism-worker/index.js'),
-  'js/promise-polyfill.js': createBundler('./src/js/promise-polyfill/index.js'),
-  'js/fastclick.js': createBundler('./src/js/fastclick/index.js'),
-  'sw.js': plugins.util.env['disable-sw'] ? createBundler('./src/js/sw-null/index.js') : createBundler('./src/js/sw/index.js')
+var jsBundles = {
+  'js/page.js': createBundle('./src/js/page/index.js'),
+  'js/svgo-worker.js': createBundle('./src/js/svgo-worker/index.js'),
+  'js/gzip-worker.js': createBundle('./src/js/gzip-worker/index.js'),
+  'js/prism-worker.js': createBundle('./src/js/prism-worker/index.js'),
+  'js/promise-polyfill.js': createBundle('./src/js/promise-polyfill/index.js'),
+  'js/fastclick.js': createBundle('./src/js/fastclick/index.js'),
+  'sw.js': plugins.util.env['disable-sw'] ? createBundle('./src/js/sw-null/index.js') : createBundle('./src/js/sw/index.js')
 };
 
-gulp.task('copy:js', function () {
+gulp.task('js', function () {
   return mergeStream.apply(null,
-    Object.keys(bundlers).map(function(key) {
-      return bundle(bundlers[key], key);
+    Object.keys(jsBundles).map(function(key) {
+      return bundle(jsBundles[key], key);
     })
   );
 });
@@ -162,15 +149,14 @@ gulp.task('browser-sync', function() {
 });
 
 gulp.task('watch', function () {
-  gulp.watch(['src/**/*.scss'], ['copy:css']);
-  gulp.watch(['src/*.html', 'src/plugin-data.json', 'src/changelog.json'], ['copy:misc', 'copy:html']);
+  gulp.watch(['src/**/*.scss'], ['css']);
+  gulp.watch(['src/*.html', 'src/plugin-data.json', 'src/changelog.json'], ['copy', 'html']);
 
-  Object.keys(bundlers).forEach(function(key) {
-    var watchifyBundler = watchify(bundlers[key]);
-    watchifyBundler.on('update', function() {
-      return bundle(watchifyBundler, key);
+  Object.keys(jsBundles).forEach(function(key) {
+    var b = jsBundles[key];
+    b.on('update', function() {
+      return bundle(b, key);
     });
-    bundle(watchifyBundler, key);
   });
 });
 
@@ -179,7 +165,7 @@ gulp.task('watch', function () {
 // ---------------------------------------------------------------------
 
 gulp.task('build', function (done) {
-  runSequence('clean', 'copy', done);
+  runSequence('clean', ['copy', 'html', 'js', 'css'], done);
 });
 
 gulp.task('default', ['build']);
