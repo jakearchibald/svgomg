@@ -4,7 +4,15 @@
   "icons": [{
     "src": "imgs/icon.png",
     "sizes": "192x192"
+  }, {
+    "src": "imgs/icon256.png",
+    "sizes": "256x256"
+  },
+  {
+    "src": "imgs/icon512.png",
+    "sizes": "512x512"
   }],
+  "background_color": "#393939",
   "display": "standalone",
   "start_url": "./"
 }

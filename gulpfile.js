@@ -85,7 +85,15 @@ function createBundle(src) {
     debug: true
   };
   var opts = assign({}, watchify.args, customOpts);
-  var b = watchify(browserify(opts));
+  var b;
+
+  // this is a quick hack. Figure out what's really happening
+  if (plugins.util.env.production) {
+    b = browserify(opts);
+  }
+  else {
+    b = watchify(browserify(opts));
+  }
 
   b.transform(babelify.configure({
     stage: 1
@@ -131,7 +139,7 @@ var jsBundles = {
   'sw.js': plugins.util.env['disable-sw'] ? createBundle('./src/js/sw-null/index.js') : createBundle('./src/js/sw/index.js')
 };
 
-gulp.task('js', function () {
+gulp.task('js', function() {
   return mergeStream.apply(null,
     Object.keys(jsBundles).map(function(key) {
       return bundle(jsBundles[key], key);
@@ -148,7 +156,7 @@ gulp.task('browser-sync', function() {
   });
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', function() {
   gulp.watch(['src/**/*.scss'], ['css']);
   gulp.watch(['src/*.html', 'src/plugin-data.json', 'src/changelog.json'], ['copy', 'html']);
 
