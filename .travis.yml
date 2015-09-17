@@ -3,12 +3,11 @@
 # http://docs.travis-ci.com
 
 after_success:
-   - curl -sSL "https://raw.githubusercontent.com/h5bp-bot/scripts/0.6.0/update_site_branch.sh" |
-         bash -s -- --commands "npm install && npm run build"
-                    --commit-message "Hey GitHub, this content is for you! [skip ci]"
-                    --directory "build"
-                    --distribution-branch "gh-pages"
-                    --source-branch "master"
+  - $(npm bin)/update-branch --commands "npm install && npm run build"
+                             --commit-message "Hey GitHub, this content is for you! [skip ci]"
+                             --directory "build"
+                             --distribution-branch "gh-pages"
+                             --source-branch "master"
 
 env:
   global:
@@ -20,4 +19,4 @@ git:
 language: node_js
 
 node_js:
-  - "0.10"
+  - "4"

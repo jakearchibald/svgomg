@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@alrra/travis-scripts": "^1.1.0",
     "babelify": "^6.3.0",
     "browser-sync": "^2.9.1",
     "browserify": "^8.0.0",
