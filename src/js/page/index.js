@@ -12,7 +12,7 @@ if (/(iPhone|iPad);/.test(navigator.userAgent)) {
 }
 
 loadScripts(polyfillsNeeded, function() {
-  require('babelify/node_modules/babel-core/node_modules/regenerator/runtime');
+  require('regenerator/runtime');
   new (require('./main-controller'));
 }, function() {
   console.error("Failed to load polyfills");

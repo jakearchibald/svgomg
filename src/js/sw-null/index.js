@@ -1,4 +1,4 @@
-require('babelify/node_modules/babel-core/node_modules/regenerator/runtime');
+require('regenerator/runtime');
 
 var storage = require('../utils/storage');
 
