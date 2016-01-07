@@ -1,5 +1,5 @@
 "use strict";
-require('babelify/node_modules/babel-core/node_modules/regenerator/runtime');
+require('regenerator/runtime');
 
 ()=>{ // hack around weird regenerator polyfill
 var svg2js = require('svgo/lib/svgo/svg2js');
