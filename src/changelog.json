@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.5.1",
+    "changes": [
+      "Minor CSS change"
+    ]
+  },
+  {
     "version": "1.5.0",
     "changes": [
       "Updating SVGO"

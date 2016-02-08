@@ -1,10 +1,9 @@
 require('regenerator/runtime');
-require("./cache-polyfill");
 
 var storage = require('../utils/storage');
 
 // TODO: use come kind of semver lib?
-// Pattern here is 
+// Pattern here is
 // a.b.c
 // a: version-isolated change, don't let both versions run together
 // b: new feature
@@ -26,7 +25,7 @@ self.addEventListener('install', function(event) {
       'js/prism-worker.js',
       'js/svgo-worker.js',
       'changelog.json',
-      new Request('https://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata', {mode: 'no-cors'})
+      'https://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata'
     ]);
 
     var activeVersion = await activeVersionPromise;

@@ -3,7 +3,7 @@
   <head>
     <title>SVGOMG - SVGO's Missing GUI</title>
     <meta name="theme-color" content="#303F9F">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0">
     <style>{% include "../build/css/head.css" %}</style>
     <script>
       if ((!location.port || location.port == "80") && location.protocol != 'https:') {
@@ -186,7 +186,9 @@
           ].forEach(function(url) {
             var link = document.createElement('link');
             link.rel = "stylesheet";
+            link.crossorigin = true;
             link.href = url;
+
             document.head.appendChild(link);
           });
 
