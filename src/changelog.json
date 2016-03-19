@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.6.1",
+    "changes": [
+      "HTMLmin broke my stuff"
+    ]
+  },
+  {
     "version": "1.6.0",
     "changes": [
       "Copy-to-clipboard button"
