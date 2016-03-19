@@ -14,6 +14,7 @@ class MainController {
     this._mainUi = null;
     this._outputUi = new (require('./ui/output'));
     this._downloadButtonUi = new (require('./ui/download-button'));
+    this._copyButtonUi = new (require('./ui/copy-button'));
     this._resultsUi = new (require('./ui/results'));
     this._settingsUi = new (require('./ui/settings'));
     this._mainMenuUi = new (require('./ui/main-menu'));
@@ -65,7 +66,12 @@ class MainController {
         this._settingsUi.container
       );
 
-      document.querySelector('.action-button-container').appendChild(this._downloadButtonUi.container);
+      const actionContainer = document.querySelector('.action-button-container');
+
+      if (document.queryCommandSupported && document.queryCommandSupported('copy')) {
+        actionContainer.appendChild(this._copyButtonUi.container);
+      }
+      actionContainer.appendChild(this._downloadButtonUi.container);
       document.querySelector('.output').appendChild(this._outputUi.container);
       this._container.appendChild(this._toastsUi.container);
       this._container.appendChild(this._dropUi.container);
@@ -109,7 +115,7 @@ class MainController {
 
       if (newWorker.state == 'installed' && navigator.serviceWorker.controller) {
         var activeVersion = await storage.get('active-version');
-        
+
         // activeVersion is undefined for sw-null
         // if the main version has changed, bail
         if (activeVersion && activeVersion.split('.')[0] != self.version.split('.')[0]) return;
@@ -226,6 +232,7 @@ class MainController {
   async _updateForFile(svgFile, {compareToFile, gzip}) {
     this._outputUi.update(svgFile);
     this._downloadButtonUi.setDownload(this._inputFilename, svgFile);
+    this._copyButtonUi.setSVG(svgFile);
 
     this._resultsUi.update({
       comparisonSize: compareToFile && (await compareToFile.size({ compress: gzip })),

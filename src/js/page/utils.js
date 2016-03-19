@@ -30,7 +30,7 @@ exports.get = function get(url) {
     req.onerror = function() {
       reject(Error("Network Error"));
     };
-    
+
     req.send();
   });
 };
@@ -142,4 +142,25 @@ exports.loadCss = function(url) {
 
     document.head.appendChild(link);
   });
+};
+
+exports.trackFocusMethod = function() {
+  var focusMethod = 'mouse';
+
+  document.body.addEventListener('focus', event => {
+    event.target.classList.add(focusMethod == 'key' ? 'key-focused' : 'mouse-focused');
+  }, true);
+
+  document.body.addEventListener('blur', event => {
+    event.target.classList.remove('key-focused');
+    event.target.classList.remove('mouse-focused');
+  }, true);
+
+  document.body.addEventListener('keydown', event => {
+    focusMethod = 'key';
+  }, true);
+
+  document.body.addEventListener('mousedown', event => {
+    focusMethod = 'mouse';
+  }, true);
 };

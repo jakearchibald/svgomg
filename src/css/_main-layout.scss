@@ -43,15 +43,26 @@
   z-index: 2;
   bottom: -28px;
   right: 13px;
+  @include display-flex;
+  @include align-items(center);
+
+  & .minor-floating-action-button {
+    margin-right: 10px;
+  }
 
   @media (min-width: 640px) {
     right: 30px;
     bottom: 30px;
-    @include display-flex;
-    @include align-items(center);
 
     & .results-container {
-      margin-right: -15px;
+      margin-right: -17px;
+    }
+
+    & .minor-floating-action-button {
+      margin: 0;
+      position: absolute;
+      top: -58px;
+      right: 10px;
     }
   }
 
@@ -59,6 +70,7 @@
     right: 0;
     bottom: 30px;
   }
+
 }
 
 // so these UI elements are above output
@@ -115,10 +127,10 @@
   }
 
   .action-button-container {
-    @include transform(translateX(74px));
+    @include transform(translateX(118px));
 
     @media (min-width: 640px) {
-      @include transform(translateY(89px));
+      @include transform(translateY(139px));
     }
 
     &.transition {
@@ -141,7 +153,7 @@
 
     &.transition {
       @include transition(all 0.5s ease-out 0.5s);
-      
+
       @media (min-width: 640px) and (max-width: 900px) {
         @include transition(all 0.5s ease-out 0.6s);
       }

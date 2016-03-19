@@ -1,6 +1,7 @@
 @import 'components/settings';
 @import 'components/material-switch';
 @import 'components/toolbar';
+@import 'components/minor-floating-action-button';
 @import 'components/floating-action-button';
 @import 'components/spinner';
 @import 'components/toasts';
@@ -12,7 +13,4 @@
 @import 'components/results';
 @import 'components/output';
 @import 'components/code-output';
-
-// app
-  .app-output {
-  }
+@import 'components/ripple';

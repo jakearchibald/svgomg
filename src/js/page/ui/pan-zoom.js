@@ -106,7 +106,7 @@ class PanZoom {
 
     this._lastPoints = getPoints(event);
     this._active++;
-    
+
     if (this._active === 1) {
       this._onFirstPointerDown(event);
     }

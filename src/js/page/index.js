@@ -13,6 +13,7 @@ if (/(iPhone|iPad);/.test(navigator.userAgent)) {
 
 loadScripts(polyfillsNeeded, function() {
   require('regenerator/runtime');
+  require('./utils').trackFocusMethod();
   new (require('./main-controller'));
 }, function() {
   console.error("Failed to load polyfills");
