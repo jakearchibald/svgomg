@@ -1,7 +1,7 @@
 "use strict";
-require('regenerator/runtime');
+require('regenerator-runtime/runtime');
 
-()=>{ // hack around weird regenerator polyfill
+()=>{ // hack around weird regenerator-runtime polyfill
 var svg2js = require('svgo/lib/svgo/svg2js');
 var JsApi = require('svgo/lib/svgo/jsAPI');
 var js2svg = require('svgo/lib/svgo/js2svg');
@@ -145,7 +145,7 @@ var actions = {
     svg2js(data, function(p) {
       parsedSvg = p;
     });
-    
+
     if (parsedSvg.error) {
       throw Error(parsedSvg.error);
     }

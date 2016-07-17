@@ -1,4 +1,4 @@
-require('regenerator/runtime');
+require('regenerator-runtime/runtime');
 
 var storage = require('../utils/storage');
 

@@ -15,6 +15,7 @@ class MainController {
     this._outputUi = new (require('./ui/output'));
     this._downloadButtonUi = new (require('./ui/download-button'));
     this._copyButtonUi = new (require('./ui/copy-button'));
+    this._bgFillUi = new (require('./ui/bg-fill'));
     this._resultsUi = new (require('./ui/results'));
     this._settingsUi = new (require('./ui/settings'));
     this._mainMenuUi = new (require('./ui/main-menu'));
@@ -68,6 +69,7 @@ class MainController {
 
       const actionContainer = document.querySelector('.action-button-container');
 
+      actionContainer.appendChild(this._bgFillUi.container);
       if (document.queryCommandSupported && document.queryCommandSupported('copy')) {
         actionContainer.appendChild(this._copyButtonUi.container);
       }

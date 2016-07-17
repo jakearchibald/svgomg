@@ -63,6 +63,10 @@
       position: absolute;
       top: -58px;
       right: 10px;
+
+      &:nth-child(2) {
+        right: 60px;
+      }
     }
   }
 
@@ -127,7 +131,7 @@
   }
 
   .action-button-container {
-    @include transform(translateX(118px));
+    @include transform(translateX(168px));
 
     @media (min-width: 640px) {
       @include transform(translateY(139px));
