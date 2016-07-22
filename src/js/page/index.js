@@ -12,7 +12,7 @@ if (/(iPhone|iPad);/.test(navigator.userAgent)) {
 }
 
 loadScripts(polyfillsNeeded, function() {
-  require('regenerator/runtime');
+  require('regenerator-runtime/runtime');
   require('./utils').trackFocusMethod();
   new (require('./main-controller'));
 }, function() {
