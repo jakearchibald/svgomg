@@ -27,10 +27,11 @@ class BgFillButton {
       this.container.classList.add('active');
       this.setColor('#f444fe');
     }
+    this._ripple.animate();
   }
 
   setColor(color) {
-    document.body.style.background = color;
+    document.documentElement.style.backgroundColor = color;
   }
 }
 
