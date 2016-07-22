@@ -68,11 +68,14 @@ class MainController {
       );
 
       const actionContainer = document.querySelector('.action-button-container');
+      const minorActionContainer = document.querySelector('.minor-action-container');
 
-      actionContainer.appendChild(this._bgFillUi.container);
+      minorActionContainer.appendChild(this._bgFillUi.container);
+
       if (document.queryCommandSupported && document.queryCommandSupported('copy')) {
-        actionContainer.appendChild(this._copyButtonUi.container);
+        minorActionContainer.appendChild(this._copyButtonUi.container);
       }
+      
       actionContainer.appendChild(this._downloadButtonUi.container);
       document.querySelector('.output').appendChild(this._outputUi.container);
       this._container.appendChild(this._toastsUi.container);

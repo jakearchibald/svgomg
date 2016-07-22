@@ -46,8 +46,12 @@
   @include display-flex;
   @include align-items(center);
 
-  & .minor-floating-action-button {
-    margin-right: 10px;
+  & .minor-action-container {
+    display: flex;
+
+    & .minor-floating-action-button {
+      margin-right: 10px;
+    }
   }
 
   @media (min-width: 640px) {
@@ -58,14 +62,15 @@
       margin-right: -17px;
     }
 
-    & .minor-floating-action-button {
-      margin: 0;
+    & .minor-action-container {
+      flex-flow: column;
       position: absolute;
-      top: -58px;
-      right: 10px;
+      bottom: 58px;
+      right: 8px;
 
-      &:nth-child(2) {
-        right: 60px;
+      & .minor-floating-action-button {
+        margin-bottom: 10px;
+        margin-right: 0;
       }
     }
   }
@@ -134,7 +139,7 @@
     @include transform(translateX(168px));
 
     @media (min-width: 640px) {
-      @include transform(translateY(139px));
+      @include transform(translateY(188px));
     }
 
     &.transition {
