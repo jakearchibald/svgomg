@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.0",
+    "changes": [
+      "Button to change background color (thanks to Una Kravets)"
+    ]
+  },
+  {
     "version": "1.6.1",
     "changes": [
       "HTMLmin broke my stuff"
