@@ -21,6 +21,7 @@
     "pako": "^0.2.7",
     "prismjs": "git+https://github.com/LeaVerou/prism.git#gh-pages",
     "regenerator": "^0.8.41",
+    "regenerator-runtime": "^0.9.5",
     "run-sequence": "^1.0.1",
     "svgo": "0.5.6",
     "uglifyify": "^2.6.0",
