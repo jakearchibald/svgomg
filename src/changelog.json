@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.8.0",
+    "changes": [
+      "New icon"
+    ]
+  },
+  {
     "version": "1.7.0",
     "changes": [
       "Button to change background color (thanks to Una Kravets)"
