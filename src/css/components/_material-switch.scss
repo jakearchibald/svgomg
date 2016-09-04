@@ -44,10 +44,12 @@
     left: 0;
     width: 20px;
     height: 20px;
-    border-radius: 10px;
+    border-radius: 20px;
     background: #fafafa;
-    box-shadow: 0 1px 3px rgba(#000, 0.5);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5), 
+                inset 0 0 0 2px transparent;
     overflow: hidden;
+    box-sizing: border-box;
     @include transition(all 0.15s ease-out);
     @include transform(translateZ(0));
 
@@ -80,6 +82,8 @@
 
     & .handle {
       @include transform(translate3d(17px, 0, 0));
+      box-shadow: 0 1px 3px rgba(0,0,0,0.5), 
+                inset 0 0 0 2px transparent;
 
       &::before {
         opacity: 1;

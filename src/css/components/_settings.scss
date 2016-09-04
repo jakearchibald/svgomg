@@ -24,7 +24,21 @@
   @include align-items(center);
 
   & input[type=checkbox] {
-    display: none;
+    position: absolute;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+  }
+
+  & input:focus + .material-switch {
+    .handle {
+      width: 25px;
+      height: 25px;
+      top: -5px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.5), 
+                inset 0 0 0 2px #3F51B5;
+    }
   }
 }
 
