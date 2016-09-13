@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.9.0",
+    "changes": [
+      "Settings are now remembered (thanks Simon Knox)",
+      "Fixed drag & drop issue (thanks Simon Knox)",
+      "Improved keyboard interaction (thanks Ahmad Shadeed)"
+    ]
+  },
+  {
     "version": "1.8.0",
     "changes": [
       "New icon (thanks to Anna Debenham)"
