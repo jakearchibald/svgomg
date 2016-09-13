@@ -27,7 +27,7 @@ class Settings extends (require('events').EventEmitter) {
       this.container.addEventListener('change', e => this._onChange(e));
       this.container.addEventListener('input', e => this._onChange(e));
       this._scroller.addEventListener('wheel', e => this._onMouseWheel(e));
-      
+
       // Stop double-tap text selection.
       // This stops all text selection which is kinda sad.
       // I think this code will bite me.
@@ -67,6 +67,24 @@ class Settings extends (require('events').EventEmitter) {
 
   }
 
+  setSettings(settings) {
+    this._globalInputs.forEach(function(inputEl) {
+      if (inputEl.type == 'checkbox') {
+        inputEl.checked = settings[inputEl.name];
+      }
+      else if (inputEl.type == 'range') {
+        inputEl.value = settings[inputEl.name];
+        var rangeChangeEvent = utils.isIe ? 'change' : 'input';
+        var event = new Event(rangeChangeEvent);
+        inputEl.dispatchEvent(event);
+      }
+    });
+
+    this._pluginInputs.forEach(function(inputEl) {
+      inputEl.checked = settings.plugins[inputEl.name];
+    });
+  }
+
   getSettings() {
     // fingerprint is used for cache lookups
     var fingerprint = [];
@@ -74,7 +92,7 @@ class Settings extends (require('events').EventEmitter) {
     var output = {
       plugins: {}
     };
-    
+
     this._globalInputs.forEach(function(inputEl) {
       if (inputEl.name != 'gzip' && inputEl.name != 'original') {
         if (inputEl.type == 'checkbox') {
@@ -84,7 +102,7 @@ class Settings extends (require('events').EventEmitter) {
           fingerprint.push('|' + inputEl.value + '|');
         }
       }
-      
+
       if (inputEl.type == 'checkbox') {
         output[inputEl.name] = inputEl.checked;
       }

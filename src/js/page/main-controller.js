@@ -75,7 +75,7 @@ class MainController {
       if (document.queryCommandSupported && document.queryCommandSupported('copy')) {
         minorActionContainer.appendChild(this._copyButtonUi.container);
       }
-      
+
       actionContainer.appendChild(this._downloadButtonUi.container);
       document.querySelector('.output').appendChild(this._outputUi.container);
       this._container.appendChild(this._toastsUi.container);
@@ -146,6 +146,7 @@ class MainController {
   }
 
   _onSettingsChange() {
+    this._saveSettings();
     this._compressSvg();
   }
 
@@ -155,6 +156,7 @@ class MainController {
     try {
       this._inputSvg = await svgo.load(event.data);
       this._inputFilename = event.filename;
+      await this._loadSettings();
     }
     catch(e) {
       e.message = "Load failed: " + e.message;
@@ -181,6 +183,16 @@ class MainController {
   _handleError(e) {
     this._toastsUi.show(e.message);
     console.error(e);
+  }
+
+  async _loadSettings() {
+    var settings = await storage.get('settings');
+    this._settingsUi.setSettings(settings);
+  }
+
+  _saveSettings() {
+    var settings = this._settingsUi.getSettings();
+    storage.set('settings', settings);
   }
 
   async _compressSvg(itterationCallback = function(){}) {
