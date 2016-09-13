@@ -75,12 +75,15 @@ class MainController {
       if (document.queryCommandSupported && document.queryCommandSupported('copy')) {
         minorActionContainer.appendChild(this._copyButtonUi.container);
       }
-      
+
       actionContainer.appendChild(this._downloadButtonUi.container);
       document.querySelector('.output').appendChild(this._outputUi.container);
       this._container.appendChild(this._toastsUi.container);
       this._container.appendChild(this._dropUi.container);
       document.querySelector('.menu-extra').appendChild(this._changelogUi.container);
+
+      // load previous settings
+      this._loadSettings();
 
       // someone managed to hit the preloader, aww
       if (this._preloaderUi.activated) {
@@ -146,10 +149,13 @@ class MainController {
   }
 
   _onSettingsChange() {
-    this._compressSvg();
+    var settings = this._settingsUi.getSettings();
+    this._saveSettings(settings);
+    this._compressSvg(settings);
   }
 
   async _onInputChange(event) {
+    var settings = this._settingsUi.getSettings();
     this._userHasInteracted = true;
 
     try {
@@ -166,7 +172,7 @@ class MainController {
     this._cache.purge();
 
     var firstItteration = true;
-    this._compressSvg(_ => {
+    this._compressSvg(settings, _ => {
       if (firstItteration) {
         this._outputUi.reset();
         this._mainUi.activate();
@@ -183,9 +189,17 @@ class MainController {
     console.error(e);
   }
 
-  async _compressSvg(itterationCallback = function(){}) {
+  async _loadSettings() {
+    var settings = await storage.get('settings');
+    if (settings) this._settingsUi.setSettings(settings);
+  }
+
+  _saveSettings(settings) {
+    storage.set('settings', settings);
+  }
+
+  async _compressSvg(settings, itterationCallback = function(){}) {
     var thisJobId = this._latestCompressJobId = Math.random();
-    var settings = this._settingsUi.getSettings();
 
     await svgo.abortCurrent();
 
