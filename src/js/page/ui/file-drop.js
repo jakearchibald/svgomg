@@ -32,7 +32,7 @@ class FileDrop extends (require('events').EventEmitter) {
 
   _onDragLeave(event) {
     this._currentEnteredElement = null;
-    
+
     if (!--this._activeEnters) {
       utils.transitionFromClass(this.container);
     }
@@ -41,6 +41,7 @@ class FileDrop extends (require('events').EventEmitter) {
   async _onDrop(event) {
     event.preventDefault();
 
+    this._activeEnters = 0;
     utils.transitionFromClass(this.container);
     var file = event.dataTransfer.files[0];
 
