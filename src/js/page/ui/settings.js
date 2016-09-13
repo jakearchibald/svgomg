@@ -17,9 +17,13 @@ class Settings extends (require('events').EventEmitter) {
         document.querySelectorAll('.settings .global input')
       );
 
+      // map real range elements to Slider instances
+      this._sliderMap = new WeakMap();
+
+      // enhance ranges
       utils.toArray(
         document.querySelectorAll('.settings input[type=range]')
-      ).forEach(el => new Slider(el));
+      ).forEach(el => this._sliderMap.set(el, new Slider(el)));
 
       this.container = document.querySelector('.settings');
       this._scroller = document.querySelector('.settings-scroller');
@@ -64,23 +68,19 @@ class Settings extends (require('events').EventEmitter) {
     else {
       this.emit('change');
     }
-
   }
 
   setSettings(settings) {
-    this._globalInputs.forEach(function(inputEl) {
+    this._globalInputs.forEach(inputEl => {
       if (inputEl.type == 'checkbox') {
         inputEl.checked = settings[inputEl.name];
       }
       else if (inputEl.type == 'range') {
-        inputEl.value = settings[inputEl.name];
-        var rangeChangeEvent = utils.isIe ? 'change' : 'input';
-        var event = new Event(rangeChangeEvent);
-        inputEl.dispatchEvent(event);
+        this._sliderMap.get(inputEl).value = settings[inputEl.name];
       }
     });
 
-    this._pluginInputs.forEach(function(inputEl) {
+    this._pluginInputs.forEach(inputEl => {
       inputEl.checked = settings.plugins[inputEl.name];
     });
   }

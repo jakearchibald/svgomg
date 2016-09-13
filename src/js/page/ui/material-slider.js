@@ -56,7 +56,16 @@ class MaterialSlider {
     document.addEventListener('mouseup', upListener);
   }
 
-  _onInputChange(event) {
+  set value(newVal) {
+    this.range.value = newVal;
+    this._update();
+  }
+
+  _onInputChange() {
+    this._update();
+  }
+
+  _update() {
     requestAnimationFrame(_ => this._setPosition());
   }
 

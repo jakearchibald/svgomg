@@ -82,6 +82,9 @@ class MainController {
       this._container.appendChild(this._dropUi.container);
       document.querySelector('.menu-extra').appendChild(this._changelogUi.container);
 
+      // load previous settings
+      this._loadSettings();
+
       // someone managed to hit the preloader, aww
       if (this._preloaderUi.activated) {
         this._toastsUi.show("Ready now!", {
@@ -146,17 +149,18 @@ class MainController {
   }
 
   _onSettingsChange() {
-    this._saveSettings();
-    this._compressSvg();
+    var settings = this._settingsUi.getSettings();
+    this._saveSettings(settings);
+    this._compressSvg(settings);
   }
 
   async _onInputChange(event) {
+    var settings = this._settingsUi.getSettings();
     this._userHasInteracted = true;
 
     try {
       this._inputSvg = await svgo.load(event.data);
       this._inputFilename = event.filename;
-      await this._loadSettings();
     }
     catch(e) {
       e.message = "Load failed: " + e.message;
@@ -168,7 +172,7 @@ class MainController {
     this._cache.purge();
 
     var firstItteration = true;
-    this._compressSvg(_ => {
+    this._compressSvg(settings, _ => {
       if (firstItteration) {
         this._outputUi.reset();
         this._mainUi.activate();
@@ -187,17 +191,15 @@ class MainController {
 
   async _loadSettings() {
     var settings = await storage.get('settings');
-    this._settingsUi.setSettings(settings);
+    if (settings) this._settingsUi.setSettings(settings);
   }
 
-  _saveSettings() {
-    var settings = this._settingsUi.getSettings();
+  _saveSettings(settings) {
     storage.set('settings', settings);
   }
 
-  async _compressSvg(itterationCallback = function(){}) {
+  async _compressSvg(settings, itterationCallback = function(){}) {
     var thisJobId = this._latestCompressJobId = Math.random();
-    var settings = this._settingsUi.getSettings();
 
     await svgo.abortCurrent();
 
