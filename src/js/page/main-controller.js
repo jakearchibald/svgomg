@@ -171,7 +171,8 @@ class MainController {
     this._cache.purge();
 
     var firstItteration = true;
-    this._compressSvg(settings, _ => {
+
+    const compressed = () => {
       if (firstItteration) {
         this._outputUi.reset();
         this._mainUi.activate();
@@ -179,8 +180,13 @@ class MainController {
         this._mainMenuUi.hide();
         firstItteration = false;
       }
-    });
+    }
 
+    this._compressSvg(settings, _ => compressed());
+
+    if (firstItteration) {
+      compressed();
+    }
   }
 
   _handleError(e) {
@@ -194,7 +200,10 @@ class MainController {
   }
 
   _saveSettings(settings) {
-    storage.set('settings', settings);
+    const copy = Object.assign({}, settings);
+    // doesn't make sense to retain the "show original" option
+    delete copy.original;
+    storage.set('settings', copy);
   }
 
   async _compressSvg(settings, itterationCallback = function(){}) {

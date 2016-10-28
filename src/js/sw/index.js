@@ -31,8 +31,7 @@ self.addEventListener('install', function(event) {
     var activeVersion = await activeVersionPromise;
 
     if (!activeVersion || activeVersion.split('.')[0] === version.split('.')[0]) {
-      // wrapping in an if while Chrome 40 is still around.
-      if (self.skipWaiting) self.skipWaiting();
+      self.skipWaiting();
     }
   }());
 });

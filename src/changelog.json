@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.9.1",
+    "changes": [
+      "Fixed bug if 'show original' setting was saved"
+    ]
+  },
+  {
     "version": "1.9.0",
     "changes": [
       "Settings are now remembered (thanks Simon Knox)",
