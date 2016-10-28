@@ -39,6 +39,7 @@ class MainController {
     this._cache = new (require('./results-cache'))(10);
     this._latestCompressJobId = 0;
     this._userHasInteracted = false;
+    this._reloading = false;
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js', {
@@ -112,6 +113,8 @@ class MainController {
     var newWorker = registration.installing;
 
     registration.installing.addEventListener('statechange', async _ => {
+      if (this._reloading) return;
+
       // the very first activation!
       // tell the user stuff works offline
       if (newWorker.state == 'activated' && !navigator.serviceWorker.controller) {
@@ -130,6 +133,7 @@ class MainController {
 
         // if the user hasn't interacted yet, do a sneaky reload
         if (!this._userHasInteracted) {
+          this._reloading = true;
           location.reload();
           return;
         }
@@ -142,6 +146,7 @@ class MainController {
         var answer = await toast.answer;
 
         if (answer == 'reload') {
+          this._reloading = true;
           location.reload();
         }
       }
