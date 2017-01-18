@@ -139,6 +139,10 @@
     {
       "id": "transformsWithOnePath",
       "name": "Optimise single-path SVG"
+    },
+    {
+      "id": "removeStyleElement",
+      "name": "Remove style element"
     }
   ]
 }
