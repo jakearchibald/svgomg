@@ -5,7 +5,6 @@ var SvgFile = require('./svg-file');
 class Svgo extends require('./worker-messenger') {
   constructor() {
     super('js/svgo-worker.js');
-    this._multiPass = false;
     this._abortOnNextIteration = false;
     this._currentJob = Promise.resolve();
   }
