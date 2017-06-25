@@ -6,7 +6,7 @@ class Svgo extends require('./worker-messenger') {
   constructor() {
     super('js/svgo-worker.js');
     this._multiPass = false;
-    this._abortOnNextItter = false;
+    this._abortOnNextIteration = false;
     this._currentJob = Promise.resolve();
   }
 
@@ -19,9 +19,9 @@ class Svgo extends require('./worker-messenger') {
     });
   }
 
-  process(settings, itterationCallback) {
+  process(settings, iterationCallback) {
     return this._currentJob = this.abortCurrent().then(async _ => {
-      this._abortOnNextItter = false;
+      this._abortOnNextIteration = false;
 
       var result = await this._requestResponse({
         action: 'process',
@@ -30,15 +30,15 @@ class Svgo extends require('./worker-messenger') {
 
       var resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
 
-      itterationCallback(resultFile);
+      iterationCallback(resultFile);
 
       if (settings.multipass) {
         while (result = await this.nextPass()) {
-          if (this._abortOnNextItter) {
+          if (this._abortOnNextIteration) {
             throw Error('abort');
           }
           resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
-          itterationCallback(resultFile);
+          iterationCallback(resultFile);
         }
       }
 
@@ -54,7 +54,7 @@ class Svgo extends require('./worker-messenger') {
   }
 
   async abortCurrent() {
-    this._abortOnNextItter = true;
+    this._abortOnNextIteration = true;
 
     try {
       await this._currentJob;

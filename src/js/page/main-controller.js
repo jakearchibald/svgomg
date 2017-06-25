@@ -170,21 +170,21 @@ class MainController {
 
     this._cache.purge();
 
-    var firstItteration = true;
+    var firstIteration = true;
 
     const compressed = () => {
-      if (firstItteration) {
+      if (firstIteration) {
         this._outputUi.reset();
         this._mainUi.activate();
         this._mainMenuUi.allowHide = true;
         this._mainMenuUi.hide();
-        firstItteration = false;
+        firstIteration = false;
       }
     }
 
     this._compressSvg(settings, _ => compressed());
 
-    if (firstItteration) {
+    if (firstIteration) {
       compressed();
     }
   }
@@ -206,7 +206,7 @@ class MainController {
     storage.set('settings', copy);
   }
 
-  async _compressSvg(settings, itterationCallback = function(){}) {
+  async _compressSvg(settings, iterationCallback = function(){}) {
     var thisJobId = this._latestCompressJobId = Math.random();
 
     await svgo.abortCurrent();
@@ -238,7 +238,7 @@ class MainController {
 
     try {
       var finalResultFile = await svgo.process(settings, resultFile => {
-        itterationCallback(resultFile);
+        iterationCallback(resultFile);
         this._updateForFile(resultFile, {
           compareToFile: this._inputSvg,
           gzip: settings.gzip
