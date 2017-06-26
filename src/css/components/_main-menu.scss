@@ -112,6 +112,12 @@
       @include flex(none);
       margin: 0 0 0 auto;
     }
+
+    & .menu-item-text {
+      margin-right: 28px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   & .menu-item.menu-item-compact {
@@ -123,7 +129,7 @@
       content: '';
 
       position: absolute;
-      right: 24px;
+      right: 20px;
 
       display: block;
       width: 8px;
