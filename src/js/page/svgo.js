@@ -29,7 +29,7 @@ class Svgo extends require('./worker-messenger') {
 
       var resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
 
-      iterationCallback(resultFile);
+      iterationCallback(this, resultFile);
 
       if (settings.multipass) {
         while (result = await this.nextPass()) {
@@ -37,7 +37,7 @@ class Svgo extends require('./worker-messenger') {
             throw Error('abort');
           }
           resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
-          iterationCallback(resultFile);
+          iterationCallback(this, resultFile);
         }
       }
 
@@ -57,7 +57,13 @@ class Svgo extends require('./worker-messenger') {
 
     try {
       await this._currentJob;
-    } catch(e){}
+    } catch(e) {
+      console.error("Svgo.abortCurrent: ", e);
+    }
+  }
+
+  async release() {
+    await this.abortCurrent().then(() => super.release());
   }
 }
 

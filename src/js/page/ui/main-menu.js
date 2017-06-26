@@ -73,8 +73,12 @@ class MainMenu extends (require('events').EventEmitter) {
       this._spinner.show();
 
       this.emit('svgDataLoad', {
-        data: val,
-        filename: 'image.svg'
+        items: [
+          {
+            data: val,
+            filename: 'image.svg'
+          }
+        ]
       });
     }
   }
@@ -86,18 +90,18 @@ class MainMenu extends (require('events').EventEmitter) {
   }
 
   async _onFileInputChange(event) {
-    var file = this._selectFileInput.files[0];
-
-    if (!file) {
+    var files = this._selectFileInput.files;
+    if (files.length <= 0) {
       return;
     }
 
     this._selectFileBtn.appendChild(this._spinner.container);
     this._spinner.show();
 
+    var items = await utils.handleFileInput(files);
+
     this.emit('svgDataLoad', {
-      data: await utils.readFileAsText(file),
-      filename: file.name
+      items: items
     });
   }
 
@@ -108,9 +112,18 @@ class MainMenu extends (require('events').EventEmitter) {
     this._spinner.show();
 
     try {
+      var items = [
+        {
+          data: await utils.get('test-svgs/car-lite.svg'),
+          filename: 'car-lite.svg'
+        },
+        {
+          data: await utils.get('test-svgs/car-lite-green.svg'),
+          filename: 'car-lite-green.svg'
+        }
+      ];
       this.emit('svgDataLoad', {
-        data: await utils.get('test-svgs/car-lite.svg'),
-        filename: 'car.svg'
+        items: items
       });
     }
     catch (error) {

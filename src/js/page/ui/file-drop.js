@@ -43,11 +43,16 @@ class FileDrop extends (require('events').EventEmitter) {
 
     this._activeEnters = 0;
     utils.transitionFromClass(this.container);
-    var file = event.dataTransfer.files[0];
+
+    var files = event.dataTransfer.files;
+    if (files.length <= 0) {
+      return;
+    }
+
+    var items = await utils.handleFileInput(files);
 
     this.emit('svgDataLoad', {
-      data: await utils.readFileAsText(file),
-      filename: file.name
+      items: items
     });
   }
 }

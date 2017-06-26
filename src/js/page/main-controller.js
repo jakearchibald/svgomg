@@ -1,9 +1,9 @@
 "use strict";
 
 var utils = require('./utils');
-var svgo = new (require('./svgo'));
 var storage = require('../utils/storage');
 
+var Svgo = require('./svgo');
 var SvgFile = require('./svg-file');
 
 class MainController {
@@ -34,8 +34,7 @@ class MainController {
     this._viewTogglerUi.on('change', e => this._onViewSelectionChange(e));
 
     // state
-    this._inputFilename = 'image.svg';
-    this._inputSvg = null;
+    this._inputItems = [];
     this._cache = new (require('./results-cache'))(10);
     this._latestCompressJobId = 0;
     this._userHasInteracted = false;
@@ -93,15 +92,24 @@ class MainController {
         });
       }
 
-      /*
       // for testing
-      async _ => {
-        this._onInputChange({
-          data: await utils.get('test-svgs/car-lite.svg'),
-          filename: 'car.svg'
-        });
-      }();
-      */
+      if (false) {
+        (async _ => {
+          var items = [
+            {
+              data: await utils.get('test-svgs/car-lite.svg'),
+              filename: 'car-lite.svg'
+            },
+            {
+              data: await utils.get('test-svgs/car-lite-green.svg'),
+              filename: 'car-lite-green.svg'
+            }
+          ];
+          this._onInputChange({
+            items: items
+          });
+        })();
+      }
     });
   }
 
@@ -158,8 +166,17 @@ class MainController {
     this._userHasInteracted = true;
 
     try {
-      this._inputSvg = await svgo.load(event.data);
-      this._inputFilename = event.filename;
+      await this._releaseAll();
+      this._inputItems = event.items.map((item) => {
+        return Object.assign({}, item, {
+          svgo: new Svgo(),
+          svgFile: null
+        });
+      });
+      var svgFiles = await this._loadAll();
+      this._inputItems.forEach((item, itemIndex) => {
+        item.svgFile = svgFiles[itemIndex];
+      });
     }
     catch(e) {
       e.message = "Load failed: " + e.message;
@@ -182,7 +199,7 @@ class MainController {
       }
     }
 
-    this._compressSvg(settings, _ => compressed());
+    this._compressSvg(settings, () => compressed());
 
     if (firstIteration) {
       compressed();
@@ -206,10 +223,26 @@ class MainController {
     storage.set('settings', copy);
   }
 
+  _loadAll() {
+    return Promise.all(this._inputItems.map((item) => item.svgo.load(item.data)));
+  }
+
+  _abortCurrentAll() {
+    return Promise.all(this._inputItems.map((item) => item.svgo.abortCurrent()));
+  }
+
+  _processAll(settings, iterationCallback) {
+    return Promise.all(this._inputItems.map((item) => item.svgo.process(settings, iterationCallback)));
+  }
+
+  _releaseAll() {
+    return Promise.all(this._inputItems.map((item) => item.svgo.release()));
+  }
+
   async _compressSvg(settings, iterationCallback = function(){}) {
     var thisJobId = this._latestCompressJobId = Math.random();
 
-    await svgo.abortCurrent();
+    await this._abortCurrentAll();
 
     if (thisJobId != this._latestCompressJobId) {
       // while we've been waiting, there's been a newer call
@@ -218,7 +251,7 @@ class MainController {
     }
 
     if (settings.original) {
-      this._updateForFile(this._inputSvg, {
+      this._updateForFile(this._inputItems[0].svgFile, {
         gzip: settings.gzip
       });
       return;
@@ -227,8 +260,8 @@ class MainController {
     var cacheMatch = this._cache.match(settings.fingerprint);
 
     if (cacheMatch) {
-      this._updateForFile(cacheMatch, {
-        compareToFile: this._inputSvg,
+      this._updateForFile(cacheMatch[0], {
+        compareToFile: this._inputItems[0].svgFile,
         gzip: settings.gzip
       });
       return;
@@ -237,14 +270,18 @@ class MainController {
     this._downloadButtonUi.working();
 
     try {
-      var finalResultFile = await svgo.process(settings, resultFile => {
-        iterationCallback(resultFile);
-        this._updateForFile(resultFile, {
-          compareToFile: this._inputSvg,
-          gzip: settings.gzip
-        });
+      var finalResultFiles = await this._processAll(settings, (svgo, resultFile) => {
+        var index = this._inputItems.map((item) => item.svgo).indexOf(svgo);
+        if (index === 0) {
+          var item = this._inputItems[index];
+          iterationCallback(item, resultFile);
+          this._updateForFile(resultFile, {
+            compareToFile: item.svgFile,
+            gzip: settings.gzip
+          });
+        }
       });
-      this._cache.add(settings.fingerprint, finalResultFile);
+      this._cache.add(settings.fingerprint, finalResultFiles);
     }
     catch(e) {
       if (e.message != "abort") { // TODO: should really be switching on error type
@@ -258,7 +295,7 @@ class MainController {
 
   async _updateForFile(svgFile, {compareToFile, gzip}) {
     this._outputUi.update(svgFile);
-    this._downloadButtonUi.setDownload(this._inputFilename, svgFile);
+    this._downloadButtonUi.setDownload(this._inputItems[0].filename, svgFile);
     this._copyButtonUi.setSVG(svgFile);
 
     this._resultsUi.update({

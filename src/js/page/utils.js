@@ -79,7 +79,22 @@ exports.readFileAsText = function readFileAsText(file) {
       resolve(reader.result);
     };
   });
-}
+};
+
+exports.handleFileInput = function handleFileInput(files) {
+  var filesArray = [].slice.call(files);
+  return Promise.all(filesArray.map(function(file) {
+    if (!file) {
+      return null;
+    }
+    return exports.readFileAsText(file).then(function(data) {
+      return {
+        data: data,
+        filename: file.name
+      };
+    });
+  }).filter(function(itemPromise) { return !!itemPromise; }));
+};
 
 function transitionClassFunc({removeClass = false}={}) {
   return function(el, className = 'active', transitionClass = 'transition') {
