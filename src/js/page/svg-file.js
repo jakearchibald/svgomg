@@ -1,6 +1,6 @@
 "use strict";
 
-var gzip = new (require('./gzip'));
+var gzip = require('./gzip').singleton;
 
 class SvgFile {
   constructor(text, width, height) {

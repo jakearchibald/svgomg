@@ -5,6 +5,7 @@ var storage = require('../utils/storage');
 
 var Svgo = require('./svgo');
 var SvgFile = require('./svg-file');
+var ZipFile = require('./zip-file');
 
 class MainController {
   constructor() {
@@ -13,7 +14,8 @@ class MainController {
     // ui components
     this._mainUi = null;
     this._outputUi = new (require('./ui/output'));
-    this._downloadButtonUi = new (require('./ui/download-button'));
+    this._downloadAllButtonUi = new (require('./ui/download-button'))({ minor: false });
+    this._downloadButtonUi = new (require('./ui/download-button'))({ minor: true });
     this._copyButtonUi = new (require('./ui/copy-button'));
     this._bgFillUi = new (require('./ui/bg-fill'));
     this._resultsUi = new (require('./ui/results'));
@@ -29,13 +31,17 @@ class MainController {
     // ui events
     this._settingsUi.on('change', _ => this._onSettingsChange());
     this._mainMenuUi.on('svgDataLoad', e => this._onInputChange(e));
+    this._mainMenuUi.on('filenameClick', e => this._onFileSelectionChange(e));
     this._dropUi.on('svgDataLoad', e => this._onInputChange(e));
     this._mainMenuUi.on('error', ({error}) => this._handleError(error));
     this._viewTogglerUi.on('change', e => this._onViewSelectionChange(e));
 
     // state
+    this._selectedItemIndex = 0;
     this._inputItems = [];
+    this._resultItems = [];
     this._cache = new (require('./results-cache'))(10);
+    this._compressSettings = null;
     this._latestCompressJobId = 0;
     this._userHasInteracted = false;
     this._reloading = false;
@@ -72,11 +78,13 @@ class MainController {
 
       minorActionContainer.appendChild(this._bgFillUi.container);
 
-      if (document.queryCommandSupported && document.queryCommandSupported('copy')) {
+      if (this._copyButtonUi.isSupported()) {
         minorActionContainer.appendChild(this._copyButtonUi.container);
       }
 
-      actionContainer.appendChild(this._downloadButtonUi.container);
+      minorActionContainer.appendChild(this._downloadButtonUi.container);
+
+      actionContainer.appendChild(this._downloadAllButtonUi.container);
       document.querySelector('.output').appendChild(this._outputUi.container);
       this._container.appendChild(this._toastsUi.container);
       this._container.appendChild(this._dropUi.container);
@@ -115,6 +123,12 @@ class MainController {
 
   _onViewSelectionChange(event) {
     this._outputUi.set(event.value);
+  }
+
+  _onFileSelectionChange(event) {
+    this._selectedItemIndex = event.filenameIndex;
+    this._updateUi();
+    this._mainMenuUi.hide();
   }
 
   _onUpdateFound(registration) {
@@ -157,31 +171,44 @@ class MainController {
 
   _onSettingsChange() {
     var settings = this._settingsUi.getSettings();
+    this._compressSettings = settings;
     this._saveSettings(settings);
-    this._compressSvg(settings);
+    this._compressSvg();
   }
 
   async _onInputChange(event) {
     var settings = this._settingsUi.getSettings();
+    this._compressSettings = settings;
     this._userHasInteracted = true;
 
     try {
       await this._releaseAll();
+
       this._inputItems = event.items.map((item) => {
         return Object.assign({}, item, {
           svgo: new Svgo(),
           svgFile: null
         });
       });
+
+      this._selectedItemIndex = 0;
+
       var svgFiles = await this._loadAll();
+
       this._inputItems.forEach((item, itemIndex) => {
         item.svgFile = svgFiles[itemIndex];
       });
+
+      this._resultItems = this._inputItems.map((item) => Object.assign({}, item));
+
+      this._mainMenuUi.setFilenames(this._inputItems.map((item) => item.filename));
+      this._mainMenuUi.setSelectedFilename(this._selectedItemIndex);
     }
     catch(e) {
-      e.message = "Load failed: " + e.message;
+      var error = new Error("Load failed: " + e.message);
+      error.inner = e;
       this._mainMenuUi.stopSpinner();
-      this._handleError(e);
+      this._handleError(error);
       return;
     }
 
@@ -199,7 +226,7 @@ class MainController {
       }
     }
 
-    this._compressSvg(settings, () => compressed());
+    this._compressSvg(() => compressed());
 
     if (firstIteration) {
       compressed();
@@ -239,7 +266,7 @@ class MainController {
     return Promise.all(this._inputItems.map((item) => item.svgo.release()));
   }
 
-  async _compressSvg(settings, iterationCallback = function(){}) {
+  async _compressSvg(iterationCallback = function(){}) {
     var thisJobId = this._latestCompressJobId = Math.random();
 
     await this._abortCurrentAll();
@@ -250,38 +277,37 @@ class MainController {
       return;
     }
 
+    var settings = this._compressSettings;
+
     if (settings.original) {
-      this._updateForFile(this._inputItems[0].svgFile, {
-        gzip: settings.gzip
-      });
+      this._updateUi();
+      this._latestCompressJobId = 0;
       return;
     }
 
-    var cacheMatch = this._cache.match(settings.fingerprint);
-
-    if (cacheMatch) {
-      this._updateForFile(cacheMatch[0], {
-        compareToFile: this._inputItems[0].svgFile,
-        gzip: settings.gzip
-      });
+    var cachedItems = this._cache.match(settings.fingerprint);
+    if (cachedItems) {
+      this._resultItems = cachedItems;
+      this._updateUi();
+      this._latestCompressJobId = 0;
       return;
     }
 
     this._downloadButtonUi.working();
+    this._downloadAllButtonUi.working();
 
     try {
-      var finalResultFiles = await this._processAll(settings, (svgo, resultFile) => {
-        var index = this._inputItems.map((item) => item.svgo).indexOf(svgo);
-        if (index === 0) {
-          var item = this._inputItems[index];
-          iterationCallback(item, resultFile);
-          this._updateForFile(resultFile, {
-            compareToFile: item.svgFile,
-            gzip: settings.gzip
-          });
-        }
+      this._resultItems = this._inputItems.map((item) => Object.assign({}, item));
+      await this._processAll(settings, (svgo, resultFile) => {
+        var itemIndex = this._inputItems.map((item) => item.svgo).indexOf(svgo);
+        var item = this._inputItems[itemIndex];
+        var resultItem = Object.assign({}, item, { svgFile: resultFile });
+        this._resultItems[itemIndex] = resultItem;
+        iterationCallback(item, resultItem);
+        this._updateUi();
       });
-      this._cache.add(settings.fingerprint, finalResultFiles);
+      this._cache.add(settings.fingerprint, this._resultItems);
+      this._updateUi();
     }
     catch(e) {
       if (e.message != "abort") { // TODO: should really be switching on error type
@@ -291,17 +317,77 @@ class MainController {
     }
 
     this._downloadButtonUi.done();
+    this._downloadAllButtonUi.done();
+
+    this._latestCompressJobId = 0;
   }
 
-  async _updateForFile(svgFile, {compareToFile, gzip}) {
-    this._outputUi.update(svgFile);
-    this._downloadButtonUi.setDownload(this._inputItems[0].filename, svgFile);
-    this._copyButtonUi.setSVG(svgFile);
+  async _updateUi() {
+    var settings = this._compressSettings;
+    var items = (settings.original ? this._inputItems : this._resultItems);
+
+    this._mainMenuUi.setSelectedFilename(this._selectedItemIndex);
+
+    await this._updateResultsUi({
+      items: items,
+      compareToItems: this._inputItems,
+      selectedItemIndex: this._selectedItemIndex,
+      gzip: settings.gzip,
+      original: settings.original
+    });
+
+    this._downloadButtonUi.container.style.display = (items.length > 1 ? '' : 'none');
+  }
+
+  async _updateResultsUi({ items, compareToItems, selectedItemIndex, gzip, original }) {
+    var measureItemSize = (item) => item.svgFile.size({ compress: gzip });
+    var sumSize = (accu, x) => (accu + x);
+    var sizeTotal = (await Promise.all(items.map(measureItemSize))).reduce(sumSize, 0);
+    var compareToSizeTotal = (await Promise.all(compareToItems.map(measureItemSize))).reduce(sumSize, 0);
+
+    var itemSelected = items[selectedItemIndex];
+    var compareToItemSelected = compareToItems[selectedItemIndex];
+    var sizeSelected = await measureItemSize(itemSelected);
+    var compareToSizeSelected = (compareToItemSelected && (await measureItemSize(compareToItemSelected)));
 
     this._resultsUi.update({
-      comparisonSize: compareToFile && (await compareToFile.size({ compress: gzip })),
-      size: await svgFile.size({ compress: gzip })
+      sizeTotal: sizeTotal,
+      compareToSizeTotal: (original ? null : compareToSizeTotal),
+      sizeSelected: sizeSelected,
+      compareToSizeSelected: (original ? null : compareToSizeSelected)
     });
+
+    this._outputUi.update(itemSelected.svgFile);
+
+    this._copyButtonUi.setCopyText(itemSelected.svgFile.text, itemSelected.filename);
+
+    this._downloadButtonUi.setDownload({
+      filename: itemSelected.filename,
+      url: itemSelected.svgFile.url,
+      blob: itemSelected.svgFile.blob
+    });
+
+    if (items.length > 1) {
+      this._downloadAllButtonUi.working();
+      var zipFile = new ZipFile();
+      items.forEach((item) => {
+        zipFile.jszip.file(item.filename, item.svgFile.text);
+      });
+      await zipFile.compress();
+      this._downloadAllButtonUi.done();
+      this._downloadAllButtonUi.setDownload({
+        filename: 'compressed.zip',
+        url: zipFile.url,
+        blob: zipFile.blob
+      });
+    }
+    else {
+      this._downloadAllButtonUi.setDownload({
+        filename: itemSelected.filename,
+        url: itemSelected.svgFile.url,
+        blob: itemSelected.svgFile.blob
+      });
+    }
   }
 }
 

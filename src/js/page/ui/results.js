@@ -18,30 +18,56 @@ class Results {
   constructor() {
     this.container = utils.strToEl(
       '<div class="results">' +
-        '<span class="size"></span>' +
-        '<span class="diff"></span>' +
+        '<table class="results-selected">' +
+          '<tbody>' +
+            '<tr class="results-selected">' +
+              '<th class="results-label">This file: </td>' +
+              '<td class="results-size-selected"></td>' +
+              '<td class="results-diff-selected"></td>' +
+            '</tr>' +
+            '<tr class="results-total">' +
+              '<th class="results-label">All files: </td>' +
+              '<td class="results-size-total"></td>' +
+              '<td class="results-diff-total"></td>' +
+            '</tr>' +
+          '</tbody>' +
+        '</table>' +
       '</div>' +
     '');
-    this._sizeEl = this.container.querySelector('.size');
-    this._diffEl = this.container.querySelector('.diff');
+
+    this._selectedEl = this.container.querySelector('.results-selected');
+    this._sizeSelectedEl = this.container.querySelector('.results-size-selected');
+    this._diffSelectedEl = this.container.querySelector('.results-diff-selected');
+
+    this._totalEl = this.container.querySelector('.results-total');
+    this._labelTotalEl = this._totalEl.querySelector('.results-label');
+    this._sizeTotalEl = this.container.querySelector('.results-size-total');
+    this._diffTotalEl = this.container.querySelector('.results-diff-total');
   }
 
-  update({size, comparisonSize}) {
-    this._sizeEl.textContent = humanSize(size);
-    
+  update({sizeTotal, compareToSizeTotal, sizeSelected, compareToSizeSelected}) {
+    this._updateEl({ size: sizeSelected, compareToSize: compareToSizeSelected, sizeEl: this._sizeSelectedEl, diffEl: this._diffSelectedEl });
+    this._updateEl({ size: sizeTotal, compareToSize: compareToSizeTotal, sizeEl: this._sizeTotalEl, diffEl: this._diffTotalEl });
+    var selectedDisplay = (sizeSelected === sizeTotal && compareToSizeSelected === compareToSizeTotal ? 'none' : '');
+    this._selectedEl.style.display = selectedDisplay;
+    this._labelTotalEl.style.display = selectedDisplay;
+  }
+
+  _updateEl({size, compareToSize, sizeEl, diffEl}) {
+    sizeEl.textContent = humanSize(size);
+
     // just displaying a single size?
-    if (!comparisonSize) {
-      this._diffEl.textContent = '';
-      return;
+    if (!compareToSize) {
+      diffEl.textContent = '';
     }
-    else if (size == comparisonSize) {
-      this._diffEl.textContent = ' - no change';
+    else if (size == compareToSize) {
+      diffEl.textContent = ' – no change';
     }
-    else if (size > comparisonSize) {
-      this._diffEl.textContent = ' - ' + round(size / comparisonSize * 100 - 100, 2) + '% increase';
+    else if (size > compareToSize) {
+      diffEl.textContent = ' – ' + round(size / compareToSize * 100 - 100, 2) + '% increase';
     }
     else {
-      this._diffEl.textContent = ' - ' + round(100 - size / comparisonSize * 100, 2) + '% saving';
+      diffEl.textContent = ' – ' + round(100 - size / compareToSize * 100, 2) + '% saving';
     }
   }
 }

@@ -38,7 +38,7 @@
     overflow-y: auto;
     @include display-flex;
     @include flex-flow(column);
-  
+
     &.transition {
       @include transition-transform(0.2s ease-out);
     }
@@ -114,6 +114,26 @@
     }
   }
 
+  & .menu-item.menu-item-compact {
+    height: 32px;
+  }
+
+  & .menu-item.menu-item-selected {
+    &::after {
+      content: '';
+
+      position: absolute;
+      right: 24px;
+
+      display: block;
+      width: 8px;
+      height: 8px;
+      border-radius: 8px;
+      background: #000;
+      opacity: 0.6;
+    }
+  }
+
   & .menu-input {
     cursor: pointer;
 
@@ -155,7 +175,7 @@
     }
   }
 
-  & .select-file-input {
+  & .load-file-input {
     display: none;
   }
 }

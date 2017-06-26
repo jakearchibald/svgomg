@@ -12,10 +12,15 @@ class MainMenu extends (require('events').EventEmitter) {
 
     utils.domReady.then(_ => {
       this.container = document.querySelector('.main-menu');
-      this._selectFileInput = document.querySelector('.select-file-input');
+      this._filenames = [];
+      this._fileItemTemplate = document.querySelector('.file-item-template');
+      this._fileItemEls = [];
+      this._fileItemElsContainerEl = this._fileItemTemplate.parentNode;
+      this._fileItemElsInsertBeforeEl = this._fileItemTemplate.nextSibling;
+      this._loadFileInput = document.querySelector('.load-file-input');
       this._pasteInput = document.querySelector('.paste-input');
       this._loadDemoBtn = document.querySelector('.load-demo');
-      this._selectFileBtn = document.querySelector('.select-file');
+      this._loadFileBtn = document.querySelector('.load-file');
       this._pasteLabel = document.querySelector('.menu-input');
       this._overlay = this.container.querySelector('.overlay');
       this._menu = this.container.querySelector('.menu');
@@ -25,9 +30,9 @@ class MainMenu extends (require('events').EventEmitter) {
 
       this._overlay.addEventListener('click', e => this._onOverlayClick(e));
 
-      this._selectFileBtn.addEventListener('click', e => this._onSelectFileClick(e));
+      this._loadFileBtn.addEventListener('click', e => this._onLoadFileClick(e));
       this._loadDemoBtn.addEventListener('click', e => this._onLoadDemoClick(e));
-      this._selectFileInput.addEventListener('change', e => this._onFileInputChange(e));
+      this._loadFileInput.addEventListener('change', e => this._onFileInputChange(e));
       this._pasteInput.addEventListener('input', e => this._onTextInputChange(e));
     });
   }
@@ -50,6 +55,47 @@ class MainMenu extends (require('events').EventEmitter) {
 
   stopSpinner() {
     this._spinner.hide();
+  }
+
+  setFilenames(filenames) {
+    var compact = (filenames.length >= 10);
+    var fileItemEls = filenames.map((filename, filenameIndex) => {
+      var fileItemEl = this._fileItemTemplate.cloneNode(true);
+      var fileItemButtonEl = fileItemEl.querySelector('.file-item');
+      var fileItemIconNumberEl = fileItemEl.querySelector('.file-item-icon-number');
+      var fileItemNameEl = fileItemEl.querySelector('.file-item-name');
+      fileItemIconNumberEl.textContent = String(filenameIndex + 1);
+      fileItemNameEl.innerText = filename;
+      if (compact) {
+        fileItemButtonEl.classList.add('menu-item-compact');
+      }
+      fileItemEl.removeAttribute('class');
+      fileItemEl.removeAttribute('style');
+      fileItemButtonEl.addEventListener('click', e => this._onFilenameClick(e, filenameIndex));
+      return fileItemEl;
+    });
+    var container = this._fileItemElsContainerEl;
+    var insertBeforeEl = this._fileItemElsInsertBeforeEl;
+    this._fileItemEls.forEach((fileItemEl) => {
+      container.removeChild(fileItemEl);
+    });
+    fileItemEls.forEach((fileItemEl) => {
+      container.insertBefore(fileItemEl, insertBeforeEl);
+    });
+    this._filenames = filenames;
+    this._fileItemEls = fileItemEls;
+  }
+
+  setSelectedFilename(filenameIndex) {
+    this._fileItemEls.forEach((fileItemEl, fileItemElIndex) => {
+      var fileItemButtonEl = fileItemEl.querySelector('.file-item');
+      if (fileItemElIndex === filenameIndex) {
+        fileItemButtonEl.classList.add('menu-item-selected');
+      }
+      else {
+        fileItemButtonEl.classList.remove('menu-item-selected');
+      }
+    });
   }
 
   _onOverlayClick(event) {
@@ -83,19 +129,28 @@ class MainMenu extends (require('events').EventEmitter) {
     }
   }
 
-  _onSelectFileClick(event) {
+  _onLoadFileClick(event) {
     event.preventDefault();
     event.target.blur();
-    this._selectFileInput.click();
+    this._loadFileInput.click();
+  }
+
+  _onFilenameClick(event, filenameIndex) {
+    event.preventDefault();
+    event.target.blur();
+    this.emit('filenameClick', {
+      filename: this._filenames[filenameIndex],
+      filenameIndex: filenameIndex
+    });
   }
 
   async _onFileInputChange(event) {
-    var files = this._selectFileInput.files;
+    var files = this._loadFileInput.files;
     if (files.length <= 0) {
       return;
     }
 
-    this._selectFileBtn.appendChild(this._spinner.container);
+    this._loadFileBtn.appendChild(this._spinner.container);
     this._spinner.show();
 
     var items = await utils.handleFileInput(files);

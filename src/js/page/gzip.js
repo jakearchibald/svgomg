@@ -12,4 +12,6 @@ class Gzip extends require('./worker-messenger') {
   }
 }
 
+Gzip.singleton = new Gzip();
+
 module.exports = Gzip;

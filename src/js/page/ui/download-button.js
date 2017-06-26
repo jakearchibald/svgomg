@@ -1,43 +1,49 @@
-var utils = require('../utils');
-var Spinner = require('./spinner');
+var FloatingActionButton = require('./floating-action-button');
 
-class DownloadButton {
-  constructor() {
-    this.container = utils.strToEl(
-      '<a href="./" class="floating-action-button">' +
+class DownloadButton extends FloatingActionButton {
+  constructor({ minor }) {
+    var title = 'Download';
+    super({
+      title: title,
+      href: './',
+      iconSvg: (
         '<svg viewBox="0 0 24 24" class="icon">' +
-          '<title>Download output</title>' +
+          '<title>' + title + '</title>' +
           '<path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>' +
-        '</svg>' +
-      '</a>' +
-    '');
-    this._spinner = new Spinner();
-    this.container.appendChild(this._spinner.container);
-    this._svgFile = null;
+        '</svg>'
+      ),
+      minor: minor
+    });
+
+    this._fileInfo = null;
+  }
+
+  _onClick(event) {
+    if (!this._fileInfo) {
+      event.preventDefault();
+      return;
+    }
+
+    super._onClick(event);
 
     // IE compat
     if ('msSaveBlob' in navigator) {
-      this.container.addEventListener('click', event => {
-        event.preventDefault();
-        navigator.msSaveBlob(this._svgFile.blob, this.container.download);
-      });
+      event.preventDefault();
+      navigator.msSaveBlob(this._fileInfo.blob, this._fileInfo.filename);
     }
   }
 
-  setDownload(filename, svgFile) {
-    this.container.download = filename;
-    this.container.href = svgFile.url;
+  setDownload(fileInfo) {
+    this._fileInfo = fileInfo;
 
-    // for IE compat
-    this._svgFile = svgFile;
-  }
+    var download = (fileInfo ? fileInfo.filename : '');
+    var href = (fileInfo ? fileInfo.url : './');
+    var title = (fileInfo ? 'Download: ' + fileInfo.filename : 'Nothing to download');
 
-  working() {
-    this._spinner.show(500);
-  }
-
-  done() {
-    this._spinner.hide();
+    this.container.download = download;
+    this.container.href = href;
+    this.container.setAttribute('title', title);
+    this.container.querySelector('svg.icon > title').textContent = title;
   }
 }
 
