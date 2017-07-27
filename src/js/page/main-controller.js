@@ -194,7 +194,7 @@ export default class MainController {
     try {
       await this._releaseAll();
 
-      this._inputItems = event.items.map((item) => {
+      this._inputItems = event.items.map(item => {
         return Object.assign({}, item, {
           svgo: new Svgo(),
           svgFile: null
@@ -209,9 +209,9 @@ export default class MainController {
         item.svgFile = svgFiles[itemIndex];
       });
 
-      this._resultItems = this._inputItems.map((item) => Object.assign({}, item));
+      this._resultItems = this._inputItems.map(item => Object.assign({}, item));
 
-      this._mainMenuUi.setFilenames(this._inputItems.map((item) => item.filename));
+      this._mainMenuUi.setFilenames(this._inputItems.map(item => item.filename));
       this._mainMenuUi.setSelectedFilename(this._selectedItemIndex);
     }
     catch(e) {
@@ -261,19 +261,19 @@ export default class MainController {
   }
 
   _loadAll() {
-    return Promise.all(this._inputItems.map((item) => item.svgo.load(item.data)));
+    return Promise.all(this._inputItems.map(item => item.svgo.load(item.data)));
   }
 
   _abortCurrentAll() {
-    return Promise.all(this._inputItems.map((item) => item.svgo.abortCurrent()));
+    return Promise.all(this._inputItems.map(item => item.svgo.abortCurrent()));
   }
 
   _processAll(settings, iterationCallback) {
-    return Promise.all(this._inputItems.map((item) => item.svgo.process(settings, iterationCallback)));
+    return Promise.all(this._inputItems.map(item => item.svgo.process(settings, iterationCallback)));
   }
 
   _releaseAll() {
-    return Promise.all(this._inputItems.map((item) => item.svgo.release()));
+    return Promise.all(this._inputItems.map(item => item.svgo.release()));
   }
 
   async _compressSvg(iterationCallback = function(){}) {
@@ -287,7 +287,7 @@ export default class MainController {
       return;
     }
 
-    var settings = this._compressSettings;
+    const settings = this._compressSettings;
 
     if (settings.original) {
       this._updateUi();
@@ -308,29 +308,28 @@ export default class MainController {
     this._downloadAllButtonUi.working();
 
     try {
-      this._resultItems = this._inputItems.map((item) => Object.assign({}, item));
+      this._resultItems = this._inputItems.map(item => Object.assign({}, item));
       await this._processAll(settings, (svgo, resultFile) => {
-        const itemIndex = this._inputItems.map((item) => item.svgo).indexOf(svgo);
+        const itemIndex = this._inputItems.map(item => item.svgo).indexOf(svgo);
         const item = this._inputItems[itemIndex];
         const resultItem = Object.assign({}, item, { svgFile: resultFile });
         this._resultItems[itemIndex] = resultItem;
         iterationCallback(item, resultItem);
         this._updateUi();
       });
+
       this._cache.add(settings.fingerprint, this._resultItems);
-      this._updateUi();
     }
     catch(e) {
-      if (e.message != "abort") { // TODO: should really be switching on error type
-        e.message = "Minifying error: " + e.message;
-        this._handleError(e);
-      }
+      if (e.message == "abort") return;
+      e.message = "Minifying error: " + e.message;
+      this._handleError(e);
     }
-
-    this._downloadButtonUi.done();
-    this._downloadAllButtonUi.done();
-
-    this._latestCompressJobId = 0;
+    finally {
+      this._downloadButtonUi.done();
+      this._downloadAllButtonUi.done();
+      this._latestCompressJobId = 0;
+    }
   }
 
   async _updateUi() {
@@ -351,7 +350,7 @@ export default class MainController {
   }
 
   async _updateResultsUi({ items, compareToItems, selectedItemIndex, gzip, original }) {
-    const measureItemSize = (item) => item.svgFile.size({ compress: gzip });
+    const measureItemSize = item => item.svgFile.size({ compress: gzip });
     const sumSize = (accu, x) => (accu + x);
     const sizeTotal = (await Promise.all(items.map(measureItemSize))).reduce(sumSize, 0);
     const compareToSizeTotal = (await Promise.all(compareToItems.map(measureItemSize))).reduce(sumSize, 0);
@@ -381,7 +380,7 @@ export default class MainController {
     if (items.length > 1) {
       this._downloadAllButtonUi.working();
       const zipFile = new ZipFile();
-      items.forEach((item) => {
+      items.forEach(item => {
         zipFile.jszip.file(item.filename, item.svgFile.text);
       });
       await zipFile.compress();

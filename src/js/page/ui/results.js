@@ -5,7 +5,7 @@ function round(num, places) {
   return Math.floor(Math.round(num * mult)) / mult;
 }
 
-function humanSize(bytes) { // TODO: I'm sure there's a better version of this
+function humanSize(bytes) {
   if (bytes < 1024) {
     return bytes + ' bytes';
   }
@@ -18,7 +18,7 @@ export default class Results {
   constructor() {
     this.container = strToEl(
       '<div class="results">' +
-        '<table class="results-selected">' +
+        '<table>' +
           '<tbody>' +
             '<tr class="results-selected">' +
               '<th class="results-label">This file: </td>' +
