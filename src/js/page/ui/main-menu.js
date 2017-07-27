@@ -1,16 +1,21 @@
-"use strict";
+import {
+  domReady,
+  transitionFromClass,
+  transitionToClass,
+  handleFileInput,
+  fetchText
+} from '../utils';
+import Spinner from './spinner';
+import { EventEmitter } from 'events';
 
-var utils = require('../utils');
-var Spinner = require('./spinner');
-
-class MainMenu extends (require('events').EventEmitter) {
+export default class MainMenu extends EventEmitter {
   constructor() {
     super();
 
     this.allowHide = false;
     this._spinner = new Spinner();
 
-    utils.domReady.then(_ => {
+    domReady.then(() => {
       this.container = document.querySelector('.main-menu');
       this._filenames = [];
       this._fileItemTemplate = document.querySelector('.file-item-template');
@@ -39,18 +44,16 @@ class MainMenu extends (require('events').EventEmitter) {
 
   show() {
     this.container.classList.remove('hidden');
-    utils.transitionFromClass(this._overlay, 'hidden');
-    utils.transitionFromClass(this._menu, 'hidden');
+    transitionFromClass(this._overlay, 'hidden');
+    transitionFromClass(this._menu, 'hidden');
   }
 
   hide() {
-    if (!this.allowHide) {
-      return;
-    }
+    if (!this.allowHide) return;
     this.stopSpinner();
     this.container.classList.add('hidden');
-    utils.transitionToClass(this._overlay, 'hidden');
-    utils.transitionToClass(this._menu, 'hidden');
+    transitionToClass(this._overlay, 'hidden');
+    transitionToClass(this._menu, 'hidden');
   }
 
   stopSpinner() {
@@ -58,37 +61,40 @@ class MainMenu extends (require('events').EventEmitter) {
   }
 
   setFilenames(filenames) {
-    var compact = (filenames.length >= 10);
-    var fileItemEls = filenames.map((filename, filenameIndex) => {
-      var fileItemEl = this._fileItemTemplate.cloneNode(true);
-      var fileItemButtonEl = fileItemEl.querySelector('.file-item');
-      var fileItemIconNumberEl = fileItemEl.querySelector('.file-item-icon-number');
-      var fileItemNameEl = fileItemEl.querySelector('.file-item-name');
+    const compact = (filenames.length >= 10);
+
+    const fileItemEls = filenames.map((filename, filenameIndex) => {
+      const fileItemEl = this._fileItemTemplate.cloneNode(true);
+      const fileItemButtonEl = fileItemEl.querySelector('.file-item');
+      const fileItemIconNumberEl = fileItemEl.querySelector('.file-item-icon-number');
+      const fileItemNameEl = fileItemEl.querySelector('.file-item-name');
       fileItemIconNumberEl.textContent = String(filenameIndex + 1);
       fileItemNameEl.innerText = filename;
-      if (compact) {
-        fileItemButtonEl.classList.add('menu-item-compact');
-      }
+      if (compact) fileItemButtonEl.classList.add('menu-item-compact');
       fileItemEl.removeAttribute('class');
       fileItemEl.removeAttribute('style');
       fileItemButtonEl.addEventListener('click', e => this._onFilenameClick(e, filenameIndex));
       return fileItemEl;
     });
-    var container = this._fileItemElsContainerEl;
-    var insertBeforeEl = this._fileItemElsInsertBeforeEl;
-    this._fileItemEls.forEach((fileItemEl) => {
+
+    const container = this._fileItemElsContainerEl;
+    const insertBeforeEl = this._fileItemElsInsertBeforeEl;
+
+    this._fileItemEls.forEach(fileItemEl => {
       container.removeChild(fileItemEl);
     });
-    fileItemEls.forEach((fileItemEl) => {
+
+    fileItemEls.forEach(fileItemEl => {
       container.insertBefore(fileItemEl, insertBeforeEl);
     });
+
     this._filenames = filenames;
     this._fileItemEls = fileItemEls;
   }
 
   setSelectedFilename(filenameIndex) {
     this._fileItemEls.forEach((fileItemEl, fileItemElIndex) => {
-      var fileItemButtonEl = fileItemEl.querySelector('.file-item');
+      const fileItemButtonEl = fileItemEl.querySelector('.file-item');
       if (fileItemElIndex === filenameIndex) {
         fileItemButtonEl.classList.add('menu-item-selected');
       }
@@ -109,9 +115,9 @@ class MainMenu extends (require('events').EventEmitter) {
   }
 
   _onTextInputChange(event) {
-    var val = this._pasteInput.value.trim();
+    const val = this._pasteInput.value.trim();
 
-    if (val.indexOf('</svg>') != -1) {
+    if (val.includes('</svg>')) {
       this._pasteInput.value = '';
       this._pasteInput.blur();
 
@@ -145,7 +151,8 @@ class MainMenu extends (require('events').EventEmitter) {
   }
 
   async _onFileInputChange(event) {
-    var files = this._loadFileInput.files;
+    const files = this._loadFileInput.files;
+
     if (files.length <= 0) {
       return;
     }
@@ -153,7 +160,7 @@ class MainMenu extends (require('events').EventEmitter) {
     this._loadFileBtn.appendChild(this._spinner.container);
     this._spinner.show();
 
-    var items = await utils.handleFileInput(files);
+    const items = await handleFileInput(files);
 
     this.emit('svgDataLoad', {
       items: items
@@ -167,37 +174,32 @@ class MainMenu extends (require('events').EventEmitter) {
     this._spinner.show();
 
     try {
-      var items = [
+      const items = [
         {
-          data: await utils.get('test-svgs/car-lite.svg'),
+          data: await fetchText('test-svgs/car-lite.svg'),
           filename: 'car-lite.svg'
-        },
+        }/*,
         {
-          data: await utils.get('test-svgs/car-lite-green.svg'),
+          data: await fetchText('test-svgs/car-lite-green.svg'),
           filename: 'car-lite-green.svg'
-        }
+        }*/
       ];
-      this.emit('svgDataLoad', {
-        items: items
-      });
+
+      this.emit('svgDataLoad', { items });
     }
-    catch (error) {
+    catch (err) {
       this.stopSpinner();
 
-      var e;
+      let error;
 
       if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-        e = Error("Demo not available offline");
+        error = Error("Demo not available offline");
       }
       else {
-        e = Error("Couldn't fetch demo SVG");
+        error = Error("Couldn't fetch demo SVG");
       }
 
-      this.emit('error', {
-        error: e
-      });
+      this.emit('error', { error });
     }
   }
 }
-
-module.exports = MainMenu;

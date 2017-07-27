@@ -1,10 +1,10 @@
-var utils = require('../utils');
-var Ripple = require('./ripple');
-var Spinner = require('./spinner');
+import { strToEl } from '../utils';
+import Ripple from './ripple';
+import Spinner from './spinner';
 
-class FloatingActionButton {
+export default class FloatingActionButton {
   constructor({ title, href, iconSvg, classList, minor }) {
-    this.container = utils.strToEl(
+    this.container = strToEl(
       (href ? '<a>' : '<div role="button" tabindex="0">') +
         iconSvg +
       (href ? '</a>' : '</div>') +
@@ -42,5 +42,3 @@ class FloatingActionButton {
     this._spinner.hide();
   }
 }
-
-module.exports = FloatingActionButton;

@@ -1,6 +1,6 @@
-var utils = require('../utils');
+import { transitionToClass } from '../utils';
 
-class MainUi {
+export default class MainUi {
   constructor(...elements) {
     this._activated = false;
     this._toActivate = elements;
@@ -11,9 +11,7 @@ class MainUi {
     this._activated = true;
 
     return Promise.all(
-      this._toActivate.map(el => utils.transitionToClass(el))
+      this._toActivate.map(el => transitionToClass(el))
     );
   }
 }
-
-module.exports = MainUi;

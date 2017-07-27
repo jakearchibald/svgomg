@@ -1,7 +1,7 @@
-var utils = require('../utils');
+import { strToEl } from '../utils';
 
 function round(num, places) {
-  var mult = Math.pow(10, places);
+  const mult = Math.pow(10, places);
   return Math.floor(Math.round(num * mult)) / mult;
 }
 
@@ -14,9 +14,9 @@ function humanSize(bytes) { // TODO: I'm sure there's a better version of this
   }
 }
 
-class Results {
+export default class Results {
   constructor() {
-    this.container = utils.strToEl(
+    this.container = strToEl(
       '<div class="results">' +
         '<table class="results-selected">' +
           '<tbody>' +
@@ -48,7 +48,7 @@ class Results {
   update({sizeTotal, compareToSizeTotal, sizeSelected, compareToSizeSelected}) {
     this._updateEl({ size: sizeSelected, compareToSize: compareToSizeSelected, sizeEl: this._sizeSelectedEl, diffEl: this._diffSelectedEl });
     this._updateEl({ size: sizeTotal, compareToSize: compareToSizeTotal, sizeEl: this._sizeTotalEl, diffEl: this._diffTotalEl });
-    var selectedDisplay = (sizeSelected === sizeTotal && compareToSizeSelected === compareToSizeTotal ? 'none' : '');
+    const selectedDisplay = (sizeSelected === sizeTotal && compareToSizeSelected === compareToSizeTotal ? 'none' : '');
     this._selectedEl.style.display = selectedDisplay;
     this._labelTotalEl.style.display = selectedDisplay;
   }
@@ -71,5 +71,3 @@ class Results {
     }
   }
 }
-
-module.exports = Results;

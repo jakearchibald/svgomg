@@ -1,5 +1,3 @@
-var utils = require('../utils');
-
 function getXY(obj) {
   return {
     x: obj.pageX,
@@ -8,8 +6,8 @@ function getXY(obj) {
 }
 
 function touchDistance(touch1, touch2) {
-  var dx = Math.abs(touch2.x - touch1.x);
-  var dy = Math.abs(touch2.y - touch1.y);
+  const dx = Math.abs(touch2.x - touch1.x);
+  const dy = Math.abs(touch2.y - touch1.y);
   return Math.sqrt(dx*dx + dy*dy);
 }
 
@@ -22,17 +20,17 @@ function getMidpoint(point1, point2) {
 
 function getPoints(event) {
   if (event.touches) {
-    return Array.prototype.map.call(event.touches, getXY);
+    return Array.from(event.touches).map(t => getXY(t));
   }
   else {
     return [getXY(event)];
   }
 }
 
-class PanZoom {
+export default class PanZoom {
   constructor(target, {
     eventArea = target,
-    shouldCaptureFunc = function(el){ return true; }
+    shouldCaptureFunc = () => true
   }={}) {
     this._target = target;
     this._shouldCaptureFunc = shouldCaptureFunc;
@@ -70,8 +68,8 @@ class PanZoom {
     if (!this._shouldCaptureFunc(event.target)) return;
     event.preventDefault();
 
-    var boundingRect = this._target.getBoundingClientRect();
-    var delta = event.deltaY;
+    const boundingRect = this._target.getBoundingClientRect();
+    let delta = event.deltaY;
 
     if (event.deltaMode === 1) { // 1 is "lines", 0 is "pixels"
       // Firefox uses "lines" when mouse is connected
@@ -81,7 +79,7 @@ class PanZoom {
     // stop mouse wheel producing huge values
     delta = Math.max(Math.min(delta, 60), -60);
 
-    var scaleDiff = (delta / 300) + 1;
+    const scaleDiff = (delta / 300) + 1;
 
     // avoid to-small values
     if (this._scale * scaleDiff < 0.05) return;
@@ -114,16 +112,16 @@ class PanZoom {
 
   _onPointerMove(event) {
     event.preventDefault();
-    var points = getPoints(event);
-    var averagePoint = points.reduce(getMidpoint);
-    var averageLastPoint = this._lastPoints.reduce(getMidpoint);
-    var boundingRect = this._target.getBoundingClientRect();
+    const points = getPoints(event);
+    const averagePoint = points.reduce(getMidpoint);
+    const averageLastPoint = this._lastPoints.reduce(getMidpoint);
+    const boundingRect = this._target.getBoundingClientRect();
 
     this._dx += averagePoint.x - averageLastPoint.x;
     this._dy += averagePoint.y - averageLastPoint.y;
 
     if (points[1]) {
-      var scaleDiff = touchDistance(points[0], points[1]) / touchDistance(this._lastPoints[0], this._lastPoints[1]);
+      const scaleDiff = touchDistance(points[0], points[1]) / touchDistance(this._lastPoints[0], this._lastPoints[1]);
       this._scale *= scaleDiff;
       this._dx -= (averagePoint.x - boundingRect.left) * (scaleDiff - 1);
       this._dy -= (averagePoint.y - boundingRect.top) * (scaleDiff - 1);
@@ -135,7 +133,7 @@ class PanZoom {
 
   _update() {
     this._target.style.WebkitTransform = this._target.style.transform
-      = 'translate3d(' + this._dx + 'px, ' + this._dy + 'px, 0) scale(' + this._scale + ')';
+      = `translate3d(${this._dx}px, ${this._dy}px, 0) scale(${this._scale})`;
   }
 
   _onPointerUp(event) {
@@ -154,5 +152,3 @@ class PanZoom {
     document.removeEventListener('touchend', this._onPointerUp);
   }
 }
-
-module.exports = PanZoom;

@@ -1,10 +1,7 @@
-// prism likes to terminate if it thinks it's inside
-// a worker, I don't want it to do that, so this
-// is all trickery-foolery:
-var addEventListener = self.addEventListener;
-self.addEventListener = null;
-var Prism = require('prismjs');
-self.addEventListener = addEventListener;
+// Hide addEventListener from prism - I want to add my own listener
+import './prism-hack-start';
+import Prism from 'prismjs';
+import './prism-hack-end';
 
 self.onmessage = function(event) {
   try {

@@ -1,6 +1,4 @@
-"use strict";
-
-class ResultsCache {
+export default class ResultsCache {
   constructor(size) {
     this._size = size;
     this.purge();
@@ -13,7 +11,7 @@ class ResultsCache {
   }
 
   add(fingerprint, svgFiles) {
-    var oldItem = this._items[this._index];
+    const oldItem = this._items[this._index];
 
     if (oldItem) {
       oldItem.forEach((svgFile) => {
@@ -32,5 +30,3 @@ class ResultsCache {
     return this._items[this._fingerprints.indexOf(fingerprint)];
   }
 }
-
-module.exports = ResultsCache;

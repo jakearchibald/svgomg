@@ -1,18 +1,19 @@
-var FloatingActionButton = require('./floating-action-button');
+import FloatingActionButton from './floating-action-button';
 
-class DownloadButton extends FloatingActionButton {
+export default class DownloadButton extends FloatingActionButton {
   constructor({ minor }) {
-    var title = 'Download';
+    const title = 'Download';
+
     super({
-      title: title,
+      title,
+      minor,
       href: './',
       iconSvg: (
         '<svg viewBox="0 0 24 24" class="icon">' +
-          '<title>' + title + '</title>' +
+          `<title>${title}</title>` +
           '<path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>' +
         '</svg>'
-      ),
-      minor: minor
+      )
     });
 
     this._fileInfo = null;
@@ -36,9 +37,9 @@ class DownloadButton extends FloatingActionButton {
   setDownload(fileInfo) {
     this._fileInfo = fileInfo;
 
-    var download = (fileInfo ? fileInfo.filename : '');
-    var href = (fileInfo ? fileInfo.url : './');
-    var title = (fileInfo ? 'Download: ' + fileInfo.filename : 'Nothing to download');
+    const download = (fileInfo ? fileInfo.filename : '');
+    const href = (fileInfo ? fileInfo.url : './');
+    const title = (fileInfo ? 'Download: ' + fileInfo.filename : 'Nothing to download');
 
     this.container.download = download;
     this.container.href = href;
@@ -46,5 +47,3 @@ class DownloadButton extends FloatingActionButton {
     this.container.querySelector('svg.icon > title').textContent = title;
   }
 }
-
-module.exports = DownloadButton;

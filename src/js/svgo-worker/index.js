@@ -1,79 +1,119 @@
 "use strict";
-require('regenerator-runtime/runtime');
-
-()=>{ // hack around weird regenerator-runtime polyfill
-var svg2js = require('svgo/lib/svgo/svg2js');
-var JsApi = require('svgo/lib/svgo/jsAPI');
-var js2svg = require('svgo/lib/svgo/js2svg');
-var plugins = require('svgo/lib/svgo/plugins');
+import '../utils/node-globals/global';
+import svg2js from 'svgo/lib/svgo/svg2js';
+import JsApi from 'svgo/lib/svgo/jsAPI';
+import js2svg from 'svgo/lib/svgo/js2svg';
+import plugins from 'svgo/lib/svgo/plugins';
 
 // the order is from https://github.com/svg/svgo/blob/master/.svgo.yml
-var pluginsData = {
-  removeDoctype: require('svgo/plugins/removeDoctype'),
-  removeXMLProcInst: require('svgo/plugins/removeXMLProcInst'),
-  removeComments: require('svgo/plugins/removeComments'),
-  removeMetadata: require('svgo/plugins/removeMetadata'),
-  removeEditorsNSData: require('svgo/plugins/removeEditorsNSData'),
-  cleanupAttrs: require('svgo/plugins/cleanupAttrs'),
-  convertStyleToAttrs: require('svgo/plugins/convertStyleToAttrs'),
-  cleanupIDs: require('svgo/plugins/cleanupIDs'),
-  removeRasterImages: require('svgo/plugins/removeRasterImages'),
-  removeUselessDefs: require('svgo/plugins/removeUselessDefs'),
-  cleanupNumericValues: require('svgo/plugins/cleanupNumericValues'),
-  cleanupListOfValues: require('svgo/plugins/cleanupListOfValues'),
-  convertColors: require('svgo/plugins/convertColors'),
-  removeUnknownsAndDefaults: require('svgo/plugins/removeUnknownsAndDefaults'),
-  removeNonInheritableGroupAttrs: require('svgo/plugins/removeNonInheritableGroupAttrs'),
-  removeUselessStrokeAndFill: require('svgo/plugins/removeUselessStrokeAndFill'),
-  removeViewBox: require('svgo/plugins/removeViewBox'),
-  cleanupEnableBackground: require('svgo/plugins/cleanupEnableBackground'),
-  removeHiddenElems: require('svgo/plugins/removeHiddenElems'),
-  removeEmptyText: require('svgo/plugins/removeEmptyText'),
-  convertShapeToPath: require('svgo/plugins/convertShapeToPath'),
-  moveElemsAttrsToGroup: require('svgo/plugins/moveElemsAttrsToGroup'),
-  moveGroupAttrsToElems: require('svgo/plugins/moveGroupAttrsToElems'),
-  collapseGroups: require('svgo/plugins/collapseGroups'),
-  convertPathData: require('svgo/plugins/convertPathData'),
-  convertTransform: require('svgo/plugins/convertTransform'),
-  removeEmptyAttrs: require('svgo/plugins/removeEmptyAttrs'),
-  removeEmptyContainers: require('svgo/plugins/removeEmptyContainers'),
-  mergePaths: require('svgo/plugins/mergePaths'),
-  removeUnusedNS: require('svgo/plugins/removeUnusedNS'),
-  transformsWithOnePath: require('svgo/plugins/transformsWithOnePath'),
-  sortAttrs: require('svgo/plugins/sortAttrs'),
-  removeTitle: require('svgo/plugins/removeTitle'),
-  removeDesc: require('svgo/plugins/removeDesc'),
-  removeDimensions: require('svgo/plugins/removeDimensions')
+import removeDoctype from 'svgo/plugins/removeDoctype';
+import removeXMLProcInst from 'svgo/plugins/removeXMLProcInst';
+import removeComments from 'svgo/plugins/removeComments';
+import removeMetadata from 'svgo/plugins/removeMetadata';
+import removeXMLNS from 'svgo/plugins/removeXMLNS';
+import removeEditorsNSData from 'svgo/plugins/removeEditorsNSData';
+import cleanupAttrs from 'svgo/plugins/cleanupAttrs';
+import minifyStyles from 'svgo/plugins/minifyStyles';
+import convertStyleToAttrs from 'svgo/plugins/convertStyleToAttrs';
+import cleanupIDs from 'svgo/plugins/cleanupIDs';
+import removeRasterImages from 'svgo/plugins/removeRasterImages';
+import removeUselessDefs from 'svgo/plugins/removeUselessDefs';
+import cleanupNumericValues from 'svgo/plugins/cleanupNumericValues';
+import cleanupListOfValues from 'svgo/plugins/cleanupListOfValues';
+import convertColors from 'svgo/plugins/convertColors';
+import removeUnknownsAndDefaults from 'svgo/plugins/removeUnknownsAndDefaults';
+import removeNonInheritableGroupAttrs from 'svgo/plugins/removeNonInheritableGroupAttrs';
+import removeUselessStrokeAndFill from 'svgo/plugins/removeUselessStrokeAndFill';
+import removeViewBox from 'svgo/plugins/removeViewBox';
+import cleanupEnableBackground from 'svgo/plugins/cleanupEnableBackground';
+import removeHiddenElems from 'svgo/plugins/removeHiddenElems';
+import removeEmptyText from 'svgo/plugins/removeEmptyText';
+import convertShapeToPath from 'svgo/plugins/convertShapeToPath';
+import moveElemsAttrsToGroup from 'svgo/plugins/moveElemsAttrsToGroup';
+import moveGroupAttrsToElems from 'svgo/plugins/moveGroupAttrsToElems';
+import collapseGroups from 'svgo/plugins/collapseGroups';
+import convertPathData from 'svgo/plugins/convertPathData';
+import convertTransform from 'svgo/plugins/convertTransform';
+import removeEmptyAttrs from 'svgo/plugins/removeEmptyAttrs';
+import removeEmptyContainers from 'svgo/plugins/removeEmptyContainers';
+import mergePaths from 'svgo/plugins/mergePaths';
+import removeUnusedNS from 'svgo/plugins/removeUnusedNS';
+import transformsWithOnePath from 'svgo/plugins/transformsWithOnePath';
+import sortAttrs from 'svgo/plugins/sortAttrs';
+import removeTitle from 'svgo/plugins/removeTitle';
+import removeDesc from 'svgo/plugins/removeDesc';
+import removeDimensions from 'svgo/plugins/removeDimensions';
+import removeAttrs from 'svgo/plugins/removeAttrs';
+import removeElementsByAttr from 'svgo/plugins/removeElementsByAttr';
+import addClassesToSVGElement from 'svgo/plugins/addClassesToSVGElement';
+import removeStyleElement from 'svgo/plugins/removeStyleElement';
+import addAttributesToSVGElement from 'svgo/plugins/addAttributesToSVGElement';
+
+const pluginsData = {
+  'removeDoctype': removeDoctype,
+  'removeXMLProcInst': removeXMLProcInst,
+  'removeComments': removeComments,
+  'removeMetadata': removeMetadata,
+  'removeXMLNS': removeXMLNS,
+  'removeEditorsNSData': removeEditorsNSData,
+  'cleanupAttrs': cleanupAttrs,
+  'minifyStyles': minifyStyles,
+  'convertStyleToAttrs': convertStyleToAttrs,
+  'cleanupIDs': cleanupIDs,
+  'removeRasterImages': removeRasterImages,
+  'removeUselessDefs': removeUselessDefs,
+  'cleanupNumericValues': cleanupNumericValues,
+  'cleanupListOfValues': cleanupListOfValues,
+  'convertColors': convertColors,
+  'removeUnknownsAndDefaults': removeUnknownsAndDefaults,
+  'removeNonInheritableGroupAttrs': removeNonInheritableGroupAttrs,
+  'removeUselessStrokeAndFill': removeUselessStrokeAndFill,
+  'removeViewBox': removeViewBox,
+  'cleanupEnableBackground': cleanupEnableBackground,
+  'removeHiddenElems': removeHiddenElems,
+  'removeEmptyText': removeEmptyText,
+  'convertShapeToPath': convertShapeToPath,
+  'moveElemsAttrsToGroup': moveElemsAttrsToGroup,
+  'moveGroupAttrsToElems': moveGroupAttrsToElems,
+  'collapseGroups': collapseGroups,
+  'convertPathData': convertPathData,
+  'convertTransform': convertTransform,
+  'removeEmptyAttrs': removeEmptyAttrs,
+  'removeEmptyContainers': removeEmptyContainers,
+  'mergePaths': mergePaths,
+  'removeUnusedNS': removeUnusedNS,
+  'transformsWithOnePath': transformsWithOnePath,
+  'sortAttrs': sortAttrs,
+  'removeTitle': removeTitle,
+  'removeDesc': removeDesc,
+  'removeDimensions': removeDimensions,
+  // Some of these don't have a useful default action
+  //'removeAttrs': removeAttrs,
+  //'removeElementsByAttr': removeElementsByAttr,
+  //'addClassesToSVGElement': addClassesToSVGElement,
+  'removeStyleElement': removeStyleElement,
+  //'addAttributesToSVGElement': addAttributesToSVGElement,
 };
 
+// Arrange plugins by type - this is what plugins() expects
 function optimizePluginsArray(plugins) {
-  var prev;
+  return plugins.map(item => [item]).reduce((arr, item) => {
+    const last = arr[arr.length - 1];
 
-  plugins = plugins.map(function(item) {
-    return [item];
-  });
-
-  plugins = plugins.filter(function(item) {
-    if (prev && item[0].type === prev[0].type) {
-      prev.push(item[0]);
-      return false;
+    if (last && item[0].type === last[0].type) {
+      last.push(item[0]);
     }
-
-    prev = item;
-    return true;
-  });
-
-  return plugins;
+    else {
+      arr.push(item);
+    }
+    return arr;
+  }, []);
 }
 
-var optimisedPluginsData = optimizePluginsArray(
-  Object.keys(pluginsData).map(p => pluginsData[p])
-);
+const optimisedPluginsData = optimizePluginsArray(Object.values(pluginsData));
 
 function getDimensions(parsedSvg) {
-  var svgEl = parsedSvg.content.filter(function(el) {
-    return el.isElem('svg');
-  })[0];
+  const svgEl = parsedSvg.content.filter(el => el.isElem('svg'))[0];
 
   if (!svgEl) {
     return {};
@@ -87,7 +127,7 @@ function getDimensions(parsedSvg) {
   }
 
   if (svgEl.hasAttr('viewBox')) {
-    let viewBox = svgEl.attr('viewBox').value.split(/(?:,\s*|\s+)/);
+    const viewBox = svgEl.attr('viewBox').value.split(/(?:,\s*|\s+)/);
 
     return {
       width: parseFloat(viewBox[2]),
@@ -104,22 +144,18 @@ function* multipassCompress(settings) {
     pluginsData[pluginName].active = settings.plugins[pluginName];
   });
 
-  // float precision
-  [
-    'cleanupNumericValues',
-    'cleanupListOfValues',
-    'convertPathData',
-    // Not including this by default, it seems to break SVGs really badly at lower numbers.
-    // TODO: make "use global precision" off by default when it comes to transforms
-    //'convertTransform',
-    'transformsWithOnePath'
-  ].forEach(pluginName => {
-    pluginsData[pluginName].params.floatPrecision = Number(settings.floatPrecision);
-  });
+  // Set floatPrecision across all the plugins
+  const floatPrecision = settings.floatPrecision;
 
-  var svg = parsedSvg.clone();
-  var svgData;
-  var previousDataLength;
+  for (const plugin of Object.values(pluginsData)) {
+    if (plugin.params && 'floatPrecision' in plugin.params) {
+      plugin.params.floatPrecision = floatPrecision;
+    }
+  }
+
+  const svg = parsedSvg.clone();
+  let svgData;
+  let previousDataLength;
 
   while (svgData === undefined || svgData.length != previousDataLength) {
     previousDataLength = svgData && svgData.length;
@@ -133,22 +169,17 @@ function* multipassCompress(settings) {
       data: svgData,
       dimensions: getDimensions(svg)
     };
-
   }
 }
 
-var parsedSvg;
-var multipassInstance;
+let parsedSvg;
+let multipassInstance;
 
-var actions = {
+const actions = {
   load({data}) {
-    svg2js(data, function(p) {
-      parsedSvg = p;
-    });
+    svg2js(data, p => parsedSvg = p);
 
-    if (parsedSvg.error) {
-      throw Error(parsedSvg.error);
-    }
+    if (parsedSvg.error) throw Error(parsedSvg.error);
 
     return getDimensions(parsedSvg);
   },
@@ -161,7 +192,7 @@ var actions = {
   }
 };
 
-self.onmessage = function(event) {
+self.onmessage = event => {
   try {
     self.postMessage({
       id: event.data.id,
@@ -175,4 +206,3 @@ self.onmessage = function(event) {
     });
   }
 };
-}();

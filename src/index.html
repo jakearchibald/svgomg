@@ -4,7 +4,7 @@
     <title>SVGOMG - SVGO's Missing GUI</title>
     <meta name="theme-color" content="#303F9F">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0">
-    <style>{% include "../build/css/head.css" %}</style>
+    <style>{{headCSS|safe}}</style>
     <script>
       if ((!location.port || location.port == "80") && location.protocol != 'https:') {
         location.protocol = 'https:';
@@ -140,7 +140,7 @@
               <div>
                 <label class="setting-item-range">
                   <div class="label-text">Precision</div>
-                  <input type="range" min="1" max="8" step="1" value="3" name="floatPrecision">
+                  <input type="range" min="0" max="8" step="1" value="3" name="floatPrecision">
                 </label>
               </div>
             </section>

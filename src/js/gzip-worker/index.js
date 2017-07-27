@@ -1,4 +1,4 @@
-var gzip = require('pako/lib/deflate').gzip;
+import {gzip} from 'pako/lib/deflate';
 
 self.onmessage = function(event) {
   try {

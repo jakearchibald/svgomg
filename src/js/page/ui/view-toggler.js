@@ -1,11 +1,12 @@
-var utils = require('../utils');
+import { EventEmitter } from 'events';
+import { domReady } from '../utils';
 
-class ViewToggler extends (require('events').EventEmitter) {
+export default class ViewToggler extends EventEmitter {
   constructor() {
     super();
     this.container = null;
 
-    utils.domReady.then(_ => {
+    domReady.then(() => {
       this.container = document.querySelector('.view-toggler');
 
       // stop browsers remembering previous form state
@@ -16,18 +17,14 @@ class ViewToggler extends (require('events').EventEmitter) {
   }
 
   _onChange(event) {
-    var value = this.container.output.value;
+    let value = this.container.output.value;
 
     if (!value) { // some browsers don't support the nice shortcut above (eg Safari)
-      value = utils.toArray(this.container.output).reduce((value, input) => {
+      value = Array.from(this.container.output).reduce((value, input) => {
         return value || (input.checked ? input.value : '');
       }, '');
     }
 
-    this.emit("change", {
-      value: value
-    });
+    this.emit("change", { value });
   }
 }
-
-module.exports = ViewToggler;

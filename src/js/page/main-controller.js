@@ -1,35 +1,47 @@
-"use strict";
+import { idbKeyval as storage } from '../utils/storage';
+import Svgo from './svgo';
+import SvgFile from './svg-file';
+import ZipFile from './zip-file';
+import { domReady, fetchText } from './utils';
+import Output from './ui/output';
+import DownloadButton from './ui/download-button';
+import CopyButton from './ui/copy-button';
+import BgFillButton from './ui/bg-fill-button';
+import Results from './ui/results';
+import Settings from './ui/settings';
+import MainMenu from './ui/main-menu';
+import Toasts from './ui/toasts';
+import FileDrop from './ui/file-drop';
+import Preloader from './ui/preloader';
+import Changelog from './ui/changelog';
+import ResultsContainer from './ui/results-container';
+import ViewToggler from './ui/view-toggler';
+import ResultsCache from './results-cache';
+import MainUi from './ui/main-ui';
 
-var utils = require('./utils');
-var storage = require('../utils/storage');
-
-var Svgo = require('./svgo');
-var SvgFile = require('./svg-file');
-var ZipFile = require('./zip-file');
-
-class MainController {
+export default class MainController {
   constructor() {
     this._container = null;
 
     // ui components
     this._mainUi = null;
-    this._outputUi = new (require('./ui/output'));
-    this._downloadAllButtonUi = new (require('./ui/download-button'))({ minor: false });
-    this._downloadButtonUi = new (require('./ui/download-button'))({ minor: true });
-    this._copyButtonUi = new (require('./ui/copy-button'));
-    this._bgFillUi = new (require('./ui/bg-fill'));
-    this._resultsUi = new (require('./ui/results'));
-    this._settingsUi = new (require('./ui/settings'));
-    this._mainMenuUi = new (require('./ui/main-menu'));
-    this._toastsUi = new (require('./ui/toasts'));
-    this._dropUi = new (require('./ui/file-drop'));
-    this._preloaderUi = new (require('./ui/preloader'));
-    this._changelogUi = new (require('./ui/changelog'))(self.version);
-    this._resultsContainerUi = new (require('./ui/results-container'))(this._resultsUi);
-    this._viewTogglerUi = new (require('./ui/view-toggler'));
+    this._outputUi = new Output();
+    this._downloadAllButtonUi = new DownloadButton({ minor: false });
+    this._downloadButtonUi = new DownloadButton({ minor: true });
+    this._copyButtonUi = new CopyButton();
+    this._bgFillUi = new BgFillButton();
+    this._resultsUi = new Results();
+    this._settingsUi = new Settings();
+    this._mainMenuUi = new MainMenu();
+    this._toastsUi = new Toasts();
+    this._dropUi = new FileDrop();
+    this._preloaderUi = new Preloader();
+    this._changelogUi = new Changelog(self.version);
+    this._resultsContainerUi = new ResultsContainer(this._resultsUi);
+    this._viewTogglerUi = new ViewToggler();
 
     // ui events
-    this._settingsUi.on('change', _ => this._onSettingsChange());
+    this._settingsUi.on('change', () => this._onSettingsChange());
     this._mainMenuUi.on('svgDataLoad', e => this._onInputChange(e));
     this._mainMenuUi.on('filenameClick', e => this._onFileSelectionChange(e));
     this._dropUi.on('svgDataLoad', e => this._onInputChange(e));
@@ -40,7 +52,7 @@ class MainController {
     this._selectedItemIndex = 0;
     this._inputItems = [];
     this._resultItems = [];
-    this._cache = new (require('./results-cache'))(10);
+    this._cache = new ResultsCache(10);
     this._compressSettings = null;
     this._latestCompressJobId = 0;
     this._userHasInteracted = false;
@@ -50,7 +62,7 @@ class MainController {
       navigator.serviceWorker.register('sw.js', {
         scope: './'
       }).then(registration => {
-        registration.addEventListener('updatefound', _ => this._onUpdateFound(registration));
+        registration.addEventListener('updatefound', () => this._onUpdateFound(registration));
       });
     }
 
@@ -62,11 +74,11 @@ class MainController {
       storage.set('last-seen-version', self.version);
     });
 
-    utils.domReady.then(_ => {
+    domReady.then(() => {
       this._container = document.querySelector('.app-output');
 
       // elements for intro anim
-      this._mainUi = new (require('./ui/main-ui'))(
+      this._mainUi = new MainUi(
         document.querySelector('.toolbar'),
         document.querySelector('.action-button-container'),
         this._outputUi.container,
@@ -102,20 +114,18 @@ class MainController {
 
       // for testing
       if (false) {
-        (async _ => {
-          var items = [
+        (async () => {
+          const items = [
             {
-              data: await utils.get('test-svgs/car-lite.svg'),
+              data: await fetchText('test-svgs/car-lite.svg'),
               filename: 'car-lite.svg'
             },
             {
-              data: await utils.get('test-svgs/car-lite-green.svg'),
+              data: await fetchText('test-svgs/car-lite-green.svg'),
               filename: 'car-lite-green.svg'
             }
           ];
-          this._onInputChange({
-            items: items
-          });
+          this._onInputChange({ items });
         })();
       }
     });
@@ -132,9 +142,9 @@ class MainController {
   }
 
   _onUpdateFound(registration) {
-    var newWorker = registration.installing;
+    const newWorker = registration.installing;
 
-    registration.installing.addEventListener('statechange', async _ => {
+    registration.installing.addEventListener('statechange', async () => {
       if (this._reloading) return;
 
       // the very first activation!
@@ -155,11 +165,11 @@ class MainController {
         }
 
         // otherwise, show the user an alert
-        var toast = this._toastsUi.show("Update available", {
+        const toast = this._toastsUi.show("Update available", {
           buttons: ['reload', 'dismiss']
         });
 
-        var answer = await toast.answer;
+        const answer = await toast.answer;
 
         if (answer == 'reload') {
           this._reloading = true;
@@ -170,14 +180,14 @@ class MainController {
   }
 
   _onSettingsChange() {
-    var settings = this._settingsUi.getSettings();
+    const settings = this._settingsUi.getSettings();
     this._compressSettings = settings;
     this._saveSettings(settings);
     this._compressSvg();
   }
 
   async _onInputChange(event) {
-    var settings = this._settingsUi.getSettings();
+    const settings = this._settingsUi.getSettings();
     this._compressSettings = settings;
     this._userHasInteracted = true;
 
@@ -193,7 +203,7 @@ class MainController {
 
       this._selectedItemIndex = 0;
 
-      var svgFiles = await this._loadAll();
+      const svgFiles = await this._loadAll();
 
       this._inputItems.forEach((item, itemIndex) => {
         item.svgFile = svgFiles[itemIndex];
@@ -205,7 +215,7 @@ class MainController {
       this._mainMenuUi.setSelectedFilename(this._selectedItemIndex);
     }
     catch(e) {
-      var error = new Error("Load failed: " + e.message);
+      const error = new Error("Load failed: " + e.message);
       error.inner = e;
       this._mainMenuUi.stopSpinner();
       this._handleError(error);
@@ -214,7 +224,7 @@ class MainController {
 
     this._cache.purge();
 
-    var firstIteration = true;
+    let firstIteration = true;
 
     const compressed = () => {
       if (firstIteration) {
@@ -239,7 +249,7 @@ class MainController {
   }
 
   async _loadSettings() {
-    var settings = await storage.get('settings');
+    const settings = await storage.get('settings');
     if (settings) this._settingsUi.setSettings(settings);
   }
 
@@ -267,7 +277,7 @@ class MainController {
   }
 
   async _compressSvg(iterationCallback = function(){}) {
-    var thisJobId = this._latestCompressJobId = Math.random();
+    const thisJobId = this._latestCompressJobId = Math.random();
 
     await this._abortCurrentAll();
 
@@ -285,7 +295,8 @@ class MainController {
       return;
     }
 
-    var cachedItems = this._cache.match(settings.fingerprint);
+    const cachedItems = this._cache.match(settings.fingerprint);
+
     if (cachedItems) {
       this._resultItems = cachedItems;
       this._updateUi();
@@ -299,9 +310,9 @@ class MainController {
     try {
       this._resultItems = this._inputItems.map((item) => Object.assign({}, item));
       await this._processAll(settings, (svgo, resultFile) => {
-        var itemIndex = this._inputItems.map((item) => item.svgo).indexOf(svgo);
-        var item = this._inputItems[itemIndex];
-        var resultItem = Object.assign({}, item, { svgFile: resultFile });
+        const itemIndex = this._inputItems.map((item) => item.svgo).indexOf(svgo);
+        const item = this._inputItems[itemIndex];
+        const resultItem = Object.assign({}, item, { svgFile: resultFile });
         this._resultItems[itemIndex] = resultItem;
         iterationCallback(item, resultItem);
         this._updateUi();
@@ -323,13 +334,13 @@ class MainController {
   }
 
   async _updateUi() {
-    var settings = this._compressSettings;
-    var items = (settings.original ? this._inputItems : this._resultItems);
+    const settings = this._compressSettings;
+    const items = (settings.original ? this._inputItems : this._resultItems);
 
     this._mainMenuUi.setSelectedFilename(this._selectedItemIndex);
 
     await this._updateResultsUi({
-      items: items,
+      items,
       compareToItems: this._inputItems,
       selectedItemIndex: this._selectedItemIndex,
       gzip: settings.gzip,
@@ -340,15 +351,15 @@ class MainController {
   }
 
   async _updateResultsUi({ items, compareToItems, selectedItemIndex, gzip, original }) {
-    var measureItemSize = (item) => item.svgFile.size({ compress: gzip });
-    var sumSize = (accu, x) => (accu + x);
-    var sizeTotal = (await Promise.all(items.map(measureItemSize))).reduce(sumSize, 0);
-    var compareToSizeTotal = (await Promise.all(compareToItems.map(measureItemSize))).reduce(sumSize, 0);
+    const measureItemSize = (item) => item.svgFile.size({ compress: gzip });
+    const sumSize = (accu, x) => (accu + x);
+    const sizeTotal = (await Promise.all(items.map(measureItemSize))).reduce(sumSize, 0);
+    const compareToSizeTotal = (await Promise.all(compareToItems.map(measureItemSize))).reduce(sumSize, 0);
 
-    var itemSelected = items[selectedItemIndex];
-    var compareToItemSelected = compareToItems[selectedItemIndex];
-    var sizeSelected = await measureItemSize(itemSelected);
-    var compareToSizeSelected = (compareToItemSelected && (await measureItemSize(compareToItemSelected)));
+    const itemSelected = items[selectedItemIndex];
+    const compareToItemSelected = compareToItems[selectedItemIndex];
+    const sizeSelected = await measureItemSize(itemSelected);
+    const compareToSizeSelected = (compareToItemSelected && (await measureItemSize(compareToItemSelected)));
 
     this._resultsUi.update({
       sizeTotal: sizeTotal,
@@ -369,7 +380,7 @@ class MainController {
 
     if (items.length > 1) {
       this._downloadAllButtonUi.working();
-      var zipFile = new ZipFile();
+      const zipFile = new ZipFile();
       items.forEach((item) => {
         zipFile.jszip.file(item.filename, item.svgFile.text);
       });
@@ -391,4 +402,3 @@ class MainController {
   }
 }
 
-module.exports = MainController;

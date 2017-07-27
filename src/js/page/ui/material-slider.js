@@ -1,8 +1,8 @@
-var utils = require('../utils');
+import { strToEl } from '../utils';
 
-class MaterialSlider {
+export default class MaterialSlider {
   constructor(rangeEl) {
-    this.container = utils.strToEl(`
+    this.container = strToEl(`
       <div class="material-slider">
         <div class="track">
           <div class="track-on"></div>
@@ -22,30 +22,26 @@ class MaterialSlider {
     rangeEl.parentNode.insertBefore(this.container, rangeEl);
     this.container.insertBefore(rangeEl, this.container.firstChild);
 
-    // events
-    // thanks IE
-    var rangeChangeEvent = utils.isIe ? 'change' : 'input';
-
-    rangeEl.addEventListener(rangeChangeEvent, e => this._onInputChange(e));
-    this.range.addEventListener('mousedown', e => this._onRangeMouseDown(e));
-    this.range.addEventListener('touchstart', e => this._onRangeTouchStart(e));
-    this.range.addEventListener('touchend', e => this._onRangeTouchEnd(e));
+    rangeEl.addEventListener('input', () => this._onInputChange());
+    this.range.addEventListener('mousedown', () => this._onRangeMouseDown());
+    this.range.addEventListener('touchstart', () => this._onRangeTouchStart());
+    this.range.addEventListener('touchend', () => this._onRangeTouchEnd());
 
     this._setPosition();
   }
 
-  _onRangeTouchStart(event) {
+  _onRangeTouchStart() {
     this.range.focus();
   }
 
-  _onRangeTouchEnd(event) {
+  _onRangeTouchEnd() {
     this.range.blur();
   }
 
-  _onRangeMouseDown(event) {
+  _onRangeMouseDown() {
     this.range.classList.add('active');
 
-    var upListener = e => {
+    const upListener = e => {
       // IE requires me to do this. Pah.
       requestAnimationFrame(_ => {
         this.range.blur();
@@ -66,17 +62,16 @@ class MaterialSlider {
   }
 
   _update() {
-    requestAnimationFrame(_ => this._setPosition());
+    requestAnimationFrame(() => this._setPosition());
   }
 
   _setPosition() {
-    var { min, max, value } = this.range;
-    var percent = (Number(value) - min) / (max - min);
-    this._trackOn.style.width = 
+    const { min, max, value } = this.range;
+    const percent = (Number(value) - min) / (max - min);
+
+    this._trackOn.style.width =
       this._handle.style.left = percent * 100 + "%";
 
     this._val.textContent = value;
   }
 }
-
-module.exports = MaterialSlider;

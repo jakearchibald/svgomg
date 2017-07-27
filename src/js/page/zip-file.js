@@ -1,10 +1,9 @@
 "use strict";
+//import JSZip from 'jszip';
 
-var JSZip = require('jszip');
-
-class ZipFile {
+export default class ZipFile {
   constructor() {
-    this.jszip = new JSZip();
+    this.jszip = {};
     this._url = '';
     this._blob = null;
   }
@@ -35,5 +34,3 @@ class ZipFile {
     URL.revokeObjectURL(this._url);
   }
 }
-
-module.exports = ZipFile;

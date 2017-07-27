@@ -1,54 +1,22 @@
 "use strict";
 
-exports.toArray = function toArray(obj) {
-  return Array.prototype.slice.apply(obj);
-};
-
-exports.domReady = new Promise(function(resolve) {
+export const domReady = new Promise(resolve => {
   function checkState() {
-    if (document.readyState != 'loading') {
-      resolve();
-    }
+    if (document.readyState != 'loading') resolve();
   }
   document.addEventListener('readystatechange', checkState);
   checkState();
 });
 
-exports.get = function get(url) {
-  return new Promise(function(resolve, reject) {
-    var req = new XMLHttpRequest();
-    req.open('GET', url);
+const range = document.createRange();
+range.selectNode(document.documentElement);
 
-    req.onload = function() {
-      if (req.status == 200) {
-        resolve(req.response);
-      }
-      else {
-        reject(Error(req.statusText));
-      }
-    };
-    req.onerror = function() {
-      reject(Error("Network Error"));
-    };
+export function strToEl(str) {
+  const frag = range.createContextualFragment(str);
+  return frag.children[0];
+}
 
-    req.send();
-  });
-};
-
-exports.strToEl = (function () {
-  var tmpEl = document.createElement('div');
-  return function (str) {
-    var r;
-    tmpEl.innerHTML = str;
-    r = tmpEl.children[0];
-    while (tmpEl.firstChild) {
-      tmpEl.removeChild(tmpEl.firstChild);
-    }
-    return r;
-  };
-}());
-
-var entityMap = {
+const entityMap = {
   "&": "&amp;",
   "<": "&lt;",
   ">": "&gt;",
@@ -57,43 +25,32 @@ var entityMap = {
   "/": '&#x2F;'
 };
 
-exports.escapeHtml = function escapeHTML(string) {
-  return String(string).replace(/[&<>"'\/]/g, function (s) {
-    return entityMap[s];
-  });
-};
+export function escapeHTML(string) {
+  return String(str).replace(/[&<>"'\/]/g, s => entityMap[s]);
+}
 
-exports.escapeHtmlTag = function(strings, ...values) {
-  values = values.map(exports.escapeHtml);
+export function escapeHtmlTag(strings, ...values) {
+  values = values.map(s => escapeHTML(s));
   return strings.reduce((str, val, i) => str += val + (values[i] || ''), '');
 };
 
-exports.readFileAsText = function readFileAsText(file) {
-  return new Promise(function(resolve, reject) {
-    var reader = new FileReader();
-    reader.readAsText(file);
-    reader.onerror = function() {
-      reject(reader.error);
-    };
-    reader.onload = function() {
-      resolve(reader.result);
-    };
-  });
+export function readFileAsText(file) {
+  return new Response(file).text();
 };
 
-exports.handleFileInput = function handleFileInput(files) {
-  var filesArray = [].slice.call(files);
-  return Promise.all(filesArray.map(function(file) {
-    if (!file) {
-      return null;
-    }
-    return exports.readFileAsText(file).then(function(data) {
+export function handleFileInput(files) {
+  const filesArray = Array.from(files);
+  return Promise.all(
+    filesArray.map(async file => {
+      if (!file) {
+        return null;
+      }
       return {
-        data: data,
+        data: await readFileAsText(file),
         filename: file.name
       };
-    });
-  }).filter(function(itemPromise) { return !!itemPromise; }));
+    }).filter(itemPromise => !!itemPromise)
+  );
 };
 
 function transitionClassFunc({removeClass = false}={}) {
@@ -106,7 +63,7 @@ function transitionClassFunc({removeClass = false}={}) {
     }
 
     return new Promise(resolve => {
-      var listener = event => {
+      const listener = event => {
         if (event.target != el) return;
         el.removeEventListener('webkitTransitionEnd', listener);
         el.removeEventListener('transitionend', listener);
@@ -116,7 +73,7 @@ function transitionClassFunc({removeClass = false}={}) {
 
       el.classList.add(transitionClass);
 
-      requestAnimationFrame(_ => {
+      requestAnimationFrame(() => {
         el.addEventListener('webkitTransitionEnd', listener);
         el.addEventListener('transitionend', listener);
         el.classList[removeClass ? 'remove' : 'add'](className);
@@ -125,41 +82,23 @@ function transitionClassFunc({removeClass = false}={}) {
   }
 }
 
-exports.transitionToClass = transitionClassFunc();
-exports.transitionFromClass = transitionClassFunc({removeClass: true});
+export const transitionToClass = transitionClassFunc();
+export const transitionFromClass = transitionClassFunc({removeClass: true});
 
-exports.closest = function(el, selector) {
-  if (el.closest) {
-    return el.closest(selector);
-  }
-
-  var matches = el.matches || el.msMatchesSelector;
-
-  do {
-    if (el.nodeType != 1) continue;
-    if (matches.call(el, selector)) return el;
-  } while (el = el.parentNode);
-
-  return undefined;
-};
-
-// I hate that I have to do this
-exports.isIe = (navigator.userAgent.indexOf('Trident/') !== -1);
-
-exports.loadCss = function(url) {
+export function loadCss(url) {
   return new Promise((resolve, reject) => {
-    var link = document.createElement('link');
+    const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = url;
 
-    link.addEventListener('load', _ => resolve());
-    link.addEventListener('error', _ => reject());
+    link.addEventListener('load', () => resolve());
+    link.addEventListener('error', () => reject());
 
     document.head.appendChild(link);
   });
 };
 
-exports.trackFocusMethod = function() {
+export function trackFocusMethod() {
   var focusMethod = 'mouse';
 
   document.body.addEventListener('focus', event => {
@@ -171,11 +110,15 @@ exports.trackFocusMethod = function() {
     event.target.classList.remove('mouse-focused');
   }, true);
 
-  document.body.addEventListener('keydown', event => {
+  document.body.addEventListener('keydown', () => {
     focusMethod = 'key';
   }, true);
 
-  document.body.addEventListener('mousedown', event => {
+  document.body.addEventListener('mousedown', () => {
     focusMethod = 'mouse';
   }, true);
 };
+
+export function fetchText(request) {
+  return fetch(request).then(r => r.text());
+}

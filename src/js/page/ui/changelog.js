@@ -1,19 +1,19 @@
-var utils = require('../utils');
+import { strToEl, escapeHtmlTag, transitionToClass, domReady } from '../utils';
 
-class Changelog {
+export default class Changelog {
   constructor(loadedVersion) {
-    this.container = utils.strToEl('<section class="changelog"></section>');
+    this.container = strToEl('<section class="changelog"></section>');
     this._loadedVersion = loadedVersion;
   }
 
   async showLogFrom(lastLoadedVersion) {
     if (lastLoadedVersion == this._loadedVersion) return;
-    var changelog = await utils.get('changelog.json').then(JSON.parse);
-    var startIndex = 0;
-    var endIndex = 0;
-    
+    const changelog = await fetch('changelog.json').then(r => r.json());
+    let startIndex = 0;
+    let endIndex = 0;
+
     for (var i = 0; i < changelog.length; i++) {
-      let entry = changelog[i];
+      const entry = changelog[i];
 
       if (entry.version === this._loadedVersion) {
         startIndex = i;
@@ -24,22 +24,18 @@ class Changelog {
       endIndex = i + 1;
     }
 
-    var changeLis = changelog.slice(startIndex, endIndex).reduce((arr, entry) => {
-      return arr.concat(entry.changes);
-    }, []).map(function(change) {
-      return utils.escapeHtmlTag`<li>${change}</li>`;
-    });
+    const changeLis = changelog.slice(startIndex, endIndex)
+      .reduce((arr, entry) => arr.concat(entry.changes), [])
+      .map(change => escapeHtmlTag`<li>${change}</li>`);
 
-    this.container.appendChild(utils.strToEl('<h1>Updated!</h1>'));
-    this.container.appendChild(utils.strToEl(
+    this.container.appendChild(strToEl('<h1>Updated!</h1>'));
+    this.container.appendChild(strToEl(
       '<ul>' +
         changeLis.join('') +
       '</ul>' +
     ''));
 
-    await utils.domReady;
-    utils.transitionToClass(this.container);
+    await domReady;
+    transitionToClass(this.container);
   }
 }
-
-module.exports = Changelog;

@@ -1,0 +1,1 @@
+self.addEventListener = self.oldAddEventListener;

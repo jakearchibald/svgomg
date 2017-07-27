@@ -1,25 +1,11 @@
-var Idb = require('./indexeddouchbag');
-var idb;
+import idb from 'idb-keyval';
 
-// avoid opening idb until first call
-function getIdb() {
-  if (!idb) {
-    idb = new Idb('svgo-keyval', 1, function(db) {
-      db.createObjectStore('keyval');
-    });
-  }
-  return idb;
-}
+export let idbKeyval = idb;
 
-if (self.indexedDB) {
-  module.exports = {
-    get: key => getIdb().get('keyval', key),
-    set: (key, val) => getIdb().put('keyval', key, val),
-    delete: key => getIdb().delete('keyval', key)
-  };
-}
-else {
-  module.exports = {
+// iOS add-to-homescreen is missing IDB, or at least it used to.
+// I haven't tested this in a while.
+if (!self.indexedDB) {
+  idbKeyval = {
     get: key => Promise.resolve(localStorage.getItem(key)),
     set: (key, val) => Promise.resolve(localStorage.setItem(key, val)),
     delete: key => Promise.resolve(localStorage.removeItem(key))

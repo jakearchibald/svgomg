@@ -1,6 +1,6 @@
 "use strict";
 
-class WorkerMessenger {
+export default class WorkerMessenger {
   constructor(url) {
     this._requestId = 0;
     // worker jobs awaiting response { [requestId]: [ resolve, reject ] }
@@ -10,18 +10,13 @@ class WorkerMessenger {
   }
 
   async release() {
-    try {
-      if (this._worker) {
-        this._worker.terminate();
-        this._worker = null;
-      }
-      Object.keys(this._pending).forEach((id) => {
-        this._fulfillPending(id, null, new Error("Worker terminated: " + this._url));
-      });
-      this._pending = {};
-    } catch(e) {
-      console.error("WorkerMessenger.release: ", e);
+    if (this._worker) {
+      this._worker.terminate();
+      this._worker = null;
     }
+    Object.keys(this._pending).forEach(id => {
+      this._fulfillPending(id, null, new Error("Worker terminated: " + this._url));
+    });
   }
 
   _postMessage(message) {
@@ -45,7 +40,7 @@ class WorkerMessenger {
   }
 
   _fulfillPending(id, result, error) {
-    var resolver = this._pending[id];
+    const resolver = this._pending[id];
 
     if (!resolver) {
       console.log("No resolver for", { id, result, error });
@@ -65,10 +60,8 @@ class WorkerMessenger {
   _requestResponse(message) {
     return new Promise((resolve, reject) => {
       message.id = ++this._requestId;
-      this._pending[message.id] = [ resolve, reject ];
+      this._pending[message.id] = [resolve, reject];
       this._postMessage(message);
     });
   }
 }
-
-module.exports = WorkerMessenger;

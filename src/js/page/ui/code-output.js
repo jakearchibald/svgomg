@@ -1,9 +1,10 @@
-var utils = require('../utils');
-var prism = new (require('../prism'));
+import { strToEl } from '../utils';
+import Prism from '../prism';
+const prism = new Prism();
 
-class CodeOutput {
+export default class CodeOutput {
   constructor() {
-    this.container = utils.strToEl(
+    this.container = strToEl(
       '<div class="code-output">' +
         '<pre><code></code></pre>' +
       '</div>' +
@@ -19,5 +20,3 @@ class CodeOutput {
     this._codeEl.innerHTML = '';
   }
 }
-
-module.exports = CodeOutput;
