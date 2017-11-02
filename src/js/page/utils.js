@@ -25,7 +25,7 @@ const entityMap = {
   "/": '&#x2F;'
 };
 
-export function escapeHTML(string) {
+export function escapeHTML(str) {
   return String(str).replace(/[&<>"'\/]/g, s => entityMap[s]);
 }
 
