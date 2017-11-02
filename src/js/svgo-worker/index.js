@@ -145,7 +145,7 @@ function* multipassCompress(settings) {
   });
 
   // Set floatPrecision across all the plugins
-  const floatPrecision = settings.floatPrecision;
+  const floatPrecision = Number(settings.floatPrecision);
 
   for (const plugin of Object.values(pluginsData)) {
     if (plugin.params && 'floatPrecision' in plugin.params) {
