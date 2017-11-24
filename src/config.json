@@ -29,6 +29,10 @@
       "name": "Cleanup attribute whitespace"
     },
     {
+      "id": "inlineStyles",
+      "name": "Inline styles"
+    },
+    {
       "id": "minifyStyles",
       "name": "Minify styles"
     },
@@ -129,10 +133,6 @@
       "name": "Remove unused namespaces"
     },
     {
-      "id": "transformsWithOnePath",
-      "name": "Optimise single-path SVG"
-    },
-    {
       "id": "sortAttrs",
       "name": "Sort attrs"
     },
@@ -151,6 +151,10 @@
     {
       "id": "removeStyleElement",
       "name": "Remove style elements"
+    },
+    {
+      "id": "removeScriptElement",
+      "name": "Remove script elements"
     }
   ]
 }
