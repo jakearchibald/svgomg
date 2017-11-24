@@ -1,7 +1,6 @@
 "use strict";
 import '../utils/node-globals/global';
 import svg2js from 'svgo/lib/svgo/svg2js';
-import JsApi from 'svgo/lib/svgo/jsAPI';
 import js2svg from 'svgo/lib/svgo/js2svg';
 import plugins from 'svgo/lib/svgo/plugins';
 
@@ -38,7 +37,6 @@ import removeEmptyAttrs from 'svgo/plugins/removeEmptyAttrs';
 import removeEmptyContainers from 'svgo/plugins/removeEmptyContainers';
 import mergePaths from 'svgo/plugins/mergePaths';
 import removeUnusedNS from 'svgo/plugins/removeUnusedNS';
-import transformsWithOnePath from 'svgo/plugins/transformsWithOnePath';
 import sortAttrs from 'svgo/plugins/sortAttrs';
 import removeTitle from 'svgo/plugins/removeTitle';
 import removeDesc from 'svgo/plugins/removeDesc';
@@ -82,7 +80,6 @@ const pluginsData = {
   'removeEmptyContainers': removeEmptyContainers,
   'mergePaths': mergePaths,
   'removeUnusedNS': removeUnusedNS,
-  'transformsWithOnePath': transformsWithOnePath,
   'sortAttrs': sortAttrs,
   'removeTitle': removeTitle,
   'removeDesc': removeDesc,
@@ -176,14 +173,14 @@ let parsedSvg;
 let multipassInstance;
 
 const actions = {
-  load({data}) {
+  load({ data }) {
     svg2js(data, p => parsedSvg = p);
 
     if (parsedSvg.error) throw Error(parsedSvg.error);
 
     return getDimensions(parsedSvg);
   },
-  process({settings}) {
+  process({ settings }) {
     multipassInstance = multipassCompress(settings);
     return multipassInstance.next().value;
   },
@@ -199,7 +196,7 @@ self.onmessage = event => {
       result: actions[event.data.action](event.data)
     });
   }
-  catch(e) {
+  catch (e) {
     self.postMessage({
       id: event.data.id,
       error: e.message
