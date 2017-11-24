@@ -38,21 +38,6 @@ export function readFileAsText(file) {
   return new Response(file).text();
 };
 
-export function handleFileInput(files) {
-  const filesArray = Array.from(files);
-  return Promise.all(
-    filesArray.map(async file => {
-      if (!file) {
-        return null;
-      }
-      return {
-        data: await readFileAsText(file),
-        filename: file.name
-      };
-    }).filter(itemPromise => !!itemPromise)
-  );
-};
-
 function transitionClassFunc({removeClass = false}={}) {
   return function(el, className = 'active', transitionClass = 'transition') {
     if (removeClass) {
@@ -118,7 +103,3 @@ export function trackFocusMethod() {
     focusMethod = 'mouse';
   }, true);
 };
-
-export function fetchText(request) {
-  return fetch(request).then(r => r.text());
-}

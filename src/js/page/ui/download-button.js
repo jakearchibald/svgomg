@@ -1,12 +1,11 @@
 import FloatingActionButton from './floating-action-button';
 
 export default class DownloadButton extends FloatingActionButton {
-  constructor({ minor }) {
+  constructor() {
     const title = 'Download';
 
     super({
       title,
-      minor,
       href: './',
       iconSvg: (
         '<svg viewBox="0 0 24 24" class="icon">' +
@@ -16,34 +15,24 @@ export default class DownloadButton extends FloatingActionButton {
       )
     });
 
-    this._fileInfo = null;
+    this._svgFile = null;
   }
 
   _onClick(event) {
-    if (!this._fileInfo) {
-      event.preventDefault();
-      return;
-    }
-
     super._onClick(event);
 
     // IE compat
     if ('msSaveBlob' in navigator) {
       event.preventDefault();
-      navigator.msSaveBlob(this._fileInfo.blob, this._fileInfo.filename);
+      navigator.msSaveBlob(this._svgFile.blob, this._svgFile.filename);
     }
   }
 
-  setDownload(fileInfo) {
-    this._fileInfo = fileInfo;
+  setDownload(filename, svgFile) {
+    this.container.download = filename;
+    this.container.href = svgFile.url;
 
-    const download = (fileInfo ? fileInfo.filename : '');
-    const href = (fileInfo ? fileInfo.url : './');
-    const title = (fileInfo ? 'Download: ' + fileInfo.filename : 'Nothing to download');
-
-    this.container.download = download;
-    this.container.href = href;
-    this.container.setAttribute('title', title);
-    this.container.querySelector('svg.icon > title').textContent = title;
+    // for IE compat
+    this._svgFile = svgFile;
   }
 }

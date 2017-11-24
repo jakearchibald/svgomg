@@ -2,8 +2,7 @@ import {
     strToEl,
     domReady,
     transitionToClass,
-    transitionFromClass,
-    handleFileInput
+    transitionFromClass
 } from '../utils';
 import { EventEmitter } from 'events';
 
@@ -51,13 +50,12 @@ export default class FileDrop extends EventEmitter {
     this._activeEnters = 0;
     transitionFromClass(this.container);
 
-    const files = event.dataTransfer.files;
-    if (files.length <= 0) {
-      return;
-    }
+    const file = event.dataTransfer.files[0];
+    if (!file) return;
 
-    const items = await handleFileInput(files);
-
-    this.emit('svgDataLoad', { items });
+    this.emit('svgDataLoad', {
+      data: await readFileAsText(file),
+      filename: file.name
+    });
   }
 }

@@ -2,8 +2,7 @@ import {
   domReady,
   transitionFromClass,
   transitionToClass,
-  handleFileInput,
-  fetchText
+  readFileAsText
 } from '../utils';
 import Spinner from './spinner';
 import { EventEmitter } from 'events';
@@ -17,11 +16,6 @@ export default class MainMenu extends EventEmitter {
 
     domReady.then(() => {
       this.container = document.querySelector('.main-menu');
-      this._filenames = [];
-      this._fileItemTemplate = document.querySelector('.file-item-template');
-      this._fileItemEls = [];
-      this._fileItemElsContainerEl = this._fileItemTemplate.parentNode;
-      this._fileItemElsInsertBeforeEl = this._fileItemTemplate.nextSibling;
       this._loadFileInput = document.querySelector('.load-file-input');
       this._pasteInput = document.querySelector('.paste-input');
       this._loadDemoBtn = document.querySelector('.load-demo');
@@ -60,50 +54,6 @@ export default class MainMenu extends EventEmitter {
     this._spinner.hide();
   }
 
-  setFilenames(filenames) {
-    const compact = (filenames.length >= 10);
-
-    const fileItemEls = filenames.map((filename, filenameIndex) => {
-      const fileItemEl = this._fileItemTemplate.cloneNode(true);
-      const fileItemButtonEl = fileItemEl.querySelector('.file-item');
-      const fileItemIconNumberEl = fileItemEl.querySelector('.file-item-icon-number');
-      const fileItemNameEl = fileItemEl.querySelector('.file-item-name');
-      fileItemIconNumberEl.textContent = String(filenameIndex + 1);
-      fileItemNameEl.innerText = filename;
-      if (compact) fileItemButtonEl.classList.add('menu-item-compact');
-      fileItemEl.removeAttribute('class');
-      fileItemEl.removeAttribute('style');
-      fileItemButtonEl.addEventListener('click', e => this._onFilenameClick(e, filenameIndex));
-      return fileItemEl;
-    });
-
-    const container = this._fileItemElsContainerEl;
-    const insertBeforeEl = this._fileItemElsInsertBeforeEl;
-
-    this._fileItemEls.forEach(fileItemEl => {
-      container.removeChild(fileItemEl);
-    });
-
-    fileItemEls.forEach(fileItemEl => {
-      container.insertBefore(fileItemEl, insertBeforeEl);
-    });
-
-    this._filenames = filenames;
-    this._fileItemEls = fileItemEls;
-  }
-
-  setSelectedFilename(filenameIndex) {
-    this._fileItemEls.forEach((fileItemEl, fileItemElIndex) => {
-      const fileItemButtonEl = fileItemEl.querySelector('.file-item');
-      if (fileItemElIndex === filenameIndex) {
-        fileItemButtonEl.classList.add('menu-item-selected');
-      }
-      else {
-        fileItemButtonEl.classList.remove('menu-item-selected');
-      }
-    });
-  }
-
   _onOverlayClick(event) {
     event.preventDefault();
     this.hide();
@@ -125,12 +75,8 @@ export default class MainMenu extends EventEmitter {
       this._spinner.show();
 
       this.emit('svgDataLoad', {
-        items: [
-          {
-            data: val,
-            filename: 'image.svg'
-          }
-        ]
+        data: val,
+        filename: 'image.svg'
       });
     }
   }
@@ -141,29 +87,17 @@ export default class MainMenu extends EventEmitter {
     this._loadFileInput.click();
   }
 
-  _onFilenameClick(event, filenameIndex) {
-    event.preventDefault();
-    event.target.blur();
-    this.emit('filenameClick', {
-      filename: this._filenames[filenameIndex],
-      filenameIndex: filenameIndex
-    });
-  }
-
   async _onFileInputChange(event) {
-    const files = this._loadFileInput.files;
+    const file = this._loadFileInput.files[0];
 
-    if (files.length <= 0) {
-      return;
-    }
+    if (!file) return;
 
     this._loadFileBtn.appendChild(this._spinner.container);
     this._spinner.show();
 
-    const items = await handleFileInput(files);
-
     this.emit('svgDataLoad', {
-      items: items
+      data: await readFileAsText(file),
+      filename: file.name
     });
   }
 
@@ -174,18 +108,10 @@ export default class MainMenu extends EventEmitter {
     this._spinner.show();
 
     try {
-      const items = [
-        {
-          data: await fetchText('test-svgs/car-lite.svg'),
-          filename: 'car-lite.svg'
-        }/*,
-        {
-          data: await fetchText('test-svgs/car-lite-green.svg'),
-          filename: 'car-lite-green.svg'
-        }*/
-      ];
-
-      this.emit('svgDataLoad', { items });
+      this.emit('svgDataLoad', {
+        data: await fetch('test-svgs/car-lite.svg').then(r => r.text()),
+        filename: 'car-lite.svg'
+      });
     }
     catch (err) {
       this.stopSpinner();

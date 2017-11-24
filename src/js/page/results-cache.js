@@ -10,18 +10,16 @@ export default class ResultsCache {
     this._index = 0;
   }
 
-  add(fingerprint, svgFiles) {
+  add(fingerprint, svgFile) {
     const oldItem = this._items[this._index];
 
     if (oldItem) {
-      oldItem.forEach((svgFile) => {
-        // gc blob url
-        svgFile.release();
-      });
+      // gc blob url
+      oldItem.release();
     }
 
     this._fingerprints[this._index] = fingerprint;
-    this._items[this._index] = svgFiles;
+    this._items[this._index] = svgFile;
 
     this._index = (this._index + 1) % this._size;
   }
