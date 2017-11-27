@@ -28,7 +28,8 @@
     "rollup-stream": "^1.23.1",
     "svgo": "^1.0.3",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.0.0"
+    "vinyl-source-stream": "^1.0.0",
+    "eslint": "^4.11.0"
   },
   "private": true,
   "scripts": {
