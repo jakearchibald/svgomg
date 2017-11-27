@@ -4,6 +4,7 @@ import { domReady } from './utils';
 import Output from './ui/output';
 import DownloadButton from './ui/download-button';
 import CopyButton from './ui/copy-button';
+import { copySupported } from './ui/copy-button';
 import BgFillButton from './ui/bg-fill-button';
 import Results from './ui/results';
 import Settings from './ui/settings';
@@ -85,7 +86,7 @@ export default class MainController {
 
       minorActionContainer.appendChild(this._bgFillUi.container);
 
-      if (this._copyButtonUi.isSupported()) {
+      if (copySupported) {
         minorActionContainer.appendChild(this._copyButtonUi.container);
       }
 
@@ -251,7 +252,7 @@ export default class MainController {
 
     try {
       const finalResultFile = await svgo.process(settings, resultFile => {
-        itterationCallback(resultFile);
+        iterationCallback(resultFile);
         this._updateForFile(resultFile, {
           compareToFile: this._inputItem,
           compress: settings.gzip
@@ -273,7 +274,7 @@ export default class MainController {
   async _updateForFile(svgFile, { compareToFile, compress }) {
     this._outputUi.update(svgFile);
     this._downloadButtonUi.setDownload(this._inputFilename, svgFile);
-    this._copyButtonUi.setSVG(svgFile);
+    this._copyButtonUi.setCopyText(svgFile.text);
 
     this._resultsUi.update({
       comparisonSize: compareToFile && (await compareToFile.size({ compress })),

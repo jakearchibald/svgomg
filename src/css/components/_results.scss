@@ -15,24 +15,4 @@
     min-width: 11.3em;
     border-radius: 2px;
   }
-
-  & th, & td {
-    padding: 0;
-    text-align: left;
-    font-weight: normal;
-  }
-
-  & .results-label {
-    opacity: 0.5;
-  }
-
-  & .results-size-selected,
-  & .results-size-total {
-    text-align: right;
-  }
-
-  & .results-diff-selected,
-  & .results-diff-total {
-    text-align: right;
-  }
 }

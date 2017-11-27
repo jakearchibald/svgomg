@@ -1,5 +1,7 @@
 import FloatingActionButton from './floating-action-button';
 
+export const copySupported = (document.queryCommandSupported && document.queryCommandSupported('copy'));
+
 export default class CopyButton extends FloatingActionButton {
   constructor() {
     const title = 'Copy as text';
@@ -35,16 +37,7 @@ export default class CopyButton extends FloatingActionButton {
     document.body.removeChild(this._pre);
   }
 
-  isSupported() {
-    return ( document.queryCommandSupported && document.queryCommandSupported('copy') );
-  }
-
   setCopyText(text, filename) {
-    const title = (filename ? 'Copy as text: ' + filename : 'Copy as text');
-
     this._text = text;
-
-    this.container.setAttribute('title', title);
-    this.container.querySelector('svg.icon > title').textContent = title;
   }
 }

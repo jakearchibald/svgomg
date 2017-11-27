@@ -28,7 +28,7 @@ export default class Svgo extends WorkerMessenger {
 
       var resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
 
-      iterationCallback(this, resultFile);
+      iterationCallback(resultFile);
 
       if (settings.multipass) {
         while (result = await this.nextPass()) {
@@ -36,7 +36,7 @@ export default class Svgo extends WorkerMessenger {
             throw Error('abort');
           }
           resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
-          iterationCallback(this, resultFile);
+          iterationCallback(resultFile);
         }
       }
 
