@@ -136,10 +136,10 @@
   }
 
   .action-button-container {
-    @include transform(translateX(238px));
+    @include transform(translateX(168px));
 
     @media (min-width: 640px) {
-      @include transform(translateY(238px));
+      @include transform(translateY(188px));
     }
 
     &.transition {

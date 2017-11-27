@@ -90,7 +90,7 @@ export default class MainController {
         minorActionContainer.appendChild(this._copyButtonUi.container);
       }
 
-      minorActionContainer.appendChild(this._downloadButtonUi.container);
+      actionContainer.appendChild(this._downloadButtonUi.container);
 
       document.querySelector('.output').appendChild(this._outputUi.container);
       this._container.appendChild(this._toastsUi.container);
