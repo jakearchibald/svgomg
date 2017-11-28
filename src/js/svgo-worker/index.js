@@ -2,9 +2,11 @@
 import '../utils/node-globals/global';
 import svg2js from 'svgo/lib/svgo/svg2js';
 import js2svg from 'svgo/lib/svgo/js2svg';
+import JSAPI from 'svgo/lib/svgo/jsAPI';
+import CSSClassList from 'svgo/lib/svgo/css-class-list';
+import CSSStyleDeclaration from 'svgo/lib/svgo/css-style-declaration';
 import plugins from 'svgo/lib/svgo/plugins';
 
-// the order is from https://github.com/svg/svgo/blob/master/.svgo.yml
 import removeDoctype from 'svgo/plugins/removeDoctype';
 import removeXMLProcInst from 'svgo/plugins/removeXMLProcInst';
 import removeComments from 'svgo/plugins/removeComments';
@@ -12,6 +14,7 @@ import removeMetadata from 'svgo/plugins/removeMetadata';
 import removeXMLNS from 'svgo/plugins/removeXMLNS';
 import removeEditorsNSData from 'svgo/plugins/removeEditorsNSData';
 import cleanupAttrs from 'svgo/plugins/cleanupAttrs';
+import inlineStyles from 'svgo/plugins/inlineStyles';
 import minifyStyles from 'svgo/plugins/minifyStyles';
 import convertStyleToAttrs from 'svgo/plugins/convertStyleToAttrs';
 import cleanupIDs from 'svgo/plugins/cleanupIDs';
@@ -41,55 +44,123 @@ import sortAttrs from 'svgo/plugins/sortAttrs';
 import removeTitle from 'svgo/plugins/removeTitle';
 import removeDesc from 'svgo/plugins/removeDesc';
 import removeDimensions from 'svgo/plugins/removeDimensions';
-import removeAttrs from 'svgo/plugins/removeAttrs';
-import removeElementsByAttr from 'svgo/plugins/removeElementsByAttr';
-import addClassesToSVGElement from 'svgo/plugins/addClassesToSVGElement';
 import removeStyleElement from 'svgo/plugins/removeStyleElement';
-import addAttributesToSVGElement from 'svgo/plugins/addAttributesToSVGElement';
+import removeScriptElement from 'svgo/plugins/removeScriptElement';
 
+// the order is from https://github.com/svg/svgo/blob/master/.svgo.yml
+// Some are commented out if they have no default action.
 const pluginsData = {
-  'removeDoctype': removeDoctype,
-  'removeXMLProcInst': removeXMLProcInst,
-  'removeComments': removeComments,
-  'removeMetadata': removeMetadata,
-  'removeXMLNS': removeXMLNS,
-  'removeEditorsNSData': removeEditorsNSData,
-  'cleanupAttrs': cleanupAttrs,
-  'minifyStyles': minifyStyles,
-  'convertStyleToAttrs': convertStyleToAttrs,
-  'cleanupIDs': cleanupIDs,
-  'removeRasterImages': removeRasterImages,
-  'removeUselessDefs': removeUselessDefs,
-  'cleanupNumericValues': cleanupNumericValues,
-  'cleanupListOfValues': cleanupListOfValues,
-  'convertColors': convertColors,
-  'removeUnknownsAndDefaults': removeUnknownsAndDefaults,
-  'removeNonInheritableGroupAttrs': removeNonInheritableGroupAttrs,
-  'removeUselessStrokeAndFill': removeUselessStrokeAndFill,
-  'removeViewBox': removeViewBox,
-  'cleanupEnableBackground': cleanupEnableBackground,
-  'removeHiddenElems': removeHiddenElems,
-  'removeEmptyText': removeEmptyText,
-  'convertShapeToPath': convertShapeToPath,
-  'moveElemsAttrsToGroup': moveElemsAttrsToGroup,
-  'moveGroupAttrsToElems': moveGroupAttrsToElems,
-  'collapseGroups': collapseGroups,
-  'convertPathData': convertPathData,
-  'convertTransform': convertTransform,
-  'removeEmptyAttrs': removeEmptyAttrs,
-  'removeEmptyContainers': removeEmptyContainers,
-  'mergePaths': mergePaths,
-  'removeUnusedNS': removeUnusedNS,
-  'sortAttrs': sortAttrs,
-  'removeTitle': removeTitle,
-  'removeDesc': removeDesc,
-  'removeDimensions': removeDimensions,
-  // Some of these don't have a useful default action
-  //'removeAttrs': removeAttrs,
-  //'removeElementsByAttr': removeElementsByAttr,
-  //'addClassesToSVGElement': addClassesToSVGElement,
-  'removeStyleElement': removeStyleElement,
-  //'addAttributesToSVGElement': addAttributesToSVGElement,
+  removeDoctype,
+  removeXMLProcInst,
+  removeComments,
+  removeMetadata,
+  removeXMLNS,
+  removeEditorsNSData,
+  cleanupAttrs,
+  inlineStyles,
+  minifyStyles,
+  convertStyleToAttrs,
+  cleanupIDs,
+  //prefixIds,
+  removeRasterImages,
+  removeUselessDefs,
+  cleanupNumericValues,
+  cleanupListOfValues,
+  convertColors,
+  removeUnknownsAndDefaults,
+  removeNonInheritableGroupAttrs,
+  removeUselessStrokeAndFill,
+  removeViewBox,
+  cleanupEnableBackground,
+  removeHiddenElems,
+  removeEmptyText,
+  convertShapeToPath,
+  moveElemsAttrsToGroup,
+  moveGroupAttrsToElems,
+  collapseGroups,
+  convertPathData,
+  convertTransform,
+  removeEmptyAttrs,
+  removeEmptyContainers,
+  mergePaths,
+  removeUnusedNS,
+  sortAttrs,
+  removeTitle,
+  removeDesc,
+  removeDimensions,
+  //removeAttrs,
+  //removeElementsByAttr,
+  //addClassesToSVGElement,
+  removeStyleElement,
+  removeScriptElement,
+  //addAttributesToSVGElement,
+};
+
+// Clone is currently broken. Hack it:
+JSAPI.prototype.clone = function () {
+  const clones = new Map();
+
+  function cloneKeys(target, obj) {
+    for (const key of Object.keys(obj)) {
+      target[key] = clone(obj[key]);
+    }
+    return target;
+  }
+
+  function clone(obj) {
+    if (typeof obj !== 'object' || obj === null) {
+      return obj;
+    }
+
+    if (clones.has(obj)) {
+      return clones.get(obj);
+    }
+
+    let objClone;
+
+    if (obj.constructor === JSAPI) {
+      objClone = new JSAPI({}, obj.parentNode);
+      clones.set(obj, objClone);
+
+      if (obj.parentNode) {
+        objClone.parentNode = clone(obj.parentNode);
+      }
+      cloneKeys(objClone, obj);
+    }
+    else if (
+      obj.constructor === CSSClassList ||
+      obj.constructor === CSSStyleDeclaration ||
+      obj.constructor === Object ||
+      obj.constructor === Array
+    ) {
+      objClone = new obj.constructor();
+      clones.set(obj, objClone);
+      cloneKeys(objClone, obj);
+    }
+    else if (obj.constructor === Map) {
+      objClone = new Map();
+      clones.set(obj, objClone);
+
+      for (const [key, val] of obj) {
+        objClone.set(clone(key), clone(val));
+      }
+    }
+    else if (obj.constructor === Set) {
+      objClone = new Set();
+      clones.set(obj, objClone);
+
+      for (const val of obj) {
+        objClone.add(clone(val));
+      }
+    }
+    else {
+      throw Error('unexpected type');
+    }
+
+    return objClone;
+  }
+
+  return clone(this);
 };
 
 // Arrange plugins by type - this is what plugins() expects
@@ -156,7 +227,7 @@ function* multipassCompress(settings) {
 
   while (svgData === undefined || svgData.length != previousDataLength) {
     previousDataLength = svgData && svgData.length;
-    plugins(svg, optimisedPluginsData);
+    plugins(svg, {input: 'string'}, optimisedPluginsData);
     svgData = js2svg(svg, {
       indent: '  ',
       pretty: settings.pretty

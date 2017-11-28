@@ -1,8 +1,9 @@
 import {
-    strToEl,
-    domReady,
-    transitionToClass,
-    transitionFromClass
+  strToEl,
+  domReady,
+  transitionToClass,
+  transitionFromClass,
+  readFileAsText
 } from '../utils';
 import { EventEmitter } from 'events';
 
