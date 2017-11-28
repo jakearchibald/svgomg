@@ -23,7 +23,7 @@
     "regenerator": "^0.8.41",
     "regenerator-runtime": "^0.9.5",
     "run-sequence": "^1.0.1",
-    "svgo": "0.5.6",
+    "svgo": "0.7.1",
     "uglifyify": "^2.6.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",

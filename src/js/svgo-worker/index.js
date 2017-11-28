@@ -43,7 +43,8 @@ var pluginsData = {
   sortAttrs: require('svgo/plugins/sortAttrs'),
   removeTitle: require('svgo/plugins/removeTitle'),
   removeDesc: require('svgo/plugins/removeDesc'),
-  removeDimensions: require('svgo/plugins/removeDimensions')
+  removeDimensions: require('svgo/plugins/removeDimensions'),
+  removeStyleElement: require('svgo/plugins/removeStyleElement')
 };
 
 function optimizePluginsArray(plugins) {
