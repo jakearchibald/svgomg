@@ -114,18 +114,22 @@ export default class MainMenu extends EventEmitter {
       });
     }
     catch (err) {
-      this.stopSpinner();
+      // This extra scope is working around a babel-minify bug.
+      // It's fixed in Babel 7.
+      {
+        this.stopSpinner();
 
-      let error;
+        let error;
 
-      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-        error = Error("Demo not available offline");
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+          error = Error("Demo not available offline");
+        }
+        else {
+          error = Error("Couldn't fetch demo SVG");
+        }
+
+        this.emit('error', { error });
       }
-      else {
-        error = Error("Couldn't fetch demo SVG");
-      }
-
-      this.emit('error', { error });
     }
   }
 }
