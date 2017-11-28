@@ -14,9 +14,8 @@ const rollup = require('rollup-stream');
 const rollupResolve = require('rollup-plugin-node-resolve');
 const rollupCommon = require('rollup-plugin-commonjs');
 const rollupReplace = require('rollup-plugin-replace');
-const rollupGlobals = require('rollup-plugin-node-globals');
 const rollupBuiltins = require('rollup-plugin-node-builtins');
-const rollupBabili = require('rollup-plugin-babili');
+const rollupBabili = require('rollup-plugin-babel-minify');
 const rollupJson = require('rollup-plugin-json');
 
 
@@ -62,28 +61,26 @@ async function html() {
 
 const rollupCaches = new Map();
 
-async function js(entry) {
+async function js(entry, outputPath) {
   const parsedPath = path.parse(entry);
   const name = /[^\/]+$/.exec(parsedPath.dir)[0];
-  const outputPath = parsedPath.dir.replace(/\/[^\/]+$/, '');
   const changelog = await readJSON(`${__dirname}/src/changelog.json`);
   const cache = rollupCaches.get(entry);
 
   return rollup({
     cache,
-    entry: `src/${entry}`,
-    sourceMap: true,
+    input: `src/${entry}`,
+    sourcemap: true,
     format: 'iife',
     plugins: [
       rollupJson(),
       rollupReplace({
         SVGOMG_VERSION: JSON.stringify(changelog[0].version)
       }),
-      //rollupGlobals(),
       rollupBuiltins(),
       rollupResolve({ preferBuiltins: true }),
       rollupCommon(),
-      //rollupBabili({ comments: false })
+      rollupBabili({ comments: false })
     ]
   }).on('error', plugins.util.log.bind(plugins.util, 'Rollup Error'))
     .on('bundle', bundle => rollupCaches.set(entry, bundle))
@@ -97,11 +94,11 @@ async function js(entry) {
 }
 
 const allJs = gulp.parallel(
-  js.bind(null, 'js/prism-worker/index.js'),
-  js.bind(null, 'js/gzip-worker/index.js'),
-  js.bind(null, 'js/svgo-worker/index.js'),
-  js.bind(null, 'js/sw/index.js'),
-  js.bind(null, 'js/page/index.js')
+  js.bind(null, 'js/prism-worker/index.js', 'js/'),
+  js.bind(null, 'js/gzip-worker/index.js', 'js/'),
+  js.bind(null, 'js/svgo-worker/index.js', 'js/'),
+  js.bind(null, 'js/sw/index.js', ''),
+  js.bind(null, 'js/page/index.js', 'js/')
 );
 
 function copy() {
@@ -136,7 +133,7 @@ module.exports.build = gulp.series(
 );
 
 module.exports.watch = gulp.series(module.exports.build, () => {
-  gulp.watch(['src/css/*.scss'], gulp.series(css, html));
+  gulp.watch(['src/css/**/*.scss'], gulp.series(css, html));
   gulp.watch(['src/js/**/*.js'], allJs);
   gulp.watch(['src/*.html', 'src/plugin-data.json', 'src/changelog.json'], gulp.parallel(html, copy, allJs));
 });
