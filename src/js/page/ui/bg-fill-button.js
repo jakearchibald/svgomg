@@ -26,7 +26,7 @@ export default class BgFillButton extends FloatingActionButton {
     }
     else {
       this.container.classList.add('active');
-      this.setColor('#f444fe');
+      this.setColor('rgba(0, 0, 0, 0.7)');
     }
   }
 
