@@ -50,7 +50,7 @@ async function html() {
   }))
   .pipe(plugins.htmlmin({
     collapseBooleanAttributes: true,
-    collapseInlineTagWhitespace: true,
+    collapseInlineTagWhitespace: false,
     collapseWhitespace: true,
     decodeEntities: true,
     minifyJS: true,
