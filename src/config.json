@@ -1,124 +1,76 @@
 {
   "plugins": [
     {
-      "id": "cleanupAttrs",
-      "name": "Cleanup attribute whitespace"
+      "id": "removeDoctype",
+      "name": "Remove doctype"
     },
     {
-      "id": "cleanupEnableBackground",
-      "name": "Remove/tidy enable-background"
-    },
-    {
-      "id": "cleanupIDs",
-      "name": "Clean IDs"
-    },
-    {
-      "id": "cleanupListOfValues",
-      "name": "Round/rewrite number lists"
-    },
-    {
-      "id": "cleanupNumericValues",
-      "name": "Round/rewrite numbers"
-    },
-    {
-      "id": "collapseGroups",
-      "name": "Collapse useless groups"
-    },
-    {
-      "id": "convertColors",
-      "name": "Minify colours"
-    },
-    {
-      "id": "convertPathData",
-      "name": "Round/rewrite paths"
-    },
-    {
-      "id": "convertShapeToPath",
-      "name": "Shapes to (smaller) paths"
-    },
-    {
-      "id": "convertStyleToAttrs",
-      "name": "Style to attributes"
-    },
-    {
-      "id": "convertTransform",
-      "name": "Round/rewrite transforms"
-    },
-    {
-      "id": "mergePaths",
-      "name": "Merge paths"
-    },
-    {
-      "id": "moveElemsAttrsToGroup",
-      "name": "Move attrs to parent group"
-    },
-    {
-      "id": "moveGroupAttrsToElems",
-      "name": "Move group attrs to elements"
+      "id": "removeXMLProcInst",
+      "name": "Remove XML instructions"
     },
     {
       "id": "removeComments",
       "name": "Remove comments"
     },
     {
-      "id": "removeDesc",
-      "name": "Remove <desc>"
+      "id": "removeMetadata",
+      "name": "Remove <metadata>"
     },
     {
-      "id": "removeDimensions",
-      "name": "Prefer viewBox to width/height"
-    },
-    {
-      "id": "removeDoctype",
-      "name": "Remove doctype"
+      "id": "removeXMLNS",
+      "name": "Remove xmlns"
     },
     {
       "id": "removeEditorsNSData",
       "name": "Remove editor data"
     },
     {
-      "id": "removeEmptyAttrs",
-      "name": "Remove empty attrs"
+      "id": "cleanupAttrs",
+      "name": "Cleanup attribute whitespace"
     },
     {
-      "id": "removeEmptyContainers",
-      "name": "Remove empty containers"
+      "id": "inlineStyles",
+      "name": "Inline styles"
     },
     {
-      "id": "removeEmptyText",
-      "name": "Remove empty text"
+      "id": "minifyStyles",
+      "name": "Minify styles"
     },
     {
-      "id": "removeHiddenElems",
-      "name": "Remove hidden elements"
+      "id": "convertStyleToAttrs",
+      "name": "Style to attributes"
     },
     {
-      "id": "removeMetadata",
-      "name": "Remove <metadata>"
-    },
-    {
-      "id": "removeNonInheritableGroupAttrs",
-      "name": "Remove unneeded group attrs"
+      "id": "cleanupIDs",
+      "name": "Clean IDs"
     },
     {
       "id": "removeRasterImages",
       "name": "Remove raster images"
     },
     {
-      "id": "removeTitle",
-      "name": "Remove <title>"
+      "id": "removeUselessDefs",
+      "name": "Remove unused defs"
+    },
+    {
+      "id": "cleanupNumericValues",
+      "name": "Round/rewrite numbers"
+    },
+    {
+      "id": "cleanupListOfValues",
+      "name": "Round/rewrite number lists"
+    },
+    {
+      "id": "convertColors",
+      "name": "Minify colours"
     },
     {
       "id": "removeUnknownsAndDefaults",
       "name": "Remove unknowns & defaults"
     },
     {
-      "id": "removeUselessDefs",
-      "name": "Remove unused defs"
-    },
-    {
-      "id": "removeUnusedNS",
-      "name": "Remove unused namespaces"
+      "id": "removeNonInheritableGroupAttrs",
+      "name": "Remove unneeded group attrs"
     },
     {
       "id": "removeUselessStrokeAndFill",
@@ -129,16 +81,80 @@
       "name": "Remove viewBox"
     },
     {
-      "id": "removeXMLProcInst",
-      "name": "Remove XML instructions"
+      "id": "cleanupEnableBackground",
+      "name": "Remove/tidy enable-background"
+    },
+    {
+      "id": "removeHiddenElems",
+      "name": "Remove hidden elements"
+    },
+    {
+      "id": "removeEmptyText",
+      "name": "Remove empty text"
+    },
+    {
+      "id": "convertShapeToPath",
+      "name": "Shapes to (smaller) paths"
+    },
+    {
+      "id": "moveElemsAttrsToGroup",
+      "name": "Move attrs to parent group"
+    },
+    {
+      "id": "moveGroupAttrsToElems",
+      "name": "Move group attrs to elements"
+    },
+    {
+      "id": "collapseGroups",
+      "name": "Collapse useless groups"
+    },
+    {
+      "id": "convertPathData",
+      "name": "Round/rewrite paths"
+    },
+    {
+      "id": "convertTransform",
+      "name": "Round/rewrite transforms"
+    },
+    {
+      "id": "removeEmptyAttrs",
+      "name": "Remove empty attrs"
+    },
+    {
+      "id": "removeEmptyContainers",
+      "name": "Remove empty containers"
+    },
+    {
+      "id": "mergePaths",
+      "name": "Merge paths"
+    },
+    {
+      "id": "removeUnusedNS",
+      "name": "Remove unused namespaces"
     },
     {
       "id": "sortAttrs",
       "name": "Sort attrs"
     },
     {
-      "id": "transformsWithOnePath",
-      "name": "Optimise single-path SVG"
+      "id": "removeTitle",
+      "name": "Remove <title>"
+    },
+    {
+      "id": "removeDesc",
+      "name": "Remove <desc>"
+    },
+    {
+      "id": "removeDimensions",
+      "name": "Prefer viewBox to width/height"
+    },
+    {
+      "id": "removeStyleElement",
+      "name": "Remove style elements"
+    },
+    {
+      "id": "removeScriptElement",
+      "name": "Remove script elements"
     }
   ]
 }

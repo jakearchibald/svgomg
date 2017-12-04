@@ -1,19 +1,19 @@
-"use strict"
+import { EventEmitter } from 'events';
 
-var utils = require('../utils');
-var Slider = require('./material-slider');
+import { domReady } from '../utils';
+import MaterialSlider from './material-slider';
 
-class Settings extends (require('events').EventEmitter) {
+export default class Settings extends EventEmitter {
   constructor() {
     super();
 
     this._throttleTimeout = null;
 
-    utils.domReady.then(_ => {
-      this._pluginInputs = utils.toArray(
+    domReady.then(() => {
+      this._pluginInputs = Array.from(
         document.querySelectorAll('.settings .plugins input')
       );
-      this._globalInputs = utils.toArray(
+      this._globalInputs = Array.from(
         document.querySelectorAll('.settings .global input')
       );
 
@@ -21,9 +21,9 @@ class Settings extends (require('events').EventEmitter) {
       this._sliderMap = new WeakMap();
 
       // enhance ranges
-      utils.toArray(
+      Array.from(
         document.querySelectorAll('.settings input[type=range]')
-      ).forEach(el => this._sliderMap.set(el, new Slider(el)));
+      ).forEach(el => this._sliderMap.set(el, new MaterialSlider(el)));
 
       this.container = document.querySelector('.settings');
       this._scroller = document.querySelector('.settings-scroller');
@@ -36,7 +36,7 @@ class Settings extends (require('events').EventEmitter) {
       // This stops all text selection which is kinda sad.
       // I think this code will bite me.
       this._scroller.addEventListener('mousedown', e => {
-        if (utils.closest(e.target, 'input[type=range]')) return;
+        if (e.target.closest('input[type=range]')) return;
         e.preventDefault();
       });
     });
@@ -52,18 +52,11 @@ class Settings extends (require('events').EventEmitter) {
   }
 
   _onChange(event) {
-    // IE fires the change event rather than input for ranges
-    if (!utils.isIe && event.type == 'change' && event.target.type == 'range') {
-      // for ranges, the change event is just a dupe of the
-      // final input event
-      return;
-    }
-
     clearTimeout(this._throttleTimeout);
 
     // throttle range
     if (event.target.type == 'range') {
-      this._throttleTimeout = setTimeout(_ => this.emit('change'), 150);
+      this._throttleTimeout = setTimeout(() => this.emit('change'), 150);
     }
     else {
       this.emit('change');
@@ -71,29 +64,32 @@ class Settings extends (require('events').EventEmitter) {
   }
 
   setSettings(settings) {
-    this._globalInputs.forEach(inputEl => {
+    for (const inputEl of this._globalInputs) {
+      if (!(inputEl.name in settings)) continue;
+
       if (inputEl.type == 'checkbox') {
         inputEl.checked = settings[inputEl.name];
       }
       else if (inputEl.type == 'range') {
         this._sliderMap.get(inputEl).value = settings[inputEl.name];
       }
-    });
+    }
 
-    this._pluginInputs.forEach(inputEl => {
+    for (const inputEl of this._pluginInputs) {
+      if (!(inputEl.name in settings)) continue;
       inputEl.checked = settings.plugins[inputEl.name];
-    });
+    }
   }
 
   getSettings() {
     // fingerprint is used for cache lookups
-    var fingerprint = [];
+    const fingerprint = [];
 
-    var output = {
+    const output = {
       plugins: {}
     };
 
-    this._globalInputs.forEach(function(inputEl) {
+    this._globalInputs.forEach(inputEl => {
       if (inputEl.name != 'gzip' && inputEl.name != 'original') {
         if (inputEl.type == 'checkbox') {
           fingerprint.push(Number(inputEl.checked));
@@ -111,7 +107,7 @@ class Settings extends (require('events').EventEmitter) {
       }
     });
 
-    this._pluginInputs.forEach(function(inputEl) {
+    this._pluginInputs.forEach(inputEl => {
       fingerprint.push(Number(inputEl.checked));
       output.plugins[inputEl.name] = inputEl.checked;
     });
@@ -121,5 +117,3 @@ class Settings extends (require('events').EventEmitter) {
     return output;
   }
 }
-
-module.exports = Settings;

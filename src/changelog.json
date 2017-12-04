@@ -1,5 +1,12 @@
 [
   {
+    "version": "1.10.0",
+    "changes": [
+      "Latest SVGO",
+      "Minor performance improvements"
+    ]
+  },
+  {
     "version": "1.9.1",
     "changes": [
       "Fixed bug if 'show original' setting was saved"

@@ -1,9 +1,16 @@
-var utils = require('../utils');
+import {
+  strToEl,
+  domReady,
+  transitionToClass,
+  transitionFromClass,
+  readFileAsText
+} from '../utils';
+import { EventEmitter } from 'events';
 
-class FileDrop extends (require('events').EventEmitter) {
+export default class FileDrop extends EventEmitter {
   constructor() {
     super();
-    this.container = utils.strToEl(
+    this.container = strToEl(
       '<div class="drop-overlay">Drop it!</div>' +
     '');
 
@@ -11,7 +18,7 @@ class FileDrop extends (require('events').EventEmitter) {
     this._activeEnters = 0;
     this._currentEnteredElement = null;
 
-    utils.domReady.then(_ => {
+    domReady.then(_ => {
       document.addEventListener('dragover', event => event.preventDefault());
       document.addEventListener('dragenter', event => this._onDragEnter(event));
       document.addEventListener('dragleave', event => this._onDragLeave(event));
@@ -26,7 +33,7 @@ class FileDrop extends (require('events').EventEmitter) {
     this._currentEnteredElement = event.target;
 
     if (!this._activeEnters++) {
-      utils.transitionToClass(this.container);
+      transitionToClass(this.container);
     }
   }
 
@@ -34,7 +41,7 @@ class FileDrop extends (require('events').EventEmitter) {
     this._currentEnteredElement = null;
 
     if (!--this._activeEnters) {
-      utils.transitionFromClass(this.container);
+      transitionFromClass(this.container);
     }
   }
 
@@ -42,14 +49,14 @@ class FileDrop extends (require('events').EventEmitter) {
     event.preventDefault();
 
     this._activeEnters = 0;
-    utils.transitionFromClass(this.container);
-    var file = event.dataTransfer.files[0];
+    transitionFromClass(this.container);
+
+    const file = event.dataTransfer.files[0];
+    if (!file) return;
 
     this.emit('svgDataLoad', {
-      data: await utils.readFileAsText(file),
+      data: await readFileAsText(file),
       filename: file.name
     });
   }
 }
-
-module.exports = FileDrop;

@@ -1,44 +1,42 @@
-"use strict";
+import WorkerMessenger from './worker-messenger';
+import SvgFile from './svg-file';
 
-var SvgFile = require('./svg-file');
-
-class Svgo extends require('./worker-messenger') {
+export default class Svgo extends WorkerMessenger {
   constructor() {
     super('js/svgo-worker.js');
-    this._multiPass = false;
-    this._abortOnNextItter = false;
+    this._abortOnNextIteration = false;
     this._currentJob = Promise.resolve();
   }
 
-  load(svgText) {
-    return this._requestResponse({
+  async load(svgText) {
+    const {width, height} = await this._requestResponse({
       action: 'load',
       data: svgText
-    }).then(({width, height}) => {
-      return new SvgFile(svgText, width, height);
     });
+
+    return new SvgFile(svgText, width, height);
   }
 
-  process(settings, itterationCallback) {
-    return this._currentJob = this.abortCurrent().then(async _ => {
-      this._abortOnNextItter = false;
+  process(settings, iterationCallback) {
+    return this._currentJob = this.abortCurrent().then(async () => {
+      this._abortOnNextIteration = false;
 
-      var result = await this._requestResponse({
+      let result = await this._requestResponse({
         action: 'process',
         settings
       });
 
       var resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
 
-      itterationCallback(resultFile);
+      iterationCallback(resultFile);
 
       if (settings.multipass) {
         while (result = await this.nextPass()) {
-          if (this._abortOnNextItter) {
+          if (this._abortOnNextIteration) {
             throw Error('abort');
           }
           resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
-          itterationCallback(resultFile);
+          iterationCallback(resultFile);
         }
       }
 
@@ -54,12 +52,12 @@ class Svgo extends require('./worker-messenger') {
   }
 
   async abortCurrent() {
-    this._abortOnNextItter = true;
+    this._abortOnNextIteration = true;
+    await this._currentJob;
+  }
 
-    try {
-      await this._currentJob;
-    } catch(e){}
+  async release() {
+    await this.abortCurrent();
+    super.release();
   }
 }
-
-module.exports = Svgo;

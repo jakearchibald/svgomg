@@ -38,7 +38,7 @@
     overflow-y: auto;
     @include display-flex;
     @include flex-flow(column);
-  
+
     &.transition {
       @include transition-transform(0.2s ease-out);
     }
@@ -112,6 +112,12 @@
       @include flex(none);
       margin: 0 0 0 auto;
     }
+
+    & .menu-item-text {
+      margin-right: 28px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   & .menu-input {
@@ -155,7 +161,7 @@
     }
   }
 
-  & .select-file-input {
+  & .load-file-input {
     display: none;
   }
 }

@@ -1,6 +1,6 @@
-"use strict";
+import WorkerMessenger from './worker-messenger';
 
-class Prism extends require('./worker-messenger') {
+export default class Prism extends WorkerMessenger {
   constructor() {
     super('js/prism-worker.js');
   }
@@ -11,5 +11,3 @@ class Prism extends require('./worker-messenger') {
     });
   }
 }
-
-module.exports = Prism;

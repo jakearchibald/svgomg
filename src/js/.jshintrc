@@ -1,5 +1,0 @@
-{
-  "esnext": true,
-  "browser": true,
-  "browserify": true
-}

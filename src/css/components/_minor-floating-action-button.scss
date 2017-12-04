@@ -36,4 +36,17 @@
     fill: #000;
     z-index: 1;
   }
+
+  & .spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    border-color: #00bcd4;
+  }
+
+  & .ripple {
+    background: #00bcd4;
+  }
 }

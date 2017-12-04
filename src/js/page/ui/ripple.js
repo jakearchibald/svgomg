@@ -1,8 +1,8 @@
-var utils = require('../utils');
+import { strToEl } from '../utils';
 
-class Ripple {
+export default class Ripple {
   constructor() {
-    this.container = utils.strToEl('<div class="ripple"></div>');
+    this.container = strToEl('<div class="ripple"></div>');
   }
 
   animate() {
@@ -11,5 +11,3 @@ class Ripple {
     this.container.classList.add('animate');
   }
 }
-
-module.exports = Ripple;

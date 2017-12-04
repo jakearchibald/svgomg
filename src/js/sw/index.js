@@ -1,21 +1,16 @@
-require('regenerator-runtime/runtime');
+import {idbKeyval as storage} from '../utils/storage.js';
 
-var storage = require('../utils/storage');
+const version = SVGOMG_VERSION;
+const cachePrefix = 'svgomg-';
+const staticCacheName = `${cachePrefix}static-${version}`;
+const fontCacheName = `${cachePrefix}fonts`;
+const expectedCaches = [staticCacheName, fontCacheName];
 
-// TODO: use come kind of semver lib?
-// Pattern here is
-// a.b.c
-// a: version-isolated change, don't let both versions run together
-// b: new feature
-// c: bug fix
-// TODO: find a way to do this without bringing the whole log in
-var version = require('../../changelog.json')[0].version;
-var cacheVerion = version.split('.')[0];
+addEventListener('install', event => {
+  event.waitUntil((async () => {
+    const activeVersionPromise = storage.get('active-version');
+    const cache = await caches.open(staticCacheName);
 
-self.addEventListener('install', function(event) {
-  event.waitUntil(async _ => {
-    var activeVersionPromise = storage.get('active-version');
-    var cache = await caches.open('svgomg-static-' + cacheVerion);
     await cache.addAll([
       './',
       'imgs/icon.png',
@@ -28,52 +23,48 @@ self.addEventListener('install', function(event) {
       'https://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata'
     ]);
 
-    var activeVersion = await activeVersionPromise;
+    const activeVersion = await activeVersionPromise;
 
+    // If it's a major version change, don't skip waiting
     if (!activeVersion || activeVersion.split('.')[0] === version.split('.')[0]) {
       self.skipWaiting();
     }
-  }());
+  })());
 });
 
-var expectedCaches = [
-  'svgomg-static-' + cacheVerion,
-];
-
-self.addEventListener('activate', function(event) {
-  event.waitUntil(async _ => {
-    // remove caches beginning "svgomg-" that aren't in
-    // expectedCaches
-    var cacheNames = await caches.keys();
-    for (var cacheName of cacheNames) {
-      if (!/^svgomg-/.test(cacheName)) continue;
-      if (expectedCaches.indexOf(cacheName) == -1) {
-        await caches.delete(cacheName);
-      }
+addEventListener('activate', event => {
+  event.waitUntil((async () => {
+    // remove caches beginning "svgomg-" that aren't in expectedCaches
+    for (const cacheName of await caches.keys()) {
+      if (!cacheName.startsWith(cachePrefix)) continue;
+      if (!expectedCaches.includes(cacheName)) await caches.delete(cacheName);
     }
 
     await storage.set('active-version', version);
-  }());
+  })());
 });
 
 async function handleFontRequest(request) {
-  var match = await caches.match(request);
+  const match = await caches.match(request);
   if (match) return match;
-  var response = await fetch(request.clone());
-  var fontCache = await caches.open('svgomg-fonts');
+
+  const [response, fontCache] = Promise.all([
+    await fetch(request),
+    await caches.open(fontCacheName)
+  ]);
+
   fontCache.put(request, response.clone());
   return response;
 }
 
-self.addEventListener('fetch', function(event) {
-  var url = new URL(event.request.url);
+addEventListener('fetch', event => {
+  const url = new URL(event.request.url);
 
   if (url.host == 'fonts.gstatic.com') {
     event.respondWith(handleFontRequest(event.request));
+    return;
   }
-  else {
-    event.respondWith(
-      caches.match(event.request).then(r => r || fetch(event.request))
-    );
-  }
+  event.respondWith(
+    caches.match(event.request).then(r => r || fetch(event.request))
+  );
 });

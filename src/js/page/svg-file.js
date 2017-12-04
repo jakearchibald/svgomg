@@ -1,8 +1,6 @@
-"use strict";
+import { gzip } from './gzip';
 
-var gzip = new (require('./gzip'));
-
-class SvgFile {
+export default class SvgFile {
   constructor(text, width, height) {
     this.text = text;
     this._compressedSize = null;
@@ -18,8 +16,7 @@ class SvgFile {
     }
 
     if (!this._compressedSize) {
-      this._compressedSize = gzip.compress(this.text)
-        .then(r => r.byteLength);
+      this._compressedSize = gzip.compress(this.text).then(r => r.byteLength);
     }
 
     return this._compressedSize;
@@ -43,13 +40,9 @@ class SvgFile {
   }
 
   release() {
-    if (!this._url) {
-      return;
-    }
+    if (!this._url) return;
 
     this._blob = null;
     URL.revokeObjectURL(this._url);
   }
 }
-
-module.exports = SvgFile;
