@@ -97,7 +97,7 @@ const pluginsData = {
 };
 
 // Clone is currently broken. Hack it:
-JSAPI.prototype.clone = function () {
+function cloneParsedSvg(svg) {
   const clones = new Map();
 
   function cloneKeys(target, obj) {
@@ -160,8 +160,8 @@ JSAPI.prototype.clone = function () {
     return objClone;
   }
 
-  return clone(this);
-};
+  return clone(svg);
+}
 
 // Arrange plugins by type - this is what plugins() expects
 function optimizePluginsArray(plugins) {
@@ -221,7 +221,7 @@ function* multipassCompress(settings) {
     }
   }
 
-  const svg = parsedSvg.clone();
+  const svg = cloneParsedSvg(parsedSvg);
   let svgData;
   let previousDataLength;
 
