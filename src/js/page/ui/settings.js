@@ -64,18 +64,21 @@ export default class Settings extends EventEmitter {
   }
 
   setSettings(settings) {
-    this._globalInputs.forEach(inputEl => {
+    for (const inputEl of this._globalInputs) {
+      if (!(inputEl.name in settings)) continue;
+
       if (inputEl.type == 'checkbox') {
         inputEl.checked = settings[inputEl.name];
       }
       else if (inputEl.type == 'range') {
         this._sliderMap.get(inputEl).value = settings[inputEl.name];
       }
-    });
+    }
 
-    this._pluginInputs.forEach(inputEl => {
+    for (const inputEl of this._pluginInputs) {
+      if (!(inputEl.name in settings)) continue;
       inputEl.checked = settings.plugins[inputEl.name];
-    });
+    }
   }
 
   getSettings() {
