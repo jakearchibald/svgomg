@@ -6,7 +6,8 @@ export default class WorkerMessenger {
     // worker jobs awaiting response { [requestId]: [ resolve, reject ] }
     this._pending = {};
     this._url = url;
-    this._worker = null;
+    this._worker = new Worker(this._url);
+    this._worker.onmessage = event => this._onMessage(event);
   }
 
   async release() {
@@ -14,19 +15,12 @@ export default class WorkerMessenger {
       this._worker.terminate();
       this._worker = null;
     }
-    Object.keys(this._pending).forEach(id => {
+    for (const key of Object.keys(this._pending)) {
       this._fulfillPending(id, null, new Error("Worker terminated: " + this._url));
-    });
+    }
   }
 
   _postMessage(message) {
-    if (!this._worker) {
-      this._worker = new Worker(this._url);
-      this._worker.onmessage = (event) => {
-        this._onMessage(event);
-      };
-    }
-
     this._worker.postMessage(message);
   }
 
