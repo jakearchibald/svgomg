@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.10.1",
+    "changes": [
+      "Fixing version tracking regression"
+    ]
+  },
+  {
     "version": "1.10.0",
     "changes": [
       "Latest SVGO",
