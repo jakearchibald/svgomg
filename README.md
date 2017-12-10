@@ -19,11 +19,3 @@ Run dev server:
 ```sh
 npm run serve
 ```
-
-Or, run without the offline capabilities:
-
-```sh
-npm run serve-no-sw
-```
-
-Running without offline capabilities means you get the latest version each time you hit refresh. The dist offline-first mobile serves the cached version first then checks for updates in the background.
