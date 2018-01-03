@@ -76,7 +76,7 @@ export default class Settings extends EventEmitter {
     }
 
     for (const inputEl of this._pluginInputs) {
-      if (!(inputEl.name in settings)) continue;
+      if (!(inputEl.name in settings.plugins)) continue;
       inputEl.checked = settings.plugins[inputEl.name];
     }
   }
