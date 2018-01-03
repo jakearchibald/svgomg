@@ -105,7 +105,7 @@ function copy() {
   return gulp.src([
     // Copy all files
     'src/**',
-    // Include the .well-know folder
+    // Include the .well-known folder
     'src/.**/*',
     // Exclude the following files
     // (other tasks will handle the copying of these files)
