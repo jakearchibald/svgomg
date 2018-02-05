@@ -15,4 +15,15 @@
     min-width: 11.3em;
     border-radius: 2px;
   }
+
+  .success {
+    color: green;
+  }
+  .error {
+    color: red;
+  }
+  .spacer {
+    display: inline-block;
+    width: 1em;
+  }
 }
