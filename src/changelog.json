@@ -1,5 +1,12 @@
 [
   {
+    "version": "1.10.3",
+    "changes": [
+      "Improving results output (thanks Pierre Giraud)",
+      "Renaming 'code' tab 'markup' (thanks Pierre Giraud)"
+    ]
+  },
+  {
     "version": "1.10.2",
     "changes": [
       "Fixing remembered-settings regression"
