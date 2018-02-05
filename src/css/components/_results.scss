@@ -13,16 +13,16 @@
     font-size: 0.9rem;
     padding-right: 25px;
     border-radius: 2px;
+
+    .decrease {
+      color: green;
+    }
+    .increase {
+      color: red;
+    }
   }
 
-  .success {
-    color: green;
-  }
-  .error {
-    color: red;
-  }
-  .spacer {
-    display: inline-block;
-    width: 1em;
+  .diff {
+    margin-left: 0.5em;
   }
 }

@@ -18,8 +18,7 @@ export default class Results {
   constructor() {
     this.container = strToEl(
       '<div class="results">' +
-        '<span class="size"></span>' +
-        '<span class="spacer"></span>' +
+        '<span class="size"></span> ' +
         '<span class="diff"></span>' +
       '</div>' +
     '');
@@ -36,24 +35,19 @@ export default class Results {
       this._sizeEl.textContent = humanSize(size);
     }
 
-    this._diffEl.classList.remove('success');
-    this._diffEl.classList.remove('error');
+    this._diffEl.classList.remove('decrease', 'increase');
 
     // just displaying a single size?
     if (!comparisonSize) {
       this._diffEl.textContent = '';
       return;
     }
-    else if (size == comparisonSize) {
-      this._diffEl.textContent = 'no change';
-    }
-    else if (size > comparisonSize) {
-      this._diffEl.textContent = '+' + round(size / comparisonSize * 100 - 100, 2) + '%';
-      this._diffEl.classList.add('error');
+    else if (size === comparisonSize) {
+      this._diffEl.textContent = '100%';
     }
     else {
-      this._diffEl.textContent = '-' + round(100 - size / comparisonSize * 100, 2) + '%';
-      this._diffEl.classList.add('success');
+      this._diffEl.textContent = round(size / comparisonSize * 100, 2) + '%';
+      this._diffEl.classList.add(size > comparisonSize ? 'increase' : 'decrease');
     }
   }
 }
