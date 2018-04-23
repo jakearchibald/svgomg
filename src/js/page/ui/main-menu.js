@@ -24,6 +24,12 @@ export default class MainMenu extends EventEmitter {
       this._overlay = this.container.querySelector('.overlay');
       this._menu = this.container.querySelector('.menu');
 
+      document.addEventListener('keydown', e => {
+        if (e.which == 79 && (e.ctrlKey || e.metaKey)) {
+          this._onLoadFileClick(e)
+        }
+      })
+
       document.querySelector('.menu-btn')
         .addEventListener('click', e => this._onMenuButtonClick(e));
 
