@@ -24,12 +24,6 @@ export default class MainMenu extends EventEmitter {
       this._overlay = this.container.querySelector('.overlay');
       this._menu = this.container.querySelector('.menu');
 
-      document.addEventListener('keydown', e => {
-        if (e.which == 79 && (e.ctrlKey || e.metaKey)) {
-          this._onLoadFileClick(e)
-        }
-      })
-
       document.querySelector('.menu-btn')
         .addEventListener('click', e => this._onMenuButtonClick(e));
 
@@ -58,6 +52,10 @@ export default class MainMenu extends EventEmitter {
 
   stopSpinner() {
     this._spinner.hide();
+  }
+
+  showFilePicker() {
+    this._loadFileInput.click();
   }
 
   _onOverlayClick(event) {
@@ -90,7 +88,7 @@ export default class MainMenu extends EventEmitter {
   _onLoadFileClick(event) {
     event.preventDefault();
     event.target.blur();
-    this._loadFileInput.click();
+    this.showFilePicker();
   }
 
   async _onFileInputChange(event) {
