@@ -54,6 +54,10 @@ export default class MainMenu extends EventEmitter {
     this._spinner.hide();
   }
 
+  showFilePicker() {
+    this._loadFileInput.click();
+  }
+
   _onOverlayClick(event) {
     event.preventDefault();
     this.hide();
@@ -84,7 +88,7 @@ export default class MainMenu extends EventEmitter {
   _onLoadFileClick(event) {
     event.preventDefault();
     event.target.blur();
-    this._loadFileInput.click();
+    this.showFilePicker();
   }
 
   async _onFileInputChange(event) {

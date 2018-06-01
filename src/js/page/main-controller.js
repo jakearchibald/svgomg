@@ -46,6 +46,7 @@ export default class MainController {
     this._dropUi.on('svgDataLoad', e => this._onInputChange(e));
     this._mainMenuUi.on('error', ({error}) => this._handleError(error));
     this._viewTogglerUi.on('change', e => this._onViewSelectionChange(e));
+    window.addEventListener('keydown', e => this._onGlobalKeyDown(e));
 
     // state
     this._inputItem = null;
@@ -117,6 +118,13 @@ export default class MainController {
         })();
       }
     });
+  }
+
+  _onGlobalKeyDown(event) {
+    if (event.key === 'o' && (event.ctrlKey || event.metaKey)) {
+      event.preventDefault();
+      this._mainMenuUi.showFilePicker();
+    }
   }
 
   _onViewSelectionChange(event) {

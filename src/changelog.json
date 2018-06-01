@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.11.0",
+    "changes": [
+      "Ctrl/cmd-o now opens file picker (thanks Patrick Kettner)"
+    ]
+  },
+  {
     "version": "1.10.3",
     "changes": [
       "Improving results output (thanks Pierre Giraud)",
