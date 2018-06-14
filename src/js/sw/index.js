@@ -48,9 +48,9 @@ async function handleFontRequest(request) {
   const match = await caches.match(request);
   if (match) return match;
 
-  const [response, fontCache] = Promise.all([
-    await fetch(request),
-    await caches.open(fontCacheName)
+  const [response, fontCache] = await Promise.all([
+    fetch(request),
+    caches.open(fontCacheName)
   ]);
 
   fontCache.put(request, response.clone());
