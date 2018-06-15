@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.11.1",
+    "changes": [
+      "Removing multipass until I figure out why it's broken"
+    ]
+  },
+  {
     "version": "1.11.0",
     "changes": [
       "Ctrl/cmd-o now opens file picker (thanks Patrick Kettner)"
