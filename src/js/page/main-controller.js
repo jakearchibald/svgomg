@@ -240,7 +240,16 @@ export default class MainController {
       this._settingsUi.setSettings(settings);
       this._compressSvg(settings);
     } else {
-      alert('default configuration not found, reload to reset the configuration');
+      const toast = this._toastsUi.show("Default configuration not found, reload to reset the configuration", {
+        buttons: ['reload', 'dismiss']
+      });
+
+      const answer = await toast.answer;
+
+      if (answer == 'reload') {
+        this._reloading = true;
+        location.reload();
+      }
     }
   }
 
