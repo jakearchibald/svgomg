@@ -233,13 +233,14 @@ export default class MainController {
   }
 
   async _resetConfig() {
+    storage.delete('settings');
+
     const settings = await storage.get('default-settings');
     if (settings) {
-      storage.delete('settings');
       this._settingsUi.setSettings(settings);
       this._compressSvg(settings);
     } else {
-      alert('default configuration not found');
+      alert('default configuration not found, reload to reset the configuration');
     }
   }
 
