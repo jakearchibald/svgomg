@@ -237,6 +237,7 @@ export default class MainController {
     if (settings) {
       storage.delete('settings');
       this._settingsUi.setSettings(settings);
+      this._compressSvg(settings);
     } else {
       alert('default configuration not found');
     }
@@ -250,6 +251,7 @@ export default class MainController {
   }
 
   async _compressSvg(settings, iterationCallback = function(){}) {
+    if (this._inputItem === null) return;
     const thisJobId = this._latestCompressJobId = Math.random();
 
     await svgo.abortCurrent();
