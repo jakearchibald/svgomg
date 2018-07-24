@@ -1,4 +1,3 @@
-import { idbKeyval as storage } from '../../utils/storage';
 import {
   domReady,
   transitionFromClass,
@@ -95,7 +94,7 @@ export default class MainMenu extends EventEmitter {
   }
 
   _onResetConfig(event) {
-    storage.delete('settings');
+    this.emit('reset-config');
   }
 
   async _onFileInputChange(event) {

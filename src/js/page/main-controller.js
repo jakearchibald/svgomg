@@ -45,6 +45,7 @@ export default class MainController {
     this._mainMenuUi.on('svgDataLoad', e => this._onInputChange(e));
     this._dropUi.on('svgDataLoad', e => this._onInputChange(e));
     this._mainMenuUi.on('error', ({error}) => this._handleError(error));
+    this._mainMenuUi.on('reset-config', () => this._resetConfig());
     this._viewTogglerUi.on('change', e => this._onViewSelectionChange(e));
     window.addEventListener('keydown', e => this._onGlobalKeyDown(e));
 
@@ -228,6 +229,16 @@ export default class MainController {
       if (await storage.get('default-settings')) return;
       const defaultSettings = this._settingsUi.getSettings();
       this._saveSettings(defaultSettings, 'default-settings');
+    }
+  }
+
+  async _resetConfig() {
+    const settings = await storage.get('default-settings');
+    if (settings) {
+      storage.delete('settings');
+      this._settingsUi.setSettings(settings);
+    } else {
+      alert('default configuration not found');
     }
   }
 
