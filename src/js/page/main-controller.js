@@ -222,14 +222,20 @@ export default class MainController {
 
   async _loadSettings() {
     const settings = await storage.get('settings');
-    if (settings) this._settingsUi.setSettings(settings);
+    if (settings) {
+      this._settingsUi.setSettings(settings);
+    } else {
+      if (await storage.get('default-settings')) return;
+      const defaultSettings = this._settingsUi.getSettings();
+      this._saveSettings(defaultSettings, 'default-settings');
+    }
   }
 
-  _saveSettings(settings) {
+  _saveSettings(settings, storageKey='settings') {
     const copy = Object.assign({}, settings);
     // doesn't make sense to retain the "show original" option
     delete copy.original;
-    storage.set('settings', copy);
+    storage.set(storageKey, copy);
   }
 
   async _compressSvg(settings, iterationCallback = function(){}) {
