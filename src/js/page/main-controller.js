@@ -224,7 +224,7 @@ export default class MainController {
   async _loadSettings() {
     const settings = await storage.get('settings');
     if (settings) {
-      this._settingsUi.setSettings(settings);
+      this._saveSettings(settings);
     } else {
       if (await storage.get('default-settings')) return;
       const defaultSettings = this._settingsUi.getSettings();
@@ -238,8 +238,7 @@ export default class MainController {
 
     const defaultSettings = await storage.get('default-settings');
     if (defaultSettings) {
-      this._settingsUi.setSettings(defaultSettings);
-      this._compressSvg(defaultSettings);
+      this._saveSettings(defaultSettings);
 
       const toast = this._toastsUi.show("Configuration reset", {
         buttons: ['undo', 'dismiss']
@@ -247,10 +246,7 @@ export default class MainController {
 
       const answer = await toast.answer;
 
-      if (answer == 'undo') {
-        this._settingsUi.setSettings(originalSettings);
-        this._compressSvg(originalSettings);
-      }
+      if (answer == 'undo') this._saveSettings(originalSettings);
     } else {
       const toast = this._toastsUi.show("Default configuration not found, reload to reset the configuration", {
         buttons: ['undo', 'reload', 'dismiss']
@@ -259,8 +255,7 @@ export default class MainController {
       const answer = await toast.answer;
 
       if (answer == 'undo') {
-        this._settingsUi.setSettings(originalSettings);
-        this._compressSvg(originalSettings);
+        this._saveSettings(originalSettings);
       } else if (answer == 'reload') {
         this._reloading = true;
         location.reload();
@@ -273,6 +268,9 @@ export default class MainController {
     // doesn't make sense to retain the "show original" option
     delete copy.original;
     storage.set(storageKey, copy);
+
+    this._settingsUi.setSettings(settings);
+    this._compressSvg(settings);
   }
 
   async _compressSvg(settings, iterationCallback = function(){}) {
