@@ -45,6 +45,7 @@ export default class MainController {
     this._mainMenuUi.on('svgDataLoad', e => this._onInputChange(e));
     this._dropUi.on('svgDataLoad', e => this._onInputChange(e));
     this._mainMenuUi.on('error', ({error}) => this._handleError(error));
+    this._mainMenuUi.on('reset-config', () => this._resetConfig());
     this._viewTogglerUi.on('change', e => this._onViewSelectionChange(e));
     window.addEventListener('keydown', e => this._onGlobalKeyDown(e));
 
@@ -222,17 +223,58 @@ export default class MainController {
 
   async _loadSettings() {
     const settings = await storage.get('settings');
-    if (settings) this._settingsUi.setSettings(settings);
+    if (settings) {
+      this._saveSettings(settings);
+    } else {
+      if (await storage.get('default-settings')) return;
+      const defaultSettings = this._settingsUi.getSettings();
+      this._saveSettings(defaultSettings, 'default-settings');
+    }
   }
 
-  _saveSettings(settings) {
+  async _resetConfig() {
+    const originalSettings = await storage.get('settings');
+    storage.delete('settings');
+
+    const defaultSettings = await storage.get('default-settings');
+    if (defaultSettings) {
+      this._saveSettings(defaultSettings);
+
+      const toast = this._toastsUi.show("Configuration reset", {
+        buttons: ['undo', 'dismiss']
+      });
+
+      const answer = await toast.answer;
+
+      if (answer == 'undo') this._saveSettings(originalSettings);
+    } else {
+      const toast = this._toastsUi.show("Default configuration not found, reload to reset the configuration", {
+        buttons: ['undo', 'reload', 'dismiss']
+      });
+
+      const answer = await toast.answer;
+
+      if (answer == 'undo') {
+        this._saveSettings(originalSettings);
+      } else if (answer == 'reload') {
+        this._reloading = true;
+        location.reload();
+      }
+    }
+  }
+
+  _saveSettings(settings, storageKey='settings') {
     const copy = Object.assign({}, settings);
     // doesn't make sense to retain the "show original" option
     delete copy.original;
-    storage.set('settings', copy);
+    storage.set(storageKey, copy);
+
+    this._settingsUi.setSettings(settings);
+    this._compressSvg(settings);
   }
 
   async _compressSvg(settings, iterationCallback = function(){}) {
+    if (this._inputItem === null) return;
     const thisJobId = this._latestCompressJobId = Math.random();
 
     await svgo.abortCurrent();

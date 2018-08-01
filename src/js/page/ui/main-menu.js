@@ -19,6 +19,7 @@ export default class MainMenu extends EventEmitter {
       this._loadFileInput = document.querySelector('.load-file-input');
       this._pasteInput = document.querySelector('.paste-input');
       this._loadDemoBtn = document.querySelector('.load-demo');
+      this._resetConfig = document.querySelector('.reset-config');
       this._loadFileBtn = document.querySelector('.load-file');
       this._pasteLabel = document.querySelector('.menu-input');
       this._overlay = this.container.querySelector('.overlay');
@@ -31,6 +32,7 @@ export default class MainMenu extends EventEmitter {
 
       this._loadFileBtn.addEventListener('click', e => this._onLoadFileClick(e));
       this._loadDemoBtn.addEventListener('click', e => this._onLoadDemoClick(e));
+      this._resetConfig.addEventListener('click', e => this._onResetConfig(e));
       this._loadFileInput.addEventListener('change', e => this._onFileInputChange(e));
       this._pasteInput.addEventListener('input', e => this._onTextInputChange(e));
     });
@@ -89,6 +91,10 @@ export default class MainMenu extends EventEmitter {
     event.preventDefault();
     event.target.blur();
     this.showFilePicker();
+  }
+
+  _onResetConfig(event) {
+    this.emit('reset-config');
   }
 
   async _onFileInputChange(event) {
