@@ -239,14 +239,26 @@ export default class MainController {
     if (settings) {
       this._settingsUi.setSettings(settings);
       this._compressSvg(settings);
-    } else {
-      const toast = this._toastsUi.show("Default configuration not found, reload to reset the configuration", {
-        buttons: ['reload', 'dismiss']
+
+      const toast = this._toastsUi.show("Configuration reset", {
+        buttons: ['undo', 'dismiss']
       });
 
       const answer = await toast.answer;
 
-      if (answer == 'reload') {
+      if (answer == 'undo') {
+        // TODO: undo the reset
+      }
+    } else {
+      const toast = this._toastsUi.show("Default configuration not found, reload to reset the configuration", {
+        buttons: ['undo', 'reload', 'dismiss']
+      });
+
+      const answer = await toast.answer;
+
+      if (answer == 'undo') {
+        // TODO: undo the reset
+      } else if (answer == 'reload') {
         this._reloading = true;
         location.reload();
       }
