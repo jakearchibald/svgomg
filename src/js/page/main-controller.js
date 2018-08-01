@@ -233,12 +233,13 @@ export default class MainController {
   }
 
   async _resetConfig() {
+    const originalSettings = await storage.get('settings');
     storage.delete('settings');
 
-    const settings = await storage.get('default-settings');
-    if (settings) {
-      this._settingsUi.setSettings(settings);
-      this._compressSvg(settings);
+    const defaultSettings = await storage.get('default-settings');
+    if (defaultSettings) {
+      this._settingsUi.setSettings(defaultSettings);
+      this._compressSvg(defaultSettings);
 
       const toast = this._toastsUi.show("Configuration reset", {
         buttons: ['undo', 'dismiss']
@@ -247,7 +248,8 @@ export default class MainController {
       const answer = await toast.answer;
 
       if (answer == 'undo') {
-        // TODO: undo the reset
+        this._settingsUi.setSettings(originalSettings);
+        this._compressSvg(originalSettings);
       }
     } else {
       const toast = this._toastsUi.show("Default configuration not found, reload to reset the configuration", {
@@ -257,7 +259,8 @@ export default class MainController {
       const answer = await toast.answer;
 
       if (answer == 'undo') {
-        // TODO: undo the reset
+        this._settingsUi.setSettings(originalSettings);
+        this._compressSvg(originalSettings);
       } else if (answer == 'reload') {
         this._reloading = true;
         location.reload();
