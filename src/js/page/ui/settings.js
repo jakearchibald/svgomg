@@ -19,8 +19,8 @@ export default class Settings extends EventEmitter {
       );
 
       this._resetRipple = new Ripple();
-      const resetBtn = document.querySelector('.setting-reset');
-      resetBtn.appendChild(this._resetRipple.container);
+      this._resetBtn = document.querySelector('.setting-reset');
+      this._resetBtn.appendChild(this._resetRipple.container);
 
       // map real range elements to Slider instances
       this._sliderMap = new WeakMap();
@@ -36,7 +36,7 @@ export default class Settings extends EventEmitter {
       this.container.addEventListener('change', e => this._onChange(e));
       this.container.addEventListener('input', e => this._onChange(e));
       this._scroller.addEventListener('wheel', e => this._onMouseWheel(e));
-      resetBtn.addEventListener('click', e => this._onReset(e));
+      this._resetBtn.addEventListener('click', e => this._onReset(e));
 
       // Stop double-tap text selection.
       // This stops all text selection which is kinda sad.
