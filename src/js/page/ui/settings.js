@@ -20,7 +20,7 @@ export default class Settings extends EventEmitter {
 
       this._resetRipple = new Ripple();
       const resetBtn = document.querySelector('.setting-reset');
-      resetBtn.appendChild(this._resetRipple.container)
+      resetBtn.appendChild(this._resetRipple.container);
 
       // map real range elements to Slider instances
       this._sliderMap = new WeakMap();
