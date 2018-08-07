@@ -36,7 +36,7 @@
       width: 25px;
       height: 25px;
       top: -5px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.5), 
+      box-shadow: 0 1px 3px rgba(0,0,0,0.5),
                 inset 0 0 0 2px #3F51B5;
     }
   }
@@ -63,4 +63,26 @@
   font-weight: normal;
   font-size: 0.9rem;
   color: #898989;
+}
+
+.setting-reset-row {
+  padding: 12px 16px 16px;
+  text-align: right;
+}
+
+.setting-reset {
+  text-transform: uppercase;
+  color: white;
+  background: #3F51B5;
+  padding: 9px 14px;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+
+  & .ripple {
+    top: -94%;
+    bottom: auto;
+    padding-top: 100%;
+  }
 }
