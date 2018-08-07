@@ -42,6 +42,7 @@ export default class MainController {
 
     // ui events
     this._settingsUi.on('change', () => this._onSettingsChange());
+    this._settingsUi.on('reset', oldSettings => this._onSettingsReset(oldSettings));
     this._mainMenuUi.on('svgDataLoad', e => this._onInputChange(e));
     this._dropUi.on('svgDataLoad', e => this._onInputChange(e));
     this._mainMenuUi.on('error', ({error}) => this._handleError(error));
@@ -173,6 +174,18 @@ export default class MainController {
     const settings = this._settingsUi.getSettings();
     this._saveSettings(settings);
     this._compressSvg(settings);
+  }
+
+  async _onSettingsReset(oldSettings) {
+    const toast = this._toastsUi.show("Settings reset", {
+      buttons: ['undo', 'dismiss'],
+      duration: 5000
+    });
+
+    if ((await toast.answer) === 'undo') {
+      this._settingsUi.setSettings(oldSettings);
+      this._onSettingsChange();
+    }
   }
 
   async _onInputChange(event) {

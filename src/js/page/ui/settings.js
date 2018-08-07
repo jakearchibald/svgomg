@@ -2,6 +2,7 @@ import { EventEmitter } from 'events';
 
 import { domReady } from '../utils';
 import MaterialSlider from './material-slider';
+import Ripple from './ripple';
 
 export default class Settings extends EventEmitter {
   constructor() {
@@ -17,6 +18,10 @@ export default class Settings extends EventEmitter {
         document.querySelectorAll('.settings .global input')
       );
 
+      this._resetRipple = new Ripple();
+      this._resetBtn = document.querySelector('.setting-reset');
+      this._resetBtn.appendChild(this._resetRipple.container);
+
       // map real range elements to Slider instances
       this._sliderMap = new WeakMap();
 
@@ -31,6 +36,7 @@ export default class Settings extends EventEmitter {
       this.container.addEventListener('change', e => this._onChange(e));
       this.container.addEventListener('input', e => this._onChange(e));
       this._scroller.addEventListener('wheel', e => this._onMouseWheel(e));
+      this._resetBtn.addEventListener('click', e => this._onReset(e));
 
       // Stop double-tap text selection.
       // This stops all text selection which is kinda sad.
@@ -61,6 +67,27 @@ export default class Settings extends EventEmitter {
     else {
       this.emit('change');
     }
+  }
+
+  _onReset() {
+    this._resetRipple.animate();
+    const oldSettings = this.getSettings();
+    // Set all inputs according to their initial attributes
+    for (const inputEl of this._globalInputs) {
+      if (inputEl.type == 'checkbox') {
+        inputEl.checked = inputEl.hasAttribute('checked');
+      }
+      else if (inputEl.type == 'range') {
+        this._sliderMap.get(inputEl).value = inputEl.getAttribute('value');
+      }
+    }
+
+    for (const inputEl of this._pluginInputs) {
+      inputEl.checked = inputEl.hasAttribute('checked');
+    }
+
+    this.emit('reset', oldSettings);
+    this.emit('change');
   }
 
   setSettings(settings) {
