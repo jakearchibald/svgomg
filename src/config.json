@@ -113,6 +113,10 @@
       "name": "Round/rewrite paths"
     },
     {
+      "id": "convertEllipseToCircle",
+      "name": "Convert non-eccentric <ellipse> to <circle>"
+    },
+    {
       "id": "convertTransform",
       "name": "Round/rewrite transforms"
     },
@@ -133,8 +137,20 @@
       "name": "Remove unused namespaces"
     },
     {
+      "id": "removeOffCanvasPaths",
+      "name": "Remove elements out of the viewbox"
+    },
+    {
+      "id": "reusePaths",
+      "name": "Replace duplicate elements with links"
+    },
+    {
       "id": "sortAttrs",
       "name": "Sort attrs"
+    },
+    {
+      "id": "sortDefsChildren",
+      "name": "Sort children of <defs>"
     },
     {
       "id": "removeTitle",
