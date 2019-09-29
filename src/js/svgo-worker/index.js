@@ -89,7 +89,7 @@ const pluginsData = {
   removeEmptyContainers,
   mergePaths,
   removeUnusedNS,
-  removeOffCanvasPaths,
+  //removeOffCanvasPaths,
   reusePaths,
   sortAttrs,
   sortDefsChildren,

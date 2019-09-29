@@ -137,10 +137,6 @@
       "name": "Remove unused namespaces"
     },
     {
-      "id": "removeOffCanvasPaths",
-      "name": "Remove elements out of the viewbox"
-    },
-    {
       "id": "reusePaths",
       "name": "Replace duplicate elements with links"
     },
