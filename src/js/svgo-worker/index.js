@@ -89,6 +89,7 @@ const pluginsData = {
   removeEmptyContainers,
   mergePaths,
   removeUnusedNS,
+  // This currently throws an error
   //removeOffCanvasPaths,
   reusePaths,
   sortAttrs,
@@ -226,7 +227,13 @@ function* multipassCompress(settings) {
 
   for (const plugin of Object.values(pluginsData)) {
     if (plugin.params && 'floatPrecision' in plugin.params) {
-      plugin.params.floatPrecision = floatPrecision;
+      if (plugin === pluginsData.cleanupNumericValues && floatPrecision === 0) {
+        // 0 almost always breaks images when used on this plugin.
+        // Better to allow 0 for everything else, but switch to 1 for this plugin.
+        plugin.params.floatPrecision = 1;
+      } else {
+        plugin.params.floatPrecision = floatPrecision;
+      }
     }
   }
 
