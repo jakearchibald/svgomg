@@ -36,11 +36,15 @@ import moveGroupAttrsToElems from 'svgo/plugins/moveGroupAttrsToElems';
 import collapseGroups from 'svgo/plugins/collapseGroups';
 import convertPathData from 'svgo/plugins/convertPathData';
 import convertTransform from 'svgo/plugins/convertTransform';
+import convertEllipseToCircle from 'svgo/plugins/convertEllipseToCircle';
 import removeEmptyAttrs from 'svgo/plugins/removeEmptyAttrs';
 import removeEmptyContainers from 'svgo/plugins/removeEmptyContainers';
 import mergePaths from 'svgo/plugins/mergePaths';
 import removeUnusedNS from 'svgo/plugins/removeUnusedNS';
+import removeOffCanvasPaths from 'svgo/plugins/removeOffCanvasPaths';
+import reusePaths from 'svgo/plugins/reusePaths';
 import sortAttrs from 'svgo/plugins/sortAttrs';
+import sortDefsChildren from 'svgo/plugins/sortDefsChildren';
 import removeTitle from 'svgo/plugins/removeTitle';
 import removeDesc from 'svgo/plugins/removeDesc';
 import removeDimensions from 'svgo/plugins/removeDimensions';
@@ -80,16 +84,22 @@ const pluginsData = {
   collapseGroups,
   convertPathData,
   convertTransform,
+  convertEllipseToCircle,
   removeEmptyAttrs,
   removeEmptyContainers,
   mergePaths,
   removeUnusedNS,
+  // This currently throws an error
+  //removeOffCanvasPaths,
+  reusePaths,
   sortAttrs,
+  sortDefsChildren,
   removeTitle,
   removeDesc,
   removeDimensions,
   //removeAttrs,
   //removeElementsByAttr,
+  //removeAttributesBySelector,
   //addClassesToSVGElement,
   removeStyleElement,
   removeScriptElement,
@@ -217,7 +227,13 @@ function* multipassCompress(settings) {
 
   for (const plugin of Object.values(pluginsData)) {
     if (plugin.params && 'floatPrecision' in plugin.params) {
-      plugin.params.floatPrecision = floatPrecision;
+      if (plugin === pluginsData.cleanupNumericValues && floatPrecision === 0) {
+        // 0 almost always breaks images when used on this plugin.
+        // Better to allow 0 for everything else, but switch to 1 for this plugin.
+        plugin.params.floatPrecision = 1;
+      } else {
+        plugin.params.floatPrecision = floatPrecision;
+      }
     }
   }
 
