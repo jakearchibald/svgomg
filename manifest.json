@@ -1,0 +1,16 @@
+{
+  "name": "SVGOMG",
+  "scope": "./",
+  "icons": [{
+    "src": "imgs/icon.png",
+    "sizes": "600x600"
+  }, {
+    "src": "imgs/maskable.png",
+    "sizes": "600x600",
+    "purpose": "maskable"
+  }],
+  "background_color": "#bababa",
+  "display": "standalone",
+  "start_url": "./",
+  "theme_color": "#303F9F"
+}
