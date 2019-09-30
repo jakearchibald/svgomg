@@ -1,5 +1,12 @@
 [
   {
+    "version": "1.13.0",
+    "changes": [
+      "Updating SVGO",
+      "Improving quality at 0 precision"
+    ]
+  },
+  {
     "version": "1.12.0",
     "changes": [
       "Adding 'reset settings' button"
