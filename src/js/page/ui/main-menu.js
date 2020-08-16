@@ -69,7 +69,13 @@ export default class MainMenu extends EventEmitter {
   }
 
   _onTextInputChange(event) {
-    const val = this._pasteInput.value.trim();
+    let val = this._pasteInput.value.trim();
+
+    // Replace <symbol> with <svg> so that the graphic is rendered
+    const symbolRe = /^<symbol([\s\S]+)<\/symbol>$/;
+    if (symbolRe.test(val)) {
+      val = val.replace(symbolRe, '<svg xmlns="http://www.w3.org/2000/svg"$1</svg>');
+    }
 
     if (val.includes('</svg>')) {
       this._pasteInput.value = '';
