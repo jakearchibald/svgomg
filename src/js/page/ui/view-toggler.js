@@ -1,9 +1,13 @@
 import { EventEmitter } from 'events';
 import { domReady } from '../utils';
 
+/**
+ * Tabs that toggle between showing the SVG image and XML markup.
+ */
 export default class ViewToggler extends EventEmitter {
   constructor() {
     super();
+    /** @type {HTMLFormElement | null} */
     this.container = null;
 
     domReady.then(() => {

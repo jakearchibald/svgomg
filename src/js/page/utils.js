@@ -47,7 +47,7 @@ function transitionClassFunc({removeClass = false}={}) {
       if (el.classList.contains(className)) return Promise.resolve();
     }
 
-    return new Promise(resolve => {
+    const transitionEnd = new Promise(resolve => {
       const listener = event => {
         if (event.target != el) return;
         el.removeEventListener('webkitTransitionEnd', listener);
@@ -64,6 +64,10 @@ function transitionClassFunc({removeClass = false}={}) {
         el.classList[removeClass ? 'remove' : 'add'](className);
       });
     });
+
+    const transitionTimeout = new Promise(resolve => setTimeout(resolve, 1000));
+
+    return Promise.race([transitionEnd, transitionTimeout]);
   }
 }
 
