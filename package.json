@@ -34,5 +34,6 @@
     "build": "gulp build --production",
     "serve": "gulp watch & http-server build -c-1",
     "test": "gulp build --production"
-  }
+  },
+  "version": "0.0.1"
 }
