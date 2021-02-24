@@ -76,18 +76,32 @@ export default class Settings {
   _onReset() {
     this._resetRipple.animate();
     const oldSettings = this.getSettings();
+    const overrides = this.getSettingsOverride();
 
     // Set all inputs according to their initial attributes
     for (const inputEl of this._globalInputs) {
       if (inputEl.type === 'checkbox') {
-        inputEl.checked = inputEl.hasAttribute('checked');
+        inputEl.checked = Object.prototype.hasOwnProperty.call(
+          overrides,
+          inputEl.name,
+        )
+          ? overrides[inputEl.name]
+          : inputEl.hasAttribute('checked');
       } else if (inputEl.type === 'range') {
-        this._sliderMap.get(inputEl).value = inputEl.getAttribute('value');
+        this._sliderMap.get(inputEl).value =
+          Object.prototype.hasOwnProperty.call(overrides, inputEl.name)
+            ? overrides[inputEl.name]
+            : inputEl.getAttribute('value');
       }
     }
 
     for (const inputEl of this._pluginInputs) {
-      inputEl.checked = inputEl.hasAttribute('checked');
+      inputEl.checked = Object.prototype.hasOwnProperty.call(
+        overrides.plugins,
+        inputEl.name,
+      )
+        ? overrides.plugins[inputEl.name]
+        : inputEl.hasAttribute('checked');
     }
 
     this.emitter.emit('reset', oldSettings);
@@ -139,5 +153,35 @@ export default class Settings {
     output.fingerprint = fingerprint.join(',');
 
     return output;
+  }
+
+  getSettingsOverride() {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    const overrides = {
+      plugins: {},
+    };
+
+    for (const inputEl of this._globalInputs) {
+      if (!searchParams.has(inputEl.name) || inputEl.name === 'original')
+        continue;
+
+      const value = searchParams.get(inputEl.name);
+      if (inputEl.type === 'checkbox' && ['true', 'false'].includes(value)) {
+        overrides[inputEl.name] = value === 'true';
+      } else if (inputEl.type === 'range') {
+        const rangeValue = Number.parseInt(value, 10);
+        if (rangeValue < inputEl.min || inputEl.max < rangeValue) continue;
+        overrides[inputEl.name] = rangeValue;
+      }
+    }
+
+    for (const inputEl of this._pluginInputs) {
+      const value = searchParams.get(inputEl.name);
+      if (!['true', 'false'].includes(value)) continue;
+      overrides.plugins[inputEl.name] = value === 'true';
+    }
+
+    return overrides;
   }
 }
