@@ -45,6 +45,9 @@ export default class Settings {
         if (event.target.closest('input[type=range]')) return;
         event.preventDefault();
       });
+
+      const settingsOverride = this.getSettingsOverride();
+      settingsOverride && this.setSettings(settingsOverride);
     });
   }
 
@@ -92,6 +95,9 @@ export default class Settings {
         ? overrides.plugins[inputEl.name]
         : inputEl.hasAttribute('checked');
     }
+
+    const settingsOverride = this.getSettingsOverride();
+    settingsOverride && this.setSettings(settingsOverride);
 
     this.emitter.emit('reset', oldSettings);
     this.emitter.emit('change');
