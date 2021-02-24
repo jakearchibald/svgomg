@@ -45,6 +45,9 @@ export default class Settings {
         if (event.target.closest('input[type=range]')) return;
         event.preventDefault();
       });
+
+      const settingsOverride = this.getSettingsOverride();
+      if (settingsOverride) this.setSettings(settingsOverride);
     });
   }
 
@@ -65,33 +68,22 @@ export default class Settings {
   _onReset() {
     this._resetRipple.animate();
     const oldSettings = this.getSettings();
-    const overrides = this.getSettingsOverride();
 
     // Set all inputs according to their initial attributes
     for (const inputEl of this._globalInputs) {
       if (inputEl.type === 'checkbox') {
-        inputEl.checked = Object.prototype.hasOwnProperty.call(
-          overrides,
-          inputEl.name,
-        )
-          ? overrides[inputEl.name]
-          : inputEl.hasAttribute('checked');
+        inputEl.checked = inputEl.hasAttribute('checked');
       } else if (inputEl.type === 'range') {
-        this._sliderMap.get(inputEl).value =
-          Object.prototype.hasOwnProperty.call(overrides, inputEl.name)
-            ? overrides[inputEl.name]
-            : inputEl.getAttribute('value');
+        this._sliderMap.get(inputEl).value = inputEl.getAttribute('value');
       }
     }
 
     for (const inputEl of this._pluginInputs) {
-      inputEl.checked = Object.prototype.hasOwnProperty.call(
-        overrides.plugins,
-        inputEl.name,
-      )
-        ? overrides.plugins[inputEl.name]
-        : inputEl.hasAttribute('checked');
+      inputEl.checked = inputEl.hasAttribute('checked');
     }
+
+    const settingsOverride = this.getSettingsOverride();
+    if (settingsOverride) this.setSettings(settingsOverride);
 
     this.emitter.emit('reset', oldSettings);
     this.emitter.emit('change');

@@ -250,12 +250,10 @@ export default class MainController {
   }
 
   async _loadSettings() {
-    let settings = await storage.get('settings');
-    settings = Object.assign(
-      {},
-      settings,
-      this._settingsUi.getSettingsOverride(),
-    );
+    const settings = {
+      ...(await storage.get('settings')),
+      ...this._settingsUi.getSettingsOverride(),
+    };
     if (settings) this._settingsUi.setSettings(settings);
   }
 
