@@ -5,6 +5,7 @@ const util = require('util');
 const readFile = util.promisify(fs.readFile);
 const readJSON = path => readFile(path, 'utf-8').then(s => JSON.parse(s));
 
+const sass = require('sass');
 const del = require('del');
 const gulp = require('gulp');
 const plugins = require('gulp-load-plugins')();
@@ -20,10 +21,11 @@ const rollupJson = require('rollup-plugin-json');
 
 
 function css() {
+  const gulpSass = plugins.sass(sass)
   return gulp.src('src/css/*.scss', { sourcemaps: true })
-    .pipe(plugins.sass.sync().on('error', plugins.sass.logError))
+    .pipe(gulpSass.sync().on('error', gulpSass.logError))
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.sass({ outputStyle: 'compressed' }))
+    .pipe(gulpSass({ outputStyle: 'compressed' }))
     .pipe(plugins.sourcemaps.write('./'))
     .pipe(gulp.dest('build/css/'))
     .pipe(plugins.filter('**/*.css'));
