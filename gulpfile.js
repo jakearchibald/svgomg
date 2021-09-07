@@ -15,7 +15,6 @@ const rollup = require('rollup');
 const { nodeResolve: rollupResolve } = require('@rollup/plugin-node-resolve');
 const rollupCommon = require('@rollup/plugin-commonjs');
 const rollupReplace = require('@rollup/plugin-replace');
-const rollupJson = require('@rollup/plugin-json');
 const { terser: rollupTerser } = require('rollup-plugin-terser');
 
 
@@ -31,13 +30,8 @@ function css() {
 }
 
 async function html() {
-  const [pluginList, changelog, headCSS] = await Promise.all([
-    readJSON(`${__dirname}/src/config.json`).then(config => {
-      for (const plugin of config.plugins) {
-        plugin.active = require('svgo/plugins/' + plugin.id).active;
-      }
-      return config.plugins;
-    }),
+  const [config, changelog, headCSS] = await Promise.all([
+    readJSON(`${__dirname}/src/config.json`),
     readJSON(`${__dirname}/src/changelog.json`),
     readFile(`${__dirname}/build/css/head.css`)
   ]);
@@ -45,7 +39,7 @@ async function html() {
   return gulp.src([
     'src/*.html',
   ]).pipe(plugins.nunjucks.compile({
-    plugins: pluginList,
+    plugins: config.plugins,
     headCSS,
     changelog
   }))
@@ -64,38 +58,9 @@ const rollupCaches = new Map();
 
 const rollupFixes = {
   name: 'rollup-fixes',
-  resolveId(importee, importer) {
-    if (
-      importee === 'os' ||
-      importee === 'fs' ||
-      importee === 'path' ||
-      importee === 'string_decoder' ||
-      importee === 'stream'
-    ) {
-      return importee;
-    }
-  },
-  load(id) {
-    if (id === 'os') {
-      return `export var EOL = '\\n'`;
-    }
-    if (id === 'fs' || id === 'path' || id === 'string_decoder') {
-      return `export default null`;
-    }
-    if (id === 'stream') {
-      return `export function Stream() {}`;
-    }
-  },
   transform(code, id) {
     if (id.endsWith('node_modules/prismjs/prism.js')) {
       return `${code}\nexport default Prism;`;
-    }
-    if (id.endsWith('node_modules/sax/lib/sax.js')) {
-      const replaced = code.replace(
-        `typeof exports === 'undefined' ? this.sax = {} : exports`,
-        'root'
-      );
-      return `var root = {};\n${replaced}\nmodule.exports = root;`;
     }
   }
 };
@@ -109,7 +74,6 @@ async function js(entry, outputPath) {
     input: `src/${entry}`,
     plugins: [
       rollupFixes,
-      rollupJson(),
       rollupReplace({
         preventAssignment: true,
         SVGOMG_VERSION: JSON.stringify(changelog[0].version),
