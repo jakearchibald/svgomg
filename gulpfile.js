@@ -11,13 +11,12 @@ const gulp = require('gulp');
 const plugins = require('gulp-load-plugins')();
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
-const rollup = require('rollup-stream');
-const rollupResolve = require('rollup-plugin-node-resolve');
-const rollupCommon = require('rollup-plugin-commonjs');
-const rollupReplace = require('rollup-plugin-replace');
-const rollupBuiltins = require('rollup-plugin-node-builtins');
-const rollupBabili = require('rollup-plugin-babel-minify');
-const rollupJson = require('rollup-plugin-json');
+const rollup = require('rollup');
+const { nodeResolve: rollupResolve } = require('@rollup/plugin-node-resolve');
+const rollupCommon = require('@rollup/plugin-commonjs');
+const rollupReplace = require('@rollup/plugin-replace');
+const rollupJson = require('@rollup/plugin-json');
+const { terser: rollupTerser } = require('rollup-plugin-terser');
 
 
 function css() {
@@ -63,36 +62,69 @@ async function html() {
 
 const rollupCaches = new Map();
 
+const rollupFixes = {
+  name: 'rollup-fixes',
+  resolveId(importee, importer) {
+    if (
+      importee === 'os' ||
+      importee === 'fs' ||
+      importee === 'path' ||
+      importee === 'string_decoder' ||
+      importee === 'stream'
+    ) {
+      return importee;
+    }
+  },
+  load(id) {
+    if (id === 'os') {
+      return `export var EOL = '\\n'`;
+    }
+    if (id === 'fs' || id === 'path' || id === 'string_decoder') {
+      return `export default null`;
+    }
+    if (id === 'stream') {
+      return `export function Stream() {}`;
+    }
+  },
+  transform(code, id) {
+    if (id.endsWith('node_modules/prismjs/prism.js')) {
+      return `${code}\nexport default Prism;`;
+    }
+    if (id.endsWith('node_modules/sax/lib/sax.js')) {
+      const replaced = code.replace(
+        `typeof exports === 'undefined' ? this.sax = {} : exports`,
+        'root'
+      );
+      return `var root = {};\n${replaced}\nmodule.exports = root;`;
+    }
+  }
+};
+
 async function js(entry, outputPath) {
   const parsedPath = path.parse(entry);
   const name = /[^\/]+$/.exec(parsedPath.dir)[0];
   const changelog = await readJSON(`${__dirname}/src/changelog.json`);
-  const cache = rollupCaches.get(entry);
-
-  return rollup({
-    cache,
+  const bundle = await rollup.rollup({
+    cache: rollupCaches.get(entry),
     input: `src/${entry}`,
-    sourcemap: true,
-    format: 'iife',
     plugins: [
+      rollupFixes,
       rollupJson(),
       rollupReplace({
-        SVGOMG_VERSION: JSON.stringify(changelog[0].version)
+        preventAssignment: true,
+        SVGOMG_VERSION: JSON.stringify(changelog[0].version),
       }),
-      rollupBuiltins(),
-      rollupResolve({ preferBuiltins: true }),
-      rollupCommon(),
-      rollupBabili({ comments: false })
+      rollupResolve({ preferBuiltins: false, browser: true }),
+      rollupCommon({ include: /node_modules/ }),
+      rollupTerser()
     ]
-  }).on('error', plugins.util.log.bind(plugins.util, 'Rollup Error'))
-    .on('bundle', bundle => rollupCaches.set(entry, bundle))
-    .pipe(source(`index.js`, parsedPath.dir))
-    .pipe(buffer())
-    .pipe(plugins.sourcemaps.init({ loadMaps: true }))
-    .pipe(plugins.rename(`${name}.js`))
-    .pipe(plugins.sourcemaps.write('.'))
-    .pipe(plugins.size({ gzip: true, title: name, showFiles: true }))
-    .pipe(gulp.dest(`build/${outputPath}`));
+  });
+  rollupCaches.set(entry, bundle.cache);
+  await bundle.write({
+    sourcemap: true,
+    format: 'iife',
+    file: `build/${outputPath}/${name}.js`
+  })
 }
 
 const allJs = gulp.parallel(

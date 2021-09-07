@@ -1,5 +1,4 @@
 "use strict";
-import '../utils/node-globals/global';
 import svg2js from 'svgo/lib/svgo/svg2js';
 import js2svg from 'svgo/lib/svgo/js2svg';
 import JSAPI from 'svgo/lib/svgo/jsAPI';
