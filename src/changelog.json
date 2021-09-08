@@ -1,5 +1,9 @@
 [
   {
+    "version": "1.14.1",
+    "changes": ["Disabling multipass while it's still flakey"]
+  },
+  {
     "version": "1.14.0",
     "changes": ["Update to SVGO v2.5.0 (thanks Bogdan Chadkin)"]
   },
