@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const util = require('util');
+const svgoPkg = require('svgo/package.json');
 
 const readFile = util.promisify(fs.readFile);
 const readJSON = path => readFile(path, 'utf-8').then(s => JSON.parse(s));
@@ -17,7 +18,6 @@ const rollupCommon = require('@rollup/plugin-commonjs');
 const rollupReplace = require('@rollup/plugin-replace');
 const rollupJson = require('@rollup/plugin-json');
 const { terser: rollupTerser } = require('rollup-plugin-terser');
-
 
 function css() {
   const gulpSass = plugins.sass(sass)
@@ -47,7 +47,8 @@ async function html() {
   ]).pipe(plugins.nunjucks.compile({
     plugins: pluginList,
     headCSS,
-    changelog
+    changelog,
+    SVGO_VERSION: svgoPkg.version,
   }))
   .pipe(plugins.htmlmin({
     collapseBooleanAttributes: true,
