@@ -21,7 +21,8 @@
   },
   "private": true,
   "scripts": {
-    "build": "gulp build --production",
+    "build": "gulp clean-build --production",
+    "prepare-deploy": "git fetch && gulp clean && git clone --branch gh-pages --no-checkout ./ build/ && gulp build --production && cd build && git add -A",
     "serve": "gulp watch & http-server build -c-1",
     "test": "gulp build --production"
   }

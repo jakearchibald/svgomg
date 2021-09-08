@@ -125,13 +125,19 @@ module.exports.css = css;
 module.exports.html = html;
 module.exports.copy = copy;
 
-module.exports.build = gulp.series(
+const mainBuild = gulp.parallel(
+  gulp.series(css, html),
+  allJs,
+  copy
+);
+
+module.exports['clean-build'] = gulp.series(
   clean,
-  gulp.parallel(
-    gulp.series(css, html),
-    allJs,
-    copy
-  )
+  mainBuild
+);
+
+module.exports.build = gulp.series(
+  mainBuild
 );
 
 module.exports.watch = gulp.series(module.exports.build, () => {
