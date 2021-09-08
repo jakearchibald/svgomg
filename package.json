@@ -3,7 +3,6 @@
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@rollup/plugin-replace": "^3.0.0",
-    "del": "^3.0.0",
     "eslint": "^4.11.0",
     "events": "^3.3.0",
     "gulp": "^4.0.2",
