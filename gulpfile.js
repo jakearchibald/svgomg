@@ -9,9 +9,10 @@ const readJSON = path => readFile(path, 'utf-8').then(s => JSON.parse(s));
 const sass = require('sass');
 const del = require('del');
 const gulp = require('gulp');
-const plugins = require('gulp-load-plugins')();
-const source = require('vinyl-source-stream');
-const buffer = require('vinyl-buffer');
+const gulpSourcemaps = require('gulp-sourcemaps');
+const gulpSass = require('gulp-sass');
+const gulpNunjucks = require('gulp-nunjucks');
+const gulpHtmlmin = require('gulp-htmlmin');
 const rollup = require('rollup');
 const { nodeResolve: rollupResolve } = require('@rollup/plugin-node-resolve');
 const rollupCommon = require('@rollup/plugin-commonjs');
@@ -19,15 +20,15 @@ const rollupReplace = require('@rollup/plugin-replace');
 const { terser: rollupTerser } = require('rollup-plugin-terser');
 
 function css() {
-  const gulpSass = plugins.sass(sass)
+  const boundSass = gulpSass(sass)
   return gulp.src('src/css/*.scss', { sourcemaps: true })
-    .pipe(gulpSass.sync().on('error', gulpSass.logError))
-    .pipe(plugins.sourcemaps.init())
-    .pipe(gulpSass({ outputStyle: 'compressed' }))
-    .pipe(plugins.sourcemaps.write('./'))
-    .pipe(gulp.dest('build/css/'))
-    .pipe(plugins.filter('**/*.css'));
+    .pipe(boundSass.sync().on('error', boundSass.logError))
+    .pipe(gulpSourcemaps.init())
+    .pipe(boundSass({ outputStyle: 'compressed' }))
+    .pipe(gulpSourcemaps.write('./'))
+    .pipe(gulp.dest('build/css/'));
 }
+
 
 async function html() {
   const [config, changelog, headCSS] = await Promise.all([
@@ -36,23 +37,23 @@ async function html() {
     readFile(`${__dirname}/build/css/head.css`)
   ]);
 
-  return gulp.src([
-    'src/*.html',
-  ]).pipe(plugins.nunjucks.compile({
-    plugins: config.plugins,
-    headCSS,
-    changelog,
-    SVGO_VERSION: svgoPkg.version,
-  }))
-  .pipe(plugins.htmlmin({
-    collapseBooleanAttributes: true,
-    collapseInlineTagWhitespace: false,
-    collapseWhitespace: true,
-    decodeEntities: true,
-    minifyJS: true,
-    removeAttributeQuotes: true,
-    removeComments: true,
-  })).pipe(gulp.dest('build'));
+  return gulp.src('src/*.html')
+    .pipe(gulpNunjucks.compile({
+      plugins: config.plugins,
+      headCSS,
+      changelog,
+      SVGO_VERSION: svgoPkg.version,
+    }))
+    .pipe(gulpHtmlmin({
+      collapseBooleanAttributes: true,
+      collapseInlineTagWhitespace: false,
+      collapseWhitespace: true,
+      decodeEntities: true,
+      minifyJS: true,
+      removeAttributeQuotes: true,
+      removeComments: true,
+    }))
+    .pipe(gulp.dest('build'));
 }
 
 const rollupCaches = new Map();
