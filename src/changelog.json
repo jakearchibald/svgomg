@@ -1,5 +1,9 @@
 [
   {
+    "version": "1.14.0",
+    "changes": ["Update to SVGO v2.5.0 (thanks Bogdan Chadkin)"]
+  },
+  {
     "version": "1.13.1",
     "changes": ["Fixing issue that caused tabs to get stuck in Firefox"]
   },

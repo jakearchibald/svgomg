@@ -166,12 +166,29 @@
   }
 }
 
-.menu-footer-notes {
-  padding: 0 16px;
-  margin-top: auto;
-  text-align: center;
+.app-title {
+  padding-right: 16px;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  align-items: center;
+  gap: 1rem;
+  background: #f3f3f3;
   font-size: 0.9rem;
-  color: #8E8E8E;
+
+  & img {
+    width: 100%;
+    height: auto;
+  }
+
+  & h1 {
+    font-size: inherit;
+    margin: 0;
+  }
+
+  & p {
+    margin: 0;
+  }
 
   & a:link,
   & a:visited {
@@ -184,4 +201,10 @@
   & a:active {
     color: #000;
   }
+}
+
+.title-text {
+  display: grid;
+  grid-template-rows: max-content max-content;
+  gap: 0.1em;
 }
