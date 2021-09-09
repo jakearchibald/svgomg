@@ -1,13 +1,13 @@
-const fs = require('fs');
+const fs = require('fs/promises');
 const path = require('path');
-const util = require('util');
 const svgoPkg = require('svgo/package.json');
 
-const readFile = util.promisify(fs.readFile);
-const readJSON = path => readFile(path, 'utf-8').then(s => JSON.parse(s));
+const readJSON = async (path) => {
+  const content = await fs.readFile(path, 'utf-8');
+  return JSON.parse(content);
+}
 
 const sass = require('sass');
-const del = require('del');
 const gulp = require('gulp');
 const gulpSourcemaps = require('gulp-sourcemaps');
 const gulpSass = require('gulp-sass');
@@ -34,7 +34,7 @@ async function html() {
   const [config, changelog, headCSS] = await Promise.all([
     readJSON(`${__dirname}/src/config.json`),
     readJSON(`${__dirname}/src/changelog.json`),
-    readFile(`${__dirname}/build/css/head.css`)
+    fs.readFile(`${__dirname}/build/css/head.css`)
   ]);
 
   return gulp.src('src/*.html')
@@ -116,7 +116,7 @@ function copy() {
 }
 
 function clean() {
-  return del('build');
+  return fs.rm('build', { force: true, recursive: true });
 }
 
 module.exports.clean = clean;
