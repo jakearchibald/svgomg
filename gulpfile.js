@@ -9,6 +9,8 @@ const readJSON = async (path) => {
 
 const sass = require('sass');
 const gulp = require('gulp');
+const gulpPostcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
 const gulpSourcemaps = require('gulp-sourcemaps');
 const gulpSass = require('gulp-sass');
 const gulpNunjucks = require('gulp-nunjucks');
@@ -25,6 +27,7 @@ function css() {
     .pipe(boundSass.sync().on('error', boundSass.logError))
     .pipe(gulpSourcemaps.init())
     .pipe(boundSass({ outputStyle: 'compressed' }))
+    .pipe(gulpPostcss([autoprefixer]))
     .pipe(gulpSourcemaps.write('./'))
     .pipe(gulp.dest('build/css/'));
 }

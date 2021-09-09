@@ -1,13 +1,13 @@
-@include keyframes(ripple-pop) {
+@keyframes ripple-pop {
   from {
-    @include transform(scale(0));
+    transform: scale(0);
     opacity: 1;
   }
   20% {
     opacity: 1;
   }
   to {
-    @include transform(scale(1));
+    transform: scale(1);
     opacity: 0;
   }
 }
@@ -26,6 +26,6 @@
   display: block;
 
   &.animate {
-    @include animation(ripple-pop 0.5s $easeOutQuint);
+    animation: ripple-pop 0.5s $easeOutQuint;
   }
 }
