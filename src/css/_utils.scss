@@ -1,5 +1,6 @@
 @mixin user-select($spec...) {
   -webkit-touch-callout: $spec;
+  -webkit-user-select: $spec;
   user-select: $spec;
 }
 
