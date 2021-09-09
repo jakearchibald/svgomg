@@ -16,7 +16,7 @@ export default class WorkerMessenger {
       this._worker = null;
     }
     for (const key of Object.keys(this._pending)) {
-      this._fulfillPending(id, null, new Error("Worker terminated: " + this._url));
+      this._fulfillPending(key, null, new Error("Worker terminated: " + this._url));
     }
   }
 
