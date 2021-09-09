@@ -26,7 +26,7 @@ function css() {
     .pipe(gulpSourcemaps.init())
     .pipe(boundSass({ outputStyle: 'compressed' }))
     .pipe(gulpSourcemaps.write('./'))
-    .pipe(gulp.dest('build/css/'));
+    .pipe(gulp.dest('build/'));
 }
 
 
@@ -34,7 +34,7 @@ async function html() {
   const [config, changelog, headCSS] = await Promise.all([
     readJSON(`${__dirname}/src/config.json`),
     readJSON(`${__dirname}/src/changelog.json`),
-    fs.readFile(`${__dirname}/build/css/head.css`)
+    fs.readFile(`${__dirname}/build/head.css`)
   ]);
 
   return gulp.src('src/*.html')

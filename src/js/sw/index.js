@@ -14,7 +14,7 @@ addEventListener('install', event => {
     await cache.addAll([
       './',
       'imgs/icon.png',
-      'css/all.css',
+      'all.css',
       'js/gzip-worker.js',
       'js/page.js',
       'js/prism-worker.js',
