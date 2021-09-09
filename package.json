@@ -1,16 +1,18 @@
 {
+  "name": "svgomg",
+  "private": true,
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@rollup/plugin-replace": "^3.0.0",
-    "eslint": "^4.11.0",
+    "eslint": "^4.19.1",
     "events": "^3.3.0",
     "gulp": "^4.0.2",
     "gulp-htmlmin": "^3.0.0",
-    "gulp-nunjucks": "^3.0.0",
+    "gulp-nunjucks": "^3.1.1",
     "gulp-sass": "^5.0.0",
-    "gulp-sourcemaps": "^2.6.0",
-    "pako": "^1.0.5",
+    "gulp-sourcemaps": "^2.6.5",
+    "pako": "^1.0.11",
     "prismjs": "^1.6.0",
     "rollup": "^2.56.3",
     "rollup-plugin-terser": "^7.0.2",
@@ -18,7 +20,6 @@
     "sirv-cli": "^1.0.14",
     "svgo": "^2.5.0"
   },
-  "private": true,
   "scripts": {
     "build": "gulp clean-build --production",
     "prepare-deploy": "git fetch && gulp clean && git clone --branch gh-pages --no-checkout ./ build/ && gulp build --production && cd build && git add -A",
