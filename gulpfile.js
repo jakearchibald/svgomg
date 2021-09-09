@@ -49,6 +49,13 @@ async function html() {
       collapseInlineTagWhitespace: false,
       collapseWhitespace: true,
       decodeEntities: true,
+      minifyCSS: {
+        level: {
+          1: {
+            specialComments: 0
+          }
+        }
+      },
       minifyJS: true,
       removeAttributeQuotes: true,
       removeComments: true,
