@@ -15,16 +15,16 @@
   display: none;
   opacity: 0;
 
-  @include align-items(center);
-  @include justify-content(center);
+  align-items: center;
+  justify-content: center;
 
   &.transition {
-    @include display-flex;
-    @include transition(opacity 0.2s ease-out);
+    display: flex;
+    transition: opacity 0.2s ease-out;
   }
 
   &.active {
-    @include display-flex;
+    display: flex;
     opacity: 1;
   }
 }

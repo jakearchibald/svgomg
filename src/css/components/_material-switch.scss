@@ -14,7 +14,7 @@
     right: 1px;
     background: rgba(#000, 0.26);
     overflow: hidden;
-    @include transform(translateZ(0));
+    transform: translateZ(0);
 
     &::before {
       content: '';
@@ -25,8 +25,8 @@
       bottom: 0;
       background: #9FA8DA;
       opacity: 0;
-      @include transition(opacity 0.15s ease-out);
-      @include transform(translateZ(0));
+      transition: opacity 0.15s ease-out;
+      transform: translateZ(0);
 
       // Safari needs this because it hates me & fails to clip properly
       border-radius: 19px;
@@ -50,8 +50,8 @@
                 inset 0 0 0 2px transparent;
     overflow: hidden;
     box-sizing: border-box;
-    @include transition(all 0.15s ease-out);
-    @include transform(translateZ(0));
+    transition: all 0.15s ease-out;
+    transform: translateZ(0);
 
     &::before {
       content: '';
@@ -62,8 +62,8 @@
       bottom: 0;
       background: #3F51B5;
       opacity: 0;
-      @include transition(opacity 0.15s ease-out);
-      @include transform(translateZ(0));
+      transition: opacity 0.15s ease-out;
+      transform: translateZ(0);
 
       // Safari needs this because it hates me & fails to clip properly
       border-radius: 10px;
@@ -81,7 +81,7 @@
     }
 
     & .handle {
-      @include transform(translate3d(17px, 0, 0));
+      transform: translate3d(17px, 0, 0);
       box-shadow: 0 1px 3px rgba(0,0,0,0.5), 
                 inset 0 0 0 2px transparent;
 

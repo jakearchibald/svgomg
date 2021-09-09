@@ -36,18 +36,18 @@
 
     overflow-x: hidden;
     overflow-y: auto;
-    @include display-flex;
-    @include flex-flow(column);
+    display: flex;
+    flex-flow: column;
 
     &.transition {
-      @include transition-transform(0.2s ease-out);
+      transition: transform 0.2s ease-out;
     }
     &.hidden {
-      @include transform(translateX(-110%));
+      transform: translateX(-110%);
     }
 
     & > * {
-      @include min-height-min-content;
+      min-height: min-content;
     }
   }
 
@@ -61,7 +61,7 @@
     will-change: opacity;
 
     &.transition {
-      @include transition(opacity 0.2s ease-in-out);
+      transition: opacity 0.2s ease-in-out;
     }
     &.hidden {
       opacity: 0;
@@ -85,8 +85,8 @@
     // I want this to be min-height, but IE breaks layout if I do
     height: 48px;
     box-sizing: border-box;
-    @include display-flex;
-    @include align-items(center);
+    display: flex;
+    align-items: center;
 
     &:link,
     &:visited {
@@ -105,11 +105,11 @@
       height: 24px;
       opacity: 0.54;
       margin-right: 32px;
-      @include flex(none);
+      flex: none;
     }
 
     & .spinner {
-      @include flex(none);
+      flex: none;
       margin: 0 0 0 auto;
     }
 

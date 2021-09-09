@@ -1,7 +1,7 @@
 .settings {
   background: #fff;
-  @include display-flex;
-  @include flex-flow(column);
+  display: flex;
+  flex-flow: column;
   @include user-select(none);
 }
 
@@ -9,8 +9,8 @@
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  @include flex(1);
-  @include transform(translateZ(0));
+  flex: 1;
+  transform: translateZ(0);
 }
 
 .setting-item-toggle {
@@ -20,8 +20,8 @@
   padding: 0 16px;
   height: 51px;
 
-  @include display-flex;
-  @include align-items(center);
+  display: flex;
+  align-items: center;
 
   & input[type=checkbox] {
     position: absolute;
@@ -44,9 +44,9 @@
 
 .setting-item-range {
   padding: 10px 16px 20px;
-  @include display-flex;
-  @include flex-flow(column);
-  @include justify-content(center);
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
 
   & .label-text {
     margin-bottom: 0.7em;
