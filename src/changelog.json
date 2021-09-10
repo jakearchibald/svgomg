@@ -1,5 +1,9 @@
 [
   {
+    "version": "1.14.3",
+    "changes": ["Preload bugfix"]
+  },
+  {
     "version": "1.14.2",
     "changes": ["Many little performance tweaks"]
   },
