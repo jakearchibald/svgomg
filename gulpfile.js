@@ -146,7 +146,13 @@ function watch() {
 }
 
 function serve() {
-  spawn('npm', ['run', 'start'], { stdio: 'inherit' });
+  let npm
+  if (process.platform === 'win32') {
+    npm = 'npm.cmd'
+  } else {
+    npm = 'npm'
+  }
+  spawn(npm, ['run', 'start'], { stdio: 'inherit' });
 }
 
 exports.dev = gulp.series(
