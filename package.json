@@ -21,7 +21,6 @@
     "svgo": "^2.5.0"
   },
   "scripts": {
-    "prepare-deploy": "git fetch && gulp clean && git clone --branch gh-pages --no-checkout ./ build/ && gulp build --production && cd build && git add -A",
     "build": "gulp clean-build --production",
     "start": "sirv build --port 8080 --dev --no-clear",
     "dev": "gulp dev",
