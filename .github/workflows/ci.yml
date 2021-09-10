@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v2
         if: github.repository == 'jakearchibald/svgomg' && github.ref == 'refs/heads/live'
         with:
-          name: docs
+          name: build
           path: ./build/
           if-no-files-found: error
 
@@ -50,7 +50,7 @@ jobs:
       - name: Download build files
         uses: actions/download-artifact@v2
         with:
-          name: docs
+          name: build
           path: ./build/
 
       - name: Deploy
