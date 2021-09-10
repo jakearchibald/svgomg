@@ -20,7 +20,7 @@ addEventListener('install', event => {
       'js/prism-worker.js',
       'js/svgo-worker.js',
       'changelog.json',
-      'https://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata'
+      'https://fonts.googleapis.com/css?family=Roboto:400,700%7CInconsolata'
     ]);
 
     const activeVersion = await activeVersionPromise;
