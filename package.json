@@ -23,7 +23,6 @@
   },
   "scripts": {
     "build": "gulp clean-build --production",
-    "prepare-deploy": "git fetch && gulp clean && git clone --branch gh-pages --no-checkout ./ build/ && gulp build --production && cd build && git add -A",
     "serve": "npm-run-all --parallel watch server",
     "server": "sirv build --port 8080 --dev",
     "watch": "gulp watch",
