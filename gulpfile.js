@@ -1,5 +1,6 @@
 const fs = require('fs/promises');
 const path = require('path');
+const sirv = require('sirv-cli');
 const svgoPkg = require('svgo/package.json');
 
 const readJSON = async (path) => {
@@ -119,11 +120,11 @@ function clean() {
   return fs.rm('build', { force: true, recursive: true });
 }
 
-module.exports.clean = clean;
-module.exports.allJs = allJs;
-module.exports.css = css;
-module.exports.html = html;
-module.exports.copy = copy;
+exports.clean = clean;
+exports.allJs = allJs;
+exports.css = css;
+exports.html = html;
+exports.copy = copy;
 
 const mainBuild = gulp.parallel(
   gulp.series(css, html),
@@ -131,17 +132,31 @@ const mainBuild = gulp.parallel(
   copy
 );
 
-module.exports['clean-build'] = gulp.series(
+exports['clean-build'] = gulp.series(
   clean,
   mainBuild
 );
 
-module.exports.build = gulp.series(
-  mainBuild
-);
+exports.build = mainBuild;
 
-module.exports.watch = gulp.series(module.exports.build, () => {
+function watch() {
   gulp.watch(['src/css/**/*.scss'], gulp.series(css, html));
   gulp.watch(['src/js/**/*.js'], allJs);
   gulp.watch(['src/*.html', 'src/plugin-data.json', 'src/changelog.json'], gulp.parallel(html, copy, allJs));
-});
+}
+
+function serve() {
+  sirv('build', {
+    port: 8080,
+    dev: true,
+    clear: false
+  })
+}
+
+exports.dev = gulp.series(
+  mainBuild,
+  gulp.parallel(
+    watch,
+    serve
+  )
+);
