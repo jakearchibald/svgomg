@@ -31,8 +31,8 @@ export default class MainMenu extends EventEmitter {
 
       this._loadFileBtn.addEventListener('click', e => this._onLoadFileClick(e));
       this._loadDemoBtn.addEventListener('click', e => this._onLoadDemoClick(e));
-      this._loadFileInput.addEventListener('change', e => this._onFileInputChange(e));
-      this._pasteInput.addEventListener('input', e => this._onTextInputChange(e));
+      this._loadFileInput.addEventListener('change', () => this._onFileInputChange());
+      this._pasteInput.addEventListener('input', () => this._onTextInputChange());
     });
   }
 
@@ -68,7 +68,7 @@ export default class MainMenu extends EventEmitter {
     this.show();
   }
 
-  _onTextInputChange(event) {
+  _onTextInputChange() {
     const val = this._pasteInput.value.trim();
 
     if (val.includes('</svg>')) {
@@ -91,7 +91,7 @@ export default class MainMenu extends EventEmitter {
     this.showFilePicker();
   }
 
-  async _onFileInputChange(event) {
+  async _onFileInputChange() {
     const file = this._loadFileInput.files[0];
 
     if (!file) return;

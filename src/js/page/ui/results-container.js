@@ -4,7 +4,7 @@ export default class ResultsContainer {
   constructor(results) {
     this._results = results;
 
-    domReady.then(_ => {
+    domReady.then(() => {
       this._mobileContainer = document.querySelector('.results-container-mobile');
       this._container = document.querySelector('.results-container');
       this._query = matchMedia('(min-width: 640px)');

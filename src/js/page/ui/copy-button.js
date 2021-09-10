@@ -37,7 +37,7 @@ export default class CopyButton extends FloatingActionButton {
     document.body.removeChild(this._pre);
   }
 
-  setCopyText(text, filename) {
+  setCopyText(text) {
     this._text = text;
   }
 }
