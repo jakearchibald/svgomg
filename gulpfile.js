@@ -1,6 +1,6 @@
 const fs = require('fs/promises');
 const path = require('path');
-const { spawn } = require('child_process');
+const sirv = require('sirv-cli');
 const svgoPkg = require('svgo/package.json');
 
 const readJSON = async (path) => {
@@ -146,13 +146,11 @@ function watch() {
 }
 
 function serve() {
-  let npm
-  if (process.platform === 'win32') {
-    npm = 'npm.cmd'
-  } else {
-    npm = 'npm'
-  }
-  spawn(npm, ['run', 'start'], { stdio: 'inherit' });
+  sirv('build', {
+    port: 8080,
+    dev: true,
+    clear: false
+  })
 }
 
 exports.dev = gulp.series(
