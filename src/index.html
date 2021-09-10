@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8">
     <title>SVGOMG - SVGO's Missing GUI</title>
-    <meta name="theme-color" content="#303F9F">
+    <meta name="theme-color" content="#303f9f">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0">
     <link rel="preload" as="script" href="js/page.js">
     <link rel="preload" as="script" href="https://www.google-analytics.com/analytics.js">
     <link rel="preload" as="style" href="all.css">
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Roboto:400,700%7CInconsolata">
     <style>{{headCSS|safe}}</style>
     <script>
-      if ((!location.port || location.port == "80") && location.protocol != 'https:') {
+      if ((!location.port || location.port === '80') && location.protocol !== 'https:') {
         location.protocol = 'https:';
       }
 
@@ -33,7 +33,7 @@
         <div class="overlay"></div>
         <nav class="menu">
           <div class="app-title">
-            <svg viewBox="0 0 600 600"><path fill="#0097A7" d="M0 1.995h600V600H0z"/><path fill="#00BCD4" d="M0 0h600v395.68H0z"/><path d="M269.224 530.33L519 395.485H269.224V530.33zM214.35 91.847H519v303.638H214.35V91.847z" opacity=".22"/><path fill="#FFF" d="M80 341.735h189.224V530.33H80z"/></svg>
+            <svg viewBox="0 0 600 600"><path fill="#0097A7" d="M0 1.995h600V600H0z"/><path fill="#00bcd4" d="M0 0h600v395.68H0z"/><path d="M269.224 530.33 519 395.485H269.224V530.33zM214.35 91.847H519v303.638H214.35V91.847z" opacity=".22"/><path fill="#fff" d="M80 341.735h189.224V530.33H80z"/></svg>
             <div class="title-text">
               <h1>SVGOMG</h1>
               <p>Powered by <a href="https://github.com/svg/svgo">SVGO v{{ SVGO_VERSION }}</a></p>
@@ -81,10 +81,7 @@
       <div class="toolbar">
         <div class="menu-toolbar-item">
           <button class="unbutton menu-btn">
-            <svg viewBox="0 0 24 24">
-              <title>Menu</title>
-              <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
-            </svg>
+            <svg viewBox="0 0 24 24"><title>Menu</title><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
           </button>
         </div>
         <form class="material-tabs view-toggler">
@@ -179,7 +176,7 @@
         <p>Sorry, wasn't ready…</p>
       </div>
       <script>
-        document.querySelector('.preloader').addEventListener('click', function(event) {
+        document.querySelector('.preloader').addEventListener('click', function() {
           // track it
           ga('send', 'event', 'preloader', 'clicked');
           this.className = 'preloader active';
@@ -188,11 +185,11 @@
         requestAnimationFrame(function() {
           requestAnimationFrame(function() {
             [
-              "all.css",
-              "https://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata"
+              'all.css',
+              'https://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata'
             ].forEach(function(url) {
               var link = document.createElement('link');
-              link.rel = "stylesheet";
+              link.rel = 'stylesheet';
               link.crossorigin = true;
               link.href = url;
 
