@@ -14,25 +14,14 @@ export default class DownloadButton extends FloatingActionButton {
         '</svg>'
       )
     });
-
-    this._svgFile = null;
   }
 
   _onClick(event) {
     super._onClick(event);
-
-    // IE compat
-    if ('msSaveBlob' in navigator) {
-      event.preventDefault();
-      navigator.msSaveBlob(this._svgFile.blob, this._svgFile.filename);
-    }
   }
 
   setDownload(filename, svgFile) {
     this.container.download = filename;
     this.container.href = svgFile.url;
-
-    // for IE compat
-    this._svgFile = svgFile;
   }
 }
