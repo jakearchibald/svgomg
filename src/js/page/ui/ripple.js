@@ -1,4 +1,4 @@
-import { strToEl } from '../utils';
+import { strToEl } from '../utils.js';
 
 export default class Ripple {
   constructor() {

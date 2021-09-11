@@ -5,14 +5,12 @@ import {
   transitionToClass,
   transitionFromClass,
   readFileAsText
-} from '../utils';
+} from '../utils.js';
 
 export default class FileDrop {
   constructor() {
     this.emitter = createNanoEvents();
-    this.container = strToEl(
-      '<div class="drop-overlay">Drop it!</div>' +
-    '');
+    this.container = strToEl(String('<div class="drop-overlay">Drop it!</div>'));
 
     // drag events are horrid
     this._activeEnters = 0;
@@ -29,7 +27,7 @@ export default class FileDrop {
   _onDragEnter(event) {
     // firefox double-fires on window enter, this works around it
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1124645
-    if (this._currentEnteredElement == event.target) return;
+    if (this._currentEnteredElement === event.target) return;
     this._currentEnteredElement = event.target;
 
     if (!this._activeEnters++) {

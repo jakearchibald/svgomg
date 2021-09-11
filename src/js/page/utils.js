@@ -1,7 +1,8 @@
 export const domReady = new Promise(resolve => {
   function checkState() {
-    if (document.readyState != 'loading') resolve();
+    if (document.readyState !== 'loading') resolve();
   }
+
   document.addEventListener('readystatechange', checkState);
   checkState();
 });
@@ -10,17 +11,16 @@ const range = document.createRange();
 range.selectNode(document.documentElement);
 
 export function strToEl(str) {
-  const frag = range.createContextualFragment(str);
-  return frag.children[0];
+  return range.createContextualFragment(str).children[0];
 }
 
 const entityMap = {
-  "&": "&amp;",
-  "<": "&lt;",
-  ">": "&gt;",
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
   '"': '&quot;',
   "'": '&#39;',
-  "/": '&#x2F;'
+  '/': '&#x2F;'
 };
 
 export function escapeHTML(str) {
@@ -36,45 +36,44 @@ export function readFileAsText(file) {
   return new Response(file).text();
 }
 
-function transitionClassFunc({removeClass = false}={}) {
-  return function(el, className = 'active', transitionClass = 'transition') {
+function transitionClassFunc({ removeClass = false } = {}) {
+  return (element, className = 'active', transitionClass = 'transition') => {
     if (removeClass) {
-      if (!el.classList.contains(className)) return Promise.resolve();
-    }
-    else {
-      if (el.classList.contains(className)) return Promise.resolve();
-    }
+      if (!element.classList.contains(className)) return Promise.resolve();
+    } else if (element.classList.contains(className)) return Promise.resolve();
 
     const transitionEnd = new Promise(resolve => {
       const listener = event => {
-        if (event.target != el) return;
-        el.removeEventListener('transitionend', listener);
-        el.classList.remove(transitionClass);
+        if (event.target !== element) return;
+        element.removeEventListener('transitionend', listener);
+        element.classList.remove(transitionClass);
         resolve();
       };
 
-      el.classList.add(transitionClass);
+      element.classList.add(transitionClass);
 
       requestAnimationFrame(() => {
-        el.addEventListener('transitionend', listener);
-        el.classList[removeClass ? 'remove' : 'add'](className);
+        element.addEventListener('transitionend', listener);
+        element.classList[removeClass ? 'remove' : 'add'](className);
       });
     });
 
-    const transitionTimeout = new Promise(resolve => setTimeout(resolve, 1000));
+    const transitionTimeout = new Promise(resolve => {
+      setTimeout(resolve, 1000);
+    });
 
     return Promise.race([transitionEnd, transitionTimeout]);
   };
 }
 
 export const transitionToClass = transitionClassFunc();
-export const transitionFromClass = transitionClassFunc({removeClass: true});
+export const transitionFromClass = transitionClassFunc({ removeClass: true });
 
 export function trackFocusMethod() {
-  var focusMethod = 'mouse';
+  let focusMethod = 'mouse';
 
   document.body.addEventListener('focus', event => {
-    event.target.classList.add(focusMethod == 'key' ? 'key-focused' : 'mouse-focused');
+    event.target.classList.add(focusMethod === 'key' ? 'key-focused' : 'mouse-focused');
   }, true);
 
   document.body.addEventListener('blur', event => {

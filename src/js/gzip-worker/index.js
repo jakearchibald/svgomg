@@ -1,14 +1,13 @@
 import { gzip } from 'pako/dist/pako_deflate.js';
 
-self.onmessage = function(event) {
+self.onmessage = (event) => {
   try {
-    var result = gzip(event.data.data).buffer;
+    const result = gzip(event.data.data).buffer;
     self.postMessage({
       id: event.data.id,
-      result: result
+      result
     });
-  }
-  catch (error) {
+  } catch (error) {
     self.postMessage({
       id: event.data.id,
       error: error.message

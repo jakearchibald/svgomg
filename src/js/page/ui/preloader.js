@@ -1,4 +1,4 @@
-import { domReady, transitionFromClass } from '../utils';
+import { domReady, transitionFromClass } from '../utils.js';
 
 export default class Preloader {
   constructor() {

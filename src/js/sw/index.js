@@ -1,12 +1,12 @@
 /* globals SVGOMG_VERSION:false */
 
-import {idbKeyval as storage} from '../utils/storage.js';
+import { idbKeyval as storage } from '../utils/storage.js';
 
 const version = SVGOMG_VERSION;
 const cachePrefix = 'svgomg-';
 const staticCacheName = `${cachePrefix}static-${version}`;
 const fontCacheName = `${cachePrefix}fonts`;
-const expectedCaches = [staticCacheName, fontCacheName];
+const expectedCaches = new Set([staticCacheName, fontCacheName]);
 
 addEventListener('install', event => {
   event.waitUntil((async () => {
@@ -39,7 +39,7 @@ addEventListener('activate', event => {
     // remove caches beginning "svgomg-" that aren't in expectedCaches
     for (const cacheName of await caches.keys()) {
       if (!cacheName.startsWith(cachePrefix)) continue;
-      if (!expectedCaches.includes(cacheName)) await caches.delete(cacheName);
+      if (!expectedCaches.has(cacheName)) await caches.delete(cacheName);
     }
 
     await storage.set('active-version', version);
@@ -66,7 +66,8 @@ addEventListener('fetch', event => {
     event.respondWith(handleFontRequest(event.request));
     return;
   }
+
   event.respondWith(
-    caches.match(event.request).then(r => r || fetch(event.request))
+    caches.match(event.request).then(response => response || fetch(event.request))
   );
 });

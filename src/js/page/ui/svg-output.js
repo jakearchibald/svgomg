@@ -1,19 +1,18 @@
-import { domReady, strToEl } from '../utils';
-import PanZoom from './pan-zoom';
+import { domReady, strToEl } from '../utils.js';
+import PanZoom from './pan-zoom.js';
 
 export default class SvgOutput {
   constructor() {
     this.container = strToEl(
-      '<div class="svg-output">' +
+      String('<div class="svg-output">' +
         '<div class="svg-container">' +
           '<iframe class="svg-frame" sandbox="allow-scripts"></iframe>' +
         '</div>' +
         // Stop touches going into the iframe.
         // pointer-events + touch + iframe doesn't work in Chrome :(
         '<div class="svg-clickjacker"></div>' +
-      '</div>' +
-    '');
-
+      '</div>')
+    );
 
     this._svgFrame = this.container.querySelector('.svg-frame');
     this._svgFrame.scrolling = 'no';
@@ -27,19 +26,19 @@ export default class SvgOutput {
     });
   }
 
-  setSvg(svgFile) {
+  setSvg({ text, width, height }) {
     // I would rather use blob urls, but they don't work in Firefox
     // All the internal refs break.
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1125667
     const nextLoad = this._nextLoadPromise();
-    this._svgFrame.src = "data:image/svg+xml," + encodeURIComponent(svgFile.text);
-    this._svgFrame.width = Math.round(svgFile.width);
-    this._svgFrame.height = Math.round(svgFile.height);
+    this._svgFrame.src = `data:image/svg+xml,${encodeURIComponent(text)}`;
+    this._svgFrame.width = Math.round(width);
+    this._svgFrame.height = Math.round(height);
     return nextLoad;
   }
 
   reset() {
-    this._svgFrame.src = "about:blank";
+    this._svgFrame.src = 'about:blank';
     this._panZoom.reset();
   }
 
@@ -49,6 +48,7 @@ export default class SvgOutput {
         this._svgFrame.removeEventListener('load', onload);
         resolve();
       };
+
       this._svgFrame.addEventListener('load', onload);
     });
   }

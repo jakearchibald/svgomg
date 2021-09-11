@@ -7,13 +7,14 @@
     "node": true
   },
   "parserOptions": {
-    "ecmaVersion": 2017,
+    "ecmaVersion": 2019,
     "ecmaFeatures": {
       "jsx": true
     },
     "sourceType": "module"
   },
   "rules": {
+    "prefer-template": "error",
     "semi": "error",
     "strict": "error"
   }

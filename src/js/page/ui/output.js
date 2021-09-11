@@ -1,12 +1,10 @@
-import { strToEl, transitionToClass, transitionFromClass } from '../utils';
-import SvgOutput from './svg-output';
-import CodeOutput from './code-output';
+import { strToEl, transitionToClass, transitionFromClass } from '../utils.js';
+import SvgOutput from './svg-output.js';
+import CodeOutput from './code-output.js';
 
 export default class Output {
   constructor() {
-    this.container = strToEl(
-      '<div class="output-switcher"></div>' +
-    '');
+    this.container = strToEl(String('<div class="output-switcher"></div>'));
 
     this._types = {
       image: new SvgOutput(),
@@ -15,7 +13,7 @@ export default class Output {
 
     this._svgFile = null;
     this._switchQueue = Promise.resolve();
-    this.set('image', {noAnimate: true});
+    this.set('image', { noAnimate: true });
   }
 
   update(svgFile) {
@@ -27,33 +25,30 @@ export default class Output {
     this._types[this._activeType].reset();
   }
 
-  set(type, {
-    noAnimate = false
-  }={}) {
-    return this._switchQueue = this._switchQueue.then(async () => {
+  set(type, { noAnimate = false } = {}) {
+    this._switchQueue = this._switchQueue.then(async () => {
       const toRemove = this._activeType && this._types[this._activeType].container;
 
       this._activeType = type;
       const toAdd = this._types[this._activeType].container;
-      this.container.appendChild(toAdd);
+      this.container.append(toAdd);
 
       if (this._svgFile) await this.update(this._svgFile);
 
       if (noAnimate) {
         toAdd.classList.add('active');
         if (toRemove) toRemove.classList.remove('active');
-      }
-      else {
-        const transitions = [
-          transitionToClass(toAdd)
-        ];
+      } else {
+        const transitions = [transitionToClass(toAdd)];
 
         if (toRemove) transitions.push(transitionFromClass(toRemove));
 
         await Promise.all(transitions);
       }
 
-      if (toRemove) this.container.removeChild(toRemove);
+      if (toRemove) toRemove.remove();
     });
+
+    return this._switchQueue;
   }
 }

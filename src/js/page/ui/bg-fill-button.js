@@ -1,4 +1,4 @@
-import FloatingActionButton from './floating-action-button';
+import FloatingActionButton from './floating-action-button.js';
 
 export default class BgFillButton extends FloatingActionButton {
   constructor() {
@@ -21,8 +21,7 @@ export default class BgFillButton extends FloatingActionButton {
     if (this.container.classList.contains('active')) {
       this.container.classList.remove('active');
       this.setColor('transparent');
-    }
-    else {
+    } else {
       this.container.classList.add('active');
       this.setColor('rgba(0, 0, 0, 0.7)');
     }

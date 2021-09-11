@@ -1,4 +1,4 @@
-import { transitionToClass } from '../utils';
+import { transitionToClass } from '../utils.js';
 
 export default class MainUi {
   constructor(...elements) {
@@ -11,7 +11,7 @@ export default class MainUi {
     this._activated = true;
 
     return Promise.all(
-      this._toActivate.map(el => transitionToClass(el))
+      this._toActivate.map(element => transitionToClass(element))
     );
   }
 }

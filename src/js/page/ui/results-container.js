@@ -1,4 +1,4 @@
-import { domReady } from '../utils';
+import { domReady } from '../utils.js';
 
 export default class ResultsContainer {
   constructor(results) {
@@ -16,10 +16,9 @@ export default class ResultsContainer {
 
   _positionResults() {
     if (this._query.matches) {
-      this._container.appendChild(this._results.container);
-    }
-    else {
-      this._mobileContainer.appendChild(this._results.container);
+      this._container.append(this._results.container);
+    } else {
+      this._mobileContainer.append(this._results.container);
     }
   }
 }

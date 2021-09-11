@@ -1,9 +1,9 @@
-import { strToEl } from '../utils';
+import { strToEl } from '../utils.js';
 
 export default class Spinner {
   constructor() {
     this.container = strToEl(
-      '<div class="spinner">' +
+      String('<div class="spinner">' +
         '<div class="spinner-container">' +
           '<div class="spinner-layer">' +
             '<div class="circle-clipper left">' +
@@ -17,14 +17,14 @@ export default class Spinner {
             '</div>' +
           '</div>' +
         '</div>' +
-      '</div>' +
-    '');
+      '</div>')
+    );
 
     this._showTimeout = null;
     this.container.style.display = 'none';
 
     this.container.addEventListener('animationend', (event) => {
-      if (event.target == this.container) {
+      if (event.target === this.container) {
         this.container.style.display = 'none';
       }
     });

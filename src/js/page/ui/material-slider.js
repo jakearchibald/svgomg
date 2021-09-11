@@ -1,7 +1,7 @@
-import { strToEl } from '../utils';
+import { strToEl } from '../utils.js';
 
 export default class MaterialSlider {
-  constructor(rangeEl) {
+  constructor(rangeElement) {
     this.container = strToEl(
       '<div class="material-slider">' +
         '<div class="track">' +
@@ -14,20 +14,25 @@ export default class MaterialSlider {
       '</div>'
     );
 
-    this.range = rangeEl;
+    this.range = rangeElement;
     this._handle = this.container.querySelector('.handle');
     this._trackOn = this.container.querySelector('.track-on');
     this._val = this.container.querySelector('.val');
 
-    rangeEl.parentNode.insertBefore(this.container, rangeEl);
-    this.container.insertBefore(rangeEl, this.container.firstChild);
+    rangeElement.parentNode.insertBefore(this.container, rangeElement);
+    this.container.insertBefore(rangeElement, this.container.firstChild);
 
-    rangeEl.addEventListener('input', () => this._onInputChange());
+    rangeElement.addEventListener('input', () => this._onInputChange());
     this.range.addEventListener('mousedown', () => this._onRangeMouseDown());
     this.range.addEventListener('touchstart', () => this._onRangeTouchStart());
     this.range.addEventListener('touchend', () => this._onRangeTouchEnd());
 
     this._setPosition();
+  }
+
+  set value(newValue) {
+    this.range.value = newValue;
+    this._update();
   }
 
   _onRangeTouchStart() {
@@ -48,12 +53,8 @@ export default class MaterialSlider {
       this.range.classList.remove('active');
       document.removeEventListener('mouseup', upListener);
     };
-    document.addEventListener('mouseup', upListener);
-  }
 
-  set value(newVal) {
-    this.range.value = newVal;
-    this._update();
+    document.addEventListener('mouseup', upListener);
   }
 
   _onInputChange() {
@@ -68,9 +69,7 @@ export default class MaterialSlider {
     const { min, max, value } = this.range;
     const percent = (Number(value) - min) / (max - min);
 
-    this._trackOn.style.width =
-      this._handle.style.left = percent * 100 + "%";
-
+    this._trackOn.style.width = this._handle.style.left = `${percent * 100}%`;
     this._val.textContent = value;
   }
 }
