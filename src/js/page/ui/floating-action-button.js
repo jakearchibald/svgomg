@@ -4,9 +4,9 @@ import Ripple from './ripple.js';
 export default class FloatingActionButton {
   constructor({ title, href, iconSvg, major = false }) {
     this.container = strToEl(
-      String((href ? '<a>' : '<div role="button" tabindex="0">') +
+      (href ? '<a>' : '<div role="button" tabindex="0">') +
         iconSvg +
-      (href ? '</a>' : '</div>'))
+      (href ? '</a>' : '</div>')
     );
 
     const classes = ['floating-action-button'];

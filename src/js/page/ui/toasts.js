@@ -2,7 +2,7 @@ import { strToEl, transitionToClass } from '../utils.js';
 
 class Toast {
   constructor(message, duration, buttons) {
-    this.container = strToEl(String('<div class="toast"><div class="toast-content"></div></div>'));
+    this.container = strToEl('<div class="toast"><div class="toast-content"></div></div>');
 
     const content = this.container.querySelector('.toast-content');
     content.textContent = message;

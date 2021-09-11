@@ -12,10 +12,10 @@ function humanSize(bytes) {
 export default class Results {
   constructor() {
     this.container = strToEl(
-      String('<div class="results">' +
+      '<div class="results">' +
         '<span class="size"></span> ' +
         '<span class="diff"></span>' +
-      '</div>')
+      '</div>'
     );
 
     this._sizeEl = this.container.querySelector('.size');

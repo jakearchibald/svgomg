@@ -27,7 +27,7 @@ export default class Changelog {
       .map(change => escapeHtmlTag`<li>${change}</li>`);
 
     this.container.append(strToEl('<h1>Updated!</h1>'));
-    this.container.append(strToEl(String(`<ul>${changeList.join('')}</ul>`)));
+    this.container.append(strToEl(`<ul>${changeList.join('')}</ul>`));
 
     await domReady;
     transitionToClass(this.container);

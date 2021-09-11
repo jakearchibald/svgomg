@@ -4,14 +4,14 @@ import PanZoom from './pan-zoom.js';
 export default class SvgOutput {
   constructor() {
     this.container = strToEl(
-      String('<div class="svg-output">' +
+      '<div class="svg-output">' +
         '<div class="svg-container">' +
           '<iframe class="svg-frame" sandbox="allow-scripts"></iframe>' +
         '</div>' +
         // Stop touches going into the iframe.
         // pointer-events + touch + iframe doesn't work in Chrome :(
         '<div class="svg-clickjacker"></div>' +
-      '</div>')
+      '</div>'
     );
 
     this._svgFrame = this.container.querySelector('.svg-frame');

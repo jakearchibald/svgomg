@@ -10,7 +10,7 @@ import {
 export default class FileDrop {
   constructor() {
     this.emitter = createNanoEvents();
-    this.container = strToEl(String('<div class="drop-overlay">Drop it!</div>'));
+    this.container = strToEl('<div class="drop-overlay">Drop it!</div>');
 
     // drag events are horrid
     this._activeEnters = 0;

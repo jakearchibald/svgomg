@@ -11,7 +11,7 @@ const range = document.createRange();
 range.selectNode(document.documentElement);
 
 export function strToEl(str) {
-  return range.createContextualFragment(str).children[0];
+  return range.createContextualFragment(String(str)).children[0];
 }
 
 const entityMap = {

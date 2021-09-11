@@ -3,7 +3,7 @@ import { strToEl } from '../utils.js';
 export default class Spinner {
   constructor() {
     this.container = strToEl(
-      String('<div class="spinner">' +
+      '<div class="spinner">' +
         '<div class="spinner-container">' +
           '<div class="spinner-layer">' +
             '<div class="circle-clipper left">' +
@@ -17,7 +17,7 @@ export default class Spinner {
             '</div>' +
           '</div>' +
         '</div>' +
-      '</div>')
+      '</div>'
     );
 
     this._showTimeout = null;

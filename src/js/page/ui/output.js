@@ -4,7 +4,7 @@ import CodeOutput from './code-output.js';
 
 export default class Output {
   constructor() {
-    this.container = strToEl(String('<div class="output-switcher"></div>'));
+    this.container = strToEl('<div class="output-switcher"></div>');
 
     this._types = {
       image: new SvgOutput(),
