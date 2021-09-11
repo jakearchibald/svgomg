@@ -132,8 +132,7 @@ export default class PanZoom {
   }
 
   _update() {
-    this._target.style.WebkitTransform = this._target.style.transform
-      = `translate3d(${this._dx}px, ${this._dy}px, 0) scale(${this._scale})`;
+    this._target.style.transform = `translate3d(${this._dx}px, ${this._dy}px, 0) scale(${this._scale})`;
   }
 
   _onPointerUp(event) {
