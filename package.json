@@ -21,9 +21,9 @@
     "svgo": "^2.5.0"
   },
   "scripts": {
-    "build": "gulp clean-build --production",
+    "build": "gulp clean-build",
     "start": "sirv build --port 8080 --dev --no-clear",
     "dev": "gulp dev",
-    "test": "gulp build --production"
+    "test": "gulp build"
   }
 }
