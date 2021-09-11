@@ -3,7 +3,7 @@ import Ripple from './ripple';
 import Spinner from './spinner';
 
 export default class FloatingActionButton {
-  constructor({ title, href, iconSvg, classList, minor }) {
+  constructor({ title, href, iconSvg, classList, major = false }) {
     this.container = strToEl(
       (href ? '<a>' : '<div role="button" tabindex="0">') +
         iconSvg +
@@ -16,7 +16,7 @@ export default class FloatingActionButton {
     if (title) {
       this.container.setAttribute('title', title);
     }
-    this.container.classList.add(minor ? 'minor-floating-action-button' : 'floating-action-button');
+    this.container.classList.add(major ? 'floating-action-button' : 'minor-floating-action-button');
     if (classList) {
       classList.forEach((className) => { this.container.classList.add(className); });
     }
