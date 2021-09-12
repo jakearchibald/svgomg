@@ -85,14 +85,11 @@ export default class MainController {
       const actionContainer = document.querySelector('.action-button-container');
       const minorActionContainer = document.querySelector('.minor-action-container');
 
-      minorActionContainer.append(this._bgFillUi.container);
-      minorActionContainer.append(this._copyButtonUi.container);
-
+      minorActionContainer.append(this._bgFillUi.container, this._copyButtonUi.container);
       actionContainer.append(this._downloadButtonUi.container);
 
       document.querySelector('.output').append(this._outputUi.container);
-      this._container.append(this._toastsUi.container);
-      this._container.append(this._dropUi.container);
+      this._container.append(this._toastsUi.container, this._dropUi.container);
       document.querySelector('.menu-extra').append(this._changelogUi.container);
 
       // load previous settings
