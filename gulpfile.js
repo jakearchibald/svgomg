@@ -81,7 +81,7 @@ async function js(entry, outputPath) {
         preventAssignment: true,
         SVGOMG_VERSION: JSON.stringify(changelog[0].version),
       }),
-      rollupResolve({ preferBuiltins: false, browser: true }),
+      rollupResolve({ browser: true }),
       rollupCommon({ include: /node_modules/ }),
       rollupTerser()
     ]
