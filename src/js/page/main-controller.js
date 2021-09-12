@@ -232,10 +232,9 @@ export default class MainController {
   }
 
   _saveSettings(settings) {
-    const copy = { ...settings };
     // doesn't make sense to retain the "show original" option
-    delete copy.original;
-    storage.set('settings', copy);
+    const { original, ...settingsToKeep } = settings;
+    storage.set('settings', settingsToKeep);
   }
 
   async _compressSvg(settings) {

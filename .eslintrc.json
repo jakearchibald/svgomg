@@ -14,6 +14,12 @@
     "sourceType": "module"
   },
   "rules": {
+    "no-unused-vars": [
+      "error",
+      {
+        "ignoreRestSiblings": true
+      }
+    ],
     "prefer-template": "error",
     "semi": "error",
     "strict": "error"
