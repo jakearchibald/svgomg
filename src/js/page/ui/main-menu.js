@@ -58,6 +58,11 @@ export default class MainMenu extends EventEmitter {
     this._loadFileInput.click();
   }
 
+  setPasteInput(value) {
+    this._pasteInput.value = value;
+    this._pasteInput.dispatchEvent(new Event('input'));
+  }
+
   _onOverlayClick(event) {
     event.preventDefault();
     this.hide();

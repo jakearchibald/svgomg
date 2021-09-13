@@ -48,6 +48,8 @@ export default class MainController {
     this._mainMenuUi.on('error', ({error}) => this._handleError(error));
     this._viewTogglerUi.on('change', e => this._onViewSelectionChange(e));
     window.addEventListener('keydown', e => this._onGlobalKeyDown(e));
+    window.addEventListener('paste', e => this._onGlobalPaste(e));
+    window.addEventListener('copy', e => this._onGlobalCopy(e));
 
     // state
     this._inputItem = null;
@@ -127,6 +129,21 @@ export default class MainController {
       this._mainMenuUi.showFilePicker();
     }
   }
+
+  _onGlobalPaste(event) {
+    let val = event.clipboardData.getData('text').trim();    
+    if (!val.includes('</svg>')) return false;
+    this._mainMenuUi.setPasteInput(val);
+    event.preventDefault();
+  };
+
+  _onGlobalCopy(event) {
+    const selection = window.getSelection();
+    if (selection.isCollapsed) {
+      this._copyButtonUi.getCopyText();
+      event.preventDefault();
+    }
+  };
 
   _onViewSelectionChange(event) {
     this._outputUi.set(event.value);

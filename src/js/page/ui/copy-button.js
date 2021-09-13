@@ -23,6 +23,10 @@ export default class CopyButton extends FloatingActionButton {
 
   _onClick(event) {
     super._onClick(event);
+    this.getCopyText();
+  }
+
+  getCopyText() {
     this._pre.textContent = this._text;
     document.body.appendChild(this._pre);
     getSelection().removeAllRanges();
@@ -36,8 +40,10 @@ export default class CopyButton extends FloatingActionButton {
     getSelection().removeAllRanges();
     document.body.removeChild(this._pre);
   }
-
-  setCopyText(text, filename) {
+  
+  setCopyText(text) {
     this._text = text;
   }
+  
+
 }
