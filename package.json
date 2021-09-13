@@ -18,7 +18,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.39.2",
     "sirv-cli": "^1.0.14",
-    "svgo": "^2.5.0"
+    "svgo": "^2.6.0"
   },
   "scripts": {
     "build": "gulp clean-build",
