@@ -132,17 +132,16 @@ export default class MainController {
 
   _onGlobalPaste(event) {
     let val = event.clipboardData.getData('text').trim();    
-    if (!val.includes('</svg>')) return false;
+    if (!val.includes("</svg>")) return;
     this._mainMenuUi.setPasteInput(val);
     event.preventDefault();
   };
 
   _onGlobalCopy(event) {
     const selection = window.getSelection();
-    if (selection.isCollapsed) {
-      this._copyButtonUi.getCopyText();
-      event.preventDefault();
-    }
+    if (!selection.isCollapsed) return;
+    this._copyButtonUi.getCopyText();
+    event.preventDefault();
   };
 
   _onViewSelectionChange(event) {
