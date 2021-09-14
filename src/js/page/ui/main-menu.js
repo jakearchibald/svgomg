@@ -117,22 +117,13 @@ export default class MainMenu {
       });
     }
     catch (err) {
-      // This extra scope is working around a babel-minify bug.
-      // It's fixed in Babel 7.
-      {
-        this.stopSpinner();
+      this.stopSpinner();
 
-        let error;
+      const error = 'serviceWorker' in navigator && navigator.serviceWorker.controller ?
+        Error("Demo not available offline") :
+        Error("Couldn't fetch demo SVG");
 
-        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-          error = Error("Demo not available offline");
-        }
-        else {
-          error = Error("Couldn't fetch demo SVG");
-        }
-
-        this.emitter.emit('error', { error });
-      }
+      this.emitter.emit('error', { error });
     }
   }
 }

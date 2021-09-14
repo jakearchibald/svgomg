@@ -198,14 +198,10 @@ export default class MainController {
       this._inputFilename = event.filename;
     }
     catch(e) {
-      // This extra scope is working around a babel-minify bug.
-      // It's fixed in Babel 7.
-      {
-        const error = new Error("Load failed: " + e.message);
-        this._mainMenuUi.stopSpinner();
-        this._handleError(error);
-        return;
-      }
+      const error = new Error("Load failed: " + e.message);
+      this._mainMenuUi.stopSpinner();
+      this._handleError(error);
+      return;
     }
 
     this._cache.purge();
