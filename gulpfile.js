@@ -50,9 +50,16 @@ async function html() {
       collapseInlineTagWhitespace: false,
       collapseWhitespace: true,
       decodeEntities: true,
+      minifyCSS: false,
       minifyJS: true,
       removeAttributeQuotes: true,
       removeComments: true,
+      removeOptionalTags: true,
+      removeRedundantAttributes: true,
+      removeScriptTypeAttributes: true,
+      removeStyleLinkTypeAttributes: true,
+      sortAttributes: true,
+      sortClassName: true
     }))
     .pipe(gulp.dest('build'));
 }
