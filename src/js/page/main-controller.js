@@ -142,11 +142,11 @@ export default class MainController {
       this._mainMenuUi.setPasteInput(val);
       event.preventDefault();
     }
-  };
+  }
 
   _onGlobalCopy(event) {
     const selection = window.getSelection();
-    if (!selection.isCollapsed) return;
+    if (!selection.isCollapsed || !copySupported) return;
 
     if (this._copyButtonUi.copyText()) {
       this._toastsUi.show("Copy successful", {
@@ -159,7 +159,7 @@ export default class MainController {
       });
     }
     event.preventDefault();
-  };
+  }
 
   _onViewSelectionChange(event) {
     this._outputUi.set(event.value);
