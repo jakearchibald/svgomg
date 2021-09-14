@@ -1,3 +1,4 @@
+import { createNanoEvents } from 'nanoevents';
 import {
   strToEl,
   domReady,
@@ -5,11 +6,10 @@ import {
   transitionFromClass,
   readFileAsText
 } from '../utils';
-import { EventEmitter } from 'events';
 
-export default class FileDrop extends EventEmitter {
+export default class FileDrop {
   constructor() {
-    super();
+    this.emitter = createNanoEvents();
     this.container = strToEl(
       '<div class="drop-overlay">Drop it!</div>' +
     '');
@@ -18,10 +18,10 @@ export default class FileDrop extends EventEmitter {
     this._activeEnters = 0;
     this._currentEnteredElement = null;
 
-    domReady.then(_ => {
+    domReady.then(() => {
       document.addEventListener('dragover', event => event.preventDefault());
       document.addEventListener('dragenter', event => this._onDragEnter(event));
-      document.addEventListener('dragleave', event => this._onDragLeave(event));
+      document.addEventListener('dragleave', () => this._onDragLeave());
       document.addEventListener('drop', event => this._onDrop(event));
     });
   }
@@ -37,7 +37,7 @@ export default class FileDrop extends EventEmitter {
     }
   }
 
-  _onDragLeave(event) {
+  _onDragLeave() {
     this._currentEnteredElement = null;
 
     if (!--this._activeEnters) {
@@ -54,7 +54,7 @@ export default class FileDrop extends EventEmitter {
     const file = event.dataTransfer.files[0];
     if (!file) return;
 
-    this.emit('svgDataLoad', {
+    this.emitter.emit('svgDataLoad', {
       data: await readFileAsText(file),
       filename: file.name
     });

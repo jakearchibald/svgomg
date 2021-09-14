@@ -6,24 +6,26 @@
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@rollup/plugin-replace": "^3.0.0",
     "eslint": "^7.32.0",
-    "events": "^3.3.0",
     "gulp": "^4.0.2",
     "gulp-htmlmin": "^5.0.1",
     "gulp-nunjucks": "^5.1.0",
     "gulp-sass": "^5.0.0",
     "gulp-sourcemaps": "^3.0.0",
+    "nanoevents": "^6.0.1",
     "pako": "^1.0.11",
     "prismjs": "^1.6.0",
     "rollup": "^2.56.3",
     "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.39.2",
     "sirv-cli": "^1.0.14",
-    "svgo": "^2.5.0"
+    "svgo": "^2.6.0"
   },
   "scripts": {
     "build": "gulp clean-build",
     "start": "sirv build --port 8080 --dev --no-clear",
     "dev": "gulp dev",
-    "test": "gulp build"
+    "lint": "eslint --report-unused-disable-directives --ignore-path .gitignore .",
+    "fix": "npm run lint -- --fix",
+    "test": "npm run lint && gulp build"
   }
 }

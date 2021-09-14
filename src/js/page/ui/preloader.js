@@ -2,7 +2,7 @@ import { domReady, transitionFromClass } from '../utils';
 
 export default class Preloader {
   constructor() {
-    domReady.then(_ => {
+    domReady.then(() => {
       this.container = document.querySelector('.preloader');
       this.activated = this.container.classList.contains('active');
       this.hide();

@@ -1,5 +1,3 @@
-"use strict";
-
 export const domReady = new Promise(resolve => {
   function checkState() {
     if (document.readyState != 'loading') resolve();
@@ -26,17 +24,17 @@ const entityMap = {
 };
 
 export function escapeHTML(str) {
-  return String(str).replace(/[&<>"'\/]/g, s => entityMap[s]);
+  return String(str).replace(/[&<>"'/]/g, s => entityMap[s]);
 }
 
 export function escapeHtmlTag(strings, ...values) {
   values = values.map(s => escapeHTML(s));
   return strings.reduce((str, val, i) => str += val + (values[i] || ''), '');
-};
+}
 
 export function readFileAsText(file) {
   return new Response(file).text();
-};
+}
 
 function transitionClassFunc({removeClass = false}={}) {
   return function(el, className = 'active', transitionClass = 'transition') {
@@ -68,7 +66,7 @@ function transitionClassFunc({removeClass = false}={}) {
     const transitionTimeout = new Promise(resolve => setTimeout(resolve, 1000));
 
     return Promise.race([transitionEnd, transitionTimeout]);
-  }
+  };
 }
 
 export const transitionToClass = transitionClassFunc();
@@ -93,4 +91,4 @@ export function trackFocusMethod() {
   document.body.addEventListener('mousedown', () => {
     focusMethod = 'mouse';
   }, true);
-};
+}

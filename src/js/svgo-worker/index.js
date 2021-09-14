@@ -1,5 +1,3 @@
-"use strict";
-
 import { optimize } from 'svgo/dist/svgo.browser';
 
 const createDimensionsExtracter = () => {
@@ -51,12 +49,12 @@ function* multipassCompress(settings) {
   }
 
   let previousSvg = null;
-  let currentSvg = svgInput
+  let currentSvg = svgInput;
 
   // multipass optimization
   while (previousSvg == null || previousSvg.length !== currentSvg.length) {
-    previousSvg = currentSvg
-    const [dimensions, extractDimensionsPlugin] = createDimensionsExtracter()
+    previousSvg = currentSvg;
+    const [dimensions, extractDimensionsPlugin] = createDimensionsExtracter();
     const { data: svgOutput, error } = optimize(currentSvg, {
       plugins: [
         ...plugins,
@@ -66,7 +64,7 @@ function* multipassCompress(settings) {
         indent: '  ',
         pretty: settings.pretty
       }
-    })
+    });
     if (error) {
       throw Error(error);
     }
@@ -84,10 +82,10 @@ let multipassInstance;
 const actions = {
   load({ data }) {
     svgInput = data;
-    const [dimensions, extractDimensionsPlugin] = createDimensionsExtracter()
+    const [dimensions, extractDimensionsPlugin] = createDimensionsExtracter();
     const { error } = optimize(data, {
       plugins: [extractDimensionsPlugin],
-    })
+    });
     if (error) {
       throw Error(error);
     }

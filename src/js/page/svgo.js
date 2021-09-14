@@ -31,7 +31,7 @@ export default class Svgo extends WorkerMessenger {
       iterationCallback(resultFile);
 
       if (settings.multipass) {
-        while (result = await this.nextPass()) {
+        while ((result = await this.nextPass())) {
           if (this._abortOnNextIteration) {
             throw Error('abort');
           }

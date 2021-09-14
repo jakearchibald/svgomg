@@ -41,14 +41,14 @@ export default class MaterialSlider {
   _onRangeMouseDown() {
     this.range.classList.add('active');
 
-    const upListener = e => {
+    const upListener = () => {
       // IE requires me to do this. Pah.
-      requestAnimationFrame(_ => {
+      requestAnimationFrame(() => {
         this.range.blur();
-      })
+      });
       this.range.classList.remove('active');
       document.removeEventListener('mouseup', upListener);
-    }
+    };
     document.addEventListener('mouseup', upListener);
   }
 

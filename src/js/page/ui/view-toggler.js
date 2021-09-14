@@ -1,12 +1,12 @@
-import { EventEmitter } from 'events';
+import { createNanoEvents } from 'nanoevents';
 import { domReady } from '../utils';
 
 /**
  * Tabs that toggle between showing the SVG image and XML markup.
  */
-export default class ViewToggler extends EventEmitter {
+export default class ViewToggler {
   constructor() {
-    super();
+    this.emitter = createNanoEvents();
     /** @type {HTMLFormElement | null} */
     this.container = null;
 
@@ -16,11 +16,11 @@ export default class ViewToggler extends EventEmitter {
       // stop browsers remembering previous form state
       this.container.output[0].checked = true;
 
-      this.container.addEventListener('change', e => this._onChange(e));
+      this.container.addEventListener('change', () => this._onChange());
     });
   }
 
-  _onChange(event) {
+  _onChange() {
     let value = this.container.output.value;
 
     if (!value) { // some browsers don't support the nice shortcut above (eg Safari)
@@ -29,6 +29,6 @@ export default class ViewToggler extends EventEmitter {
       }, '');
     }
 
-    this.emit("change", { value });
+    this.emitter.emit("change", { value });
   }
 }
