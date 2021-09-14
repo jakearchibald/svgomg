@@ -72,19 +72,6 @@ function transitionClassFunc({removeClass = false}={}) {
 export const transitionToClass = transitionClassFunc();
 export const transitionFromClass = transitionClassFunc({removeClass: true});
 
-export function loadCss(url) {
-  return new Promise((resolve, reject) => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = url;
-
-    link.addEventListener('load', () => resolve());
-    link.addEventListener('error', () => reject());
-
-    document.head.appendChild(link);
-  });
-}
-
 export function trackFocusMethod() {
   var focusMethod = 'mouse';
 
