@@ -25,6 +25,11 @@
     font-size: 0.9rem;
     display: block;
     padding: 14px;
+
+    @media (min-width: 640px) {
+      // Allow the code area to scroll past the floating action buttons.
+      margin-bottom: 200px;
+    }
   }
 
   @media (min-width: 900px) {
