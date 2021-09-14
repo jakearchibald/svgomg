@@ -132,15 +132,34 @@ export default class MainController {
 
   _onGlobalPaste(event) {
     let val = event.clipboardData.getData('text').trim();    
-    if (!val.includes("</svg>")) return;
-    this._mainMenuUi.setPasteInput(val);
-    event.preventDefault();
+    if (!val.includes("</svg>")) {
+      this._toastsUi.show("Pasted value not an SVG", {
+        duration: 2000
+      });
+    }
+    else {
+      this._mainMenuUi.setPasteInput(val);
+      this._toastsUi.show("Paste completed", {
+        duration: 2000
+      });
+      event.preventDefault();
+    }
   };
 
   _onGlobalCopy(event) {
     const selection = window.getSelection();
     if (!selection.isCollapsed) return;
-    this._copyButtonUi.getCopyText();
+
+    if (this._copyButtonUi.getCopyText()) {
+      this._toastsUi.show("Copy successful", {
+        duration: 2000
+      });
+    }
+    else {
+      this._toastsUi.show("Nothing to copy", {
+        duration: 2000
+      });
+    }
     event.preventDefault();
   };
 
