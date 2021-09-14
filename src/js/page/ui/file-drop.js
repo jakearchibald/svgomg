@@ -4,7 +4,8 @@ import {
   domReady,
   transitionToClass,
   transitionFromClass,
-  readFileAsText
+  readFileAsText,
+  loadUtils
 } from '../utils';
 
 export default class FileDrop {
@@ -54,9 +55,6 @@ export default class FileDrop {
     const file = event.dataTransfer.files[0];
     if (!file) return;
 
-    this.emitter.emit('svgDataLoad', {
-      data: await readFileAsText(file),
-      filename: file.name
-    });
+    loadUtils.loadSvg(await readFileAsText(file), file.name);
   }
 }

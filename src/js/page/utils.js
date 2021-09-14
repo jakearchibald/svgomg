@@ -1,3 +1,5 @@
+import { createNanoEvents } from 'nanoevents';
+
 export const domReady = new Promise(resolve => {
   function checkState() {
     if (document.readyState != 'loading') resolve();
@@ -89,3 +91,42 @@ export function trackFocusMethod() {
     focusMethod = 'mouse';
   }, true);
 }
+export const copyUtils = {
+  _text: '',
+  _pre: document.createElement('pre'),
+  setCopyText(text) {
+    this._text = text;
+  },
+  copyText() {
+    if (!this._text) return false;
+  
+    this._pre.textContent = this._text;
+    document.body.appendChild(this._pre);
+    getSelection().removeAllRanges();
+
+    const range = document.createRange();
+    range.selectNode(this._pre);
+
+    window.getSelection().addRange(range);
+
+    document.execCommand('copy');
+    getSelection().removeAllRanges();
+    document.body.removeChild(this._pre);
+    
+    return true;
+  }
+};
+export const loadUtils = {
+  emitter: createNanoEvents(),
+  loadClipboardSVG(val) {
+    if (val.includes("</svg>")) {
+      this.loadSvg(val, "image.svg");
+    }
+  },
+  loadSvg(data, filename) {
+    this.emitter.emit("svgDataLoad", {
+      data,
+      filename,
+    });
+  },
+};

@@ -1,6 +1,6 @@
 import { idbKeyval as storage } from '../utils/storage';
 import Svgo from './svgo';
-import { domReady } from './utils';
+import { loadUtils, copyUtils, domReady } from './utils';
 import Output from './ui/output';
 import DownloadButton from './ui/download-button';
 import CopyButton from './ui/copy-button';
@@ -42,8 +42,7 @@ export default class MainController {
     // ui events
     this._settingsUi.emitter.on('change', () => this._onSettingsChange());
     this._settingsUi.emitter.on('reset', oldSettings => this._onSettingsReset(oldSettings));
-    this._mainMenuUi.emitter.on('svgDataLoad', e => this._onInputChange(e));
-    this._dropUi.emitter.on('svgDataLoad', e => this._onInputChange(e));
+    loadUtils.emitter.on('svgDataLoad', e => this._onInputChange(e));
     this._mainMenuUi.emitter.on('error', ({error}) => this._handleError(error));
     this._viewTogglerUi.emitter.on('change', e => this._onViewSelectionChange(e));
     window.addEventListener('keydown', e => this._onGlobalKeyDown(e));
@@ -140,7 +139,7 @@ export default class MainController {
       });
     }
     else {
-      this._mainMenuUi.setPasteInput(val);
+      loadUtils.loadClipboardSVG(val);
       event.preventDefault();
     }
   }
@@ -149,7 +148,7 @@ export default class MainController {
     const selection = window.getSelection();
     if (!selection.isCollapsed) return;
 
-    if (this._copyButtonUi.copyText()) {
+    if (copyUtils.copyText()) {
       this._toastsUi.show("Copy successful", {
         duration: 2000
       });
@@ -316,7 +315,7 @@ export default class MainController {
   async _updateForFile(svgFile, { compareToFile, compress }) {
     this._outputUi.update(svgFile);
     this._downloadButtonUi.setDownload(this._inputFilename, svgFile);
-    this._copyButtonUi.setCopyText(svgFile.text);
+    copyUtils.setCopyText(svgFile.text);
 
     this._resultsUi.update({
       comparisonSize: compareToFile && (await compareToFile.size({ compress })),

@@ -2,7 +2,8 @@ import {
   domReady,
   transitionFromClass,
   transitionToClass,
-  readFileAsText
+  readFileAsText,
+  loadUtils
 } from '../utils';
 import Spinner from './spinner';
 import { createNanoEvents } from 'nanoevents';
@@ -74,21 +75,15 @@ export default class MainMenu {
 
   _onTextInputChange() {
     const val = this._pasteInput.value.trim();
-
     if (val.includes('</svg>')) {
       this._pasteInput.value = '';
       this._pasteInput.blur();
 
       this._pasteLabel.appendChild(this._spinner.container);
       this._spinner.show();
-
-      this.emitter.emit('svgDataLoad', {
-        data: val,
-        filename: 'image.svg'
-      });
+      loadUtils.loadClipboardSVG(val);
     }
   }
-
   _onLoadFileClick(event) {
     event.preventDefault();
     event.target.blur();
@@ -102,11 +97,7 @@ export default class MainMenu {
 
     this._loadFileBtn.appendChild(this._spinner.container);
     this._spinner.show();
-
-    this.emitter.emit('svgDataLoad', {
-      data: await readFileAsText(file),
-      filename: file.name
-    });
+    loadUtils.loadSvg(await readFileAsText(file), file.name);
   }
 
   async _onLoadDemoClick(event) {
@@ -116,10 +107,7 @@ export default class MainMenu {
     this._spinner.show();
 
     try {
-      this.emitter.emit('svgDataLoad', {
-        data: await fetch('test-svgs/car-lite.svg').then(r => r.text()),
-        filename: 'car-lite.svg'
-      });
+      loadUtils.loadSvg(await fetch('test-svgs/car-lite.svg').then(r => r.text()), 'car-lite.svg');
     }
     catch (err) {
       this.stopSpinner();
