@@ -9,7 +9,7 @@ import { createNanoEvents } from 'nanoevents';
 
 export default class MainMenu {
   constructor() {
-    this.emitter = createNanoEvents()
+    this.emitter = createNanoEvents();
     this.allowHide = false;
     this._spinner = new Spinner();
 

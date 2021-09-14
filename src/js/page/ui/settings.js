@@ -6,7 +6,7 @@ import Ripple from './ripple';
 
 export default class Settings {
   constructor() {
-    this.emitter = createNanoEvents()
+    this.emitter = createNanoEvents();
     this._throttleTimeout = null;
 
     domReady.then(() => {
