@@ -41,12 +41,12 @@ export default class MainController {
     this._viewTogglerUi = new ViewToggler();
 
     // ui events
-    this._settingsUi.on('change', () => this._onSettingsChange());
-    this._settingsUi.on('reset', oldSettings => this._onSettingsReset(oldSettings));
-    this._mainMenuUi.on('svgDataLoad', e => this._onInputChange(e));
-    this._dropUi.on('svgDataLoad', e => this._onInputChange(e));
-    this._mainMenuUi.on('error', ({error}) => this._handleError(error));
-    this._viewTogglerUi.on('change', e => this._onViewSelectionChange(e));
+    this._settingsUi.emitter.on('change', () => this._onSettingsChange());
+    this._settingsUi.emitter.on('reset', oldSettings => this._onSettingsReset(oldSettings));
+    this._mainMenuUi.emitter.on('svgDataLoad', e => this._onInputChange(e));
+    this._dropUi.emitter.on('svgDataLoad', e => this._onInputChange(e));
+    this._mainMenuUi.emitter.on('error', ({error}) => this._handleError(error));
+    this._viewTogglerUi.emitter.on('change', e => this._onViewSelectionChange(e));
     window.addEventListener('keydown', e => this._onGlobalKeyDown(e));
     window.addEventListener('paste', e => this._onGlobalPaste(e));
     window.addEventListener('copy', e => this._onGlobalCopy(e));
@@ -112,6 +112,7 @@ export default class MainController {
       }
 
       // for testing
+      // eslint-disable-next-line no-constant-condition
       if (false) {
         (async () => {
           this._onInputChange({
@@ -251,7 +252,7 @@ export default class MainController {
         this._mainMenuUi.hide();
         firstIteration = false;
       }
-    }
+    };
 
     this._compressSvg(settings, () => compressed());
 

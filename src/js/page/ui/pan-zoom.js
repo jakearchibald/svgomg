@@ -47,7 +47,7 @@ export default class PanZoom {
       '_onPointerUp'
     ].forEach(funcName => {
       this[funcName] = this[funcName].bind(this);
-    })
+    });
 
     // bound events
     eventArea.addEventListener('mousedown', this._onPointerDown);
@@ -90,7 +90,7 @@ export default class PanZoom {
     this._update();
   }
 
-  _onFirstPointerDown(event) {
+  _onFirstPointerDown() {
     document.addEventListener('mousemove', this._onPointerMove);
     document.addEventListener('mouseup', this._onPointerUp);
     document.addEventListener('touchmove', this._onPointerMove);
@@ -106,7 +106,7 @@ export default class PanZoom {
     this._active++;
 
     if (this._active === 1) {
-      this._onFirstPointerDown(event);
+      this._onFirstPointerDown();
     }
   }
 
@@ -132,8 +132,7 @@ export default class PanZoom {
   }
 
   _update() {
-    this._target.style.WebkitTransform = this._target.style.transform
-      = `translate3d(${this._dx}px, ${this._dy}px, 0) scale(${this._scale})`;
+    this._target.style.transform = `translate3d(${this._dx}px, ${this._dy}px, 0) scale(${this._scale})`;
   }
 
   _onPointerUp(event) {

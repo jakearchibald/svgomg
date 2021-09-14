@@ -1,13 +1,12 @@
-import { EventEmitter } from 'events';
+import { createNanoEvents } from 'nanoevents';
 
 import { domReady } from '../utils';
 import MaterialSlider from './material-slider';
 import Ripple from './ripple';
 
-export default class Settings extends EventEmitter {
+export default class Settings {
   constructor() {
-    super();
-
+    this.emitter = createNanoEvents();
     this._throttleTimeout = null;
 
     domReady.then(() => {
@@ -62,10 +61,10 @@ export default class Settings extends EventEmitter {
 
     // throttle range
     if (event.target.type == 'range') {
-      this._throttleTimeout = setTimeout(() => this.emit('change'), 150);
+      this._throttleTimeout = setTimeout(() => this.emitter.emit('change'), 150);
     }
     else {
-      this.emit('change');
+      this.emitter.emit('change');
     }
   }
 
@@ -86,8 +85,8 @@ export default class Settings extends EventEmitter {
       inputEl.checked = inputEl.hasAttribute('checked');
     }
 
-    this.emit('reset', oldSettings);
-    this.emit('change');
+    this.emitter.emit('reset', oldSettings);
+    this.emitter.emit('change');
   }
 
   setSettings(settings) {

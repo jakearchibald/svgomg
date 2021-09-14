@@ -1,5 +1,3 @@
-"use strict";
-
 export const domReady = new Promise(resolve => {
   function checkState() {
     if (document.readyState != 'loading') resolve();
@@ -26,17 +24,17 @@ const entityMap = {
 };
 
 export function escapeHTML(str) {
-  return String(str).replace(/[&<>"'\/]/g, s => entityMap[s]);
+  return String(str).replace(/[&<>"'/]/g, s => entityMap[s]);
 }
 
 export function escapeHtmlTag(strings, ...values) {
   values = values.map(s => escapeHTML(s));
   return strings.reduce((str, val, i) => str += val + (values[i] || ''), '');
-};
+}
 
 export function readFileAsText(file) {
   return new Response(file).text();
-};
+}
 
 function transitionClassFunc({removeClass = false}={}) {
   return function(el, className = 'active', transitionClass = 'transition') {
@@ -50,7 +48,6 @@ function transitionClassFunc({removeClass = false}={}) {
     const transitionEnd = new Promise(resolve => {
       const listener = event => {
         if (event.target != el) return;
-        el.removeEventListener('webkitTransitionEnd', listener);
         el.removeEventListener('transitionend', listener);
         el.classList.remove(transitionClass);
         resolve();
@@ -59,7 +56,6 @@ function transitionClassFunc({removeClass = false}={}) {
       el.classList.add(transitionClass);
 
       requestAnimationFrame(() => {
-        el.addEventListener('webkitTransitionEnd', listener);
         el.addEventListener('transitionend', listener);
         el.classList[removeClass ? 'remove' : 'add'](className);
       });
@@ -68,24 +64,11 @@ function transitionClassFunc({removeClass = false}={}) {
     const transitionTimeout = new Promise(resolve => setTimeout(resolve, 1000));
 
     return Promise.race([transitionEnd, transitionTimeout]);
-  }
+  };
 }
 
 export const transitionToClass = transitionClassFunc();
 export const transitionFromClass = transitionClassFunc({removeClass: true});
-
-export function loadCss(url) {
-  return new Promise((resolve, reject) => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = url;
-
-    link.addEventListener('load', () => resolve());
-    link.addEventListener('error', () => reject());
-
-    document.head.appendChild(link);
-  });
-};
 
 export function trackFocusMethod() {
   var focusMethod = 'mouse';
@@ -106,4 +89,4 @@ export function trackFocusMethod() {
   document.body.addEventListener('mousedown', () => {
     focusMethod = 'mouse';
   }, true);
-};
+}

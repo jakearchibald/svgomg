@@ -44,7 +44,6 @@ export default class CopyButton extends FloatingActionButton {
     
     return true;
   }
-  
   setCopyText(text) {
     this._text = text;
   }

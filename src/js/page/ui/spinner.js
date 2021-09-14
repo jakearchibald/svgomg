@@ -29,7 +29,6 @@ export default class Spinner {
       }
     };
 
-    this.container.addEventListener('webkitAnimationEnd', animEndListener);
     this.container.addEventListener('animationend', animEndListener);
   }
 

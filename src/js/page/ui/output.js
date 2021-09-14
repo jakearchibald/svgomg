@@ -54,6 +54,6 @@ export default class Output {
       }
 
       if (toRemove) this.container.removeChild(toRemove);
-    })
+    });
   }
 }
