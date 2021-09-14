@@ -27,14 +27,6 @@
       opacity: 0;
       transition: opacity 0.15s ease-out;
       transform: translateZ(0);
-
-      // Safari needs this because it hates me & fails to clip properly
-      border-radius: 19px;
-
-      // But it causes issues in other browsers so:
-      @supports (transform: none) {
-        border-radius: 0;
-      }
     }
   }
 
@@ -64,14 +56,6 @@
       opacity: 0;
       transition: opacity 0.15s ease-out;
       transform: translateZ(0);
-
-      // Safari needs this because it hates me & fails to clip properly
-      border-radius: 10px;
-
-      // But it causes issues in other browsers so:
-      @supports (transform: none) {
-        border-radius: 0;
-      }
     }
   }
 
