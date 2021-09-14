@@ -23,10 +23,10 @@ export default class CopyButton extends FloatingActionButton {
 
   _onClick(event) {
     super._onClick(event);
-    this.getCopyText();
+    this.copyText();
   }
 
-  getCopyText() {
+  copyText() {
     if (!this._text) return false;
   
     this._pre.textContent = this._text;

@@ -147,7 +147,7 @@ export default class MainController {
     const selection = window.getSelection();
     if (!selection.isCollapsed) return;
 
-    if (this._copyButtonUi.getCopyText()) {
+    if (this._copyButtonUi.copyText()) {
       this._toastsUi.show("Copy successful", {
         duration: 2000
       });
