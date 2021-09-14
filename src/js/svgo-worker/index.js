@@ -1,6 +1,6 @@
 import { optimize } from 'svgo/dist/svgo.browser';
 
-const createDimensionsExtracter = () => {
+const createDimensionsExtractor = () => {
   const dimensions = {};
   const plugin = {
     type: 'visitor',
@@ -27,7 +27,7 @@ const createDimensionsExtracter = () => {
   return [dimensions, plugin];
 };
 
-function* multipassCompress(settings) {
+function compress(svgInput, settings) {
   // setup plugin list
   const floatPrecision = Number(settings.floatPrecision);
   const plugins = [];
@@ -48,41 +48,32 @@ function* multipassCompress(settings) {
     }
   }
 
-  let previousSvg = null;
-  let currentSvg = svgInput;
-
   // multipass optimization
-  while (previousSvg == null || previousSvg.length !== currentSvg.length) {
-    previousSvg = currentSvg;
-    const [dimensions, extractDimensionsPlugin] = createDimensionsExtracter();
-    const { data: svgOutput, error } = optimize(currentSvg, {
-      plugins: [
-        ...plugins,
-        extractDimensionsPlugin,
-      ],
-      js2svg: {
-        indent: '  ',
-        pretty: settings.pretty
-      }
-    });
-    if (error) {
-      throw Error(error);
+  const [dimensions, extractDimensionsPlugin] = createDimensionsExtractor();
+  const { data: svgOutput, error } = optimize(svgInput, {
+    multipass: settings.multipass,
+    plugins: [
+      ...plugins,
+      extractDimensionsPlugin,
+    ],
+    js2svg: {
+      indent: '  ',
+      pretty: settings.pretty
     }
-    currentSvg = svgOutput;
-    yield {
-      data: svgOutput,
-      dimensions
-    };
+  });
+  if (error) {
+    throw Error(error);
   }
+
+  return {
+    data: svgOutput,
+    dimensions
+  };
 }
 
-let svgInput;
-let multipassInstance;
-
 const actions = {
-  load({ data }) {
-    svgInput = data;
-    const [dimensions, extractDimensionsPlugin] = createDimensionsExtracter();
+  wrapOriginal({ data }) {
+    const [dimensions, extractDimensionsPlugin] = createDimensionsExtractor();
     const { error } = optimize(data, {
       plugins: [extractDimensionsPlugin],
     });
@@ -92,13 +83,9 @@ const actions = {
 
     return dimensions;
   },
-  process({ settings }) {
-    multipassInstance = multipassCompress(settings);
-    return multipassInstance.next().value;
+  process({ data, settings }) {
+    return compress(data, settings);
   },
-  nextPass() {
-    return multipassInstance.next().value;
-  }
 };
 
 self.onmessage = event => {

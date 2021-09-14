@@ -32,7 +32,6 @@ export default class Settings {
       this.container = document.querySelector('.settings');
       this._scroller = document.querySelector('.settings-scroller');
 
-      this.container.addEventListener('change', e => this._onChange(e));
       this.container.addEventListener('input', e => this._onChange(e));
       this._scroller.addEventListener('wheel', e => this._onMouseWheel(e));
       this._resetBtn.addEventListener('click', e => this._onReset(e));
