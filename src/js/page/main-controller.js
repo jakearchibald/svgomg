@@ -194,39 +194,23 @@ export default class MainController {
     this._userHasInteracted = true;
 
     try {
-      this._inputItem = await svgo.load(event.data);
+      this._inputItem = await svgo.wrapOriginal(event.data);
       this._inputFilename = event.filename;
     }
     catch(e) {
-      // This extra scope is working around a babel-minify bug.
-      // It's fixed in Babel 7.
-      {
-        const error = new Error("Load failed: " + e.message);
-        this._mainMenuUi.stopSpinner();
-        this._handleError(error);
-        return;
-      }
+      const error = new Error("Load failed: " + e.message);
+      this._mainMenuUi.stopSpinner();
+      this._handleError(error);
+      return;
     }
 
     this._cache.purge();
 
-    let firstIteration = true;
-
-    const compressed = () => {
-      if (firstIteration) {
-        this._outputUi.reset();
-        this._mainUi.activate();
-        this._mainMenuUi.allowHide = true;
-        this._mainMenuUi.hide();
-        firstIteration = false;
-      }
-    };
-
-    this._compressSvg(settings, () => compressed());
-
-    if (firstIteration) {
-      compressed();
-    }
+    this._compressSvg(settings);
+    this._outputUi.reset();
+    this._mainUi.activate();
+    this._mainMenuUi.allowHide = true;
+    this._mainMenuUi.hide();
   }
 
   _handleError(e) {
@@ -246,10 +230,10 @@ export default class MainController {
     storage.set('settings', copy);
   }
 
-  async _compressSvg(settings, iterationCallback = function(){}) {
+  async _compressSvg(settings) {
     const thisJobId = this._latestCompressJobId = Math.random();
 
-    await svgo.abortCurrent();
+    await svgo.abort();
 
     if (thisJobId != this._latestCompressJobId) {
       // while we've been waiting, there's been a newer call
@@ -277,18 +261,17 @@ export default class MainController {
     this._downloadButtonUi.working();
 
     try {
-      const finalResultFile = await svgo.process(settings, resultFile => {
-        iterationCallback(resultFile);
-        this._updateForFile(resultFile, {
-          compareToFile: this._inputItem,
-          compress: settings.gzip
-        });
+      const finalResultFile = await svgo.process(this._inputItem.text, settings);
+
+      this._updateForFile(finalResultFile, {
+        compareToFile: this._inputItem,
+        compress: settings.gzip
       });
 
       this._cache.add(settings.fingerprint, finalResultFile);
     }
-    catch(e) {
-      if (e.message == "abort") return;
+    catch (e) {
+      if (e.name === "AbortError") return;
       e.message = "Minifying error: " + e.message;
       this._handleError(e);
     }

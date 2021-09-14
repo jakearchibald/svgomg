@@ -4,21 +4,42 @@ export default class WorkerMessenger {
     // worker jobs awaiting response { [requestId]: [ resolve, reject ] }
     this._pending = {};
     this._url = url;
-    this._worker = new Worker(this._url);
-    this._worker.onmessage = event => this._onMessage(event);
+    this._worker = null;
   }
 
-  async release() {
+  release() {
+    this._abortPending();
     if (this._worker) {
       this._worker.terminate();
       this._worker = null;
     }
+  }
+
+  abort() {
+    if (Object.keys(this._pending).length === 0) return;
+
+    this._abortPending();
+    if (this._worker) {
+      this._worker.terminate();
+    }
+    this._startWorker();
+  }
+
+  _abortPending() {
     for (const key of Object.keys(this._pending)) {
-      this._fulfillPending(key, null, new Error("Worker terminated: " + this._url));
+      this._fulfillPending(key, null, new DOMException("AbortError", "AbortError"));
     }
   }
 
+  _startWorker() {
+    this._worker = new Worker(this._url);
+    this._worker.onmessage = event => this._onMessage(event);
+  }
+
   _postMessage(message) {
+    if (!this._worker) {
+      this._startWorker();
+    }
     this._worker.postMessage(message);
   }
 
@@ -28,7 +49,11 @@ export default class WorkerMessenger {
       return;
     }
 
-    this._fulfillPending(event.data.id, event.data.result, event.data.error);
+    this._fulfillPending(
+      event.data.id,
+      event.data.result,
+      event.data.error && new Error(event.data.error),
+    );
   }
 
   _fulfillPending(id, result, error) {
@@ -42,7 +67,7 @@ export default class WorkerMessenger {
     delete this._pending[id];
 
     if (error) {
-      resolver[1](new Error(error));
+      resolver[1](error);
       return;
     }
 
