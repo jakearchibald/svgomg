@@ -78,8 +78,7 @@ export function trackFocusMethod() {
   }, true);
 
   document.body.addEventListener('blur', event => {
-    event.target.classList.remove('key-focused');
-    event.target.classList.remove('mouse-focused');
+    event.target.classList.remove('key-focused', 'mouse-focused');
   }, true);
 
   document.body.addEventListener('keydown', () => {
