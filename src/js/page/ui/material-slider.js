@@ -42,7 +42,6 @@ export default class MaterialSlider {
     this.range.classList.add('active');
 
     const upListener = () => {
-      // IE requires me to do this. Pah.
       requestAnimationFrame(() => {
         this.range.blur();
       });

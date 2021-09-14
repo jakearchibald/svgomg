@@ -58,23 +58,11 @@
     position: absolute;
     top: 0;
     left: 0;
-    margin: 0;
-    width: 100%;
-
-    // increase the touch target
-    height: 60px;
-
-    @supports (width: calc(100% + 10px)) {
-      width: calc(100% + 10px);
-      margin-left: -5px;
-    }
+    margin: 0 0 0 -5px;
+    width: calc(100% + 10px);
+    height: 60px; // increase the touch target
     transform: translateY(-50%);
     opacity: 0;
-    
-    // remove tooltip in IE
-    &::-ms-tooltip {
-      display: none;
-    }
   }
 
   & :focus + .track,
