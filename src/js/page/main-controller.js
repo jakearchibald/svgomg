@@ -4,7 +4,6 @@ import { domReady } from './utils';
 import Output from './ui/output';
 import DownloadButton from './ui/download-button';
 import CopyButton from './ui/copy-button';
-import { copySupported } from './ui/copy-button';
 import BgFillButton from './ui/bg-fill-button';
 import Results from './ui/results';
 import Settings from './ui/settings';
@@ -48,6 +47,8 @@ export default class MainController {
     this._mainMenuUi.emitter.on('error', ({error}) => this._handleError(error));
     this._viewTogglerUi.emitter.on('change', e => this._onViewSelectionChange(e));
     window.addEventListener('keydown', e => this._onGlobalKeyDown(e));
+    window.addEventListener('paste', e => this._onGlobalPaste(e));
+    window.addEventListener('copy', e => this._onGlobalCopy(e));
 
     // state
     this._inputItem = null;
@@ -88,10 +89,8 @@ export default class MainController {
 
       minorActionContainer.appendChild(this._bgFillUi.container);
 
-      if (copySupported) {
-        minorActionContainer.appendChild(this._copyButtonUi.container);
-      }
-
+      minorActionContainer.appendChild(this._copyButtonUi.container);
+      
       actionContainer.appendChild(this._downloadButtonUi.container);
 
       document.querySelector('.output').appendChild(this._outputUi.container);
@@ -131,6 +130,36 @@ export default class MainController {
     if (event.key === 'Escape') {
       this._mainMenuUi.hide();
     }
+  }
+
+  _onGlobalPaste(event) {
+    const val = event.clipboardData.getData('text').trim();    
+    if (!val.includes("</svg>")) {
+      this._toastsUi.show("Pasted value not an SVG", {
+        duration: 2000
+      });
+    }
+    else {
+      this._mainMenuUi.setPasteInput(val);
+      event.preventDefault();
+    }
+  }
+
+  _onGlobalCopy(event) {
+    const selection = window.getSelection();
+    if (!selection.isCollapsed) return;
+
+    if (this._copyButtonUi.copyText()) {
+      this._toastsUi.show("Copy successful", {
+        duration: 2000
+      });
+    }
+    else {
+      this._toastsUi.show("Nothing to copy", {
+        duration: 2000
+      });
+    }
+    event.preventDefault();
   }
 
   _onViewSelectionChange(event) {

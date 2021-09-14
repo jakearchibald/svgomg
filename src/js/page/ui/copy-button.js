@@ -1,7 +1,5 @@
 import FloatingActionButton from './floating-action-button';
 
-export const copySupported = (document.queryCommandSupported && document.queryCommandSupported('copy'));
-
 export default class CopyButton extends FloatingActionButton {
   constructor() {
     const title = 'Copy as text';
@@ -23,6 +21,12 @@ export default class CopyButton extends FloatingActionButton {
 
   _onClick(event) {
     super._onClick(event);
+    this.copyText();
+  }
+
+  copyText() {
+    if (!this._text) return false;
+  
     this._pre.textContent = this._text;
     document.body.appendChild(this._pre);
     getSelection().removeAllRanges();
@@ -35,9 +39,12 @@ export default class CopyButton extends FloatingActionButton {
     document.execCommand('copy');
     getSelection().removeAllRanges();
     document.body.removeChild(this._pre);
+    
+    return true;
   }
-
   setCopyText(text) {
     this._text = text;
   }
+  
+
 }
