@@ -59,15 +59,6 @@ async function html() {
 
 const rollupCaches = new Map();
 
-const rollupFixes = {
-  name: 'rollup-fixes',
-  transform(code, id) {
-    if (id.endsWith('node_modules/prismjs/prism.js')) {
-      return `${code}\nexport default Prism;`;
-    }
-  }
-};
-
 async function js(entry, outputPath) {
   const parsedPath = path.parse(entry);
   const name = /[^/]+$/.exec(parsedPath.dir)[0];
@@ -76,7 +67,6 @@ async function js(entry, outputPath) {
     cache: rollupCaches.get(entry),
     input: `src/${entry}`,
     plugins: [
-      rollupFixes,
       rollupReplace({
         preventAssignment: true,
         SVGOMG_VERSION: JSON.stringify(changelog[0].version),
