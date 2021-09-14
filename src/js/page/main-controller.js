@@ -127,6 +127,10 @@ export default class MainController {
       event.preventDefault();
       this._mainMenuUi.showFilePicker();
     }
+
+    if (event.key === 'Escape') {
+      this._mainMenuUi.hide();
+    }
   }
 
   _onViewSelectionChange(event) {
