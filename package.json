@@ -26,6 +26,6 @@
     "dev": "gulp dev",
     "lint": "eslint --report-unused-disable-directives --ignore-path .gitignore .",
     "fix": "npm run lint -- --fix",
-    "test": "npm run lint && gulp build"
+    "test": "npm run lint && npm run build"
   }
 }
