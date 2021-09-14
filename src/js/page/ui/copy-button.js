@@ -1,7 +1,5 @@
 import FloatingActionButton from './floating-action-button';
 
-export const copySupported = (document.queryCommandSupported && document.queryCommandSupported('copy'));
-
 export default class CopyButton extends FloatingActionButton {
   constructor() {
     const title = 'Copy as text';

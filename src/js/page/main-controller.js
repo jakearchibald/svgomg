@@ -4,7 +4,6 @@ import { domReady } from './utils';
 import Output from './ui/output';
 import DownloadButton from './ui/download-button';
 import CopyButton from './ui/copy-button';
-import { copySupported } from './ui/copy-button';
 import BgFillButton from './ui/bg-fill-button';
 import Results from './ui/results';
 import Settings from './ui/settings';
@@ -90,10 +89,8 @@ export default class MainController {
 
       minorActionContainer.appendChild(this._bgFillUi.container);
 
-      if (copySupported) {
-        minorActionContainer.appendChild(this._copyButtonUi.container);
-      }
-
+      minorActionContainer.appendChild(this._copyButtonUi.container);
+      
       actionContainer.appendChild(this._downloadButtonUi.container);
 
       document.querySelector('.output').appendChild(this._outputUi.container);
@@ -146,7 +143,7 @@ export default class MainController {
 
   _onGlobalCopy(event) {
     const selection = window.getSelection();
-    if (!selection.isCollapsed || !copySupported) return;
+    if (!selection.isCollapsed) return;
 
     if (this._copyButtonUi.copyText()) {
       this._toastsUi.show("Copy successful", {
