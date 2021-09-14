@@ -1,3 +1,4 @@
+import { createNanoEvents } from 'nanoevents';
 import {
   strToEl,
   domReady,
@@ -5,11 +6,10 @@ import {
   transitionFromClass,
   readFileAsText
 } from '../utils';
-import { EventEmitter } from 'events';
 
-export default class FileDrop extends EventEmitter {
+export default class FileDrop {
   constructor() {
-    super();
+    this.emitter = createNanoEvents();
     this.container = strToEl(
       '<div class="drop-overlay">Drop it!</div>' +
     '');
@@ -54,7 +54,7 @@ export default class FileDrop extends EventEmitter {
     const file = event.dataTransfer.files[0];
     if (!file) return;
 
-    this.emit('svgDataLoad', {
+    this.emitter.emit('svgDataLoad', {
       data: await readFileAsText(file),
       filename: file.name
     });

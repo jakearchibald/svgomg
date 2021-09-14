@@ -5,12 +5,11 @@ import {
   readFileAsText
 } from '../utils';
 import Spinner from './spinner';
-import { EventEmitter } from 'events';
+import { createNanoEvents } from 'nanoevents';
 
-export default class MainMenu extends EventEmitter {
+export default class MainMenu {
   constructor() {
-    super();
-
+    this.emitter = createNanoEvents()
     this.allowHide = false;
     this._spinner = new Spinner();
 
@@ -78,7 +77,7 @@ export default class MainMenu extends EventEmitter {
       this._pasteLabel.appendChild(this._spinner.container);
       this._spinner.show();
 
-      this.emit('svgDataLoad', {
+      this.emitter.emit('svgDataLoad', {
         data: val,
         filename: 'image.svg'
       });
@@ -99,7 +98,7 @@ export default class MainMenu extends EventEmitter {
     this._loadFileBtn.appendChild(this._spinner.container);
     this._spinner.show();
 
-    this.emit('svgDataLoad', {
+    this.emitter.emit('svgDataLoad', {
       data: await readFileAsText(file),
       filename: file.name
     });
@@ -112,7 +111,7 @@ export default class MainMenu extends EventEmitter {
     this._spinner.show();
 
     try {
-      this.emit('svgDataLoad', {
+      this.emitter.emit('svgDataLoad', {
         data: await fetch('test-svgs/car-lite.svg').then(r => r.text()),
         filename: 'car-lite.svg'
       });
@@ -132,7 +131,7 @@ export default class MainMenu extends EventEmitter {
           error = Error("Couldn't fetch demo SVG");
         }
 
-        this.emit('error', { error });
+        this.emitter.emit('error', { error });
       }
     }
   }
