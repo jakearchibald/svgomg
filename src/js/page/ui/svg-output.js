@@ -48,7 +48,7 @@ export default class SvgOutput {
       const onload = () => {
         this._svgFrame.removeEventListener('load', onload);
         resolve();
-      }
+      };
       this._svgFrame.addEventListener('load', onload);
     });
   }

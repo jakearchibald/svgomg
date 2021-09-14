@@ -27,10 +27,10 @@ export default class FloatingActionButton {
     this._spinner = new Spinner();
     this.container.appendChild(this._spinner.container);
 
-    this.container.addEventListener('click', event => this._onClick(event));
+    this.container.addEventListener('click', () => this._onClick());
   }
 
-  _onClick(event) {
+  _onClick() {
     this._ripple.animate();
   }
 

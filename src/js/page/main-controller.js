@@ -110,6 +110,7 @@ export default class MainController {
       }
 
       // for testing
+      // eslint-disable-next-line no-constant-condition
       if (false) {
         (async () => {
           this._onInputChange({
@@ -219,7 +220,7 @@ export default class MainController {
         this._mainMenuUi.hide();
         firstIteration = false;
       }
-    }
+    };
 
     this._compressSvg(settings, () => compressed());
 

@@ -16,11 +16,11 @@ export default class ViewToggler {
       // stop browsers remembering previous form state
       this.container.output[0].checked = true;
 
-      this.container.addEventListener('change', e => this._onChange(e));
+      this.container.addEventListener('change', () => this._onChange());
     });
   }
 
-  _onChange(event) {
+  _onChange() {
     let value = this.container.output.value;
 
     if (!value) { // some browsers don't support the nice shortcut above (eg Safari)

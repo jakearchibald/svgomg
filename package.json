@@ -24,6 +24,8 @@
     "build": "gulp clean-build",
     "start": "sirv build --port 8080 --dev --no-clear",
     "dev": "gulp dev",
-    "test": "gulp build"
+    "lint": "eslint --report-unused-disable-directives --ignore-path .gitignore .",
+    "fix": "npm run lint -- --fix",
+    "test": "npm run lint && gulp build"
   }
 }

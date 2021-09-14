@@ -1,3 +1,5 @@
+/* globals SVGOMG_VERSION:false */
+
 import {idbKeyval as storage} from '../utils/storage.js';
 
 const version = SVGOMG_VERSION;

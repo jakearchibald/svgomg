@@ -6,7 +6,7 @@ const svgoPkg = require('svgo/package.json');
 const readJSON = async (path) => {
   const content = await fs.readFile(path, 'utf-8');
   return JSON.parse(content);
-}
+};
 
 const sass = require('sass');
 const gulp = require('gulp');
@@ -21,7 +21,7 @@ const rollupReplace = require('@rollup/plugin-replace');
 const { terser: rollupTerser } = require('rollup-plugin-terser');
 
 function css() {
-  const boundSass = gulpSass(sass)
+  const boundSass = gulpSass(sass);
   return gulp.src('src/css/*.scss', { sourcemaps: true })
     .pipe(boundSass.sync().on('error', boundSass.logError))
     .pipe(gulpSourcemaps.init())
@@ -70,7 +70,7 @@ const rollupFixes = {
 
 async function js(entry, outputPath) {
   const parsedPath = path.parse(entry);
-  const name = /[^\/]+$/.exec(parsedPath.dir)[0];
+  const name = /[^/]+$/.exec(parsedPath.dir)[0];
   const changelog = await readJSON(`${__dirname}/src/changelog.json`);
   const bundle = await rollup.rollup({
     cache: rollupCaches.get(entry),
@@ -91,7 +91,7 @@ async function js(entry, outputPath) {
     sourcemap: true,
     format: 'iife',
     file: `build/${outputPath}/${name}.js`
-  })
+  });
 }
 
 const allJs = gulp.parallel(
@@ -150,7 +150,7 @@ function serve() {
     port: 8080,
     dev: true,
     clear: false
-  })
+  });
 }
 
 exports.dev = gulp.series(
