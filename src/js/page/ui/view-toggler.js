@@ -21,14 +21,8 @@ export default class ViewToggler {
   }
 
   _onChange() {
-    let value = this.container.output.value;
-
-    if (!value) { // some browsers don't support the nice shortcut above (eg Safari)
-      value = Array.from(this.container.output).reduce((value, input) => {
-        return value || (input.checked ? input.value : '');
-      }, '');
-    }
-
-    this.emitter.emit("change", { value });
+    this.emitter.emit('change', {
+      value: this.container.output.value
+    });
   }
 }
