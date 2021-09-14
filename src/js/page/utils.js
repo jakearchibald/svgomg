@@ -48,7 +48,6 @@ function transitionClassFunc({removeClass = false}={}) {
     const transitionEnd = new Promise(resolve => {
       const listener = event => {
         if (event.target != el) return;
-        el.removeEventListener('webkitTransitionEnd', listener);
         el.removeEventListener('transitionend', listener);
         el.classList.remove(transitionClass);
         resolve();
@@ -57,7 +56,6 @@ function transitionClassFunc({removeClass = false}={}) {
       el.classList.add(transitionClass);
 
       requestAnimationFrame(() => {
-        el.addEventListener('webkitTransitionEnd', listener);
         el.addEventListener('transitionend', listener);
         el.classList[removeClass ? 'remove' : 'add'](className);
       });
