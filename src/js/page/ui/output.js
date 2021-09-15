@@ -8,7 +8,7 @@ export default class Output {
 
     this._types = {
       image: new SvgOutput(),
-      code: new CodeOutput()
+      code: new CodeOutput(),
     };
 
     this._svgFile = null;
@@ -27,7 +27,8 @@ export default class Output {
 
   set(type, { noAnimate = false } = {}) {
     this._switchQueue = this._switchQueue.then(async () => {
-      const toRemove = this._activeType && this._types[this._activeType].container;
+      const toRemove =
+        this._activeType && this._types[this._activeType].container;
 
       this._activeType = type;
       const toAdd = this._types[this._activeType].container;

@@ -2,6 +2,7 @@ import { strToEl } from '../utils.js';
 
 export default class Spinner {
   constructor() {
+    // prettier-ignore
     this.container = strToEl(
       '<div class="spinner">' +
         '<div class="spinner-container">' +

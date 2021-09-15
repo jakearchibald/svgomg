@@ -1,4 +1,9 @@
-import { strToEl, escapeHtmlTag, transitionToClass, domReady } from '../utils.js';
+import {
+  strToEl,
+  escapeHtmlTag,
+  transitionToClass,
+  domReady,
+} from '../utils.js';
 
 export default class Changelog {
   constructor(loadedVersion) {
@@ -8,7 +13,9 @@ export default class Changelog {
 
   async showLogFrom(lastLoadedVersion) {
     if (lastLoadedVersion === this._loadedVersion) return;
-    const changelog = await fetch('changelog.json').then(response => response.json());
+    const changelog = await fetch('changelog.json').then((response) =>
+      response.json(),
+    );
     let startIndex = 0;
     let endIndex = 0;
 
@@ -22,13 +29,16 @@ export default class Changelog {
       endIndex = i + 1;
     }
 
-    const changeList = changelog.slice(startIndex, endIndex)
+    const changeList = changelog
+      .slice(startIndex, endIndex)
+      // TODO: remove `reduce`
+      // eslint-disable-next-line unicorn/no-array-reduce
       .reduce((array, entry) => array.concat(entry.changes), [])
-      .map(change => escapeHtmlTag`<li>${change}</li>`);
+      .map((change) => escapeHtmlTag`<li>${change}</li>`);
 
     this.container.append(
       strToEl('<h1>Updated!</h1>'),
-      strToEl(`<ul>${changeList.join('')}</ul>`)
+      strToEl(`<ul>${changeList.join('')}</ul>`),
     );
 
     await domReady;

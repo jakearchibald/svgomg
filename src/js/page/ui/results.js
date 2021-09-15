@@ -11,6 +11,7 @@ function humanSize(bytes) {
 
 export default class Results {
   constructor() {
+    // prettier-ignore
     this.container = strToEl(
       '<div class="results">' +
         '<span class="size"></span> ' +
@@ -23,9 +24,9 @@ export default class Results {
   }
 
   update({ size, comparisonSize }) {
-    this._sizeEl.textContent = comparisonSize ?
-      `${humanSize(comparisonSize)} → ${humanSize(size)}` :
-      humanSize(size);
+    this._sizeEl.textContent = comparisonSize
+      ? `${humanSize(comparisonSize)} → ${humanSize(size)}`
+      : humanSize(size);
 
     this._diffEl.classList.remove('decrease', 'increase');
 
@@ -35,8 +36,10 @@ export default class Results {
     } else if (size === comparisonSize) {
       this._diffEl.textContent = '100%';
     } else {
-      this._diffEl.textContent = `${round(size / comparisonSize * 100, 2)}%`;
-      this._diffEl.classList.add(size > comparisonSize ? 'increase' : 'decrease');
+      this._diffEl.textContent = `${round((size / comparisonSize) * 100, 2)}%`;
+      this._diffEl.classList.add(
+        size > comparisonSize ? 'increase' : 'decrease',
+      );
     }
   }
 }

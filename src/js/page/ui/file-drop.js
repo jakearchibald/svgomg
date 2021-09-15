@@ -4,7 +4,7 @@ import {
   domReady,
   transitionToClass,
   transitionFromClass,
-  readFileAsText
+  readFileAsText,
 } from '../utils.js';
 
 export default class FileDrop {
@@ -17,15 +17,18 @@ export default class FileDrop {
     this._currentEnteredElement = null;
 
     domReady.then(() => {
-      document.addEventListener('dragover', event => event.preventDefault());
-      document.addEventListener('dragenter', event => this._onDragEnter(event));
+      document.addEventListener('dragover', (event) => event.preventDefault());
+      document.addEventListener('dragenter', (event) =>
+        this._onDragEnter(event),
+      );
       document.addEventListener('dragleave', () => this._onDragLeave());
-      document.addEventListener('drop', event => this._onDrop(event));
+      document.addEventListener('drop', (event) => this._onDrop(event));
     });
   }
 
   _onDragEnter(event) {
-    // firefox double-fires on window enter, this works around it
+    // TODO: revisit this
+    // Firefox double-fires on window enter, this works around it
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1124645
     if (this._currentEnteredElement === event.target) return;
     this._currentEnteredElement = event.target;
@@ -54,7 +57,7 @@ export default class FileDrop {
 
     this.emitter.emit('svgDataLoad', {
       data: await readFileAsText(file),
-      filename: file.name
+      filename: file.name,
     });
   }
 }

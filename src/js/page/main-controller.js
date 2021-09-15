@@ -41,14 +41,24 @@ export default class MainController {
 
     // ui events
     this._settingsUi.emitter.on('change', () => this._onSettingsChange());
-    this._settingsUi.emitter.on('reset', oldSettings => this._onSettingsReset(oldSettings));
-    this._mainMenuUi.emitter.on('svgDataLoad', event => this._onInputChange(event));
-    this._dropUi.emitter.on('svgDataLoad', event => this._onInputChange(event));
-    this._mainMenuUi.emitter.on('error', ({ error }) => this._handleError(error));
-    this._viewTogglerUi.emitter.on('change', event => this._outputUi.set(event.value));
-    window.addEventListener('keydown', event => this._onGlobalKeyDown(event));
-    window.addEventListener('paste', event => this._onGlobalPaste(event));
-    window.addEventListener('copy', event => this._onGlobalCopy(event));
+    this._settingsUi.emitter.on('reset', (oldSettings) =>
+      this._onSettingsReset(oldSettings),
+    );
+    this._mainMenuUi.emitter.on('svgDataLoad', (event) =>
+      this._onInputChange(event),
+    );
+    this._dropUi.emitter.on('svgDataLoad', (event) =>
+      this._onInputChange(event),
+    );
+    this._mainMenuUi.emitter.on('error', ({ error }) =>
+      this._handleError(error),
+    );
+    this._viewTogglerUi.emitter.on('change', (event) =>
+      this._outputUi.set(event.value),
+    );
+    window.addEventListener('keydown', (event) => this._onGlobalKeyDown(event));
+    window.addEventListener('paste', (event) => this._onGlobalPaste(event));
+    window.addEventListener('copy', (event) => this._onGlobalCopy(event));
 
     // state
     this._inputItem = null;
@@ -60,21 +70,27 @@ export default class MainController {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register('sw.js', { scope: './' })
-        .then(registration => {
-          registration.addEventListener('updatefound', () => this._onUpdateFound(registration));
+        .then((registration) => {
+          registration.addEventListener('updatefound', () =>
+            this._onUpdateFound(registration),
+          );
         });
     }
 
     // tell the user about the latest update
-    storage.get('last-seen-version').then(lastSeenVersion => {
+    storage.get('last-seen-version').then((lastSeenVersion) => {
       if (lastSeenVersion) this._changelogUi.showLogFrom(lastSeenVersion);
       storage.set('last-seen-version', self.version);
     });
 
     domReady.then(() => {
       this._container = document.querySelector('.app-output');
-      const actionContainer = this._container.querySelector('.action-button-container');
-      const minorActionContainer = this._container.querySelector('.minor-action-container');
+      const actionContainer = this._container.querySelector(
+        '.action-button-container',
+      );
+      const minorActionContainer = this._container.querySelector(
+        '.minor-action-container',
+      );
       const toolbarElement = this._container.querySelector('.toolbar');
       const outputElement = this._container.querySelector('.output');
       const menuExtraElement = this._container.querySelector('.menu-extra');
@@ -84,10 +100,13 @@ export default class MainController {
         toolbarElement,
         actionContainer,
         this._outputUi.container,
-        this._settingsUi.container
+        this._settingsUi.container,
       );
 
-      minorActionContainer.append(this._bgFillUi.container, this._copyButtonUi.container);
+      minorActionContainer.append(
+        this._bgFillUi.container,
+        this._copyButtonUi.container,
+      );
       actionContainer.append(this._downloadButtonUi.container);
       outputElement.append(this._outputUi.container);
       this._container.append(this._toastsUi.container, this._dropUi.container);
@@ -105,7 +124,9 @@ export default class MainController {
       // eslint-disable-next-line no-constant-condition
       if (false) {
         (async () => {
-          const data = await fetch('test-svgs/car-lite.svg').then(response => response.text());
+          const data = await fetch('test-svgs/car-lite.svg').then((response) =>
+            response.text(),
+          );
           this._onInputChange({ data, filename: 'car-lite.svg' });
         })();
       }
@@ -137,7 +158,7 @@ export default class MainController {
 
     this._toastsUi.show(
       this._copyButtonUi.copyText() ? 'Copy successful' : 'Nothing to copy',
-      { duration: 2000 }
+      { duration: 2000 },
     );
 
     event.preventDefault();
@@ -151,12 +172,18 @@ export default class MainController {
 
       // the very first activation!
       // tell the user stuff works offline
-      if (newWorker.state === 'activated' && !navigator.serviceWorker.controller) {
+      if (
+        newWorker.state === 'activated' &&
+        !navigator.serviceWorker.controller
+      ) {
         this._toastsUi.show('Ready to work offline', { duration: 5000 });
         return;
       }
 
-      if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
+      if (
+        newWorker.state === 'activated' &&
+        navigator.serviceWorker.controller
+      ) {
         // if the user hasn't interacted yet, do a sneaky reload
         if (!this._userHasInteracted) {
           this._reloading = true;
@@ -166,7 +193,7 @@ export default class MainController {
 
         // otherwise, show the user an alert
         const toast = this._toastsUi.show('Update available', {
-          buttons: ['reload', 'dismiss']
+          buttons: ['reload', 'dismiss'],
         });
         const answer = await toast.answer;
 
@@ -187,7 +214,7 @@ export default class MainController {
   async _onSettingsReset(oldSettings) {
     const toast = this._toastsUi.show('Settings reset', {
       buttons: ['undo', 'dismiss'],
-      duration: 5000
+      duration: 5000,
     });
     const answer = await toast.answer;
 
@@ -236,7 +263,7 @@ export default class MainController {
   }
 
   async _compressSvg(settings) {
-    const thisJobId = this._latestCompressJobId = Math.random();
+    const thisJobId = (this._latestCompressJobId = Math.random());
 
     await svgo.abort();
 
@@ -248,7 +275,7 @@ export default class MainController {
 
     if (settings.original) {
       this._updateForFile(this._inputItem, {
-        compress: settings.gzip
+        compress: settings.gzip,
       });
       return;
     }
@@ -258,7 +285,7 @@ export default class MainController {
     if (cacheMatch) {
       this._updateForFile(cacheMatch, {
         compareToFile: this._inputItem,
-        compress: settings.gzip
+        compress: settings.gzip,
       });
       return;
     }
@@ -270,7 +297,7 @@ export default class MainController {
 
       this._updateForFile(resultFile, {
         compareToFile: this._inputItem,
-        compress: settings.gzip
+        compress: settings.gzip,
       });
 
       this._cache.add(settings.fingerprint, resultFile);
@@ -290,8 +317,7 @@ export default class MainController {
 
     this._resultsUi.update({
       comparisonSize: compareToFile && (await compareToFile.size({ compress })),
-      size: await svgFile.size({ compress })
+      size: await svgFile.size({ compress }),
     });
   }
 }
-

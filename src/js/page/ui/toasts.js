@@ -2,7 +2,9 @@ import { strToEl, transitionToClass } from '../utils.js';
 
 class Toast {
   constructor(message, duration, buttons) {
-    this.container = strToEl('<div class="toast"><div class="toast-content"></div></div>');
+    this.container = strToEl(
+      '<div class="toast"><div class="toast-content"></div></div>',
+    );
 
     const content = this.container.querySelector('.toast-content');
     content.textContent = message;
@@ -10,7 +12,7 @@ class Toast {
     this._answerResolve = null;
     this._hideTimeout = null;
 
-    this.answer = new Promise(resolve => {
+    this.answer = new Promise((resolve) => {
       this._answerResolve = resolve;
     });
 
@@ -46,9 +48,11 @@ export default class Toasts {
     const toast = new Toast(message, duration, buttons);
     this.container.append(toast.container);
 
-    toast.answer.then(() => toast.hide()).then(() => {
-      toast.container.remove();
-    });
+    toast.answer
+      .then(() => toast.hide())
+      .then(() => {
+        toast.container.remove();
+      });
 
     return toast;
   }

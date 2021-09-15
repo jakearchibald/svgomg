@@ -10,7 +10,7 @@ export default class Svgo extends WorkerMessenger {
   async wrapOriginal(svgText) {
     const { width, height } = await this.requestResponse({
       action: 'wrapOriginal',
-      data: svgText
+      data: svgText,
     });
 
     return new SvgFile(svgText, width, height);
@@ -19,16 +19,18 @@ export default class Svgo extends WorkerMessenger {
   process(svgText, settings) {
     this.abort();
 
-    this._currentJob = this._currentJob.catch(() => {}).then(async () => {
-      const { data, dimensions } = await this.requestResponse({
-        action: 'process',
-        settings,
-        data: svgText,
-      });
+    this._currentJob = this._currentJob
+      .catch(() => {})
+      .then(async () => {
+        const { data, dimensions } = await this.requestResponse({
+          action: 'process',
+          settings,
+          data: svgText,
+        });
 
-      // return final result
-      return new SvgFile(data, dimensions.width, dimensions.height);
-    });
+        // return final result
+        return new SvgFile(data, dimensions.width, dimensions.height);
+      });
 
     return this._currentJob;
   }

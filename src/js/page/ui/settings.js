@@ -12,8 +12,12 @@ export default class Settings {
       this.container = document.querySelector('.settings');
       this._scroller = this.container.querySelector('.settings-scroller');
       this._resetBtn = this.container.querySelector('.setting-reset');
-      this._pluginInputs = [...this.container.querySelectorAll('.plugins input')];
-      this._globalInputs = [...this.container.querySelectorAll('.global input')];
+      this._pluginInputs = [
+        ...this.container.querySelectorAll('.plugins input'),
+      ];
+      this._globalInputs = [
+        ...this.container.querySelectorAll('.global input'),
+      ];
       const ranges = this.container.querySelectorAll('input[type=range]');
 
       this._resetRipple = new Ripple();
@@ -27,14 +31,19 @@ export default class Settings {
         this._sliderMap.set(range, new MaterialSlider(range));
       }
 
-      this.container.addEventListener('input', event => this._onChange(event));
-      this._scroller.addEventListener('wheel', event => this._onMouseWheel(event));
+      this.container.addEventListener('input', (event) =>
+        this._onChange(event),
+      );
+      this._scroller.addEventListener('wheel', (event) =>
+        this._onMouseWheel(event),
+      );
       this._resetBtn.addEventListener('click', () => this._onReset());
 
+      // TODO: revisit this
       // Stop double-tap text selection.
       // This stops all text selection which is kinda sad.
       // I think this code will bite me.
-      this._scroller.addEventListener('mousedown', event => {
+      this._scroller.addEventListener('mousedown', (event) => {
         if (event.target.closest('input[type=range]')) return;
         event.preventDefault();
       });
@@ -56,7 +65,10 @@ export default class Settings {
 
     // throttle range
     if (event.target.type === 'range') {
-      this._throttleTimeout = setTimeout(() => this.emitter.emit('change'), 150);
+      this._throttleTimeout = setTimeout(
+        () => this.emitter.emit('change'),
+        150,
+      );
     } else {
       this.emitter.emit('change');
     }
@@ -104,7 +116,7 @@ export default class Settings {
     // fingerprint is used for cache lookups
     const fingerprint = [];
     const output = {
-      plugins: {}
+      plugins: {},
     };
 
     for (const inputEl of this._globalInputs) {

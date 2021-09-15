@@ -3,11 +3,13 @@ import PanZoom from './pan-zoom.js';
 
 export default class SvgOutput {
   constructor() {
+    // prettier-ignore
     this.container = strToEl(
       '<div class="svg-output">' +
         '<div class="svg-container">' +
           '<iframe class="svg-frame" sandbox="allow-scripts" scrolling="no"></iframe>' +
         '</div>' +
+        // TODO: revisit this
         // Stop touches going into the iframe.
         // pointer-events + touch + iframe doesn't work in Chrome :(
         '<div class="svg-clickjacker"></div>' +
@@ -19,12 +21,13 @@ export default class SvgOutput {
 
     domReady.then(() => {
       this._panZoom = new PanZoom(this._svgContainer, {
-        eventArea: this.container
+        eventArea: this.container,
       });
     });
   }
 
   setSvg({ text, width, height }) {
+    // TODO: revisit this
     // I would rather use blob urls, but they don't work in Firefox
     // All the internal refs break.
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1125667
@@ -41,7 +44,7 @@ export default class SvgOutput {
   }
 
   _nextLoadPromise() {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const onload = () => {
         this._svgFrame.removeEventListener('load', onload);
         resolve();

@@ -18,7 +18,7 @@ export default class ViewToggler {
 
       this.container.addEventListener('change', () => {
         this.emitter.emit('change', {
-          value: this.container.output.value
+          value: this.container.output.value,
         });
       });
     });

@@ -1,4 +1,4 @@
-export const domReady = new Promise(resolve => {
+export const domReady = new Promise((resolve) => {
   function checkState() {
     if (document.readyState !== 'loading') resolve();
   }
@@ -20,15 +20,15 @@ const entityMap = {
   '>': '&gt;',
   '"': '&quot;',
   "'": '&#39;',
-  '/': '&#x2F;'
+  '/': '&#x2F;',
 };
 
 export function escapeHTML(str) {
-  return String(str).replace(/[&<>"'/]/g, s => entityMap[s]);
+  return String(str).replace(/[&<>"'/]/g, (s) => entityMap[s]);
 }
 
 export function escapeHtmlTag(strings, ...values) {
-  values = values.map(s => escapeHTML(s));
+  values = values.map((s) => escapeHTML(s));
   return strings.reduce((str, val, i) => str + val + (values[i] || ''), '');
 }
 
@@ -46,8 +46,8 @@ function transitionClassFunc({ removeClass = false } = {}) {
       return Promise.resolve();
     }
 
-    const transitionEnd = new Promise(resolve => {
-      const listener = event => {
+    const transitionEnd = new Promise((resolve) => {
+      const listener = (event) => {
         if (event.target !== element) return;
         element.removeEventListener('transitionend', listener);
         element.classList.remove(transitionClass);
@@ -62,7 +62,7 @@ function transitionClassFunc({ removeClass = false } = {}) {
       });
     });
 
-    const transitionTimeout = new Promise(resolve => {
+    const transitionTimeout = new Promise((resolve) => {
       setTimeout(resolve, 1000);
     });
 
@@ -76,19 +76,37 @@ export const transitionFromClass = transitionClassFunc({ removeClass: true });
 export function trackFocusMethod() {
   let focusMethod = 'mouse';
 
-  document.body.addEventListener('focus', event => {
-    event.target.classList.add(focusMethod === 'key' ? 'key-focused' : 'mouse-focused');
-  }, true);
+  document.body.addEventListener(
+    'focus',
+    (event) => {
+      event.target.classList.add(
+        focusMethod === 'key' ? 'key-focused' : 'mouse-focused',
+      );
+    },
+    true,
+  );
 
-  document.body.addEventListener('blur', event => {
-    event.target.classList.remove('key-focused', 'mouse-focused');
-  }, true);
+  document.body.addEventListener(
+    'blur',
+    (event) => {
+      event.target.classList.remove('key-focused', 'mouse-focused');
+    },
+    true,
+  );
 
-  document.body.addEventListener('keydown', () => {
-    focusMethod = 'key';
-  }, true);
+  document.body.addEventListener(
+    'keydown',
+    () => {
+      focusMethod = 'key';
+    },
+    true,
+  );
 
-  document.body.addEventListener('mousedown', () => {
-    focusMethod = 'mouse';
-  }, true);
+  document.body.addEventListener(
+    'mousedown',
+    () => {
+      focusMethod = 'mouse';
+    },
+    true,
+  );
 }

@@ -6,7 +6,9 @@ export default class ResultsContainer {
 
     domReady.then(() => {
       this._container = document.querySelector('.results-container');
-      this._mobileContainer = document.querySelector('.results-container-mobile');
+      this._mobileContainer = document.querySelector(
+        '.results-container-mobile',
+      );
       this._query = matchMedia('(min-width: 640px)');
 
       this._query.addListener(() => this._positionResults());

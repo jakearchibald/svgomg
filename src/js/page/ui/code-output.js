@@ -5,6 +5,7 @@ const prism = new Prism();
 
 export default class CodeOutput {
   constructor() {
+    // prettier-ignore
     this.container = strToEl(
       '<div class="code-output">' +
         '<pre><code></code></pre>' +

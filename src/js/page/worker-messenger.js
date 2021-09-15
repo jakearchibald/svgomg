@@ -35,13 +35,17 @@ export default class WorkerMessenger {
 
   _abortPending() {
     for (const key of Object.keys(this._pending)) {
-      this._fulfillPending(key, null, new DOMException('AbortError', 'AbortError'));
+      this._fulfillPending(
+        key,
+        null,
+        new DOMException('AbortError', 'AbortError'),
+      );
     }
   }
 
   _startWorker() {
     this._worker = new Worker(this._url);
-    this._worker.onmessage = event => this._onMessage(event);
+    this._worker.onmessage = (event) => this._onMessage(event);
   }
 
   _onMessage(event) {

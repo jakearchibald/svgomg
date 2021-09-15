@@ -11,7 +11,7 @@ export default class MainUi {
     this._activated = true;
 
     return Promise.all(
-      this._toActivate.map(element => transitionToClass(element))
+      this._toActivate.map((element) => transitionToClass(element)),
     );
   }
 }
