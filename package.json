@@ -1,6 +1,18 @@
 {
   "name": "svgomg",
   "private": true,
+  "version": "1.15.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jakearchibald/svgomg.git"
+  },
+  "keywords": [],
+  "author": "Jake Archibald",
+  "bugs": {
+    "url": "https://github.com/jakearchibald/svgomg/issues"
+  },
+  "homepage": "https://jakearchibald.github.io/svgomg/",
+  "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
@@ -27,6 +39,5 @@
     "lint": "eslint --report-unused-disable-directives --ignore-path .gitignore .",
     "fix": "npm run lint -- --fix",
     "test": "npm run lint && npm run build"
-  },
-  "version": "1.15.0"
+  }
 }
