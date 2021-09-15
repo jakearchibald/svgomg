@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.15.0",
+    "changes": [
+      "Copy & paste keyboard commands work anywhere (thanks Lars Johansson)",
+      "More performance & UI tweaks (thanks XhmikosR)",
+      "Multipass option is back and working!",
+      "Fixed cases where markup is obscured",
+      "Update to SVGO v2.6.0 (thanks Bogdan Chadkin)"
+    ]
+  },
+  {
     "version": "1.14.3",
     "changes": ["Preload bugfix"]
   },
