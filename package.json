@@ -27,5 +27,6 @@
     "lint": "eslint --report-unused-disable-directives --ignore-path .gitignore .",
     "fix": "npm run lint -- --fix",
     "test": "npm run lint && npm run build"
-  }
+  },
+  "version": "1.15.0"
 }
