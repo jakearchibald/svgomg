@@ -5,11 +5,17 @@
     <title>SVGOMG - SVGO's Missing GUI</title>
     <meta name="theme-color" content="#303f9f">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0">
-    <link rel="preload" as="script" href="js/page.js">
-    <link rel="preload" as="script" href="https://www.google-analytics.com/analytics.js">
-    <link rel="preload" as="style" href="all.css">
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Roboto:400,700%7CInconsolata">
     <style>{{headCSS|safe}}</style>
+
+    <link rel="preload" as="style" href="all.css">
+    <link rel="stylesheet" href="all.css" media="print" onload="this.media='all'">
+
+    <link rel="preload" crossorigin as="style" href="https://fonts.googleapis.com/css?family=Roboto:400,700%7CInconsolata">
+    <link rel="stylesheet" crossorigin as="style" href="https://fonts.googleapis.com/css?family=Roboto:400,700%7CInconsolata" media="print" onload="this.media='all'">
+    <link rel="preconnect" crossorigin href="https://fonts.googleapis.com">
+
+    <script defer src="js/page.js"></script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
     <script>
       if ((!location.port || location.port === '80') && location.protocol !== 'https:') {
         location.protocol = 'https:';
@@ -187,31 +193,6 @@
           // track it
           ga('send', 'event', 'preloader', 'clicked');
           this.className = 'preloader active';
-        });
-
-        requestAnimationFrame(function() {
-          requestAnimationFrame(function() {
-            [
-              'all.css',
-              'https://fonts.googleapis.com/css?family=Roboto:400,700%7CInconsolata'
-            ].forEach(function(url) {
-              var link = document.createElement('link');
-              link.rel = 'stylesheet';
-              link.crossorigin = true;
-              link.href = url;
-
-              document.head.appendChild(link);
-            });
-
-            [
-              'js/page.js',
-              'https://www.google-analytics.com/analytics.js'
-            ].forEach(function(url) {
-              var script = document.createElement('script');
-              script.src = url;
-              document.head.appendChild(script);
-            });
-          });
         });
       </script>
     </div>
