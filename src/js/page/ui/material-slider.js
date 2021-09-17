@@ -2,17 +2,17 @@ import { strToEl } from '../utils';
 
 export default class MaterialSlider {
   constructor(rangeEl) {
-    this.container = strToEl(`
-      <div class="material-slider">
-        <div class="track">
-          <div class="track-on"></div>
-          <div class="handle">
-            <div class="arrow"></div>
-            <div class="val"></div>
-          </div>
-        </div>
-      </div>
-    `);
+    this.container = strToEl(
+      '<div class="material-slider">' +
+        '<div class="track">' +
+          '<div class="track-on"></div>' +
+          '<div class="handle">' +
+            '<div class="arrow"></div>' +
+            '<div class="val"></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
 
     this.range = rangeEl;
     this._handle = this.container.querySelector('.handle');
