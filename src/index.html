@@ -8,6 +8,7 @@
     <style>{{headCSS|safe}}</style>
 
     <script>
+      // Using preloads then JS to avoid keeping the browser spinner spinning.
       function appendScript(url) {
         var script = document.createElement('script');
         script.src = url;
