@@ -14,17 +14,9 @@
         script.src = url;
         document.head.appendChild(script);
       }
-      function appendStyle(url) {
-        var link = document.createElement('link');
-        link.rel = 'stylesheet';
-        // So it can be cached without no-cors in the service worker:
-        link.crossOrigin = true;
-        link.href = url;
-        document.head.appendChild(link);
-      }
     </script>
-    <link rel="preload" crossorigin as="style" href="all.css" onload="appendStyle(href)">
-    <link rel="preload" crossorigin as="style" href="https://fonts.googleapis.com/css?family=Roboto:400,700%7CInconsolata" onload="appendStyle(href)">
+    <link rel="preload" as="style" href="all.css" onload="rel='stylesheet'">
+    <link rel="preload" crossorigin as="style" href="https://fonts.googleapis.com/css?family=Roboto:400,700%7CInconsolata" onload="rel='stylesheet'">
     <link rel="preconnect" crossorigin href="https://fonts.googleapis.com">
     <link rel="preload" as="script" href="https://www.google-analytics.com/analytics.js" onload="appendScript(href)">
     <script>
