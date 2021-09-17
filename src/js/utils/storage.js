@@ -2,25 +2,24 @@ export let idbKeyval = (() => {
   let db;
 
   function getDB() {
-    if (!db) {
-      db = new Promise((resolve, reject) => {
-        const openreq = indexedDB.open('svgo-keyval', 1);
+    if (db) return db;
 
-        openreq.onerror = () => {
-          reject(openreq.error);
-        };
+    return new Promise((resolve, reject) => {
+      const openreq = indexedDB.open('svgo-keyval', 1);
 
-        openreq.onupgradeneeded = () => {
-          // First time setup: create an empty object store
-          openreq.result.createObjectStore('keyval');
-        };
+      openreq.onerror = () => {
+        reject(openreq.error);
+      };
 
-        openreq.onsuccess = () => {
-          resolve(openreq.result);
-        };
-      });
-    }
-    return db;
+      openreq.onupgradeneeded = () => {
+        // First time setup: create an empty object store
+        openreq.result.createObjectStore('keyval');
+      };
+
+      openreq.onsuccess = () => {
+        resolve(openreq.result);
+      };
+    });
   }
 
   async function withStore(type, callback) {
