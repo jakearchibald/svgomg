@@ -7,11 +7,25 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1.0">
     <style>{{headCSS|safe}}</style>
 
-    <link rel="preload" crossorigin as="style" href="all.css">
-    <link rel="preload" crossorigin as="style" href="https://fonts.googleapis.com/css?family=Roboto:400,700%7CInconsolata">
+    <script>
+      function appendScript(url) {
+        var script = document.createElement('script');
+        script.src = url;
+        document.head.appendChild(script);
+      }
+      function appendStyle(url) {
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        // So it can be cached without no-cors in the service worker:
+        link.crossOrigin = true;
+        link.href = url;
+        document.head.appendChild(link);
+      }
+    </script>
+    <link rel="preload" crossorigin as="style" href="all.css" onload="appendStyle(href)">
+    <link rel="preload" crossorigin as="style" href="https://fonts.googleapis.com/css?family=Roboto:400,700%7CInconsolata" onload="appendStyle(href)">
     <link rel="preconnect" crossorigin href="https://fonts.googleapis.com">
-    <link rel="preload" as="script" src="js/page.js">
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <link rel="preload" as="script" href="https://www.google-analytics.com/analytics.js" onload="appendScript(href)">
     <script>
       if ((!location.port || location.port === '80') && location.protocol !== 'https:') {
         location.protocol = 'https:';
@@ -184,35 +198,12 @@
         </div>
         <p>Sorry, wasn't ready…</p>
       </div>
+      <link rel="preload" as="script" href="js/page.js" onload="appendScript(href)">
       <script>
         document.querySelector('.preloader').addEventListener('click', function() {
           // track it
           ga('send', 'event', 'preloader', 'clicked');
           this.className = 'preloader active';
-        });
-
-        addEventListener('load', () => {
-          // Loading these after the load event so they don't cause the browser spinner to spin.
-          [
-            'all.css',
-            'https://fonts.googleapis.com/css?family=Roboto:400,700%7CInconsolata'
-          ].forEach(function(url) {
-            var link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.crossOrigin = true;
-            link.href = url;
-
-            document.head.appendChild(link);
-          });
-
-          [
-            'js/page.js',
-            'https://www.google-analytics.com/analytics.js'
-          ].forEach(function(url) {
-            var script = document.createElement('script');
-            script.src = url;
-            document.head.appendChild(script);
-          });
         });
       </script>
     </div>
