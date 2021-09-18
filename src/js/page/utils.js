@@ -29,7 +29,7 @@ export function escapeHTML(str) {
 
 export function escapeHtmlTag(strings, ...values) {
   values = values.map(s => escapeHTML(s));
-  return strings.reduce((str, val, i) => str += val + (values[i] || ''), '');
+  return strings.reduce((str, val, i) => str + val + (values[i] || ''), '');
 }
 
 export function readFileAsText(file) {
