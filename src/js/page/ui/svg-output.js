@@ -6,7 +6,7 @@ export default class SvgOutput {
     this.container = strToEl(
       '<div class="svg-output">' +
         '<div class="svg-container">' +
-          '<iframe class="svg-frame" sandbox="allow-scripts"></iframe>' +
+          '<iframe class="svg-frame" sandbox="allow-scripts" scrolling="no"></iframe>' +
         '</div>' +
         // Stop touches going into the iframe.
         // pointer-events + touch + iframe doesn't work in Chrome :(
@@ -15,8 +15,6 @@ export default class SvgOutput {
     );
 
     this._svgFrame = this.container.querySelector('.svg-frame');
-    this._svgFrame.scrolling = 'no';
-
     this._svgContainer = this.container.querySelector('.svg-container');
 
     domReady.then(() => {
