@@ -26,6 +26,11 @@
     outline: none;
   }
 
+  &.active {
+    background-color: #00bcd4;
+    color: #fff;
+  }
+
   .icon {
     display: block;
     width: 24px;
