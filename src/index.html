@@ -109,53 +109,41 @@
           <div class="settings-scroller">
             <section class="global">
               <h1 class="settings-sub-heading">Global settings</h1>
-              <div>
-                <label class="setting-item-toggle">
-                  <input type="checkbox" name="original">
-                  {% include "partials/material-switch.html" %}
-                  Show original
-                </label>
-              </div>
-              <div>
-                <label class="setting-item-toggle">
-                  <input type="checkbox" name="gzip" checked>
-                  {% include "partials/material-switch.html" %}
-                  Compare gzipped
-                </label>
-              </div>
-              <div>
-                <label class="setting-item-toggle">
-                  <input type="checkbox" name="pretty">
-                  {% include "partials/material-switch.html" %}
-                  Prettify markup
-                </label>
-              </div>
-              <div>
-                <label class="setting-item-toggle">
-                  <input type="checkbox" name="multipass">
-                  {% include "partials/material-switch.html" %}
-                  Multipass
-                </label>
-              </div>
-              <div>
-                <label class="setting-item-range">
-                  <span class="label-text">Precision</span>
-                  <input type="range" min="0" max="8" step="1" value="3" name="floatPrecision">
-                </label>
-              </div>
+              <label class="setting-item-toggle">
+                <input type="checkbox" name="original">
+                {% include "partials/material-switch.html" %}
+                Show original
+              </label>
+              <label class="setting-item-toggle">
+                <input type="checkbox" name="gzip" checked>
+                {% include "partials/material-switch.html" %}
+                Compare gzipped
+              </label>
+              <label class="setting-item-toggle">
+                <input type="checkbox" name="pretty">
+                {% include "partials/material-switch.html" %}
+                Prettify markup
+              </label>
+              <label class="setting-item-toggle">
+                <input type="checkbox" name="multipass">
+                {% include "partials/material-switch.html" %}
+                Multipass
+              </label>
+              <label class="setting-item-range">
+                <span class="label-text">Precision</span>
+                <input type="range" min="0" max="8" step="1" value="3" name="floatPrecision">
+              </label>
             </section>
             <section class="plugins">
               <h1 class="settings-sub-heading">Features</h1>
               {% for plugin in plugins %}
-                <div>
-                  <label class="setting-item-toggle">
-                    <input type="checkbox"
-                           name="{{ plugin.id }}"
-                           {% if plugin.active %}checked{% endif %}>
-                    {% include "partials/material-switch.html" %}
-                    {{ plugin.name }}
-                  </label>
-                </div>
+                <label class="setting-item-toggle">
+                  <input type="checkbox"
+                         name="{{ plugin.id }}"
+                         {% if plugin.active %}checked{% endif %}>
+                  {% include "partials/material-switch.html" %}
+                  {{ plugin.name }}
+                </label>
               {% endfor %}
             </section>
             <div class="setting-reset-row">
