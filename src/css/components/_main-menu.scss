@@ -7,18 +7,6 @@
   z-index: 3;
   font-family: sans-serif;
 
-  &.hide-font {
-    color: transparent;
-
-    .menu-footer-notes {
-      color: transparent;
-    }
-  }
-
-  &.use-font {
-    font-family: inherit;
-  }
-
   &.hidden {
     pointer-events: none;
   }
