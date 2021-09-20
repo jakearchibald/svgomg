@@ -34,8 +34,7 @@
     background-color: #fff;
     box-shadow: 3px 0 16px rgba(0, 0, 0, 0.4);
     will-change: transform;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
     display: flex;
     flex-flow: column;
 
