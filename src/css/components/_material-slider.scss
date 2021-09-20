@@ -6,7 +6,7 @@
   .track {
     position: relative;
     height: 2px;
-    background: rgba(#000, 0.26);
+    background-color: rgba(#000, 0.26);
     pointer-events: none;
   }
 
@@ -14,11 +14,11 @@
     position: relative;
     width: 0;
     height: 100%;
-    background: #3f51b5;
+    background-color: #3f51b5;
   }
 
   .handle {
-    background: #3f51b5;
+    background-color: #3f51b5;
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -31,7 +31,7 @@
   }
 
   .arrow {
-    background: inherit;
+    background-color: inherit;
     width: 60%;
     height: 60%;
     position: absolute;

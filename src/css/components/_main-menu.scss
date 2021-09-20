@@ -31,7 +31,7 @@
     min-width: 264px;
     width: 40%;
     max-width: 340px;
-    background: #fff;
+    background-color: #fff;
     box-shadow: 3px 0 16px rgba(0, 0, 0, 0.4);
     will-change: transform;
     overflow-x: hidden;
@@ -98,7 +98,7 @@
     &:focus,
     &:hover {
       outline: none;
-      background: rgba(#000, 0.1);
+      background-color: rgba(#000, 0.1);
     }
 
     .icon {
@@ -140,7 +140,7 @@
       display: block;
       font: inherit;
       border: none;
-      background: none;
+      background-color: transparent;
       padding: 0;
       margin: 0;
       opacity: 0;
@@ -174,7 +174,7 @@
   grid-template-columns: 56px 1fr;
   align-items: center;
   gap: 1rem;
-  background: #f3f3f3;
+  background-color: #f3f3f3;
   font-size: 0.9rem;
 
   .logo {

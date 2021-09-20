@@ -12,7 +12,7 @@
     bottom: 0;
     left: 1px;
     right: 1px;
-    background: rgba(#000, 0.26);
+    background-color: rgba(#000, 0.26);
     overflow: hidden;
     transform: translateZ(0);
 
@@ -23,7 +23,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: #9fa8da;
+      background-color: #9fa8da;
       opacity: 0;
       transition: opacity 0.15s ease-out;
       transform: translateZ(0);
@@ -37,7 +37,7 @@
     width: 20px;
     height: 20px;
     border-radius: 20px;
-    background: #fafafa;
+    background-color: #fafafa;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), inset 0 0 0 2px transparent;
     overflow: hidden;
     box-sizing: border-box;
@@ -51,7 +51,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: #3f51b5;
+      background-color: #3f51b5;
       opacity: 0;
       transition: opacity 0.15s ease-out;
       transform: translateZ(0);
