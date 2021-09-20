@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dropzone>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <title>SVGOMG - SVGO's Missing GUI</title>
@@ -22,7 +22,7 @@
       window.version = "{{changelog[0].version}}";
     </script>
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon-precomposed" href="imgs/icon.png">
+    <link rel="apple-touch-icon" href="imgs/icon.png">
     <link rel="icon" href="imgs/icon.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="SVGOMG">
@@ -50,10 +50,10 @@
             <li>
               <label class="menu-input menu-item">
                 <svg viewBox="0 0 24 24" class="icon"><path d="M19 2h-4.2C14.4.8 13.3 0 12 0c-1.3 0-2.4.8-2.8 2H5C4 2 3 3 3 4v16c0 1 1 2 2 2h14c1 0 2-1 2-2V4c0-1-1-2-2-2zm-7 0c.6 0 1 .5 1 1s-.5 1-1 1-1-.5-1-1 .5-1 1-1zm7 18H5V4h2v3h10V4h2v16z"/></svg>
-                <div class="input-area">
+                <span class="input-area">
                   <textarea class="paste-input"></textarea>
                   <span class="label-txt">Paste markup</span>
-                </div>
+                </span>
               </label>
             </li>
             <li>
@@ -139,7 +139,7 @@
               </div>
               <div>
                 <label class="setting-item-range">
-                  <div class="label-text">Precision</div>
+                  <span class="label-text">Precision</span>
                   <input type="range" min="0" max="8" step="1" value="3" name="floatPrecision">
                 </label>
               </div>
