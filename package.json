@@ -30,13 +30,17 @@
     "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.42.1",
     "sirv-cli": "^1.0.14",
+    "stylelint": "^13.13.1",
+    "stylelint-config-twbs-bootstrap": "^2.2.3",
     "svgo": "^2.7.0"
   },
   "scripts": {
     "build": "gulp clean-build",
     "start": "sirv build --port 8080 --dev --no-clear",
     "dev": "gulp dev",
-    "lint": "eslint --report-unused-disable-directives --ignore-path .gitignore .",
+    "lint": "npm run eslint && npm run stylelint",
+    "eslint": "eslint --report-unused-disable-directives --ignore-path .gitignore .",
+    "stylelint": "stylelint src/css/ --rd --risd",
     "fix": "npm run lint -- --fix",
     "test": "npm run lint && npm run build"
   }
