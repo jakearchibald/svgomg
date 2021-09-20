@@ -123,6 +123,7 @@ function watch() {
 
 function serve() {
   sirv('build', {
+    host: 'localhost',
     port: 8080,
     dev: true,
     clear: false
