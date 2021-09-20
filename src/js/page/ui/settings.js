@@ -9,24 +9,23 @@ export default class Settings {
     this._throttleTimeout = null;
 
     domReady.then(() => {
-      this._pluginInputs = [...document.querySelectorAll('.settings .plugins input')];
-      this._globalInputs = [...document.querySelectorAll('.settings .global input')];
+      this.container = document.querySelector('.settings');
+      this._scroller = this.container.querySelector('.settings-scroller');
+      this._resetBtn = this.container.querySelector('.setting-reset');
+      this._pluginInputs = [...this.container.querySelectorAll('.plugins input')];
+      this._globalInputs = [...this.container.querySelectorAll('.global input')];
+      const ranges = this.container.querySelectorAll('input[type=range]');
 
       this._resetRipple = new Ripple();
-      this._resetBtn = document.querySelector('.setting-reset');
       this._resetBtn.append(this._resetRipple.container);
 
       // map real range elements to Slider instances
       this._sliderMap = new WeakMap();
 
       // enhance ranges
-      const ranges = document.querySelectorAll('.settings input[type=range]');
       for (const range of ranges) {
         this._sliderMap.set(range, new MaterialSlider(range));
       }
-
-      this.container = document.querySelector('.settings');
-      this._scroller = document.querySelector('.settings-scroller');
 
       this.container.addEventListener('input', event => this._onChange(event));
       this._scroller.addEventListener('wheel', event => this._onMouseWheel(event));

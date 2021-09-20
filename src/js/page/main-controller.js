@@ -73,24 +73,25 @@ export default class MainController {
 
     domReady.then(() => {
       this._container = document.querySelector('.app-output');
+      const actionContainer = this._container.querySelector('.action-button-container');
+      const minorActionContainer = this._container.querySelector('.minor-action-container');
+      const toolbarElement = this._container.querySelector('.toolbar');
+      const outputElement = this._container.querySelector('.output');
+      const menuExtraElement = this._container.querySelector('.menu-extra');
 
       // elements for intro anim
       this._mainUi = new MainUi(
-        document.querySelector('.toolbar'),
-        document.querySelector('.action-button-container'),
+        toolbarElement,
+        actionContainer,
         this._outputUi.container,
         this._settingsUi.container
       );
 
-      const actionContainer = document.querySelector('.action-button-container');
-      const minorActionContainer = document.querySelector('.minor-action-container');
-
       minorActionContainer.append(this._bgFillUi.container, this._copyButtonUi.container);
       actionContainer.append(this._downloadButtonUi.container);
-
-      document.querySelector('.output').append(this._outputUi.container);
+      outputElement.append(this._outputUi.container);
       this._container.append(this._toastsUi.container, this._dropUi.container);
-      document.querySelector('.menu-extra').append(this._changelogUi.container);
+      menuExtraElement.append(this._changelogUi.container);
 
       // load previous settings
       this._loadSettings();

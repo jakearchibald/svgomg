@@ -15,19 +15,17 @@ export default class MainMenu {
 
     domReady.then(() => {
       this.container = document.querySelector('.main-menu');
-      this._loadFileInput = document.querySelector('.load-file-input');
-      this._pasteInput = document.querySelector('.paste-input');
-      this._loadDemoBtn = document.querySelector('.load-demo');
-      this._loadFileBtn = document.querySelector('.load-file');
-      this._pasteLabel = document.querySelector('.menu-input');
+      this._loadFileInput = this.container.querySelector('.load-file-input');
+      this._pasteInput = this.container.querySelector('.paste-input');
+      this._loadDemoBtn = this.container.querySelector('.load-demo');
+      this._loadFileBtn = this.container.querySelector('.load-file');
+      this._pasteLabel = this.container.querySelector('.menu-input');
       this._overlay = this.container.querySelector('.overlay');
       this._menu = this.container.querySelector('.menu');
+      const menuBtn = document.querySelector('.menu-btn');
 
-      document.querySelector('.menu-btn')
-        .addEventListener('click', event => this._onMenuButtonClick(event));
-
+      menuBtn.addEventListener('click', (event) =>this._onMenuButtonClick(event));
       this._overlay.addEventListener('click', event => this._onOverlayClick(event));
-
       this._loadFileBtn.addEventListener('click', event => this._onLoadFileClick(event));
       this._loadDemoBtn.addEventListener('click', event => this._onLoadDemoClick(event));
       this._loadFileInput.addEventListener('change', () => this._onFileInputChange());
