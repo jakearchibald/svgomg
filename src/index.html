@@ -5,11 +5,8 @@
     <title>SVGOMG - SVGO's Missing GUI</title>
     <meta name="theme-color" content="#303f9f">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="preload" as="script" href="js/page.js">
-    <link rel="preload" as="script" href="https://www.google-analytics.com/analytics.js">
-    <link rel="preload" as="style" href="all.css">
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Roboto:400,700%7CInconsolata">
     <style>{{headCSS|safe}}</style>
+
     <script>
       if ((!location.port || location.port === '80') && location.protocol !== 'https:') {
         location.protocol = 'https:';
@@ -20,7 +17,19 @@
       ga('send', 'pageview');
 
       window.version = "{{changelog[0].version}}";
+
+      // Delay analytics until after the page has loaded, to avoid extending
+      // the browser spinner, and allow higher priority stuff through.
+      addEventListener('load', function() {
+        var script = document.createElement('script');
+        script.src = 'https://www.google-analytics.com/analytics.js';
+        document.head.appendChild(script);
+      });
     </script>
+    <script src="js/page.js" defer></script>
+    <link rel="preload" as="style" href="all.css" onload="rel='stylesheet'">
+    <link rel="preload" crossorigin as="style" href="https://fonts.googleapis.com/css?family=Roboto:400,700%7CInconsolata" onload="rel='stylesheet'">
+    <link rel="preconnect" crossorigin href="https://fonts.gstatic.com">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="imgs/icon.png">
     <link rel="icon" href="imgs/icon.png">
@@ -109,53 +118,41 @@
           <div class="settings-scroller">
             <section class="global">
               <h1 class="settings-sub-heading">Global settings</h1>
-              <div>
-                <label class="setting-item-toggle">
-                  <input type="checkbox" name="original">
-                  {% include "partials/material-switch.html" %}
-                  Show original
-                </label>
-              </div>
-              <div>
-                <label class="setting-item-toggle">
-                  <input type="checkbox" name="gzip" checked>
-                  {% include "partials/material-switch.html" %}
-                  Compare gzipped
-                </label>
-              </div>
-              <div>
-                <label class="setting-item-toggle">
-                  <input type="checkbox" name="pretty">
-                  {% include "partials/material-switch.html" %}
-                  Prettify markup
-                </label>
-              </div>
-              <div>
-                <label class="setting-item-toggle">
-                  <input type="checkbox" name="multipass">
-                  {% include "partials/material-switch.html" %}
-                  Multipass
-                </label>
-              </div>
-              <div>
-                <label class="setting-item-range">
-                  <span class="label-text">Precision</span>
-                  <input type="range" min="0" max="8" step="1" value="3" name="floatPrecision">
-                </label>
-              </div>
+              <label class="setting-item-toggle">
+                <input type="checkbox" name="original">
+                {% include "partials/material-switch.html" %}
+                Show original
+              </label>
+              <label class="setting-item-toggle">
+                <input type="checkbox" name="gzip" checked>
+                {% include "partials/material-switch.html" %}
+                Compare gzipped
+              </label>
+              <label class="setting-item-toggle">
+                <input type="checkbox" name="pretty">
+                {% include "partials/material-switch.html" %}
+                Prettify markup
+              </label>
+              <label class="setting-item-toggle">
+                <input type="checkbox" name="multipass">
+                {% include "partials/material-switch.html" %}
+                Multipass
+              </label>
+              <label class="setting-item-range">
+                <span class="label-text">Precision</span>
+                <input type="range" min="0" max="8" step="1" value="3" name="floatPrecision">
+              </label>
             </section>
             <section class="plugins">
               <h1 class="settings-sub-heading">Features</h1>
               {% for plugin in plugins %}
-                <div>
-                  <label class="setting-item-toggle">
-                    <input type="checkbox"
-                           name="{{ plugin.id }}"
-                           {% if plugin.active %}checked{% endif %}>
-                    {% include "partials/material-switch.html" %}
-                    {{ plugin.name }}
-                  </label>
-                </div>
+                <label class="setting-item-toggle">
+                  <input type="checkbox"
+                         name="{{ plugin.id }}"
+                         {% if plugin.active %}checked{% endif %}>
+                  {% include "partials/material-switch.html" %}
+                  {{ plugin.name }}
+                </label>
               {% endfor %}
             </section>
             <div class="setting-reset-row">
@@ -187,31 +184,6 @@
           // track it
           ga('send', 'event', 'preloader', 'clicked');
           this.className = 'preloader active';
-        });
-
-        requestAnimationFrame(function() {
-          requestAnimationFrame(function() {
-            [
-              'all.css',
-              'https://fonts.googleapis.com/css?family=Roboto:400,700%7CInconsolata'
-            ].forEach(function(url) {
-              var link = document.createElement('link');
-              link.rel = 'stylesheet';
-              link.crossorigin = true;
-              link.href = url;
-
-              document.head.appendChild(link);
-            });
-
-            [
-              'js/page.js',
-              'https://www.google-analytics.com/analytics.js'
-            ].forEach(function(url) {
-              var script = document.createElement('script');
-              script.src = url;
-              document.head.appendChild(script);
-            });
-          });
         });
       </script>
     </div>
