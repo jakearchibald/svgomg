@@ -1,5 +1,12 @@
 [
   {
+    "version": "1.15.1",
+    "changes": [
+      "Various performance improvements",
+      "Update to SVGO v2.6.1 (thanks XhmikosR)"
+    ]
+  },
+  {
     "version": "1.15.0",
     "changes": [
       "Copy & paste keyboard commands work anywhere (thanks Lars Johansson)",
