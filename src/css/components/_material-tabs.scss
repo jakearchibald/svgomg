@@ -40,6 +40,6 @@
   }
 
   :focus + .selected {
-    background: transparentize(#fff, 0.9);
+    background-color: transparentize(#fff, 0.9);
   }
 }
