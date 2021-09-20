@@ -24,7 +24,6 @@ export default class Results {
     '');
 
     this._sizeEl = this.container.querySelector('.size');
-    this._newSizeEl = this.container.querySelector('.newSize');
     this._diffEl = this.container.querySelector('.diff');
   }
 
