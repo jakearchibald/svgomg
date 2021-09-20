@@ -51,6 +51,7 @@ async function html() {
         liveBaseUrl: 'https://jakearchibald.github.io/svgomg/',
         title: `SVGOMG - SVGO's Missing GUI`,
         description: 'Easy & visual compression of SVG images.',
+        appleTouchIcon: 'imgs/apple-touch-icon.png',
         iconPath: 'imgs/icon.png',
       }),
     )
