@@ -41,7 +41,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), inset 0 0 0 2px transparent;
     overflow: hidden;
     box-sizing: border-box;
-    transition: all 0.15s ease-out;
+    transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
     transform: translateZ(0);
 
     &::before {
