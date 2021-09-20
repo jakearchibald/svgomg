@@ -3,22 +3,22 @@
   cursor: pointer;
   position: relative;
 
-  & .track {
+  .track {
     position: relative;
     height: 2px;
     background: rgba(#000, 0.26);
     pointer-events: none;
   }
 
-  & .track-on {
+  .track-on {
     position: relative;
-    width: 0%;
+    width: 0;
     height: 100%;
-    background: #3F51B5;
+    background: #3f51b5;
   }
 
-  & .handle {
-    background: #3F51B5;
+  .handle {
+    background: #3f51b5;
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -30,7 +30,7 @@
     transition: transform 0.1s ease-out;
   }
 
-  & .arrow {
+  .arrow {
     background: inherit;
     width: 60%;
     height: 60%;
@@ -41,7 +41,7 @@
     transition: transform 0.1s ease-out;
   }
 
-  & .val {
+  .val {
     position: relative;
     color: #fff;
     text-align: center;
@@ -53,7 +53,8 @@
     transform: translateZ(0);
   }
 
-  & input[type=range] {
+  // stylelint-disable-next-line selector-no-qualifying-type
+  input[type='range'] {
     cursor: inherit;
     position: absolute;
     top: 0;
@@ -65,17 +66,17 @@
     opacity: 0;
   }
 
-  & :focus + .track,
-  & .active + .track {
-    & .handle {
+  :focus + .track,
+  .active + .track {
+    .handle {
       transform: translate(-50%, -145%) translateZ(0);
     }
 
-    & .val {
+    .val {
       opacity: 1;
     }
 
-    & .arrow {
+    .arrow {
       transform: rotate(45deg) translateZ(0);
     }
   }

@@ -8,7 +8,6 @@
   cursor: pointer;
   overflow: hidden;
   z-index: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,7 +28,7 @@
     outline: none;
   }
 
-  & .icon {
+  .icon {
     display: block;
     width: 24px;
     height: 24px;
@@ -37,7 +36,7 @@
     z-index: 1;
   }
 
-  & .spinner {
+  .spinner {
     position: absolute;
     top: 0;
     left: 0;
@@ -46,7 +45,7 @@
     border-color: #00bcd4;
   }
 
-  & .ripple {
+  .ripple {
     background: #00bcd4;
   }
 }

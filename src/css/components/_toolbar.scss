@@ -1,16 +1,16 @@
 .toolbar {
-  background: #3F51B5;
+  background: #3f51b5;
   color: #fff;
   display: flex;
   align-items: center;
 }
 
 .menu-toolbar-item {
-  & button {
+  button {
     padding: 10px 12px;
   }
 
-  & svg {
+  svg {
     width: 24px;
     height: 24px;
     fill: #fff;

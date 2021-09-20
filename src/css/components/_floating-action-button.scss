@@ -2,10 +2,9 @@
   width: 56px;
   height: 56px;
   border-radius: 28px;
-  background: #00BCD4;
+  background: #00bcd4;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
   position: relative;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,7 +25,7 @@
     outline: none;
   }
 
-  & .icon {
+  .icon {
     display: block;
     width: 24px;
     height: 24px;
@@ -34,7 +33,7 @@
     z-index: 1;
   }
 
-  & .spinner {
+  .spinner {
     position: absolute;
     top: 0;
     left: 0;
@@ -43,7 +42,7 @@
     border-color: #fff;
   }
 
-  & .ripple {
+  .ripple {
     background: #fff;
   }
 }
