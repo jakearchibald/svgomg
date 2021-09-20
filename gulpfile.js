@@ -2,12 +2,6 @@ const fs = require('fs/promises');
 const path = require('path');
 const sirv = require('sirv-cli');
 const svgoPkg = require('svgo/package.json');
-
-const readJSON = async (path) => {
-  const content = await fs.readFile(path, 'utf-8');
-  return JSON.parse(content);
-};
-
 const sass = require('sass');
 const gulp = require('gulp');
 const gulpSourcemaps = require('gulp-sourcemaps');
@@ -20,22 +14,25 @@ const rollupCommon = require('@rollup/plugin-commonjs');
 const rollupReplace = require('@rollup/plugin-replace');
 const { terser: rollupTerser } = require('rollup-plugin-terser');
 
+const readJSON = async path => {
+  const content = await fs.readFile(path, 'utf-8');
+  return JSON.parse(content);
+};
+
 function css() {
   const boundSass = gulpSass(sass);
-  return gulp.src('src/css/*.scss', { sourcemaps: true })
-    .pipe(boundSass.sync().on('error', boundSass.logError))
+  return gulp.src('src/css/*.scss')
     .pipe(gulpSourcemaps.init())
-    .pipe(boundSass({ outputStyle: 'compressed' }))
+    .pipe(boundSass.sync({ outputStyle: 'compressed' }).on('error', boundSass.logError))
     .pipe(gulpSourcemaps.write('./'))
     .pipe(gulp.dest('build/'));
 }
 
-
 async function html() {
   const [config, changelog, headCSS] = await Promise.all([
-    readJSON(`${__dirname}/src/config.json`),
-    readJSON(`${__dirname}/src/changelog.json`),
-    fs.readFile(`${__dirname}/build/head.css`)
+    readJSON(path.join(__dirname, 'src', 'config.json')),
+    readJSON(path.join(__dirname, 'src', 'changelog.json')),
+    fs.readFile(path.join(__dirname, 'build', 'head.css'), 'utf-8')
   ]);
 
   return gulp.src('src/*.html')
@@ -67,9 +64,8 @@ async function html() {
 const rollupCaches = new Map();
 
 async function js(entry, outputPath) {
-  const parsedPath = path.parse(entry);
-  const name = /[^/]+$/.exec(parsedPath.dir)[0];
-  const changelog = await readJSON(`${__dirname}/src/changelog.json`);
+  const name = path.basename(path.dirname(entry));
+  const changelog = await readJSON(path.join(__dirname, 'src', 'changelog.json'));
   const bundle = await rollup.rollup({
     cache: rollupCaches.get(entry),
     input: `src/${entry}`,
@@ -101,15 +97,11 @@ const allJs = gulp.parallel(
 
 function copy() {
   return gulp.src([
-    // Copy all files
-    'src/**',
-    // Include the .well-known folder
-    'src/.**/*',
-    // Exclude the following files
-    // (other tasks will handle the copying of these files)
-    '!src/*.html',
-    '!src/{css,css/**}',
-    '!src/{js,js/**}'
+    'src/{.well-known,imgs,test-svgs}/**',
+    // Exclude the test-svgs files except for `car-lite.svg`
+    // which is used in the demo
+    '!src/test-svgs/!(car-lite.svg)',
+    'src/*.json'
   ]).pipe(gulp.dest('build'));
 }
 
@@ -117,29 +109,16 @@ function clean() {
   return fs.rm('build', { force: true, recursive: true });
 }
 
-exports.clean = clean;
-exports.allJs = allJs;
-exports.css = css;
-exports.html = html;
-exports.copy = copy;
-
 const mainBuild = gulp.parallel(
   gulp.series(css, html),
   allJs,
   copy
 );
 
-exports['clean-build'] = gulp.series(
-  clean,
-  mainBuild
-);
-
-exports.build = mainBuild;
-
 function watch() {
   gulp.watch(['src/css/**/*.scss'], gulp.series(css, html));
   gulp.watch(['src/js/**/*.js'], allJs);
-  gulp.watch(['src/*.html', 'src/plugin-data.json', 'src/changelog.json'], gulp.parallel(html, copy, allJs));
+  gulp.watch(['src/*.{html,json}'], gulp.parallel(html, copy, allJs));
 }
 
 function serve() {
@@ -150,7 +129,20 @@ function serve() {
   });
 }
 
+exports.clean = clean;
+exports.allJs = allJs;
+exports.css = css;
+exports.html = html;
+exports.copy = copy;
+exports.build = mainBuild;
+
+exports['clean-build'] = gulp.series(
+  clean,
+  mainBuild
+);
+
 exports.dev = gulp.series(
+  clean,
   mainBuild,
   gulp.parallel(
     watch,
