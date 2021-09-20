@@ -5,7 +5,7 @@
   right: 0;
   bottom: 0;
   overflow: auto;
-  -webkit-overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch; // TODO: revisit this later
   color: #f8f8f2;
   background: rgba(#000, 0.8);
   opacity: 0;
@@ -19,7 +19,7 @@
     opacity: 1;
   }
 
-  & code {
+  code {
     font-family: Inconsolata, monospace;
     line-height: 1.5;
     font-size: 0.9rem;
@@ -35,14 +35,14 @@
   @media (min-width: 900px) {
     width: 100vw;
 
-    & code {
+    code {
       font-size: 1rem;
       // This is a hack
       padding-right: 380px;
     }
   }
 
-  & pre {
+  pre {
     margin: 0;
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -61,7 +61,7 @@
 }
 
 .namespace {
-  opacity: .7;
+  opacity: 0.7;
 }
 
 .token.property,
@@ -111,7 +111,7 @@
 
 .token.important,
 .token.bold {
-  font-weight: bold;
+  font-weight: 700;
 }
 .token.italic {
   font-style: italic;

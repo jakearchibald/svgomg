@@ -9,23 +9,21 @@
   color: #fff;
   opacity: 0;
   font-family: sans-serif;
-
   display: flex;
   flex-flow: column;
   align-items: center;
   justify-content: center;
-
   transition: opacity 0.2s ease-out;
 
   &.active {
     opacity: 1;
 
-    & .spinner {
+    .spinner {
       display: block;
     }
   }
 
-  & .spinner {
+  .spinner {
     display: none;
     border-color: #fff;
   }

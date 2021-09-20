@@ -8,7 +8,7 @@
   line-height: 1;
   font-size: 0.9rem;
 
-  & input {
+  input {
     position: absolute;
     height: 1px;
     width: 1px;
@@ -25,7 +25,7 @@
   cursor: pointer;
   position: relative;
 
-  & .selected {
+  .selected {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -34,12 +34,12 @@
     border-bottom: 2px solid transparent;
   }
 
-  & :checked + .selected,
-  & :focus + .selected {
-    border-color: #00BCD4;
+  :checked + .selected,
+  :focus + .selected {
+    border-color: #00bcd4;
   }
 
-  & :focus + .selected {
+  :focus + .selected {
     background: transparentize(#fff, 0.9);
   }
 }

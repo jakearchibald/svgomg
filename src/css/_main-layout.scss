@@ -46,10 +46,10 @@
   display: flex;
   align-items: center;
 
-  & .minor-action-container {
+  .minor-action-container {
     display: flex;
 
-    & .minor-floating-action-button {
+    .minor-floating-action-button {
       margin-right: 10px;
     }
   }
@@ -58,17 +58,17 @@
     right: 30px;
     bottom: 30px;
 
-    & .results-container {
+    .results-container {
       margin-right: -17px;
     }
 
-    & .minor-action-container {
+    .minor-action-container {
       flex-flow: column;
       position: absolute;
       bottom: 58px;
       right: 8px;
 
-      & .minor-floating-action-button {
+      .minor-floating-action-button {
         margin-bottom: 10px;
         margin-right: 0;
       }
@@ -93,7 +93,7 @@
 // shadows
 .settings,
 .toolbar {
-  box-shadow: 0 0px 11px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 11px rgba(0, 0, 0, 0.4);
 
   @media (min-width: 640px) {
     box-shadow: 0 4px 11px rgba(0, 0, 0, 0.3);
@@ -101,75 +101,72 @@
 }
 
 // initial state
-  .toolbar {
-    transform: translateY(-110%);
+.toolbar {
+  transform: translateY(-110%);
 
-    &.transition {
-      transition: transform 0.2s ease-out;
-    }
+  &.transition {
+    transition: transform 0.2s ease-out;
+  }
 
-    &.active {
-      // translateZ required to make Safari layer in the right order
-      transform: translateZ(0);
+  &.active {
+    transform: translateZ(0);
+  }
+}
+
+.settings {
+  transform: translateY(110%);
+
+  @media (min-width: 640px) {
+    transform: translateX(115%);
+  }
+
+  &.transition {
+    transition: transform 0.3s ease-out 0.05s;
+
+    @media (min-width: 640px) and (max-width: 900px) {
+      transition: transform 0.3s ease-out 0.2s;
     }
   }
 
-  .settings {
-    transform: translateY(110%);
+  &.active {
+    transform: translateZ(0);
+  }
+}
 
-    @media (min-width: 640px) {
-      transform: translateX(115%);
-    }
+.action-button-container {
+  transform: translateX(168px);
 
-    &.transition {
-      transition: transform 0.3s ease-out 0.05s;
+  @media (min-width: 640px) {
+    transform: translateY(188px);
+  }
 
-      @media (min-width: 640px) and (max-width: 900px) {
-        transition: transform 0.3s ease-out 0.2s;
-      }
-    }
+  &.transition {
+    transition: transform 0.2s ease-out 0.2s;
 
-    &.active {
-      // translateZ required to make Safari layer in the right order
-      transform: translateZ(0);
+    @media (min-width: 640px) and (max-width: 900px) {
+      transition: transform 0.2s ease-out 0.4s;
     }
   }
 
-  .action-button-container {
-    transform: translateX(168px);
+  &.active {
+    transform: translateZ(0);
+  }
+}
 
-    @media (min-width: 640px) {
-      transform: translateY(188px);
-    }
+.output-switcher {
+  filter: contrast(0) brightness(150%) saturate(100%);
+  opacity: 0;
 
-    &.transition {
-      transition: transform 0.2s ease-out 0.2s;
+  &.transition {
+    transition: all 0.5s ease-out 0.5s;
 
-      @media (min-width: 640px) and (max-width: 900px) {
-        transition: transform 0.2s ease-out 0.4s;
-      }
-    }
-
-    &.active {
-      // translateZ required to make Safari layer in the right order
-      transform: translateZ(0);
+    @media (min-width: 640px) and (max-width: 900px) {
+      transition: all 0.5s ease-out 0.6s;
     }
   }
 
-  .output-switcher {
-    filter: contrast(0%) brightness(150%) saturate(100%);
-    opacity: 0;
-
-    &.transition {
-      transition: all 0.5s ease-out 0.5s;
-
-      @media (min-width: 640px) and (max-width: 900px) {
-        transition: all 0.5s ease-out 0.6s;
-      }
-    }
-
-    &.active {
-      opacity: 1;
-      filter: none;
-    }
+  &.active {
+    opacity: 1;
+    filter: none;
   }
+}
