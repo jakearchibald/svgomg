@@ -1,9 +1,8 @@
-// Hide addEventListener from prism - I want to add my own listener
-import './prism-hack-start';
+// This needs to be an import so it executes before Prism
+import './prism-config';
 import Prism from 'prismjs';
-import './prism-hack-end';
 
-self.onmessage = function(event) {
+self.onmessage = (event) => {
   try {
     self.postMessage({
       id: event.data.id,
