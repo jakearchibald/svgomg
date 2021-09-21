@@ -8,8 +8,8 @@ class Toast {
 
     this._content = this.container.querySelector('.toast-content');
     this._content.textContent = message;
-    this._answerResolve;
-    this._hideTimeout;
+    this._answerResolve = null;
+    this._hideTimeout = null;
 
     this.answer = new Promise(r => this._answerResolve = r);
 
