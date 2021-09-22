@@ -1,11 +1,11 @@
-var utils = require('../utils');
+import { strToEl } from '../utils';
 
 function round(num, places) {
-  var mult = Math.pow(10, places);
+  const mult = Math.pow(10, places);
   return Math.floor(Math.round(num * mult)) / mult;
 }
 
-function humanSize(bytes) { // TODO: I'm sure there's a better version of this
+function humanSize(bytes) {
   if (bytes < 1024) {
     return bytes + ' bytes';
   }
@@ -14,36 +14,39 @@ function humanSize(bytes) { // TODO: I'm sure there's a better version of this
   }
 }
 
-class Results {
+export default class Results {
   constructor() {
-    this.container = utils.strToEl(
+    this.container = strToEl(
       '<div class="results">' +
-        '<span class="size"></span>' +
+        '<span class="size"></span> ' +
         '<span class="diff"></span>' +
       '</div>' +
     '');
+
     this._sizeEl = this.container.querySelector('.size');
     this._diffEl = this.container.querySelector('.diff');
   }
 
-  update({size, comparisonSize}) {
-    this._sizeEl.textContent = humanSize(size);
-    
+  update({ size, comparisonSize }) {
+    if (comparisonSize) {
+      this._sizeEl.textContent = humanSize(comparisonSize) + ' → ' + humanSize(size);
+    } else {
+      this._sizeEl.textContent = humanSize(size);
+    }
+
+    this._diffEl.classList.remove('decrease', 'increase');
+
     // just displaying a single size?
     if (!comparisonSize) {
       this._diffEl.textContent = '';
       return;
     }
-    else if (size == comparisonSize) {
-      this._diffEl.textContent = ' - no change';
-    }
-    else if (size > comparisonSize) {
-      this._diffEl.textContent = ' - ' + round(size / comparisonSize * 100 - 100, 2) + '% increase';
+    else if (size === comparisonSize) {
+      this._diffEl.textContent = '100%';
     }
     else {
-      this._diffEl.textContent = ' - ' + round(100 - size / comparisonSize * 100, 2) + '% saving';
+      this._diffEl.textContent = round(size / comparisonSize * 100, 2) + '%';
+      this._diffEl.classList.add(size > comparisonSize ? 'increase' : 'decrease');
     }
   }
 }
-
-module.exports = Results;

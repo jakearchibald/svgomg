@@ -12,7 +12,17 @@
     padding: 7px 11px;
     font-size: 0.9rem;
     padding-right: 25px;
-    min-width: 11.3em;
     border-radius: 2px;
+
+    .decrease {
+      color: green;
+    }
+    .increase {
+      color: red;
+    }
+  }
+
+  .diff {
+    margin-left: 0.5em;
   }
 }

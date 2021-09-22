@@ -1,9 +1,16 @@
-var utils = require('../utils');
+import { createNanoEvents } from 'nanoevents';
+import {
+  strToEl,
+  domReady,
+  transitionToClass,
+  transitionFromClass,
+  readFileAsText
+} from '../utils';
 
-class FileDrop extends (require('events').EventEmitter) {
+export default class FileDrop {
   constructor() {
-    super();
-    this.container = utils.strToEl(
+    this.emitter = createNanoEvents();
+    this.container = strToEl(
       '<div class="drop-overlay">Drop it!</div>' +
     '');
 
@@ -11,10 +18,10 @@ class FileDrop extends (require('events').EventEmitter) {
     this._activeEnters = 0;
     this._currentEnteredElement = null;
 
-    utils.domReady.then(_ => {
+    domReady.then(() => {
       document.addEventListener('dragover', event => event.preventDefault());
       document.addEventListener('dragenter', event => this._onDragEnter(event));
-      document.addEventListener('dragleave', event => this._onDragLeave(event));
+      document.addEventListener('dragleave', () => this._onDragLeave());
       document.addEventListener('drop', event => this._onDrop(event));
     });
   }
@@ -26,15 +33,15 @@ class FileDrop extends (require('events').EventEmitter) {
     this._currentEnteredElement = event.target;
 
     if (!this._activeEnters++) {
-      utils.transitionToClass(this.container);
+      transitionToClass(this.container);
     }
   }
 
-  _onDragLeave(event) {
+  _onDragLeave() {
     this._currentEnteredElement = null;
 
     if (!--this._activeEnters) {
-      utils.transitionFromClass(this.container);
+      transitionFromClass(this.container);
     }
   }
 
@@ -42,14 +49,14 @@ class FileDrop extends (require('events').EventEmitter) {
     event.preventDefault();
 
     this._activeEnters = 0;
-    utils.transitionFromClass(this.container);
-    var file = event.dataTransfer.files[0];
+    transitionFromClass(this.container);
 
-    this.emit('svgDataLoad', {
-      data: await utils.readFileAsText(file),
+    const file = event.dataTransfer.files[0];
+    if (!file) return;
+
+    this.emitter.emit('svgDataLoad', {
+      data: await readFileAsText(file),
       filename: file.name
     });
   }
 }
-
-module.exports = FileDrop;

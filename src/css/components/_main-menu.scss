@@ -36,18 +36,18 @@
 
     overflow-x: hidden;
     overflow-y: auto;
-    @include display-flex;
-    @include flex-flow(column);
-  
+    display: flex;
+    flex-flow: column;
+
     &.transition {
-      @include transition-transform(0.2s ease-out);
+      transition: transform 0.2s ease-out;
     }
     &.hidden {
-      @include transform(translateX(-110%));
+      transform: translateX(-110%);
     }
 
     & > * {
-      @include min-height-min-content;
+      min-height: min-content;
     }
   }
 
@@ -61,7 +61,7 @@
     will-change: opacity;
 
     &.transition {
-      @include transition(opacity 0.2s ease-in-out);
+      transition: opacity 0.2s ease-in-out;
     }
     &.hidden {
       opacity: 0;
@@ -82,11 +82,10 @@
   & .menu-item {
     padding: 0 16px;
     width: 100%;
-    // I want this to be min-height, but IE breaks layout if I do
-    height: 48px;
+    min-height: 48px;
     box-sizing: border-box;
-    @include display-flex;
-    @include align-items(center);
+    display: flex;
+    align-items: center;
 
     &:link,
     &:visited {
@@ -105,12 +104,18 @@
       height: 24px;
       opacity: 0.54;
       margin-right: 32px;
-      @include flex(none);
+      flex: none;
     }
 
     & .spinner {
-      @include flex(none);
+      flex: none;
       margin: 0 0 0 auto;
+    }
+
+    & .menu-item-text {
+      margin-right: 28px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
@@ -155,26 +160,50 @@
     }
   }
 
-  & .select-file-input {
+  & .load-file-input {
     display: none;
   }
 }
 
-.menu-footer-notes {
-  padding: 0 16px;
-  margin-top: auto;
-  text-align: center;
+.app-title {
+  padding-right: 16px;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  align-items: center;
+  gap: 1rem;
+  background: #f3f3f3;
   font-size: 0.9rem;
-  color: #8E8E8E;
+
+  .logo {
+    width: 100%;
+    height: auto;
+  }
+
+  & h1 {
+    font-size: inherit;
+    margin: 0;
+  }
+
+  & p {
+    margin: 0;
+  }
 
   & a:link,
   & a:visited {
     color: inherit;
     text-decoration: underline;
+    white-space: nowrap;
   }
 
   & a:hover,
   & a:active {
     color: #000;
   }
+}
+
+.title-text {
+  display: grid;
+  grid-template-rows: max-content max-content;
+  gap: 0.1em;
 }

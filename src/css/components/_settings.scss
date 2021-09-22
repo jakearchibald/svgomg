@@ -1,7 +1,7 @@
 .settings {
   background: #fff;
-  @include display-flex;
-  @include flex-flow(column);
+  display: flex;
+  flex-flow: column;
   @include user-select(none);
 }
 
@@ -9,8 +9,8 @@
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  @include flex(1);
-  @include transform(translateZ(0));
+  flex: 1;
+  transform: translateZ(0);
 }
 
 .setting-item-toggle {
@@ -20,8 +20,8 @@
   padding: 0 16px;
   height: 51px;
 
-  @include display-flex;
-  @include align-items(center);
+  display: flex;
+  align-items: center;
 
   & input[type=checkbox] {
     position: absolute;
@@ -36,7 +36,7 @@
       width: 25px;
       height: 25px;
       top: -5px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.5), 
+      box-shadow: 0 1px 3px rgba(0,0,0,0.5),
                 inset 0 0 0 2px #3F51B5;
     }
   }
@@ -44,9 +44,9 @@
 
 .setting-item-range {
   padding: 10px 16px 20px;
-  @include display-flex;
-  @include flex-flow(column);
-  @include justify-content(center);
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
 
   & .label-text {
     margin-bottom: 0.7em;
@@ -63,4 +63,26 @@
   font-weight: normal;
   font-size: 0.9rem;
   color: #898989;
+}
+
+.setting-reset-row {
+  padding: 12px 16px 16px;
+  text-align: right;
+}
+
+.setting-reset {
+  text-transform: uppercase;
+  color: white;
+  background: #3F51B5;
+  padding: 9px 14px;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+
+  & .ripple {
+    top: -94%;
+    bottom: auto;
+    padding-top: 100%;
+  }
 }

@@ -1,33 +1,28 @@
-var utils = require('../utils');
+import { createNanoEvents } from 'nanoevents';
+import { domReady } from '../utils';
 
-class ViewToggler extends (require('events').EventEmitter) {
+/**
+ * Tabs that toggle between showing the SVG image and XML markup.
+ */
+export default class ViewToggler {
   constructor() {
-    super();
+    this.emitter = createNanoEvents();
+    /** @type {HTMLFormElement | null} */
     this.container = null;
 
-    utils.domReady.then(_ => {
+    domReady.then(() => {
       this.container = document.querySelector('.view-toggler');
 
       // stop browsers remembering previous form state
       this.container.output[0].checked = true;
 
-      this.container.addEventListener('change', e => this._onChange(e));
+      this.container.addEventListener('change', () => this._onChange());
     });
   }
 
-  _onChange(event) {
-    var value = this.container.output.value;
-
-    if (!value) { // some browsers don't support the nice shortcut above (eg Safari)
-      value = utils.toArray(this.container.output).reduce((value, input) => {
-        return value || (input.checked ? input.value : '');
-      }, '');
-    }
-
-    this.emit("change", {
-      value: value
+  _onChange() {
+    this.emitter.emit('change', {
+      value: this.container.output.value
     });
   }
 }
-
-module.exports = ViewToggler;

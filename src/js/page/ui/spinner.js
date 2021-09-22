@@ -1,8 +1,8 @@
-var utils = require('../utils');
+import { strToEl } from '../utils';
 
-class Spinner {
+export default class Spinner {
   constructor() {
-    this.container = utils.strToEl(
+    this.container = strToEl(
       '<div class="spinner">' +
         '<div class="spinner-container">' +
           '<div class="spinner-layer">' +
@@ -23,13 +23,12 @@ class Spinner {
     this._showTimeout = null;
     this.container.style.display = 'none';
 
-    var animEndListener = event => {
+    const animEndListener = event => {
       if (event.target == this.container) {
         this.container.style.display = 'none';
       }
     };
 
-    this.container.addEventListener('webkitAnimationEnd', animEndListener);
     this.container.addEventListener('animationend', animEndListener);
   }
 
@@ -37,7 +36,7 @@ class Spinner {
     clearTimeout(this._showTimeout);
     this.container.style.display = 'none';
     this.container.classList.remove('cooldown');
-    this._showTimeout = setTimeout(_ => {
+    this._showTimeout = setTimeout(() => {
       this.container.style.display = '';
     }, delay);
   }
@@ -47,5 +46,3 @@ class Spinner {
     this.container.classList.add('cooldown');
   }
 }
-
-module.exports = Spinner;

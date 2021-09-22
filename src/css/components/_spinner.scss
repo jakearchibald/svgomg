@@ -1,31 +1,31 @@
-@include keyframes(container-rotate) {
-  to { @include transform(rotate(360deg)) }
+@keyframes container-rotate {
+  to { transform: rotate(360deg) }
 }
 
-@include keyframes(fill-unfill-rotate) {
-  12.5% { @include transform(rotate(135deg));  } /* 0.5 * ARCSIZE */
-  25%   { @include transform(rotate(270deg));  } /* 1   * ARCSIZE */
-  37.5% { @include transform(rotate(405deg));  } /* 1.5 * ARCSIZE */
-  50%   { @include transform(rotate(540deg));  } /* 2   * ARCSIZE */
-  62.5% { @include transform(rotate(675deg));  } /* 2.5 * ARCSIZE */
-  75%   { @include transform(rotate(810deg));  } /* 3   * ARCSIZE */
-  87.5% { @include transform(rotate(945deg));  } /* 3.5 * ARCSIZE */
-  to    { @include transform(rotate(1080deg)); } /* 4   * ARCSIZE */
+@keyframes fill-unfill-rotate {
+  12.5% { transform: rotate(135deg);  } /* 0.5 * ARCSIZE */
+  25%   { transform: rotate(270deg);  } /* 1   * ARCSIZE */
+  37.5% { transform: rotate(405deg);  } /* 1.5 * ARCSIZE */
+  50%   { transform: rotate(540deg);  } /* 2   * ARCSIZE */
+  62.5% { transform: rotate(675deg);  } /* 2.5 * ARCSIZE */
+  75%   { transform: rotate(810deg);  } /* 3   * ARCSIZE */
+  87.5% { transform: rotate(945deg);  } /* 3.5 * ARCSIZE */
+  to    { transform: rotate(1080deg); } /* 4   * ARCSIZE */
 }
 
-@include keyframes(left-spin) {
-  from { @include transform(rotate(130deg)); }
-  50% { @include transform(rotate(-5deg)); }
-  to { @include transform(rotate(130deg)); }
+@keyframes left-spin {
+  from { transform: rotate(130deg); }
+  50% { transform: rotate(-5deg); }
+  to { transform: rotate(130deg); }
 }
 
-@include keyframes(right-spin) {
-  from { @include transform(rotate(-130deg)); }
-  50% { @include transform(rotate(5deg)); }
-  to { @include transform(rotate(-130deg)); }
+@keyframes right-spin {
+  from { transform: rotate(-130deg); }
+  50% { transform: rotate(5deg); }
+  to { transform: rotate(-130deg); }
 }
 
-@include keyframes(fade-in) {
+@keyframes fade-in {
   from {
     opacity: 0;
   }
@@ -34,7 +34,7 @@
   }
 }
 
-@include keyframes(fade-out) {
+@keyframes fade-out {
   from {
     opacity: 1;
   }
@@ -93,15 +93,15 @@
 
     &.left .circle {
       border-right-color: transparent !important;
-      @include transform(rotate(129deg));
-      @include animation(left-spin 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both);
+      transform: rotate(129deg);
+      animation: left-spin 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
     }
 
     &.right .circle {
       left: -100%;
       border-left-color: transparent !important;
-      @include transform(rotate(-129deg));
-      @include animation(right-spin 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both);
+      transform: rotate(-129deg);
+      animation: right-spin 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
     }
 
     & .circle {
@@ -111,7 +111,7 @@
 
   &.cooldown {
     /* duration: SHRINK_TIME */
-    @include animation(fade-out 400ms cubic-bezier(0.4, 0.0, 0.2, 1) both);
+    animation: fade-out 400ms cubic-bezier(0.4, 0.0, 0.2, 1) both;
   }
 }
 
@@ -121,7 +121,7 @@
   border-color: inherit;
 
   /* duration: 360 * ARCTIME / (ARCSTARTROT + (360-ARCSIZE)) */
-  @include animation(container-rotate 1568ms linear infinite);
+  animation: container-rotate 1568ms linear infinite;
 }
 
 .spinner-layer {
@@ -131,5 +131,5 @@
   opacity: 1;
   border-color: inherit;
   /* durations: 4 * ARCTIME */
-  @include animation(fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both);
+  animation: fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
 }

@@ -1,65 +1,33 @@
-"use strict";
+import WorkerMessenger from './worker-messenger';
+import SvgFile from './svg-file';
 
-var SvgFile = require('./svg-file');
-
-class Svgo extends require('./worker-messenger') {
+export default class Svgo extends WorkerMessenger {
   constructor() {
     super('js/svgo-worker.js');
-    this._multiPass = false;
-    this._abortOnNextItter = false;
     this._currentJob = Promise.resolve();
   }
 
-  load(svgText) {
-    return this._requestResponse({
-      action: 'load',
+  async wrapOriginal(svgText) {
+    const {width, height} = await this._requestResponse({
+      action: 'wrapOriginal',
       data: svgText
-    }).then(({width, height}) => {
-      return new SvgFile(svgText, width, height);
     });
+
+    return new SvgFile(svgText, width, height);
   }
 
-  process(settings, itterationCallback) {
-    return this._currentJob = this.abortCurrent().then(async _ => {
-      this._abortOnNextItter = false;
+  process(svgText, settings) {
+    this.abort();
 
-      var result = await this._requestResponse({
+    return this._currentJob = this._currentJob.catch(() => {}).then(async () => {
+      const result = await this._requestResponse({
         action: 'process',
-        settings
+        settings,
+        data: svgText,
       });
 
-      var resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
-
-      itterationCallback(resultFile);
-
-      if (settings.multipass) {
-        while (result = await this.nextPass()) {
-          if (this._abortOnNextItter) {
-            throw Error('abort');
-          }
-          resultFile = new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
-          itterationCallback(resultFile);
-        }
-      }
-
       // return final result
-      return resultFile;
+      return new SvgFile(result.data, result.dimensions.width, result.dimensions.height);
     });
-  }
-
-  nextPass() {
-    return this._requestResponse({
-      action: 'nextPass'
-    });
-  }
-
-  async abortCurrent() {
-    this._abortOnNextItter = true;
-
-    try {
-      await this._currentJob;
-    } catch(e){}
   }
 }
-
-module.exports = Svgo;

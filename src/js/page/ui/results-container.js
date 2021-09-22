@@ -1,15 +1,15 @@
-var utils = require('../utils');
+import { domReady } from '../utils';
 
-class ResultsContainer {
+export default class ResultsContainer {
   constructor(results) {
     this._results = results;
 
-    utils.domReady.then(_ => {
+    domReady.then(() => {
       this._mobileContainer = document.querySelector('.results-container-mobile');
       this._container = document.querySelector('.results-container');
       this._query = matchMedia('(min-width: 640px)');
 
-      this._query.addListener(_ => this._positionResults());
+      this._query.addListener(() => this._positionResults());
       this._positionResults();
     });
   }
@@ -23,5 +23,3 @@ class ResultsContainer {
     }
   }
 }
-
-module.exports = ResultsContainer;

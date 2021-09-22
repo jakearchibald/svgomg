@@ -1,7 +1,7 @@
 .material-tabs {
   @include user-select(none);
-  @include display-flex;
-  @include align-self(stretch);
+  display: flex;
+  align-self: stretch;
   text-transform: uppercase;
   overflow: hidden;
   position: relative;
@@ -18,8 +18,8 @@
 }
 
 .material-tab {
-  @include display-flex;
-  @include align-items(center);
+  display: flex;
+  align-items: center;
   fill: #fff;
   padding: 0 24px;
   cursor: pointer;

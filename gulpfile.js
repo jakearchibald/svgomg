@@ -1,183 +1,152 @@
-var fs = require('fs');
+const fs = require('fs/promises');
+const path = require('path');
+const sirv = require('sirv-cli');
+const svgoPkg = require('svgo/package.json');
+const sass = require('sass');
+const gulp = require('gulp');
+const gulpSourcemaps = require('gulp-sourcemaps');
+const gulpSass = require('gulp-sass');
+const gulpNunjucks = require('gulp-nunjucks');
+const gulpHtmlmin = require('gulp-htmlmin');
+const rollup = require('rollup');
+const { nodeResolve: rollupResolve } = require('@rollup/plugin-node-resolve');
+const rollupCommon = require('@rollup/plugin-commonjs');
+const rollupReplace = require('@rollup/plugin-replace');
+const { terser: rollupTerser } = require('rollup-plugin-terser');
 
-var browserSync = require('browser-sync');
-var gulp = require('gulp');
-var plugins = require('gulp-load-plugins')();
-var mergeStream = require('merge-stream');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var watchify = require('watchify');
-var browserify = require('browserify');
-var uglifyify = require('uglifyify');
-var babelify = require("babelify");
-var assign = require('lodash/object/assign');
-var runSequence = require('run-sequence');  // Temporary solution until Gulp 4
-                                            // https://github.com/gulpjs/gulp/issues/355
-
-var reload = browserSync.reload;
-
-// ---------------------------------------------------------------------
-// | Helper tasks                                                      |
-// ---------------------------------------------------------------------
-
-gulp.task('clean', function (done) {
-  require('del')(['build'], done);
-});
-
-var pageData;
-gulp.task('get-page-data', function(done) {
-  pageData = JSON.parse(fs.readFileSync("./src/config.json"));
-  pageData.changelog = JSON.parse(fs.readFileSync("./src/changelog.json"));
-  pageData.plugins.forEach(function(plugin) {
-    plugin.active = require('svgo/plugins/' + plugin.id).active;
-  });
-  done();
-});
-
-gulp.task('css', function () {
-  return gulp.src('src/css/*.scss')
-    .pipe(plugins.sass.sync().on('error', plugins.sass.logError))
-    .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.sass({ outputStyle: 'compressed' }))
-    .pipe(plugins.sourcemaps.write('./'))
-    .pipe(gulp.dest('build/css/'))
-    .pipe(plugins.filter('**/*.css'))
-    .pipe(reload({stream: true}));
-});
-
-gulp.task('html', ['get-page-data', 'css'], function () {
-  return gulp.src([
-    // Copy all `.html` files
-    'src/*.html',
-  ])
-  .pipe(plugins.swig({
-    defaults: { cache: false },
-    data: pageData
-  }))
-  .pipe(plugins.htmlmin({
-    removeComments: true,
-    removeCommentsFromCDATA: true,
-    removeCDATASectionsFromCDATA: true,
-    collapseWhitespace: true,
-    collapseBooleanAttributes: true,
-    removeAttributeQuotes: true,
-    removeRedundantAttributes: true,
-    minifyJS: true
-  })).pipe(gulp.dest('build'))
-    .pipe(reload({stream: true}));
-});
-
-gulp.task('copy', function () {
-  return gulp.src([
-    // Copy all files
-    'src/**',
-    // Exclude the following files
-    // (other tasks will handle the copying of these files)
-    '!src/*.html',
-    '!src/{css,css/**}',
-    '!src/{js,js/**}'
-  ]).pipe(gulp.dest('build'));
-});
-
-function createBundle(src) {
-  var customOpts = {
-    entries: [src],
-    debug: true
-  };
-  var opts = assign({}, watchify.args, customOpts);
-  var b;
-
-  // this is a quick hack. Figure out what's really happening
-  if (plugins.util.env.production) {
-    b = browserify(opts);
-  }
-  else {
-    b = watchify(browserify(opts));
-  }
-
-  b.transform(babelify.configure({
-    stage: 1
-  }));
-
-  if (plugins.util.env.production) {
-    b.transform({
-      global: true
-    }, 'uglifyify');
-  }
-
-  b.on('log', plugins.util.log);
-  return b;
-}
-
-function bundle(b, outputPath) {
-  var splitPath = outputPath.split('/');
-  var outputFile = splitPath[splitPath.length - 1];
-  var outputDir = splitPath.slice(0, -1).join('/');
-
-  return b.bundle()
-    // log errors if they happen
-    .on('error', plugins.util.log.bind(plugins.util, 'Browserify Error'))
-    .pipe(source(outputFile))
-    // optional, remove if you don't need to buffer file contents
-    .pipe(buffer())
-    // optional, remove if you dont want sourcemaps
-    .pipe(plugins.sourcemaps.init({loadMaps: true})) // loads map from browserify file
-       // Add transformation tasks to the pipeline here.
-    .pipe(plugins.sourcemaps.write('./')) // writes .map file
-    .pipe(plugins.size({ gzip: true, title: outputFile }))
-    .pipe(gulp.dest('build/' + outputDir))
-    .pipe(reload({ stream: true }));
-}
-
-var jsBundles = {
-  'js/page.js': createBundle('./src/js/page/index.js'),
-  'js/svgo-worker.js': createBundle('./src/js/svgo-worker/index.js'),
-  'js/gzip-worker.js': createBundle('./src/js/gzip-worker/index.js'),
-  'js/prism-worker.js': createBundle('./src/js/prism-worker/index.js'),
-  'js/promise-polyfill.js': createBundle('./src/js/promise-polyfill/index.js'),
-  'js/fastclick.js': createBundle('./src/js/fastclick/index.js'),
-  'sw.js': plugins.util.env['disable-sw'] ? createBundle('./src/js/sw-null/index.js') : createBundle('./src/js/sw/index.js')
+const readJSON = async path => {
+  const content = await fs.readFile(path, 'utf-8');
+  return JSON.parse(content);
 };
 
-gulp.task('js', function() {
-  return mergeStream.apply(null,
-    Object.keys(jsBundles).map(function(key) {
-      return bundle(jsBundles[key], key);
-    })
-  );
-});
+function css() {
+  const boundSass = gulpSass(sass);
+  return gulp.src('src/css/*.scss')
+    .pipe(gulpSourcemaps.init())
+    .pipe(boundSass.sync({ outputStyle: 'compressed' }).on('error', boundSass.logError))
+    .pipe(gulpSourcemaps.write('./'))
+    .pipe(gulp.dest('build/'));
+}
 
-gulp.task('browser-sync', function() {
-  browserSync({
-    notify: false,
-    port: 8000,
-    server: "build",
-    open: false
+async function html() {
+  const [config, changelog, headCSS] = await Promise.all([
+    readJSON(path.join(__dirname, 'src', 'config.json')),
+    readJSON(path.join(__dirname, 'src', 'changelog.json')),
+    fs.readFile(path.join(__dirname, 'build', 'head.css'), 'utf-8')
+  ]);
+
+  return gulp.src('src/*.html')
+    .pipe(gulpNunjucks.compile({
+      plugins: config.plugins,
+      headCSS,
+      changelog,
+      SVGO_VERSION: svgoPkg.version,
+    }))
+    .pipe(gulpHtmlmin({
+      collapseBooleanAttributes: true,
+      collapseInlineTagWhitespace: false,
+      collapseWhitespace: true,
+      decodeEntities: true,
+      minifyCSS: false,
+      minifyJS: true,
+      removeAttributeQuotes: true,
+      removeComments: true,
+      removeOptionalTags: true,
+      removeRedundantAttributes: true,
+      removeScriptTypeAttributes: true,
+      removeStyleLinkTypeAttributes: true,
+      sortAttributes: true,
+      sortClassName: true
+    }))
+    .pipe(gulp.dest('build'));
+}
+
+const rollupCaches = new Map();
+
+async function js(entry, outputPath) {
+  const name = path.basename(path.dirname(entry));
+  const changelog = await readJSON(path.join(__dirname, 'src', 'changelog.json'));
+  const bundle = await rollup.rollup({
+    cache: rollupCaches.get(entry),
+    input: `src/${entry}`,
+    plugins: [
+      rollupReplace({
+        preventAssignment: true,
+        SVGOMG_VERSION: JSON.stringify(changelog[0].version),
+      }),
+      rollupResolve({ browser: true }),
+      rollupCommon({ include: /node_modules/ }),
+      rollupTerser()
+    ]
   });
-});
-
-gulp.task('watch', function() {
-  gulp.watch(['src/**/*.scss'], ['css']);
-  gulp.watch(['src/*.html', 'src/plugin-data.json', 'src/changelog.json'], ['copy', 'html']);
-
-  Object.keys(jsBundles).forEach(function(key) {
-    var b = jsBundles[key];
-    b.on('update', function() {
-      return bundle(b, key);
-    });
+  rollupCaches.set(entry, bundle.cache);
+  await bundle.write({
+    sourcemap: true,
+    format: 'iife',
+    file: `build/${outputPath}/${name}.js`
   });
-});
+}
 
-// ---------------------------------------------------------------------
-// | Main tasks                                                        |
-// ---------------------------------------------------------------------
+const allJs = gulp.parallel(
+  js.bind(null, 'js/prism-worker/index.js', 'js/'),
+  js.bind(null, 'js/gzip-worker/index.js', 'js/'),
+  js.bind(null, 'js/svgo-worker/index.js', 'js/'),
+  js.bind(null, 'js/sw/index.js', ''),
+  js.bind(null, 'js/page/index.js', 'js/')
+);
 
-gulp.task('build', function (done) {
-  runSequence('clean', ['copy', 'html', 'js', 'css'], done);
-});
+function copy() {
+  return gulp.src([
+    'src/{.well-known,imgs,test-svgs}/**',
+    // Exclude the test-svgs files except for `car-lite.svg`
+    // which is used in the demo
+    '!src/test-svgs/!(car-lite.svg)',
+    'src/*.json'
+  ]).pipe(gulp.dest('build'));
+}
 
-gulp.task('default', ['build']);
+function clean() {
+  return fs.rm('build', { force: true, recursive: true });
+}
 
-gulp.task('serve', function (done) {
-  runSequence( 'build', ['browser-sync', 'watch'], done);
-});
+const mainBuild = gulp.parallel(
+  gulp.series(css, html),
+  allJs,
+  copy
+);
+
+function watch() {
+  gulp.watch(['src/css/**/*.scss'], gulp.series(css, html));
+  gulp.watch(['src/js/**/*.js'], allJs);
+  gulp.watch(['src/*.{html,json}', 'src/**/*.svg'], gulp.parallel(html, copy, allJs));
+}
+
+function serve() {
+  sirv('build', {
+    host: 'localhost',
+    port: 8080,
+    dev: true,
+    clear: false
+  });
+}
+
+exports.clean = clean;
+exports.allJs = allJs;
+exports.css = css;
+exports.html = html;
+exports.copy = copy;
+exports.build = mainBuild;
+
+exports['clean-build'] = gulp.series(
+  clean,
+  mainBuild
+);
+
+exports.dev = gulp.series(
+  clean,
+  mainBuild,
+  gulp.parallel(
+    watch,
+    serve
+  )
+);

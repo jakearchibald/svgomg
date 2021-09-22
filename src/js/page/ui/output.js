@@ -1,14 +1,16 @@
-var utils = require('../utils');
+import { strToEl, transitionToClass, transitionFromClass } from '../utils';
+import SvgOutput from './svg-output';
+import CodeOutput from './code-output';
 
-class Output {
+export default class Output {
   constructor() {
-    this.container = utils.strToEl(
+    this.container = strToEl(
       '<div class="output-switcher"></div>' +
     '');
 
     this._types = {
-      image: new (require('./svg-output')),
-      code: new (require('./code-output'))
+      image: new SvgOutput(),
+      code: new CodeOutput()
     };
 
     this._svgFile = null;
@@ -28,16 +30,11 @@ class Output {
   set(type, {
     noAnimate = false
   }={}) {
-    return this._switchQueue = this._switchQueue.then(async _ => {
-      var toRemove;
-      var toAdd;
-
-      if (this._activeType) {
-        toRemove = this._types[this._activeType].container;
-      }
+    return this._switchQueue = this._switchQueue.then(async () => {
+      const toRemove = this._activeType && this._types[this._activeType].container;
 
       this._activeType = type;
-      toAdd = this._types[this._activeType].container;
+      const toAdd = this._types[this._activeType].container;
       this.container.appendChild(toAdd);
 
       if (this._svgFile) await this.update(this._svgFile);
@@ -47,20 +44,16 @@ class Output {
         if (toRemove) toRemove.classList.remove('active');
       }
       else {
-        let transitions = [
-          utils.transitionToClass(toAdd)
+        const transitions = [
+          transitionToClass(toAdd)
         ];
 
-        if (toRemove) transitions.push(utils.transitionFromClass(toRemove));
+        if (toRemove) transitions.push(transitionFromClass(toRemove));
 
         await Promise.all(transitions);
       }
 
-      if (toRemove) {
-        this.container.removeChild(toRemove);
-      }
-    })
+      if (toRemove) this.container.removeChild(toRemove);
+    });
   }
 }
-
-module.exports = Output;

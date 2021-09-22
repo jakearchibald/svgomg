@@ -1,6 +1,6 @@
-"use strict";
+import WorkerMessenger from './worker-messenger';
 
-class Gzip extends require('./worker-messenger') {
+class Gzip extends WorkerMessenger {
   constructor() {
     super('js/gzip-worker.js');
   }
@@ -12,4 +12,4 @@ class Gzip extends require('./worker-messenger') {
   }
 }
 
-module.exports = Gzip;
+export const gzip = new Gzip();

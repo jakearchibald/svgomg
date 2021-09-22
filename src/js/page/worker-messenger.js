@@ -1,14 +1,46 @@
-"use strict";
-
-class WorkerMessenger {
+export default class WorkerMessenger {
   constructor(url) {
     this._requestId = 0;
-    this._worker = new Worker(url);
-
-    // worker jobs awaiting response {callId: [resolve, reject]}
+    // worker jobs awaiting response { [requestId]: [ resolve, reject ] }
     this._pending = {};
+    this._url = url;
+    this._worker = null;
+  }
 
+  release() {
+    this._abortPending();
+    if (this._worker) {
+      this._worker.terminate();
+      this._worker = null;
+    }
+  }
+
+  abort() {
+    if (Object.keys(this._pending).length === 0) return;
+
+    this._abortPending();
+    if (this._worker) {
+      this._worker.terminate();
+    }
+    this._startWorker();
+  }
+
+  _abortPending() {
+    for (const key of Object.keys(this._pending)) {
+      this._fulfillPending(key, null, new DOMException("AbortError", "AbortError"));
+    }
+  }
+
+  _startWorker() {
+    this._worker = new Worker(this._url);
     this._worker.onmessage = event => this._onMessage(event);
+  }
+
+  _postMessage(message) {
+    if (!this._worker) {
+      this._startWorker();
+    }
+    this._worker.postMessage(message);
   }
 
   _onMessage(event) {
@@ -17,33 +49,36 @@ class WorkerMessenger {
       return;
     }
 
-    var resolver = this._pending[event.data.id];
+    this._fulfillPending(
+      event.data.id,
+      event.data.result,
+      event.data.error && new Error(event.data.error),
+    );
+  }
+
+  _fulfillPending(id, result, error) {
+    const resolver = this._pending[id];
 
     if (!resolver) {
-      console.log("No resolver for", event);
+      console.log("No resolver for", { id, result, error });
       return;
     }
 
-    delete this._pending[event.data.id];
+    delete this._pending[id];
 
-    if (event.data.error) {
-      resolver[1](new Error(event.data.error));
+    if (error) {
+      resolver[1](error);
       return;
     }
 
-    resolver[0](event.data.result);
+    resolver[0](result);
   }
 
   _requestResponse(message) {
-    var workerMessenger = this;
-    var requestId = ++this._requestId;
-    message.id = requestId;
-
-    return new Promise(function(resolve, reject) {
-      workerMessenger._pending[requestId] = [resolve, reject];
-      workerMessenger._worker.postMessage(message);
+    return new Promise((resolve, reject) => {
+      message.id = ++this._requestId;
+      this._pending[message.id] = [resolve, reject];
+      this._postMessage(message);
     });
   }
 }
-
-module.exports = WorkerMessenger;

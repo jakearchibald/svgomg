@@ -1,12 +1,8 @@
-// prism likes to terminate if it thinks it's inside
-// a worker, I don't want it to do that, so this
-// is all trickery-foolery:
-var addEventListener = self.addEventListener;
-self.addEventListener = null;
-var Prism = require('prismjs');
-self.addEventListener = addEventListener;
+// This needs to be an import so it executes before Prism
+import './prism-config';
+import Prism from 'prismjs';
 
-self.onmessage = function(event) {
+self.onmessage = (event) => {
   try {
     self.postMessage({
       id: event.data.id,

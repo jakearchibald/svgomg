@@ -1,8 +1,8 @@
-var utils = require('../utils');
+import { domReady, transitionFromClass } from '../utils';
 
-class Preloader {
+export default class Preloader {
   constructor() {
-    utils.domReady.then(_ => {
+    domReady.then(() => {
       this.container = document.querySelector('.preloader');
       this.activated = this.container.classList.contains('active');
       this.hide();
@@ -10,9 +10,7 @@ class Preloader {
   }
 
   async hide() {
-    await utils.transitionFromClass(this.container, 'active');
+    await transitionFromClass(this.container, 'active');
     this.container.style.display = 'none';
   }
 }
-
-module.exports = Preloader;

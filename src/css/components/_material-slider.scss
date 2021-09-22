@@ -24,10 +24,10 @@
     border-radius: 50%;
     position: absolute;
     top: 50%;
-    @include transform(translate(-50%, -50%) scale(0.45) translateZ(0));
-    @include display-flex;
-    @include align-items(center);
-    @include transition-transform(0.1s ease-out);
+    transform: translate(-50%, -50%) scale(0.45) translateZ(0);
+    display: flex;
+    align-items: center;
+    transition: transform 0.1s ease-out;
   }
 
   & .arrow {
@@ -37,8 +37,8 @@
     position: absolute;
     top: 14px;
     left: 20%;
-    @include transform(translateY(-35%) rotate(45deg) translateZ(0));
-    @include transition-transform(0.1s ease-out);
+    transform: translateY(-35%) rotate(45deg) translateZ(0);
+    transition: transform 0.1s ease-out;
   }
 
   & .val {
@@ -49,8 +49,8 @@
     line-height: 1;
     font-size: 0.8rem;
     opacity: 0;
-    @include transition(opacity 0.1s ease-out);
-    @include transform(translateZ(0))
+    transition: opacity 0.1s ease-out;
+    transform: translateZ(0);
   }
 
   & input[type=range] {
@@ -58,29 +58,17 @@
     position: absolute;
     top: 0;
     left: 0;
-    margin: 0;
-    width: 100%;
-
-    // increase the touch target
-    height: 60px;
-
-    @supports (width: calc(100% + 10px)) {
-      width: calc(100% + 10px);
-      margin-left: -5px;
-    }
-    @include transform(translateY(-50%));
+    margin: 0 0 0 -5px;
+    width: calc(100% + 10px);
+    height: 60px; // increase the touch target
+    transform: translateY(-50%);
     opacity: 0;
-    
-    // remove tooltip in IE
-    &::-ms-tooltip {
-      display: none;
-    }
   }
 
   & :focus + .track,
   & .active + .track {
     & .handle {
-      @include transform(translate(-50%, -145%) translateZ(0));
+      transform: translate(-50%, -145%) translateZ(0);
     }
 
     & .val {
@@ -88,7 +76,7 @@
     }
 
     & .arrow {
-      @include transform(rotate(45deg) translateZ(0));
+      transform: rotate(45deg) translateZ(0);
     }
   }
 }

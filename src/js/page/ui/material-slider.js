@@ -1,18 +1,18 @@
-var utils = require('../utils');
+import { strToEl } from '../utils';
 
-class MaterialSlider {
+export default class MaterialSlider {
   constructor(rangeEl) {
-    this.container = utils.strToEl(`
-      <div class="material-slider">
-        <div class="track">
-          <div class="track-on"></div>
-          <div class="handle">
-            <div class="arrow"></div>
-            <div class="val"></div>
-          </div>
-        </div>
-      </div>
-    `);
+    this.container = strToEl(
+      '<div class="material-slider">' +
+        '<div class="track">' +
+          '<div class="track-on"></div>' +
+          '<div class="handle">' +
+            '<div class="arrow"></div>' +
+            '<div class="val"></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
 
     this.range = rangeEl;
     this._handle = this.container.querySelector('.handle');
@@ -22,37 +22,32 @@ class MaterialSlider {
     rangeEl.parentNode.insertBefore(this.container, rangeEl);
     this.container.insertBefore(rangeEl, this.container.firstChild);
 
-    // events
-    // thanks IE
-    var rangeChangeEvent = utils.isIe ? 'change' : 'input';
-
-    rangeEl.addEventListener(rangeChangeEvent, e => this._onInputChange(e));
-    this.range.addEventListener('mousedown', e => this._onRangeMouseDown(e));
-    this.range.addEventListener('touchstart', e => this._onRangeTouchStart(e));
-    this.range.addEventListener('touchend', e => this._onRangeTouchEnd(e));
+    rangeEl.addEventListener('input', () => this._onInputChange());
+    this.range.addEventListener('mousedown', () => this._onRangeMouseDown());
+    this.range.addEventListener('touchstart', () => this._onRangeTouchStart());
+    this.range.addEventListener('touchend', () => this._onRangeTouchEnd());
 
     this._setPosition();
   }
 
-  _onRangeTouchStart(event) {
+  _onRangeTouchStart() {
     this.range.focus();
   }
 
-  _onRangeTouchEnd(event) {
+  _onRangeTouchEnd() {
     this.range.blur();
   }
 
-  _onRangeMouseDown(event) {
+  _onRangeMouseDown() {
     this.range.classList.add('active');
 
-    var upListener = e => {
-      // IE requires me to do this. Pah.
-      requestAnimationFrame(_ => {
+    const upListener = () => {
+      requestAnimationFrame(() => {
         this.range.blur();
-      })
+      });
       this.range.classList.remove('active');
       document.removeEventListener('mouseup', upListener);
-    }
+    };
     document.addEventListener('mouseup', upListener);
   }
 
@@ -66,17 +61,16 @@ class MaterialSlider {
   }
 
   _update() {
-    requestAnimationFrame(_ => this._setPosition());
+    requestAnimationFrame(() => this._setPosition());
   }
 
   _setPosition() {
-    var { min, max, value } = this.range;
-    var percent = (Number(value) - min) / (max - min);
-    this._trackOn.style.width = 
+    const { min, max, value } = this.range;
+    const percent = (Number(value) - min) / (max - min);
+
+    this._trackOn.style.width =
       this._handle.style.left = percent * 100 + "%";
 
     this._val.textContent = value;
   }
 }
-
-module.exports = MaterialSlider;
