@@ -11,6 +11,6 @@ export default class Preloader {
 
   async hide() {
     await transitionFromClass(this.container, 'active');
-    this.container.style.display = 'none';
+    this.container.classList.add('d-none');
   }
 }

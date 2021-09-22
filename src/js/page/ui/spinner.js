@@ -22,21 +22,21 @@ export default class Spinner {
     );
 
     this._showTimeout = null;
-    this.container.style.display = 'none';
+    this.container.classList.add('d-none');
 
     this.container.addEventListener('animationend', (event) => {
       if (event.target === this.container) {
-        this.container.style.display = 'none';
+        this.container.classList.add('d-none');
       }
     });
   }
 
   show(delay = 300) {
     clearTimeout(this._showTimeout);
-    this.container.style.display = 'none';
+    this.container.classList.add('d-none');
     this.container.classList.remove('cooldown');
     this._showTimeout = setTimeout(() => {
-      this.container.style.display = '';
+      this.container.classList.remove('d-none');
     }, delay);
   }
 
