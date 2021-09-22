@@ -8,7 +8,7 @@ export default class Svgo extends WorkerMessenger {
   }
 
   async wrapOriginal(svgText) {
-    const {width, height} = await this._requestResponse({
+    const {width, height} = await this.requestResponse({
       action: 'wrapOriginal',
       data: svgText
     });
@@ -20,7 +20,7 @@ export default class Svgo extends WorkerMessenger {
     this.abort();
 
     return this._currentJob = this._currentJob.catch(() => {}).then(async () => {
-      const result = await this._requestResponse({
+      const result = await this.requestResponse({
         action: 'process',
         settings,
         data: svgText,

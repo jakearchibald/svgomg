@@ -6,7 +6,7 @@ class Gzip extends WorkerMessenger {
   }
 
   compress(svgData) {
-    return this._requestResponse({
+    return this.requestResponse({
       data: svgData
     });
   }
