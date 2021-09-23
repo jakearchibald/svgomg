@@ -45,7 +45,7 @@
         <div class="overlay"></div>
         <nav class="menu">
           <div class="app-title">
-            {% include "partials/icons/logo.svg" %}
+            {% include "_partials/icons/logo.svg" %}
             <div class="title-text">
               <h1>SVGOMG</h1>
               <p>Powered by <a href="https://github.com/svg/svgo">SVGO v{{ SVGO_VERSION }}</a></p>
@@ -54,14 +54,14 @@
           <ul>
             <li>
               <button class="load-file unbutton menu-item" type="button">
-                {% include "partials/icons/open.svg" %}
+                {% include "_partials/icons/open.svg" %}
                 <span class="menu-item-text">Open SVG</span>
               </button>
               <input type="file" class="load-file-input" accept=".svg">
             </li>
             <li>
               <label class="menu-input menu-item">
-                {% include "partials/icons/paste.svg" %}
+                {% include "_partials/icons/paste.svg" %}
                 <span class="input-area">
                   <textarea class="paste-input"></textarea>
                   <span class="label-txt">Paste markup</span>
@@ -70,13 +70,13 @@
             </li>
             <li>
               <button class="load-demo unbutton menu-item" type="button">
-                {% include "partials/icons/demo.svg" %}
+                {% include "_partials/icons/demo.svg" %}
                 <span class="menu-item-text">Demo</span>
               </button>
             </li>
             <li>
               <a href="https://github.com/jakearchibald/svgomg" class="menu-item">
-                {% include "partials/icons/contribute.svg" %}
+                {% include "_partials/icons/contribute.svg" %}
                 <span class="menu-item-text">Contribute</span>
               </a>
             </li>
@@ -87,7 +87,7 @@
       <div class="toolbar">
         <div class="menu-toolbar-item">
           <button class="unbutton menu-btn" type="button" title="Menu">
-            {% include "partials/icons/menu.svg" %}
+            {% include "_partials/icons/menu.svg" %}
           </button>
         </div>
         <form class="material-tabs view-toggler">
@@ -117,22 +117,22 @@
               <h1 class="settings-sub-heading">Global settings</h1>
               <label class="setting-item-toggle">
                 <input type="checkbox" name="original">
-                {% include "partials/material-switch.html" %}
+                {% include "_partials/material-switch.html" %}
                 Show original
               </label>
               <label class="setting-item-toggle">
                 <input type="checkbox" name="gzip" checked>
-                {% include "partials/material-switch.html" %}
+                {% include "_partials/material-switch.html" %}
                 Compare gzipped
               </label>
               <label class="setting-item-toggle">
                 <input type="checkbox" name="pretty">
-                {% include "partials/material-switch.html" %}
+                {% include "_partials/material-switch.html" %}
                 Prettify markup
               </label>
               <label class="setting-item-toggle">
                 <input type="checkbox" name="multipass">
-                {% include "partials/material-switch.html" %}
+                {% include "_partials/material-switch.html" %}
                 Multipass
               </label>
               <label class="setting-item-range">
@@ -151,7 +151,7 @@
                   <input type="checkbox"
                          name="{{ plugin.id }}"
                          {% if plugin.enabledByDefault %}checked{% endif %}>
-                  {% include "partials/material-switch.html" %}
+                  {% include "_partials/material-switch.html" %}
                   {{ plugin.name }}
                 </label>
               {% endfor %}
