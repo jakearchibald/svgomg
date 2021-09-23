@@ -8,7 +8,7 @@ function getXY(obj) {
 function touchDistance(touch1, touch2) {
   const dx = Math.abs(touch2.x - touch1.x);
   const dy = Math.abs(touch2.y - touch1.y);
-  return Math.sqrt(dx*dx + dy*dy);
+  return Math.hypot(dx, dy);
 }
 
 function getMidpoint(point1, point2) {
