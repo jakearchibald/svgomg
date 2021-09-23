@@ -80,7 +80,7 @@ function copy() {
     .src([
       'src/{.well-known,imgs,fonts}/**',
       // Copy the demo SVG to the root
-      'src/test-svgs/car-lite.svg',
+      'test-svgs/car-lite.svg',
       'src/*.json',
       '!src/imgs/maskable.svg',
     ])
