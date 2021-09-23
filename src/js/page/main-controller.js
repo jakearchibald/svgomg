@@ -122,10 +122,9 @@ export default class MainController {
       // eslint-disable-next-line no-constant-condition
       if (false) {
         (async () => {
-          const data = await fetch('test-svgs/car-lite.svg').then((response) =>
-            response.text(),
-          );
-          this._onInputChange({ data, filename: 'car-lite.svg' });
+          const filename = 'car-lite.svg';
+          const data = await fetch(filename).then((response) => response.text());
+          this._onInputChange({ data, filename });
         })();
       }
     });

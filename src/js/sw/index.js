@@ -17,6 +17,7 @@ addEventListener('install', (event) => {
       await cache.addAll([
         './',
         'all.css',
+        'car-lite.svg',
         'changelog.json',
         'fonts/code-latin.woff2',
         'imgs/icon.png',
@@ -24,7 +25,6 @@ addEventListener('install', (event) => {
         'js/page.js',
         'js/prism-worker.js',
         'js/svgo-worker.js',
-        'test-svgs/car-lite.svg',
       ]);
 
       const activeVersion = await activeVersionPromise;

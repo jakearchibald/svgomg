@@ -78,12 +78,11 @@ const minifyCss = vinylMap((buffer) => {
 function copy() {
   return gulp
     .src([
-      'src/{.well-known,imgs,test-svgs,fonts}/**',
-      // Exclude the test-svgs files except for `car-lite.svg`
-      // which is used in the demo
-      '!src/test-svgs/!(car-lite.svg)',
-      '!src/imgs/maskable.svg',
+      'src/{.well-known,imgs,fonts}/**',
+      // Copy the demo SVG to the root
+      'src/test-svgs/car-lite.svg',
       'src/*.json',
+      '!src/imgs/maskable.svg',
     ])
     .pipe(gulp.dest('build'));
 }
