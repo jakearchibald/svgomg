@@ -1,8 +1,6 @@
-/* globals SVGOMG_VERSION:false */
-
 import {idbKeyval as storage} from '../utils/storage.js';
 
-const version = SVGOMG_VERSION;
+const version = 'SVGOMG_VERSION';
 const cachePrefix = 'svgomg-';
 const staticCacheName = `${cachePrefix}static-${version}`;
 const fontCacheName = `${cachePrefix}fonts`;

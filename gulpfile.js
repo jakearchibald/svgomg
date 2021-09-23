@@ -72,7 +72,7 @@ async function js(entry, outputPath) {
     plugins: [
       rollupReplace({
         preventAssignment: true,
-        SVGOMG_VERSION: JSON.stringify(changelog[0].version),
+        SVGOMG_VERSION: changelog[0].version,
       }),
       rollupResolve({ browser: true }),
       rollupCommon({ include: /node_modules/ }),
