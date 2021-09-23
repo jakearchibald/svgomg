@@ -4,20 +4,3 @@
 @import 'components/main-menu';
 @import 'components/preloader';
 @import 'utils';
-
-.unbutton {
-  display: inline-block;
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-  font: inherit;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.toolbar,
-.main,
-.drop-overlay {
-  display: none;
-}
