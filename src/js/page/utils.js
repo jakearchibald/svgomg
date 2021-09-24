@@ -57,7 +57,7 @@ function transitionClassFunc({removeClass = false}={}) {
 
       requestAnimationFrame(() => {
         el.addEventListener('transitionend', listener);
-        el.classList[removeClass ? 'remove' : 'add'](className);
+        el.classList.toggle(className);
       });
     });
 
