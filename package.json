@@ -15,7 +15,7 @@
   "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",
-    "@rollup/plugin-node-resolve": "^13.0.4",
+    "@rollup/plugin-node-resolve": "^13.0.5",
     "@rollup/plugin-replace": "^3.0.0",
     "eslint": "^7.32.0",
     "gulp": "^4.0.2",
@@ -26,11 +26,11 @@
     "nanoevents": "^6.0.1",
     "pako": "^2.0.4",
     "prismjs": "^1.25.0",
-    "rollup": "^2.56.3",
+    "rollup": "^2.57.0",
     "rollup-plugin-terser": "^7.0.2",
-    "sass": "^1.41.1",
+    "sass": "^1.42.1",
     "sirv-cli": "^1.0.14",
-    "svgo": "^2.6.1"
+    "svgo": "^2.7.0"
   },
   "scripts": {
     "build": "gulp clean-build",
