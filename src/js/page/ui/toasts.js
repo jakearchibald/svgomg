@@ -17,6 +17,7 @@ class Toast {
       var buttonEl = document.createElement('button');
       buttonEl.className = 'unbutton';
       buttonEl.textContent = button;
+      buttonEl.type = 'button';
       buttonEl.addEventListener('click', () => {
         this._answerResolve(button);
       });
