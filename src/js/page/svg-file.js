@@ -11,7 +11,7 @@ export default class SvgFile {
 
   async size({ compress }) {
     if (!compress) {
-      return this.text.trim().length;
+      return this.text.length;
     }
 
     if (!this._compressedSize) {

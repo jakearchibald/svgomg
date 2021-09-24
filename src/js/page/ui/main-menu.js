@@ -73,7 +73,7 @@ export default class MainMenu {
   }
 
   _onTextInputChange() {
-    const val = this._pasteInput.value.trim();
+    const val = this._pasteInput.value;
 
     if (val.includes('</svg>')) {
       this._pasteInput.value = '';

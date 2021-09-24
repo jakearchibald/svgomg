@@ -133,7 +133,7 @@ export default class MainController {
   }
 
   _onGlobalPaste(event) {
-    const val = event.clipboardData.getData('text').trim();    
+    const val = event.clipboardData.getData('text');    
     if (!val.includes("</svg>")) {
       this._toastsUi.show("Pasted value not an SVG", {
         duration: 2000
