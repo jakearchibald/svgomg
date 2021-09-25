@@ -30,7 +30,7 @@ export default class Settings {
 
       this.container.addEventListener('input', event => this._onChange(event));
       this._scroller.addEventListener('wheel', event => this._onMouseWheel(event));
-      this._resetBtn.addEventListener('click', event => this._onReset(event));
+      this._resetBtn.addEventListener('click', () => this._onReset());
 
       // Stop double-tap text selection.
       // This stops all text selection which is kinda sad.
