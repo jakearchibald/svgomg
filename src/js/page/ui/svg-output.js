@@ -32,7 +32,7 @@ export default class SvgOutput {
     // All the internal refs break.
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1125667
     const nextLoad = this._nextLoadPromise();
-    this._svgFrame.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgFile.text);
+    this._svgFrame.src = "data:image/svg+xml," + encodeURIComponent(svgFile.text);
     this._svgFrame.width = svgFile.width;
     this._svgFrame.height = svgFile.height;
     return nextLoad;
