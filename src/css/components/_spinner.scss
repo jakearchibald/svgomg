@@ -56,7 +56,6 @@
     left: 0;
     right: 0;
     bottom: 0;
-    box-sizing: border-box;
     height: 100%;
     border-width: 3px;
     border-style: solid;
@@ -69,7 +68,6 @@
   // spinner is rotating (appears on Chrome 38, Safari 7.1, and IE 11).
   .gap-patch {
     position: absolute;
-    box-sizing: border-box;
     top: 0;
     left: 45%;
     width: 10%;
