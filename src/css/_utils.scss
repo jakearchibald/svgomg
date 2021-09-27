@@ -3,7 +3,7 @@
   user-select: $spec;
 }
 
-.bg-dark {
+.bg-dark body::after {
   background-color: rgba(0, 0, 0, 0.7);
 }
 
