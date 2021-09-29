@@ -16,10 +16,6 @@ export default class DownloadButton extends FloatingActionButton {
     });
   }
 
-  _onClick(event) {
-    super._onClick(event);
-  }
-
   setDownload(filename, svgFile) {
     this.container.download = filename;
     this.container.href = svgFile.url;
