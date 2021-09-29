@@ -47,6 +47,7 @@ export default class MainMenu {
 
   show() {
     this.container.classList.remove('hidden');
+    this._menu.setAttribute('aria-expanded', true);
     transitionFromClass(this._overlay, 'hidden');
     transitionFromClass(this._menu, 'hidden');
   }
@@ -55,6 +56,7 @@ export default class MainMenu {
     if (!this.allowHide) return;
     this.stopSpinner();
     this.container.classList.add('hidden');
+    this._menu.setAttribute('aria-expanded', false);
     transitionToClass(this._overlay, 'hidden');
     transitionToClass(this._menu, 'hidden');
   }

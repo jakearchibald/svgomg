@@ -43,7 +43,7 @@
     <div class="app-output">
       <div class="main-menu">
         <div class="overlay"></div>
-        <nav class="menu">
+        <nav id="menu" class="menu" aria-expanded="true">
           <div class="app-title">
             {% include "partials/icons/logo.svg" %}
             <div class="title-text">
@@ -86,7 +86,7 @@
       </div>
       <div class="toolbar">
         <div class="menu-toolbar-item">
-          <button class="unbutton menu-btn" type="button">
+          <button class="unbutton menu-btn" type="button" title="Menu" aria-controls="menu">
             {% include "partials/icons/menu.svg" %}
           </button>
         </div>
