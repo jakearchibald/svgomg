@@ -1,4 +1,5 @@
 import FloatingActionButton from './floating-action-button';
+import Spinner from './spinner';
 
 export default class DownloadButton extends FloatingActionButton {
   constructor() {
@@ -15,10 +16,21 @@ export default class DownloadButton extends FloatingActionButton {
       ),
       major: true
     });
+
+    this._spinner = new Spinner();
+    this.container.appendChild(this._spinner.container);
   }
 
   setDownload(filename, svgFile) {
     this.container.download = filename;
     this.container.href = svgFile.url;
+  }
+
+  working() {
+    this._spinner.show(500);
+  }
+
+  done() {
+    this._spinner.hide();
   }
 }
