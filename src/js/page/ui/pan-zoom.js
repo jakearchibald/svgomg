@@ -40,14 +40,58 @@ export default class PanZoom {
     this._active = 0;
     this._lastPoints = [];
 
-    // bind
-    [
-      '_onPointerDown',
-      '_onPointerMove',
-      '_onPointerUp'
-    ].forEach(funcName => {
-      this[funcName] = this[funcName].bind(this);
-    });
+    // Ideally these would use public class fields, but around 1.7% of users
+    // are on old Safari versions that don't support them. We should be able
+    // to switch over soon.
+    this._onPointerDown = (event) => {
+      if (event.type == 'mousedown' && event.button !== 0) return;
+      if (!this._shouldCaptureFunc(event.target)) return;
+      event.preventDefault();
+
+      this._lastPoints = getPoints(event);
+      this._active++;
+
+      if (this._active === 1) {
+        this._onFirstPointerDown();
+      }
+    };
+
+    this._onPointerMove = (event) => {
+      event.preventDefault();
+      const points = getPoints(event);
+      const averagePoint = points.reduce(getMidpoint);
+      const averageLastPoint = this._lastPoints.reduce(getMidpoint);
+      const boundingRect = this._target.getBoundingClientRect();
+
+      this._dx += averagePoint.x - averageLastPoint.x;
+      this._dy += averagePoint.y - averageLastPoint.y;
+
+      if (points[1]) {
+        const scaleDiff = touchDistance(points[0], points[1]) / touchDistance(this._lastPoints[0], this._lastPoints[1]);
+        this._scale *= scaleDiff;
+        this._dx -= (averagePoint.x - boundingRect.left) * (scaleDiff - 1);
+        this._dy -= (averagePoint.y - boundingRect.top) * (scaleDiff - 1);
+      }
+
+      this._update();
+      this._lastPoints = points;
+    };
+
+    this._onPointerUp = (event) => {
+      event.preventDefault();
+      this._active--;
+      this._lastPoints.pop();
+
+      if (this._active) {
+        this._lastPoints = getPoints(event);
+        return;
+      }
+
+      document.removeEventListener('mousemove', this._onPointerMove);
+      document.removeEventListener('mouseup', this._onPointerUp);
+      document.removeEventListener('touchmove', this._onPointerMove);
+      document.removeEventListener('touchend', this._onPointerUp);
+    };
 
     // bound events
     eventArea.addEventListener('mousedown', this._onPointerDown);
@@ -97,57 +141,7 @@ export default class PanZoom {
     document.addEventListener('touchend', this._onPointerUp);
   }
 
-  _onPointerDown(event) {
-    if (event.type == 'mousedown' && event.button !== 0) return;
-    if (!this._shouldCaptureFunc(event.target)) return;
-    event.preventDefault();
-
-    this._lastPoints = getPoints(event);
-    this._active++;
-
-    if (this._active === 1) {
-      this._onFirstPointerDown();
-    }
-  }
-
-  _onPointerMove(event) {
-    event.preventDefault();
-    const points = getPoints(event);
-    const averagePoint = points.reduce(getMidpoint);
-    const averageLastPoint = this._lastPoints.reduce(getMidpoint);
-    const boundingRect = this._target.getBoundingClientRect();
-
-    this._dx += averagePoint.x - averageLastPoint.x;
-    this._dy += averagePoint.y - averageLastPoint.y;
-
-    if (points[1]) {
-      const scaleDiff = touchDistance(points[0], points[1]) / touchDistance(this._lastPoints[0], this._lastPoints[1]);
-      this._scale *= scaleDiff;
-      this._dx -= (averagePoint.x - boundingRect.left) * (scaleDiff - 1);
-      this._dy -= (averagePoint.y - boundingRect.top) * (scaleDiff - 1);
-    }
-
-    this._update();
-    this._lastPoints = points;
-  }
-
   _update() {
     this._target.style.transform = `translate3d(${this._dx}px, ${this._dy}px, 0) scale(${this._scale})`;
-  }
-
-  _onPointerUp(event) {
-    event.preventDefault();
-    this._active--;
-    this._lastPoints.pop();
-
-    if (this._active) {
-      this._lastPoints = getPoints(event);
-      return;
-    }
-
-    document.removeEventListener('mousemove', this._onPointerMove);
-    document.removeEventListener('mouseup', this._onPointerUp);
-    document.removeEventListener('touchmove', this._onPointerMove);
-    document.removeEventListener('touchend', this._onPointerUp);
   }
 }

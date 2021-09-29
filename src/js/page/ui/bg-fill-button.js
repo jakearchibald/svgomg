@@ -16,8 +16,8 @@ export default class BgFillButton extends FloatingActionButton {
     });
   }
 
-  _onClick(event) {
-    super._onClick(event);
+  onClick(event) {
+    super.onClick(event);
     // event adds a background color
     if (this.container.classList.contains('active')) {
       this.container.classList.remove('active');
