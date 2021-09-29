@@ -18,8 +18,8 @@ export default class CopyButton extends FloatingActionButton {
     this._pre = document.createElement('pre');
   }
 
-  _onClick(event) {
-    super._onClick(event);
+  onClick(event) {
+    super.onClick(event);
     this.copyText();
   }
 

@@ -6,7 +6,7 @@ export default class Prism extends WorkerMessenger {
   }
 
   highlight(svgData) {
-    return this._requestResponse({
+    return this.requestResponse({
       data: svgData
     });
   }

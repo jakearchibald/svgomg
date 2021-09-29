@@ -15,6 +15,14 @@ export default class WorkerMessenger {
     }
   }
 
+  requestResponse(message) {
+    return new Promise((resolve, reject) => {
+      message.id = ++this._requestId;
+      this._pending[message.id] = [resolve, reject];
+      this._postMessage(message);
+    });
+  }
+
   abort() {
     if (Object.keys(this._pending).length === 0) return;
 
@@ -72,13 +80,5 @@ export default class WorkerMessenger {
     }
 
     resolver[0](result);
-  }
-
-  _requestResponse(message) {
-    return new Promise((resolve, reject) => {
-      message.id = ++this._requestId;
-      this._pending[message.id] = [resolve, reject];
-      this._postMessage(message);
-    });
   }
 }
