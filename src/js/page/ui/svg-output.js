@@ -30,8 +30,8 @@ export default class SvgOutput {
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1125667
     const nextLoad = this._nextLoadPromise();
     this._svgFrame.src = `data:image/svg+xml,${encodeURIComponent(text)}`;
-    this._svgFrame.width = Math.round(width);
-    this._svgFrame.height = Math.round(height);
+    this._svgFrame.style.width = `${width}px`;
+    this._svgFrame.style.height = `${height}px`;
     return nextLoad;
   }
 
