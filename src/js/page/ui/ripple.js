@@ -2,7 +2,7 @@ import { strToEl } from '../utils';
 
 export default class Ripple {
   constructor() {
-    this.container = strToEl('<div class="ripple"></div>');
+    this.container = strToEl('<span class="ripple"></span>');
   }
 
   animate() {
