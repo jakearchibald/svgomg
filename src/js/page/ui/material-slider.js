@@ -15,44 +15,44 @@ export default class MaterialSlider {
       '</div>'
     );
 
-    this.range = rangeElement;
+    this._range = rangeElement;
     this._handle = this.container.querySelector('.handle');
     this._trackOn = this.container.querySelector('.track-on');
     this._val = this.container.querySelector('.val');
 
-    rangeElement.parentNode.insertBefore(this.container, rangeElement);
-    this.container.insertBefore(rangeElement, this.container.firstChild);
+    this._range.parentNode.insertBefore(this.container, this._range);
+    this.container.insertBefore(this._range, this.container.firstChild);
 
-    rangeElement.addEventListener('input', () => this._onInputChange());
-    this.range.addEventListener('mousedown', () => this._onRangeMouseDown());
-    this.range.addEventListener('touchstart', () => this._onRangeTouchStart());
-    this.range.addEventListener('touchend', () => this._onRangeTouchEnd());
+    this._range.addEventListener('input', () => this._onInputChange());
+    this._range.addEventListener('mousedown', () => this._onRangeMouseDown());
+    this._range.addEventListener('touchstart', () => this._onRangeTouchStart());
+    this._range.addEventListener('touchend', () => this._onRangeTouchEnd());
 
     this._setPosition();
   }
 
   // eslint-disable-next-line accessor-pairs
   set value(newValue) {
-    this.range.value = newValue;
+    this._range.value = newValue;
     this._update();
   }
 
   _onRangeTouchStart() {
-    this.range.focus();
+    this._range.focus();
   }
 
   _onRangeTouchEnd() {
-    this.range.blur();
+    this._range.blur();
   }
 
   _onRangeMouseDown() {
-    this.range.classList.add('active');
+    this._range.classList.add('active');
 
     const upListener = () => {
       requestAnimationFrame(() => {
-        this.range.blur();
+        this._range.blur();
       });
-      this.range.classList.remove('active');
+      this._range.classList.remove('active');
       document.removeEventListener('mouseup', upListener);
     };
 
@@ -68,7 +68,7 @@ export default class MaterialSlider {
   }
 
   _setPosition() {
-    const { min, max, value } = this.range;
+    const { min, max, value } = this._range;
     const percent = (Number(value) - min) / (max - min);
 
     this._trackOn.style.width = this._handle.style.left = `${percent * 100}%`;
