@@ -170,6 +170,12 @@
   h1 {
     font-size: 1rem;
     margin: 0;
+
+    .version {
+      font-size: 0.8rem;
+      font-weight: 400;
+      margin-left: 0.25rem;
+    }
   }
 
   p {
