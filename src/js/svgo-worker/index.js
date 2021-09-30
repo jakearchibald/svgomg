@@ -11,10 +11,13 @@ const createDimensionsExtractor = () => {
           // Node, parentNode
           enter: ({ name, attributes }, { type }) => {
             if (name === 'svg' && type === 'root') {
-              if (attributes.width != null && attributes.height !== null) {
+              if (
+                attributes.width !== undefined &&
+                attributes.height !== undefined
+              ) {
                 dimensions.width = Number.parseFloat(attributes.width);
                 dimensions.height = Number.parseFloat(attributes.height);
-              } else if (attributes.viewBox != null) {
+              } else if (attributes.viewBox !== undefined) {
                 const viewBox = attributes.viewBox.split(/,\s*|\s+/);
                 dimensions.width = Number.parseFloat(viewBox[2]);
                 dimensions.height = Number.parseFloat(viewBox[3]);

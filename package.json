@@ -57,14 +57,6 @@
     "rules": {
       "arrow-body-style": "off",
       "capitalized-comments": "off",
-      "eqeqeq": [
-        "error",
-        "always",
-        {
-          "null": "ignore"
-        }
-      ],
-      "no-eq-null": "off",
       "no-multi-assign": "off",
       "no-negated-condition": "off",
       "no-shadow": "error",
