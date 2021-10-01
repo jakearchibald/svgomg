@@ -17,6 +17,7 @@
     "@rollup/plugin-commonjs": "^23.0.2",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^5.0.1",
+    "clean-css": "^5.3.1",
     "gulp": "^4.0.2",
     "gulp-htmlmin": "^5.0.1",
     "gulp-if": "^3.0.0",
@@ -32,6 +33,7 @@
     "stylelint": "^14.14.0",
     "stylelint-config-twbs-bootstrap": "^6.0.0",
     "svgo": "^2.8.0",
+    "vinyl-map": "^1.0.2",
     "xo": "^0.52.4"
   },
   "scripts": {

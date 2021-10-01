@@ -4,6 +4,8 @@ const process = require('process');
 const sirv = require('sirv-cli');
 const { version: SVGO_VERSION } = require('svgo/package.json');
 const sass = require('sass');
+const CleanCSS = require('clean-css');
+const vinylMap = require('vinyl-map');
 const gulp = require('gulp');
 const gulpif = require('gulp-if');
 const gulpSass = require('gulp-sass')(sass);
@@ -19,6 +21,21 @@ const IS_DEV_TASK =
   process.argv.includes('dev') || process.argv.includes('--dev');
 
 const buildConfig = {
+  cleancss: {
+    level: {
+      1: {
+        specialComments: 0,
+      },
+      2: {
+        all: false,
+        mergeMedia: true,
+        removeDuplicateMediaBlocks: true,
+        removeEmpty: true,
+      },
+    },
+    sourceMap: true,
+    sourceMapInlineSources: true,
+  },
   htmlmin: {
     collapseBooleanAttributes: true,
     collapseInlineTagWhitespace: false,
@@ -54,6 +71,10 @@ const readJSON = async (filePath) => {
   return JSON.parse(content);
 };
 
+const minifyCss = vinylMap((buffer) => {
+  return new CleanCSS(buildConfig.cleancss).minify(buffer.toString()).styles;
+});
+
 function copy() {
   return gulp
     .src([
@@ -71,6 +92,7 @@ function css() {
   return gulp
     .src('src/css/*.scss', { sourcemaps: true })
     .pipe(gulpSass.sync(buildConfig.sass).on('error', gulpSass.logError))
+    .pipe(gulpif(!IS_DEV_TASK, minifyCss))
     .pipe(gulp.dest('build/', { sourcemaps: '.' }));
 }
 
