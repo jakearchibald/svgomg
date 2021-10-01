@@ -32,7 +32,7 @@
     },
     {
       "id": "cleanupAttrs",
-      "name": "Cleanup attribute whitespace",
+      "name": "Clean up attribute whitespace",
       "active": true
     },
     {
@@ -57,7 +57,7 @@
     },
     {
       "id": "cleanupIDs",
-      "name": "Clean IDs",
+      "name": "Clean up IDs",
       "active": true
     },
     {
