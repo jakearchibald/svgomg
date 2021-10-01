@@ -4,15 +4,15 @@ export default class MaterialSlider {
   constructor(rangeElement) {
     // prettier-ignore
     this.container = strToEl(
-      '<div class="material-slider">' +
-        '<div class="track">' +
-          '<div class="track-on"></div>' +
-          '<div class="handle">' +
-            '<div class="arrow"></div>' +
-            '<div class="val"></div>' +
-          '</div>' +
-        '</div>' +
-      '</div>'
+      '<span class="material-slider">' +
+        '<span class="track">' +
+          '<span class="track-on"></span>' +
+          '<span class="handle">' +
+            '<span class="arrow"></span>' +
+            '<span class="val"></span>' +
+          '</span>' +
+        '</span>' +
+      '</span>'
     );
 
     this._range = rangeElement;

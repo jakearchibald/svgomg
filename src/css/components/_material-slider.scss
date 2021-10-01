@@ -4,6 +4,7 @@
   position: relative;
 
   .track {
+    display: block;
     position: relative;
     height: 2px;
     background-color: rgba(#000, 0.26);
@@ -11,6 +12,7 @@
   }
 
   .track-on {
+    display: block;
     position: relative;
     width: 0;
     height: 100%;
@@ -31,6 +33,7 @@
   }
 
   .arrow {
+    display: block;
     background-color: inherit;
     width: 60%;
     height: 60%;
@@ -42,6 +45,7 @@
   }
 
   .val {
+    display: block;
     position: relative;
     color: #fff;
     text-align: center;
