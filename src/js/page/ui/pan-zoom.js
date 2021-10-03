@@ -95,10 +95,10 @@ export default class PanZoom {
 
     // bound events
     eventArea.addEventListener('mousedown', this._onPointerDown);
-    eventArea.addEventListener('touchstart', this._onPointerDown);
+    eventArea.addEventListener('touchstart', this._onPointerDown, { passive: true });
 
     // unbonud
-    eventArea.addEventListener('wheel', e => this._onWheel(e));
+    eventArea.addEventListener('wheel', e => this._onWheel(e), { passive: true });
   }
 
   reset() {

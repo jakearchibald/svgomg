@@ -24,7 +24,7 @@ export default class MaterialSlider {
 
     rangeEl.addEventListener('input', () => this._onInputChange());
     this.range.addEventListener('mousedown', () => this._onRangeMouseDown());
-    this.range.addEventListener('touchstart', () => this._onRangeTouchStart());
+    this.range.addEventListener('touchstart', () => this._onRangeTouchStart(), { passive: true });
     this.range.addEventListener('touchend', () => this._onRangeTouchEnd());
 
     this._setPosition();

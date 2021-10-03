@@ -33,7 +33,7 @@ export default class Settings {
       this._scroller = document.querySelector('.settings-scroller');
 
       this.container.addEventListener('input', e => this._onChange(e));
-      this._scroller.addEventListener('wheel', e => this._onMouseWheel(e));
+      this._scroller.addEventListener('wheel', e => this._onMouseWheel(e), { passive: true });
       this._resetBtn.addEventListener('click', e => this._onReset(e));
 
       // Stop double-tap text selection.
