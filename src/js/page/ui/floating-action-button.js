@@ -1,6 +1,5 @@
 import { strToEl } from '../utils';
 import Ripple from './ripple';
-import Spinner from './spinner';
 
 export default class FloatingActionButton {
   constructor({ title, href, iconSvg, classList, major = false }) {
@@ -23,22 +22,10 @@ export default class FloatingActionButton {
 
     this._ripple = new Ripple();
     this.container.appendChild(this._ripple.container);
-
-    this._spinner = new Spinner();
-    this.container.appendChild(this._spinner.container);
-
     this.container.addEventListener('click', () => this.onClick());
   }
 
   onClick() {
     this._ripple.animate();
-  }
-
-  working() {
-    this._spinner.show(500);
-  }
-
-  done() {
-    this._spinner.hide();
   }
 }
