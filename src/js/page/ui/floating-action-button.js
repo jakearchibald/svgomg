@@ -2,12 +2,14 @@ import { strToEl } from '../utils';
 import Ripple from './ripple';
 
 export default class FloatingActionButton {
-  constructor({ title, href, iconSvg, classList, major = false }) {
+  constructor({ title, href, iconSvg, major = false }) {
     this.container = strToEl(
       (href ? '<a>' : '<div role="button" tabindex="0">') +
         iconSvg +
       (href ? '</a>' : '</div>') +
     '');
+
+    const classes = ['floating-action-button'];
 
     if (href) {
       this.container.href = href;
@@ -15,10 +17,11 @@ export default class FloatingActionButton {
     if (title) {
       this.container.setAttribute('title', title);
     }
-    this.container.classList.add(major ? 'floating-action-button' : 'minor-floating-action-button');
-    if (classList) {
-      classList.forEach((className) => { this.container.classList.add(className); });
+    if (major) {
+      classes.push('major-floating-action-button');
     }
+
+    this.container.classList.add(...classes);
 
     this._ripple = new Ripple();
     this.container.appendChild(this._ripple.container);
