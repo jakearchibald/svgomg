@@ -2,11 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>SVGOMG - SVGO's Missing GUI</title>
+    <title>{{ title }}</title>
     <meta name="theme-color" content="#303f9f">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>{{headCSS|safe}}</style>
-
+    <link rel="preload" as="style" href="all.css" onload="rel='stylesheet'">
+    <link rel="preload" crossorigin as="style" href="https://fonts.googleapis.com/css?family=Inconsolata" onload="rel='stylesheet'">
+    <link rel="preconnect" crossorigin href="https://fonts.gstatic.com">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="{{ iconPath }}">
+    <link rel="icon" href="{{ iconPath }}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="SVGOMG">
+    <meta name="twitter:card" content="summary">
+    <meta name="description" content="{{ description }}">
+    <meta property="og:description" content="{{ description }}">
+    <meta property="og:image" content="{{ liveBaseUrl }}{{ iconPath }}">
+    <meta property="og:title" content="{{ title }}">
     <script>
       if ((!location.port || location.port === '80') && location.protocol !== 'https:') {
         location.protocol = 'https:';
@@ -27,19 +38,7 @@
       });
     </script>
     <script src="js/page.js" defer></script>
-    <link rel="preload" as="style" href="all.css" onload="rel='stylesheet'">
-    <link rel="preload" crossorigin as="style" href="https://fonts.googleapis.com/css?family=Inconsolata" onload="rel='stylesheet'">
-    <link rel="preconnect" crossorigin href="https://fonts.gstatic.com">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="imgs/icon.png">
-    <link rel="icon" href="imgs/icon.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="SVGOMG">
-    <meta name="twitter:card" content="summary">
-    <meta name="description" content="Easy & visual compression of SVG images.">
-    <meta property="og:description" content="Easy & visual compression of SVG images.">
-    <meta property="og:image" content="https://deploy-preview-345--svgomg.netlify.app/imgs/icon.png">
-    <meta property="og:title" content="SVGOMG - SVGO's Missing GUI">
+    <style>{{headCSS|safe}}</style>
   </head>
   <body>
     <div class="app-output">
