@@ -20,8 +20,9 @@
   }
 
   code {
-    line-height: 1.65;
-    font-size: 0.81rem;
+    font-family: Inconsolata, monospace;
+    line-height: 1.5;
+    font-size: 0.9rem;
     display: block;
     padding: 14px;
 
@@ -35,7 +36,7 @@
     width: 100vw;
 
     code {
-      font-size: 0.91rem;
+      font-size: 1rem;
       // This is a hack
       padding-right: 380px;
     }
