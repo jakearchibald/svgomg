@@ -169,7 +169,7 @@
   }
 
   h1 {
-    font-size: inherit;
+    font-size: 1rem;
     margin: 0;
   }
 
@@ -193,5 +193,5 @@
 .title-text {
   display: grid;
   grid-template-rows: max-content max-content;
-  gap: 0.1em;
+  gap: 0.2em;
 }
