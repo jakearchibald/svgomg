@@ -118,7 +118,7 @@ const mainBuild = gulp.parallel(
 function watch() {
   gulp.watch(['src/css/**/*.scss'], gulp.series(css, html));
   gulp.watch(['src/js/**/*.js'], allJs);
-  gulp.watch(['src/*.{html,json}', 'src/**/*.svg'], gulp.parallel(html, copy, allJs));
+  gulp.watch(['src/*.{html,json}', 'src/**/*.{svg,woff2}'], gulp.parallel(html, copy, allJs));
 }
 
 function serve() {
