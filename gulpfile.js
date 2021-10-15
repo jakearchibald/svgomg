@@ -101,7 +101,7 @@ const allJs = gulp.parallel(
 
 function copy() {
   return gulp.src([
-    'src/{.well-known,imgs,test-svgs}/**',
+    'src/{.well-known,imgs,test-svgs,fonts}/**',
     // Exclude the test-svgs files except for `car-lite.svg`
     // which is used in the demo
     '!src/test-svgs/!(car-lite.svg)',
@@ -122,7 +122,7 @@ const mainBuild = gulp.parallel(
 function watch() {
   gulp.watch(['src/css/**/*.scss'], gulp.series(css, html));
   gulp.watch(['src/js/**/*.js'], allJs);
-  gulp.watch(['src/*.{html,json}', 'src/**/*.svg'], gulp.parallel(html, copy, allJs));
+  gulp.watch(['src/*.{html,json}', 'src/**/*.{svg,woff2}'], gulp.parallel(html, copy, allJs));
 }
 
 function serve() {
