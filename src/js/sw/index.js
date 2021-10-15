@@ -22,7 +22,7 @@ addEventListener('install', event => {
       'js/prism-worker.js',
       'js/svgo-worker.js',
       'changelog.json',
-      'https://fonts.googleapis.com/css?family=Inconsolata',
+      'fonts/code-latin.woff2',
     ]);
 
     const activeVersion = await activeVersionPromise;
@@ -62,7 +62,7 @@ async function handleFontRequest(request) {
 addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  if (url.host == 'fonts.gstatic.com') {
+  if (url.pathname.endsWith('.woff2')) {
     event.respondWith(handleFontRequest(event.request));
     return;
   }
