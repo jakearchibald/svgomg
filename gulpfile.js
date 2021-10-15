@@ -97,7 +97,7 @@ const allJs = gulp.parallel(
 
 function copy() {
   return gulp.src([
-    'src/{.well-known,imgs,test-svgs}/**',
+    'src/{.well-known,imgs,test-svgs,fonts}/**',
     // Exclude the test-svgs files except for `car-lite.svg`
     // which is used in the demo
     '!src/test-svgs/!(car-lite.svg)',

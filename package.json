@@ -40,7 +40,7 @@
     "dev": "gulp dev",
     "lint": "npm run eslint && npm run stylelint",
     "eslint": "eslint --report-unused-disable-directives --ignore-path .gitignore .",
-    "stylelint": "stylelint src/css/ --rd --risd",
+    "stylelint": "stylelint src/css/**/*.scss --rd --risd",
     "fix": "npm run lint -- --fix",
     "test": "npm run lint && npm run build"
   }
