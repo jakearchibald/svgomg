@@ -1,5 +1,6 @@
 {
   "name": "svgomg",
+  "description": "Easy & visual compression of SVG images.",
   "private": true,
   "version": "1.16.0",
   "repository": {

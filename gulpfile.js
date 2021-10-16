@@ -16,6 +16,7 @@ const { nodeResolve: rollupResolve } = require('@rollup/plugin-node-resolve');
 const rollupCommon = require('@rollup/plugin-commonjs');
 const rollupReplace = require('@rollup/plugin-replace');
 const { terser: rollupTerser } = require('rollup-plugin-terser');
+const pkg = require('./package.json');
 
 const IS_DEV_TASK =
   process.argv.includes('dev') || process.argv.includes('--dev');
@@ -96,9 +97,8 @@ function css() {
 }
 
 async function html() {
-  const [config, changelog, headCSS] = await Promise.all([
+  const [config, headCSS] = await Promise.all([
     readJSON(path.join(__dirname, 'src', 'config.json')),
-    readJSON(path.join(__dirname, 'src', 'changelog.json')),
     fs.readFile(path.join(__dirname, 'build', 'head.css'), 'utf8'),
   ]);
 
@@ -108,11 +108,11 @@ async function html() {
       gulpNunjucks.compile({
         plugins: config.plugins,
         headCSS,
-        SVGOMG_VERSION: changelog[0].version,
+        SVGOMG_VERSION: pkg.version,
         SVGO_VERSION,
-        liveBaseUrl: 'https://jakearchibald.github.io/svgomg/',
+        liveBaseUrl: pkg.homepage,
         title: `SVGOMG - SVGO's Missing GUI`,
-        description: 'Easy & visual compression of SVG images.',
+        description: pkg.description,
         iconPath: 'imgs/icon.png',
       }),
     )
@@ -124,16 +124,13 @@ const rollupCaches = new Map();
 
 async function js(entry, outputPath) {
   const name = path.basename(path.dirname(entry));
-  const changelog = await readJSON(
-    path.join(__dirname, 'src', 'changelog.json'),
-  );
   const bundle = await rollup.rollup({
     cache: rollupCaches.get(entry),
     input: `src/${entry}`,
     plugins: [
       rollupReplace({
         preventAssignment: true,
-        SVGOMG_VERSION: JSON.stringify(changelog[0].version),
+        SVGOMG_VERSION: JSON.stringify(pkg.version),
       }),
       rollupResolve({ browser: true }),
       rollupCommon({ include: /node_modules/ }),
