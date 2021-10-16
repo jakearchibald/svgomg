@@ -21,23 +21,23 @@ const svgo = new Svgo();
 
 export default class MainController {
   constructor() {
-    this._container = null;
-
     // ui components
     this._mainUi = null;
     this._outputUi = new Output();
     this._downloadButtonUi = new DownloadButton();
     this._copyButtonUi = new CopyButton();
-    this._bgFillUi = new BgFillButton();
     this._resultsUi = new Results();
     this._settingsUi = new Settings();
     this._mainMenuUi = new MainMenu();
     this._toastsUi = new Toasts();
-    this._dropUi = new FileDrop();
-    this._preloaderUi = new Preloader();
-    this._changelogUi = new Changelog(self.version);
+
+    const bgFillUi = new BgFillButton();
+    const dropUi = new FileDrop();
+    const preloaderUi = new Preloader();
+    const changelogUi = new Changelog(self.version);
+    // _resultsContainerUi is unused
     this._resultsContainerUi = new ResultsContainer(this._resultsUi);
-    this._viewTogglerUi = new ViewToggler();
+    const viewTogglerUi = new ViewToggler();
 
     // ui events
     this._settingsUi.emitter.on('change', () => this._onSettingsChange());
@@ -47,13 +47,11 @@ export default class MainController {
     this._mainMenuUi.emitter.on('svgDataLoad', (event) =>
       this._onInputChange(event),
     );
-    this._dropUi.emitter.on('svgDataLoad', (event) =>
-      this._onInputChange(event),
-    );
+    dropUi.emitter.on('svgDataLoad', (event) => this._onInputChange(event));
     this._mainMenuUi.emitter.on('error', ({ error }) =>
       this._handleError(error),
     );
-    this._viewTogglerUi.emitter.on('change', (event) =>
+    viewTogglerUi.emitter.on('change', (event) =>
       this._outputUi.set(event.value),
     );
     window.addEventListener('keydown', (event) => this._onGlobalKeyDown(event));
@@ -79,21 +77,21 @@ export default class MainController {
 
     // tell the user about the latest update
     storage.get('last-seen-version').then((lastSeenVersion) => {
-      if (lastSeenVersion) this._changelogUi.showLogFrom(lastSeenVersion);
+      if (lastSeenVersion) changelogUi.showLogFrom(lastSeenVersion);
       storage.set('last-seen-version', self.version);
     });
 
     domReady.then(() => {
-      this._container = document.querySelector('.app-output');
-      const actionContainer = this._container.querySelector(
+      const container = document.querySelector('.app-output');
+      const actionContainer = container.querySelector(
         '.action-button-container',
       );
-      const minorActionContainer = this._container.querySelector(
+      const minorActionContainer = container.querySelector(
         '.minor-action-container',
       );
-      const toolbarElement = this._container.querySelector('.toolbar');
-      const outputElement = this._container.querySelector('.output');
-      const menuExtraElement = this._container.querySelector('.menu-extra');
+      const toolbarElement = container.querySelector('.toolbar');
+      const outputElement = container.querySelector('.output');
+      const menuExtraElement = container.querySelector('.menu-extra');
 
       // elements for intro anim
       this._mainUi = new MainUi(
@@ -104,19 +102,19 @@ export default class MainController {
       );
 
       minorActionContainer.append(
-        this._bgFillUi.container,
+        bgFillUi.container,
         this._copyButtonUi.container,
       );
       actionContainer.append(this._downloadButtonUi.container);
       outputElement.append(this._outputUi.container);
-      this._container.append(this._toastsUi.container, this._dropUi.container);
-      menuExtraElement.append(this._changelogUi.container);
+      container.append(this._toastsUi.container, dropUi.container);
+      menuExtraElement.append(changelogUi.container);
 
       // load previous settings
       this._loadSettings();
 
       // someone managed to hit the preloader, aww
-      if (this._preloaderUi.activated) {
+      if (preloaderUi.activated) {
         this._toastsUi.show('Ready now!', { duration: 3000 });
       }
 

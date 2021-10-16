@@ -10,18 +10,19 @@ export default class Settings {
 
     domReady.then(() => {
       this.container = document.querySelector('.settings');
-      this._scroller = this.container.querySelector('.settings-scroller');
-      this._resetBtn = this.container.querySelector('.setting-reset');
       this._pluginInputs = [
         ...this.container.querySelectorAll('.plugins input'),
       ];
       this._globalInputs = [
         ...this.container.querySelectorAll('.global input'),
       ];
+
+      const scroller = this.container.querySelector('.settings-scroller');
+      const resetBtn = this.container.querySelector('.setting-reset');
       const ranges = this.container.querySelectorAll('input[type=range]');
 
       this._resetRipple = new Ripple();
-      this._resetBtn.append(this._resetRipple.container);
+      resetBtn.append(this._resetRipple.container);
 
       // map real range elements to Slider instances
       this._sliderMap = new WeakMap();
@@ -34,16 +35,14 @@ export default class Settings {
       this.container.addEventListener('input', (event) =>
         this._onChange(event),
       );
-      this._scroller.addEventListener('wheel', (event) =>
-        this._onMouseWheel(event),
-      );
-      this._resetBtn.addEventListener('click', () => this._onReset());
+      scroller.addEventListener('wheel', (event) => this._onMouseWheel(event));
+      resetBtn.addEventListener('click', () => this._onReset());
 
       // TODO: revisit this
       // Stop double-tap text selection.
       // This stops all text selection which is kinda sad.
       // I think this code will bite me.
-      this._scroller.addEventListener('mousedown', (event) => {
+      scroller.addEventListener('mousedown', (event) => {
         if (event.target.closest('input[type=range]')) return;
         event.preventDefault();
       });
