@@ -245,7 +245,7 @@ export default class MainController {
   }
 
   _handleError(error) {
-    this._toastsUi.show(error.message);
+    this._toastsUi.show(error.message, { isError: true });
     console.error(error);
   }
 
