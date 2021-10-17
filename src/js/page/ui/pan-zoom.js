@@ -113,16 +113,9 @@ export default class PanZoom {
     event.preventDefault();
 
     const { left, top } = this._target.getBoundingClientRect();
-    let delta = event.deltaY;
-
-    // 1 is "lines", 0 is "pixels"
-    // Firefox uses "lines" when mouse is connected
-    if (event.deltaMode === 1) {
-      delta *= 15;
-    }
 
     // stop mouse wheel producing huge values
-    delta = Math.max(Math.min(delta, 60), -60);
+    const delta = Math.max(Math.min(event.deltaY, 60), -60);
 
     const scaleDiff = delta / 300 + 1;
 
