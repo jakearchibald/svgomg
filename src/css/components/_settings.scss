@@ -17,8 +17,10 @@
   cursor: pointer;
   padding: 0 16px;
   height: 51px;
-  display: flex;
+  display: grid;
+  grid-template-columns: max-content 1fr;
   align-items: center;
+  gap: 19px;
 
   // stylelint-disable-next-line selector-no-qualifying-type
   input[type='checkbox'] {
