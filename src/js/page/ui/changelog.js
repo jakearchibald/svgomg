@@ -1,4 +1,9 @@
-import { strToEl, escapeHtmlTag, transitionToClass, domReady } from '../utils';
+import {
+  strToEl,
+  escapeHtmlTag,
+  transitionToClass,
+  domReady,
+} from '../utils.js';
 
 export default class Changelog {
   constructor(loadedVersion) {
@@ -7,33 +12,34 @@ export default class Changelog {
   }
 
   async showLogFrom(lastLoadedVersion) {
-    if (lastLoadedVersion == this._loadedVersion) return;
-    const changelog = await fetch('changelog.json').then(r => r.json());
+    if (lastLoadedVersion === this._loadedVersion) return;
+    const changelog = await fetch('changelog.json').then((response) =>
+      response.json(),
+    );
     let startIndex = 0;
     let endIndex = 0;
 
-    for (var i = 0; i < changelog.length; i++) {
-      const entry = changelog[i];
-
+    for (const [i, entry] of Object.entries(changelog)) {
       if (entry.version === this._loadedVersion) {
         startIndex = i;
-      }
-      else if (entry.version === lastLoadedVersion) {
+      } else if (entry.version === lastLoadedVersion) {
         break;
       }
+
       endIndex = i + 1;
     }
 
-    const changeLis = changelog.slice(startIndex, endIndex)
-      .reduce((arr, entry) => arr.concat(entry.changes), [])
-      .map(change => escapeHtmlTag`<li>${change}</li>`);
+    const changeList = changelog
+      .slice(startIndex, endIndex)
+      // TODO: remove `reduce`
+      // eslint-disable-next-line unicorn/no-array-reduce
+      .reduce((array, entry) => array.concat(entry.changes), [])
+      .map((change) => escapeHtmlTag`<li>${change}</li>`);
 
-    this.container.appendChild(strToEl('<h1>Updated!</h1>'));
-    this.container.appendChild(strToEl(
-      '<ul>' +
-        changeLis.join('') +
-      '</ul>' +
-    ''));
+    this.container.append(
+      strToEl('<h1>Updated!</h1>'),
+      strToEl(`<ul>${changeList.join('')}</ul>`),
+    );
 
     await domReady;
     transitionToClass(this.container);

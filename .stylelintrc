@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "stylelint-config-twbs-bootstrap/scss"
+  ],
+  "rules": {
+    "color-named": null,
+    "no-duplicate-selectors": null,
+    "number-leading-zero": "always",
+    "order/properties-order": null,
+    "property-no-vendor-prefix": null,
+    "scss/dollar-variable-pattern": null,
+    "scss/selector-no-union-class-name": true,
+    "string-quotes": "single"
+  }
+}

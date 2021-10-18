@@ -1,26 +1,27 @@
-export let idbKeyval = (() => {
-  let db;
+export const idbKeyval = (() => {
+  let dbInstance;
 
   function getDB() {
-    if (!db) {
-      db = new Promise((resolve, reject) => {
-        const openreq = indexedDB.open('svgo-keyval', 1);
+    if (dbInstance) return dbInstance;
 
-        openreq.onerror = () => {
-          reject(openreq.error);
-        };
+    dbInstance = new Promise((resolve, reject) => {
+      const openreq = indexedDB.open('svgo-keyval', 1);
 
-        openreq.onupgradeneeded = () => {
-          // First time setup: create an empty object store
-          openreq.result.createObjectStore('keyval');
-        };
+      openreq.onerror = () => {
+        reject(openreq.error);
+      };
 
-        openreq.onsuccess = () => {
-          resolve(openreq.result);
-        };
-      });
-    }
-    return db;
+      openreq.onupgradeneeded = () => {
+        // First time setup: create an empty object store
+        openreq.result.createObjectStore('keyval');
+      };
+
+      openreq.onsuccess = () => {
+        resolve(openreq.result);
+      };
+    });
+
+    return dbInstance;
   }
 
   async function withStore(type, callback) {
@@ -35,31 +36,21 @@ export let idbKeyval = (() => {
 
   return {
     async get(key) {
-      let req;
-      await withStore('readonly', store => {
-        req = store.get(key);
+      let request;
+      await withStore('readonly', (store) => {
+        request = store.get(key);
       });
-      return req.result;
+      return request.result;
     },
     set(key, value) {
-      return withStore('readwrite', store => {
+      return withStore('readwrite', (store) => {
         store.put(value, key);
       });
     },
     delete(key) {
-      return withStore('readwrite', store => {
+      return withStore('readwrite', (store) => {
         store.delete(key);
       });
-    }
+    },
   };
 })();
-
-// iOS add-to-homescreen is missing IDB, or at least it used to.
-// I haven't tested this in a while.
-if (!self.indexedDB) {
-  idbKeyval = {
-    get: key => Promise.resolve(localStorage.getItem(key)),
-    set: (key, val) => Promise.resolve(localStorage.setItem(key, val)),
-    delete: key => Promise.resolve(localStorage.removeItem(key))
-  };
-}

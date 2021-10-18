@@ -1,7 +1,8 @@
-import { strToEl } from '../utils';
+import { strToEl } from '../utils.js';
 
 export default class Spinner {
   constructor() {
+    // prettier-ignore
     this.container = strToEl(
       '<div class="spinner">' +
         '<div class="spinner-container">' +
@@ -17,19 +18,17 @@ export default class Spinner {
             '</div>' +
           '</div>' +
         '</div>' +
-      '</div>' +
-    '');
+      '</div>'
+    );
 
     this._showTimeout = null;
     this.container.style.display = 'none';
 
-    const animEndListener = event => {
-      if (event.target == this.container) {
+    this.container.addEventListener('animationend', (event) => {
+      if (event.target === this.container) {
         this.container.style.display = 'none';
       }
-    };
-
-    this.container.addEventListener('animationend', animEndListener);
+    });
   }
 
   show(delay = 300) {

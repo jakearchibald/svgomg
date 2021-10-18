@@ -4,28 +4,25 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(#000, 0.7);
+  background-color: rgba(#000, 0.7);
   z-index: 3;
   color: #fff;
   opacity: 0;
-  font-family: sans-serif;
-
   display: flex;
   flex-flow: column;
   align-items: center;
   justify-content: center;
-
   transition: opacity 0.2s ease-out;
 
   &.active {
     opacity: 1;
 
-    & .spinner {
+    .spinner {
       display: block;
     }
   }
 
-  & .spinner {
+  .spinner {
     display: none;
     border-color: #fff;
   }

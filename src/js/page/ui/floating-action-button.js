@@ -1,44 +1,29 @@
-import { strToEl } from '../utils';
-import Ripple from './ripple';
-import Spinner from './spinner';
+import { strToEl } from '../utils.js';
+import Ripple from './ripple.js';
 
 export default class FloatingActionButton {
-  constructor({ title, href, iconSvg, classList, minor }) {
+  constructor({ title, href, iconSvg, major = false }) {
+    // prettier-ignore
     this.container = strToEl(
       (href ? '<a>' : '<div role="button" tabindex="0">') +
         iconSvg +
-      (href ? '</a>' : '</div>') +
-    '');
+      (href ? '</a>' : '</div>')
+    );
 
-    if (href) {
-      this.container.href = href;
-    }
-    if (title) {
-      this.container.setAttribute('title', title);
-    }
-    this.container.classList.add(minor ? 'minor-floating-action-button' : 'floating-action-button');
-    if (classList) {
-      classList.forEach((className) => { this.container.classList.add(className); });
-    }
+    const classes = ['floating-action-button'];
+
+    if (href) this.container.href = href;
+    if (title) this.container.setAttribute('title', title);
+    if (major) classes.push('major-floating-action-button');
+
+    this.container.classList.add(...classes);
 
     this._ripple = new Ripple();
-    this.container.appendChild(this._ripple.container);
-
-    this._spinner = new Spinner();
-    this.container.appendChild(this._spinner.container);
-
-    this.container.addEventListener('click', () => this._onClick());
+    this.container.append(this._ripple.container);
+    this.container.addEventListener('click', () => this.onClick());
   }
 
-  _onClick() {
+  onClick() {
     this._ripple.animate();
-  }
-
-  working() {
-    this._spinner.show(500);
-  }
-
-  done() {
-    this._spinner.hide();
   }
 }

@@ -1,13 +1,13 @@
-import { strToEl } from '../utils';
+import { strToEl } from '../utils.js';
 
 export default class Ripple {
   constructor() {
-    this.container = strToEl('<div class="ripple"></div>');
+    this.container = strToEl('<span class="ripple"></span>');
   }
 
   animate() {
     this.container.classList.remove('animate');
-    this.container.offsetLeft;
+    this.container.offsetLeft; // eslint-disable-line no-unused-expressions
     this.container.classList.add('animate');
   }
 }

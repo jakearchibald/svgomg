@@ -2,11 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>SVGOMG - SVGO's Missing GUI</title>
+    <title>{{ title }}</title>
     <meta name="theme-color" content="#303f9f">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>{{headCSS|safe}}</style>
-
+    <link rel="preload" crossorigin as="font" href="fonts/code-latin.woff2">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="{{ iconPath }}">
+    <link rel="icon" href="{{ iconPath }}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="SVGOMG">
+    <meta name="twitter:card" content="summary">
+    <meta name="description" content="{{ description }}">
+    <meta property="og:description" content="{{ description }}">
+    <meta property="og:image" content="{{ liveBaseUrl }}{{ iconPath }}">
+    <meta property="og:title" content="{{ title }}">
     <script>
       if ((!location.port || location.port === '80') && location.protocol !== 'https:') {
         location.protocol = 'https:';
@@ -27,14 +36,8 @@
       });
     </script>
     <script src="js/page.js" defer></script>
+    <style>{{headCSS|safe}}</style>
     <link rel="preload" as="style" href="all.css" onload="rel='stylesheet'">
-    <link rel="preload" crossorigin as="style" href="https://fonts.googleapis.com/css?family=Roboto:400,700%7CInconsolata" onload="rel='stylesheet'">
-    <link rel="preconnect" crossorigin href="https://fonts.gstatic.com">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="imgs/icon.png">
-    <link rel="icon" href="imgs/icon.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="SVGOMG">
   </head>
   <body>
     <div class="app-output">
@@ -50,7 +53,7 @@
           </div>
           <ul>
             <li>
-              <div tabindex="0" role="button" class="load-file unbutton menu-item needsclick">
+              <div tabindex="0" role="button" class="load-file unbutton menu-item">
                 {% include "partials/icons/open.svg" %}
                 <span class="menu-item-text">Open SVG</span>
               </div>
@@ -77,19 +80,13 @@
                 <span class="menu-item-text">Contribute</span>
               </a>
             </li>
-            <li>
-              <a href="https://github.com/jakearchibald/svgomg/blob/main/README.md" class="menu-item">
-                {% include "partials/icons/about.svg" %}
-                <span class="menu-item-text">About</span>
-              </a>
-            </li>
           </ul>
           <div class="menu-extra"></div>
         </nav>
       </div>
       <div class="toolbar">
         <div class="menu-toolbar-item">
-          <button class="unbutton menu-btn">
+          <button class="unbutton menu-btn" type="button">
             {% include "partials/icons/menu.svg" %}
           </button>
         </div>
@@ -156,7 +153,7 @@
               {% endfor %}
             </section>
             <div class="setting-reset-row">
-              <button class="unbutton setting-reset">Reset all</button>
+              <button class="unbutton setting-reset" type="button">Reset all</button>
             </div>
           </div>
         </div>

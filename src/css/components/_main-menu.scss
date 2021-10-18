@@ -5,24 +5,12 @@
   bottom: 0;
   right: 0;
   z-index: 3;
-  font-family: sans-serif;
-
-  &.hide-font {
-    color: transparent;
-    & .menu-footer-notes {
-      color: transparent;
-    }
-  }
-
-  &.use-font {
-    font-family: inherit;
-  }
 
   &.hidden {
     pointer-events: none;
   }
 
-  & .menu {
+  .menu {
     position: absolute;
     top: 0;
     left: 0;
@@ -30,56 +18,56 @@
     min-width: 264px;
     width: 40%;
     max-width: 340px;
-    background: #fff;
+    background-color: #fff;
     box-shadow: 3px 0 16px rgba(0, 0, 0, 0.4);
     will-change: transform;
-
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
     display: flex;
     flex-flow: column;
 
     &.transition {
       transition: transform 0.2s ease-out;
     }
+
     &.hidden {
       transform: translateX(-110%);
     }
 
-    & > * {
+    > * {
       min-height: min-content;
     }
   }
 
-  & .overlay {
+  .overlay {
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
-    background: rgba(#000, 0.4);
+    background-color: rgba(#000, 0.4);
     will-change: opacity;
 
     &.transition {
       transition: opacity 0.2s ease-in-out;
     }
+
     &.hidden {
       opacity: 0;
     }
   }
 
-  & ul {
+  ul {
     margin: 0;
     padding: 0;
   }
 
-  & li {
+  li {
     display: block;
     margin: 0;
     padding: 0;
   }
 
-  & .menu-item {
+  .menu-item {
     padding: 0 16px;
     width: 100%;
     min-height: 48px;
@@ -96,10 +84,10 @@
     &:focus,
     &:hover {
       outline: none;
-      background: rgba(#000, 0.1);
+      background-color: rgba(#000, 0.1);
     }
 
-    & .icon {
+    .icon {
       width: 24px;
       height: 24px;
       opacity: 0.54;
@@ -107,38 +95,38 @@
       flex: none;
     }
 
-    & .spinner {
+    .spinner {
       flex: none;
       margin: 0 0 0 auto;
     }
 
-    & .menu-item-text {
+    .menu-item-text {
       margin-right: 28px;
       overflow: hidden;
       text-overflow: ellipsis;
     }
   }
 
-  & .menu-input {
+  .menu-input {
     cursor: pointer;
 
-    & .input-area {
+    .input-area {
       position: relative;
       white-space: nowrap;
     }
 
-    & .label-txt {
+    .label-txt {
       position: absolute;
       left: 0;
       top: 0;
     }
 
-    & textarea,
-    & input {
+    textarea,
+    input {
       display: block;
       font: inherit;
       border: none;
-      background: none;
+      background-color: transparent;
       padding: 0;
       margin: 0;
       opacity: 0;
@@ -152,7 +140,7 @@
         outline: none;
         opacity: 1;
 
-        & + .label-txt {
+        + .label-txt {
           opacity: 0;
           pointer-events: none;
         }
@@ -160,7 +148,7 @@
     }
   }
 
-  & .load-file-input {
+  .load-file-input {
     display: none;
   }
 }
@@ -172,7 +160,7 @@
   grid-template-columns: 56px 1fr;
   align-items: center;
   gap: 1rem;
-  background: #f3f3f3;
+  background-color: #f3f3f3;
   font-size: 0.9rem;
 
   .logo {
@@ -180,24 +168,24 @@
     height: auto;
   }
 
-  & h1 {
-    font-size: inherit;
+  h1 {
+    font-size: 1rem;
     margin: 0;
   }
 
-  & p {
+  p {
     margin: 0;
   }
 
-  & a:link,
-  & a:visited {
+  a:link,
+  a:visited {
     color: inherit;
     text-decoration: underline;
     white-space: nowrap;
   }
 
-  & a:hover,
-  & a:active {
+  a:hover,
+  a:active {
     color: #000;
   }
 }
@@ -205,5 +193,5 @@
 .title-text {
   display: grid;
   grid-template-rows: max-content max-content;
-  gap: 0.1em;
+  gap: 0.2em;
 }

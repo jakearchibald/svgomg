@@ -4,32 +4,33 @@ import {
   domReady,
   transitionToClass,
   transitionFromClass,
-  readFileAsText
-} from '../utils';
+  readFileAsText,
+} from '../utils.js';
 
 export default class FileDrop {
   constructor() {
     this.emitter = createNanoEvents();
-    this.container = strToEl(
-      '<div class="drop-overlay">Drop it!</div>' +
-    '');
+    this.container = strToEl('<div class="drop-overlay">Drop it!</div>');
 
     // drag events are horrid
     this._activeEnters = 0;
     this._currentEnteredElement = null;
 
     domReady.then(() => {
-      document.addEventListener('dragover', event => event.preventDefault());
-      document.addEventListener('dragenter', event => this._onDragEnter(event));
+      document.addEventListener('dragover', (event) => event.preventDefault());
+      document.addEventListener('dragenter', (event) =>
+        this._onDragEnter(event),
+      );
       document.addEventListener('dragleave', () => this._onDragLeave());
-      document.addEventListener('drop', event => this._onDrop(event));
+      document.addEventListener('drop', (event) => this._onDrop(event));
     });
   }
 
   _onDragEnter(event) {
-    // firefox double-fires on window enter, this works around it
+    // TODO: revisit this
+    // Firefox double-fires on window enter, this works around it
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1124645
-    if (this._currentEnteredElement == event.target) return;
+    if (this._currentEnteredElement === event.target) return;
     this._currentEnteredElement = event.target;
 
     if (!this._activeEnters++) {
@@ -56,7 +57,7 @@ export default class FileDrop {
 
     this.emitter.emit('svgDataLoad', {
       data: await readFileAsText(file),
-      filename: file.name
+      filename: file.name,
     });
   }
 }

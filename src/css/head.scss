@@ -1,3 +1,4 @@
+@import 'fonts';
 @import 'utils';
 @import 'global';
 @import 'components/main-menu';
@@ -5,7 +6,7 @@
 
 .unbutton {
   display: inline-block;
-  background: none;
+  background-color: transparent;
   border: none;
   padding: 0;
   margin: 0;
@@ -14,6 +15,8 @@
   white-space: nowrap;
 }
 
-.toolbar, .main, .drop-overlay {
+.toolbar,
+.main,
+.drop-overlay {
   display: none;
 }

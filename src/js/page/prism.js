@@ -1,13 +1,11 @@
-import WorkerMessenger from './worker-messenger';
+import WorkerMessenger from './worker-messenger.js';
 
 export default class Prism extends WorkerMessenger {
   constructor() {
     super('js/prism-worker.js');
   }
 
-  highlight(svgData) {
-    return this._requestResponse({
-      data: svgData
-    });
+  highlight(data) {
+    return this.requestResponse({ data });
   }
 }

@@ -1,6 +1,6 @@
 .changelog {
   font-size: 0.9rem;
-  color: #898989;
+  color: #767676;
   padding: 12px 16px;
   opacity: 0;
 
@@ -11,15 +11,15 @@
   &.active {
     opacity: 1;
   }
-  
-  & h1 {
+
+  h1 {
     font-size: 0.9rem;
     margin: 0;
     padding: 0;
-    font-weight: normal;
+    font-weight: 400;
   }
 
-  & li {
+  li {
     display: flex;
     margin: 0.7em 0;
     line-height: 1.5;

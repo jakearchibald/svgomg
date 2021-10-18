@@ -3,16 +3,15 @@
   width: 37px;
   height: 14px;
   position: relative;
-  margin-right: 19px;
 
-  & .track {
+  .track {
     border-radius: 19px;
     position: absolute;
     top: 0;
     bottom: 0;
     left: 1px;
     right: 1px;
-    background: rgba(#000, 0.26);
+    background-color: rgba(#000, 0.26);
     overflow: hidden;
     transform: translateZ(0);
 
@@ -23,26 +22,25 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: #9FA8DA;
+      background-color: #9fa8da;
       opacity: 0;
       transition: opacity 0.15s ease-out;
       transform: translateZ(0);
     }
   }
 
-  & .handle {
+  .handle {
     position: absolute;
     top: -3px;
     left: 0;
     width: 20px;
     height: 20px;
     border-radius: 20px;
-    background: #fafafa;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.5), 
-                inset 0 0 0 2px transparent;
+    background-color: #fafafa;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), inset 0 0 0 2px transparent;
     overflow: hidden;
     box-sizing: border-box;
-    transition: all 0.15s ease-out;
+    transition: transform 0.15s ease-out;
     transform: translateZ(0);
 
     &::before {
@@ -52,7 +50,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: #3F51B5;
+      background-color: #3f51b5;
       opacity: 0;
       transition: opacity 0.15s ease-out;
       transform: translateZ(0);
@@ -60,14 +58,12 @@
   }
 
   :checked + & {
-    & .track::before {
+    .track::before {
       opacity: 1;
     }
 
-    & .handle {
+    .handle {
       transform: translate3d(17px, 0, 0);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.5), 
-                inset 0 0 0 2px transparent;
 
       &::before {
         opacity: 1;

@@ -1,7 +1,6 @@
 .toasts {
   position: absolute;
   z-index: 3;
-
   bottom: 0;
   left: 0;
   right: 0;
@@ -15,9 +14,8 @@
 
 .toast {
   color: #fff;
-  background: #323232;
+  background-color: #323232;
   padding: 14px 29px;
-
   display: flex;
   animation: fade-in 0.5s ease-out;
   transition: opacity 0.3s ease-out;
@@ -32,13 +30,13 @@
     opacity: 0;
   }
 
-  & .toast-content {
+  .toast-content {
     margin-right: 24px;
   }
 
-  & button {
+  button {
     margin: 0 0 0 auto;
-    color: #00BCD4;
+    color: #00bcd4;
     text-transform: uppercase;
     min-width: min-content;
 
