@@ -116,24 +116,34 @@
             <section class="global">
               <h1 class="settings-sub-heading">Global settings</h1>
               <label class="setting-item-toggle">
-                <input type="checkbox" name="original">
-                {% include "partials/material-switch.html" %}
-                Show original
+                <span>
+                  <input type="checkbox" name="original">
+                  {% include "partials/material-switch.html" %}                  
+                </span>
+                <span>
+                  Show original                  
+                </span>
               </label>
               <label class="setting-item-toggle">
-                <input type="checkbox" name="gzip" checked>
-                {% include "partials/material-switch.html" %}
-                Compare gzipped
+                <span>
+                  <input type="checkbox" name="gzip" checked>
+                  {% include "partials/material-switch.html" %}
+                </span>
+                <span>Compare gzipped</span>
               </label>
               <label class="setting-item-toggle">
-                <input type="checkbox" name="pretty">
-                {% include "partials/material-switch.html" %}
-                Prettify markup
+                <span>
+                  <input type="checkbox" name="pretty">
+                  {% include "partials/material-switch.html" %}
+                </span>
+                <span>Prettify markup</span>
               </label>
               <label class="setting-item-toggle">
-                <input type="checkbox" name="multipass">
-                {% include "partials/material-switch.html" %}
-                Multipass
+                <span>
+                  <input type="checkbox" name="multipass">
+                  {% include "partials/material-switch.html" %}
+                </span>
+                <span>Multipass</span>
               </label>
               <label class="setting-item-range">
                 <span class="label-text">Precision</span>
@@ -144,11 +154,13 @@
               <h1 class="settings-sub-heading">Features</h1>
               {% for plugin in plugins %}
                 <label class="setting-item-toggle">
-                  <input type="checkbox"
-                         name="{{ plugin.id }}"
-                         {% if plugin.active %}checked{% endif %}>
-                  {% include "partials/material-switch.html" %}
-                  {{ plugin.name }}
+                  <span>
+                    <input type="checkbox"
+                           name="{{ plugin.id }}"
+                           {% if plugin.active %}checked{% endif %}>
+                    {% include "partials/material-switch.html" %}
+                  </span>
+                  <span>{{ plugin.name }}</span>
                 </label>
               {% endfor %}
             </section>
