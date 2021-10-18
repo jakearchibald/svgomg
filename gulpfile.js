@@ -39,6 +39,10 @@ const buildConfig = {
     outputStyle: IS_DEV_TASK ? 'expanded' : 'compressed',
   },
   terser: {
+    mangle: true,
+    compress: {
+      passes: 2,
+    },
     format: {
       comments: false,
     },
