@@ -1,19 +1,21 @@
-import { strToEl } from '../utils';
-import Prism from '../prism';
+import { strToEl } from '../utils.js';
+import Prism from '../prism.js';
+
 const prism = new Prism();
 
 export default class CodeOutput {
   constructor() {
+    // prettier-ignore
     this.container = strToEl(
       '<div class="code-output">' +
         '<pre><code></code></pre>' +
-      '</div>' +
-    '');
+      '</div>'
+    );
     this._codeEl = this.container.querySelector('code');
   }
 
-  async setSvg(svgFile) {
-    this._codeEl.innerHTML = await prism.highlight(svgFile.text);
+  async setSvg({ text }) {
+    this._codeEl.innerHTML = await prism.highlight(text);
   }
 
   reset() {

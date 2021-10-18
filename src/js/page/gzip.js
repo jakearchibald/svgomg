@@ -1,14 +1,12 @@
-import WorkerMessenger from './worker-messenger';
+import WorkerMessenger from './worker-messenger.js';
 
 class Gzip extends WorkerMessenger {
   constructor() {
     super('js/gzip-worker.js');
   }
 
-  compress(svgData) {
-    return this.requestResponse({
-      data: svgData
-    });
+  compress(data) {
+    return this.requestResponse({ data });
   }
 }
 

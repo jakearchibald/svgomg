@@ -1,7 +1,7 @@
 function getXY(obj) {
   return {
     x: obj.pageX,
-    y: obj.pageY
+    y: obj.pageY,
   };
 }
 
@@ -14,24 +14,21 @@ function touchDistance(touch1, touch2) {
 function getMidpoint(point1, point2) {
   return {
     x: (point1.x + point2.x) / 2,
-    y: (point1.y + point2.y) / 2
+    y: (point1.y + point2.y) / 2,
   };
 }
 
 function getPoints(event) {
-  if (event.touches) {
-    return Array.from(event.touches).map(t => getXY(t));
-  }
-  else {
-    return [getXY(event)];
-  }
+  return event.touches
+    ? [...event.touches].map((touch) => getXY(touch))
+    : [getXY(event)];
 }
 
 export default class PanZoom {
-  constructor(target, {
-    eventArea = target,
-    shouldCaptureFunc = () => true
-  }={}) {
+  constructor(
+    target,
+    { eventArea = target, shouldCaptureFunc = () => true } = {},
+  ) {
     this._target = target;
     this._shouldCaptureFunc = shouldCaptureFunc;
     this._dx = 0;
@@ -40,37 +37,40 @@ export default class PanZoom {
     this._active = 0;
     this._lastPoints = [];
 
+    // TODO: revisit this later
     // Ideally these would use public class fields, but around 1.7% of users
     // are on old Safari versions that don't support them. We should be able
     // to switch over soon.
     this._onPointerDown = (event) => {
-      if (event.type == 'mousedown' && event.button !== 0) return;
+      if (event.type === 'mousedown' && event.button !== 0) return;
       if (!this._shouldCaptureFunc(event.target)) return;
       event.preventDefault();
 
       this._lastPoints = getPoints(event);
       this._active++;
 
-      if (this._active === 1) {
-        this._onFirstPointerDown();
-      }
+      if (this._active === 1) this._onFirstPointerDown();
     };
 
     this._onPointerMove = (event) => {
       event.preventDefault();
       const points = getPoints(event);
+      /* eslint-disable unicorn/no-array-reduce, unicorn/no-array-callback-reference */
       const averagePoint = points.reduce(getMidpoint);
       const averageLastPoint = this._lastPoints.reduce(getMidpoint);
-      const boundingRect = this._target.getBoundingClientRect();
+      /* eslint-enable unicorn/no-array-reduce, unicorn/no-array-callback-reference */
+      const { left, top } = this._target.getBoundingClientRect();
 
       this._dx += averagePoint.x - averageLastPoint.x;
       this._dy += averagePoint.y - averageLastPoint.y;
 
       if (points[1]) {
-        const scaleDiff = touchDistance(points[0], points[1]) / touchDistance(this._lastPoints[0], this._lastPoints[1]);
+        const scaleDiff =
+          touchDistance(points[0], points[1]) /
+          touchDistance(this._lastPoints[0], this._lastPoints[1]);
         this._scale *= scaleDiff;
-        this._dx -= (averagePoint.x - boundingRect.left) * (scaleDiff - 1);
-        this._dy -= (averagePoint.y - boundingRect.top) * (scaleDiff - 1);
+        this._dx -= (averagePoint.x - left) * (scaleDiff - 1);
+        this._dy -= (averagePoint.y - top) * (scaleDiff - 1);
       }
 
       this._update();
@@ -97,8 +97,8 @@ export default class PanZoom {
     eventArea.addEventListener('mousedown', this._onPointerDown);
     eventArea.addEventListener('touchstart', this._onPointerDown);
 
-    // unbonud
-    eventArea.addEventListener('wheel', e => this._onWheel(e));
+    // unbound
+    eventArea.addEventListener('wheel', (event) => this._onWheel(event));
   }
 
   reset() {
@@ -112,25 +112,26 @@ export default class PanZoom {
     if (!this._shouldCaptureFunc(event.target)) return;
     event.preventDefault();
 
-    const boundingRect = this._target.getBoundingClientRect();
+    const { left, top } = this._target.getBoundingClientRect();
     let delta = event.deltaY;
 
-    if (event.deltaMode === 1) { // 1 is "lines", 0 is "pixels"
-      // Firefox uses "lines" when mouse is connected
+    // 1 is "lines", 0 is "pixels"
+    // Firefox uses "lines" when mouse is connected
+    if (event.deltaMode === 1) {
       delta *= 15;
     }
 
     // stop mouse wheel producing huge values
     delta = Math.max(Math.min(delta, 60), -60);
 
-    const scaleDiff = (delta / 300) + 1;
+    const scaleDiff = delta / 300 + 1;
 
     // avoid to-small values
     if (this._scale * scaleDiff < 0.05) return;
 
     this._scale *= scaleDiff;
-    this._dx -= (event.pageX - boundingRect.left) * (scaleDiff - 1);
-    this._dy -= (event.pageY - boundingRect.top) * (scaleDiff - 1);
+    this._dx -= (event.pageX - left) * (scaleDiff - 1);
+    this._dy -= (event.pageY - top) * (scaleDiff - 1);
     this._update();
   }
 

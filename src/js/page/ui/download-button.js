@@ -1,5 +1,5 @@
-import FloatingActionButton from './floating-action-button';
-import Spinner from './spinner';
+import FloatingActionButton from './floating-action-button.js';
+import Spinner from './spinner.js';
 
 export default class DownloadButton extends FloatingActionButton {
   constructor() {
@@ -8,22 +8,22 @@ export default class DownloadButton extends FloatingActionButton {
     super({
       title,
       href: './',
-      iconSvg: (
+      iconSvg:
+        // prettier-ignore
         '<svg class="icon" viewBox="0 0 24 24">' +
           `<title>${title}</title>` +
           '<path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>' +
-        '</svg>'
-      ),
-      major: true
+        '</svg>',
+      major: true,
     });
 
     this._spinner = new Spinner();
-    this.container.appendChild(this._spinner.container);
+    this.container.append(this._spinner.container);
   }
 
-  setDownload(filename, svgFile) {
+  setDownload(filename, { url }) {
     this.container.download = filename;
-    this.container.href = svgFile.url;
+    this.container.href = url;
   }
 
   working() {

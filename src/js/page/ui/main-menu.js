@@ -1,11 +1,11 @@
+import { createNanoEvents } from 'nanoevents';
 import {
   domReady,
   transitionFromClass,
   transitionToClass,
-  readFileAsText
-} from '../utils';
-import Spinner from './spinner';
-import { createNanoEvents } from 'nanoevents';
+  readFileAsText,
+} from '../utils.js';
+import Spinner from './spinner.js';
 
 export default class MainMenu {
   constructor() {
@@ -15,23 +15,33 @@ export default class MainMenu {
 
     domReady.then(() => {
       this.container = document.querySelector('.main-menu');
-      this._loadFileInput = document.querySelector('.load-file-input');
-      this._pasteInput = document.querySelector('.paste-input');
-      this._loadDemoBtn = document.querySelector('.load-demo');
-      this._loadFileBtn = document.querySelector('.load-file');
-      this._pasteLabel = document.querySelector('.menu-input');
+      this._loadFileInput = this.container.querySelector('.load-file-input');
+      this._pasteInput = this.container.querySelector('.paste-input');
+      this._loadDemoBtn = this.container.querySelector('.load-demo');
+      this._loadFileBtn = this.container.querySelector('.load-file');
+      this._pasteLabel = this.container.querySelector('.menu-input');
       this._overlay = this.container.querySelector('.overlay');
       this._menu = this.container.querySelector('.menu');
+      const menuBtn = document.querySelector('.menu-btn');
 
-      document.querySelector('.menu-btn')
-        .addEventListener('click', e => this._onMenuButtonClick(e));
-
-      this._overlay.addEventListener('click', e => this._onOverlayClick(e));
-
-      this._loadFileBtn.addEventListener('click', e => this._onLoadFileClick(e));
-      this._loadDemoBtn.addEventListener('click', e => this._onLoadDemoClick(e));
-      this._loadFileInput.addEventListener('change', () => this._onFileInputChange());
-      this._pasteInput.addEventListener('input', () => this._onTextInputChange());
+      menuBtn.addEventListener('click', (event) =>
+        this._onMenuButtonClick(event),
+      );
+      this._overlay.addEventListener('click', (event) =>
+        this._onOverlayClick(event),
+      );
+      this._loadFileBtn.addEventListener('click', (event) =>
+        this._onLoadFileClick(event),
+      );
+      this._loadDemoBtn.addEventListener('click', (event) =>
+        this._onLoadDemoClick(event),
+      );
+      this._loadFileInput.addEventListener('change', () =>
+        this._onFileInputChange(),
+      );
+      this._pasteInput.addEventListener('input', () =>
+        this._onTextInputChange(),
+      );
     });
   }
 
@@ -73,20 +83,19 @@ export default class MainMenu {
   }
 
   _onTextInputChange() {
-    const val = this._pasteInput.value;
+    const value = this._pasteInput.value;
+    if (!value.includes('</svg>')) return;
 
-    if (val.includes('</svg>')) {
-      this._pasteInput.value = '';
-      this._pasteInput.blur();
+    this._pasteInput.value = '';
+    this._pasteInput.blur();
 
-      this._pasteLabel.appendChild(this._spinner.container);
-      this._spinner.show();
+    this._pasteLabel.append(this._spinner.container);
+    this._spinner.show();
 
-      this.emitter.emit('svgDataLoad', {
-        data: val,
-        filename: 'image.svg'
-      });
-    }
+    this.emitter.emit('svgDataLoad', {
+      data: value,
+      filename: 'image.svg',
+    });
   }
 
   _onLoadFileClick(event) {
@@ -100,33 +109,37 @@ export default class MainMenu {
 
     if (!file) return;
 
-    this._loadFileBtn.appendChild(this._spinner.container);
+    this._loadFileBtn.append(this._spinner.container);
     this._spinner.show();
 
     this.emitter.emit('svgDataLoad', {
       data: await readFileAsText(file),
-      filename: file.name
+      filename: file.name,
     });
   }
 
   async _onLoadDemoClick(event) {
     event.preventDefault();
     event.target.blur();
-    this._loadDemoBtn.appendChild(this._spinner.container);
+    this._loadDemoBtn.append(this._spinner.container);
     this._spinner.show();
 
     try {
+      const data = await fetch('test-svgs/car-lite.svg').then((response) =>
+        response.text(),
+      );
       this.emitter.emit('svgDataLoad', {
-        data: await fetch('test-svgs/car-lite.svg').then(r => r.text()),
-        filename: 'car-lite.svg'
+        data,
+        filename: 'car-lite.svg',
       });
-    }
-    catch (err) {
+    } catch {
       this.stopSpinner();
 
-      const error = 'serviceWorker' in navigator && navigator.serviceWorker.controller ?
-        Error("Demo not available offline") :
-        Error("Couldn't fetch demo SVG");
+      const error = new Error(
+        'serviceWorker' in navigator && navigator.serviceWorker.controller
+          ? 'Demo not available offline' // TODO: revisit this
+          : "Couldn't fetch demo SVG",
+      );
 
       this.emitter.emit('error', { error });
     }
