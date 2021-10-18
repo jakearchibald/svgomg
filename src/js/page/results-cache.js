@@ -1,3 +1,5 @@
+// TODO: switch to Map/Set
+
 export default class ResultsCache {
   constructor(size) {
     this._size = size;

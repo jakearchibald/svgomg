@@ -17,7 +17,6 @@
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-node-resolve": "^13.0.5",
     "@rollup/plugin-replace": "^3.0.0",
-    "eslint": "^7.32.0",
     "gulp": "^4.0.2",
     "gulp-htmlmin": "^5.0.1",
     "gulp-nunjucks": "^5.1.0",
@@ -32,16 +31,44 @@
     "sirv-cli": "^1.0.14",
     "stylelint": "^13.13.1",
     "stylelint-config-twbs-bootstrap": "^2.2.3",
-    "svgo": "^2.7.0"
+    "svgo": "^2.7.0",
+    "xo": "^0.45.0"
   },
   "scripts": {
     "build": "gulp clean-build",
     "start": "sirv build --port 8080 --dev --no-clear",
     "dev": "gulp dev",
-    "lint": "npm run eslint && npm run stylelint",
-    "eslint": "eslint --report-unused-disable-directives --ignore-path .gitignore .",
-    "stylelint": "stylelint src/css/ --rd --risd",
-    "fix": "npm run lint -- --fix",
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:css": "stylelint src/css/ --rd --risd",
+    "lint:js": "xo",
+    "fix": "xo --fix",
     "test": "npm run lint && npm run build"
+  },
+  "prettier": {
+    "bracketSpacing": true,
+    "singleQuote": true
+  },
+  "xo": {
+    "space": true,
+    "prettier": true,
+    "envs": [
+      "browser"
+    ],
+    "rules": {
+      "arrow-body-style": "off",
+      "capitalized-comments": "off",
+      "no-multi-assign": "off",
+      "no-negated-condition": "off",
+      "no-shadow": "error",
+      "prefer-template": "error",
+      "spaced-comment": "off",
+      "unicorn/explicit-length-check": "off",
+      "unicorn/no-unused-properties": "error",
+      "unicorn/numeric-separators-style": "off",
+      "unicorn/prefer-add-event-listener": "off",
+      "unicorn/prefer-module": "off",
+      "unicorn/prevent-abbreviations": "off",
+      "unicorn/require-post-message-target-origin": "off"
+    }
   }
 }

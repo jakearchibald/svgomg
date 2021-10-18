@@ -1,28 +1,31 @@
-import { strToEl, transitionToClass } from '../utils';
+import { strToEl, transitionToClass } from '../utils.js';
 
 class Toast {
   constructor(message, duration, buttons) {
     this.container = strToEl(
-      '<div class="toast"><div class="toast-content"></div></div>' +
-    '');
+      '<div class="toast"><div class="toast-content"></div></div>',
+    );
 
-    this._content = this.container.querySelector('.toast-content');
-    this._content.textContent = message;
+    const content = this.container.querySelector('.toast-content');
+    content.textContent = message;
+
     this._answerResolve = null;
     this._hideTimeout = null;
 
-    this.answer = new Promise(r => this._answerResolve = r);
+    this.answer = new Promise((resolve) => {
+      this._answerResolve = resolve;
+    });
 
-    buttons.forEach(button => {
-      var buttonEl = document.createElement('button');
-      buttonEl.className = 'unbutton';
-      buttonEl.textContent = button;
-      buttonEl.type = 'button';
-      buttonEl.addEventListener('click', () => {
+    for (const button of buttons) {
+      const buttonElement = document.createElement('button');
+      buttonElement.className = 'unbutton';
+      buttonElement.textContent = button;
+      buttonElement.type = 'button';
+      buttonElement.addEventListener('click', () => {
         this._answerResolve(button);
       });
-      this.container.appendChild(buttonEl);
-    });
+      this.container.append(buttonElement);
+    }
 
     if (duration) {
       this._hideTimeout = setTimeout(() => this.hide(), duration);
@@ -38,19 +41,18 @@ class Toast {
 
 export default class Toasts {
   constructor() {
-    this.container = strToEl("<div class='toasts'></div>");
+    this.container = strToEl('<div class="toasts"></div>');
   }
 
-  show(message, {
-    duration = 0,
-    buttons = ['dismiss']
-  }={}) {
+  show(message, { duration = 0, buttons = ['dismiss'] } = {}) {
     const toast = new Toast(message, duration, buttons);
-    this.container.appendChild(toast.container);
+    this.container.append(toast.container);
 
-    toast.answer.then(() => toast.hide()).then(() => {
-      this.container.removeChild(toast.container);
-    });
+    toast.answer
+      .then(() => toast.hide())
+      .then(() => {
+        toast.container.remove();
+      });
 
     return toast;
   }
