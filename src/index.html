@@ -118,22 +118,22 @@
               <label class="setting-item-toggle">
                 <input type="checkbox" name="original">
                 {% include "partials/material-switch.html" %}
-                <span>Show original</span>
+                Show original
               </label>
               <label class="setting-item-toggle">
                 <input type="checkbox" name="gzip" checked>
                 {% include "partials/material-switch.html" %}
-                <span>Compare gzipped</span>
+                Compare gzipped
               </label>
               <label class="setting-item-toggle">
                 <input type="checkbox" name="pretty">
                 {% include "partials/material-switch.html" %}
-                <span>Prettify markup</span>
+                Prettify markup
               </label>
               <label class="setting-item-toggle">
                 <input type="checkbox" name="multipass">
                 {% include "partials/material-switch.html" %}
-                <span>Multipass</span>
+                Multipass
               </label>
               <label class="setting-item-range">
                 <span class="label-text">Precision</span>
@@ -148,7 +148,7 @@
                          name="{{ plugin.id }}"
                          {% if plugin.active %}checked{% endif %}>
                   {% include "partials/material-switch.html" %}
-                  <span>{{ plugin.name }}</span>
+                  {{ plugin.name }}
                 </label>
               {% endfor %}
             </section>
