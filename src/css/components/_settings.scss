@@ -37,6 +37,11 @@
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), inset 0 0 0 2px #3f51b5;
     }
   }
+
+  .material-switch + span {
+    display: inline-block;
+    width: calc(100% - 56px);
+  }
 }
 
 .setting-item-range {
