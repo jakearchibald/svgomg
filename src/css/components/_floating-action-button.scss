@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+  transition: transform 0.1s ease-out;
 
   @media (min-width: 640px) {
     box-shadow: 0 4px 11px rgba(0, 0, 0, 0.3);
@@ -20,7 +20,6 @@
   &:hover,
   &.key-focused {
     transform: scale(1.15);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
   }
 
   &:focus {
