@@ -45,7 +45,7 @@ export default class WorkerMessenger {
 
   _startWorker() {
     this._worker = new Worker(this._url);
-    this._worker.onmessage = (event) => {
+    this._worker.addEventListener('message', (event) => {
       if (!event.data.id) {
         console.log('Unexpected message', event);
         return;
@@ -56,7 +56,7 @@ export default class WorkerMessenger {
         event.data.result,
         event.data.error && new Error(event.data.error),
       );
-    };
+    });
   }
 
   _fulfillPending(id, result, error) {

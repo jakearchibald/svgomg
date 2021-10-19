@@ -2,7 +2,7 @@
 import './prism-config.js'; // eslint-disable-line import/no-unassigned-import
 import { highlight, languages } from 'prismjs';
 
-self.onmessage = (event) => {
+self.addEventListener('message', (event) => {
   try {
     self.postMessage({
       id: event.data.id,
@@ -14,4 +14,4 @@ self.onmessage = (event) => {
       error: error.message,
     });
   }
-};
+});

@@ -1,3 +1,5 @@
+/* eslint-disable unicorn/prefer-add-event-listener */
+
 export const idbKeyval = (() => {
   let dbInstance;
 
