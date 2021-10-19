@@ -24,17 +24,11 @@ export default class MainMenu {
       this._menu = this.container.querySelector('.menu');
       const menuBtn = document.querySelector('.menu-btn');
 
-      menuBtn.addEventListener('click', (event) =>
-        this._onMenuButtonClick(event),
-      );
-      this._overlay.addEventListener('click', (event) =>
-        this._onOverlayClick(event),
-      );
-      this._loadFileBtn.addEventListener('click', (event) =>
-        this._onLoadFileClick(event),
-      );
-      this._loadDemoBtn.addEventListener('click', (event) =>
-        this._onLoadDemoClick(event),
+      menuBtn.addEventListener('click', () => this.show());
+      this._overlay.addEventListener('click', () => this.hide());
+      this._loadFileBtn.addEventListener('click', () => this.showFilePicker());
+      this._loadDemoBtn.addEventListener('click', () =>
+        this._onLoadDemoClick(),
       );
       this._loadFileInput.addEventListener('change', () =>
         this._onFileInputChange(),
@@ -72,16 +66,6 @@ export default class MainMenu {
     this._pasteInput.dispatchEvent(new Event('input'));
   }
 
-  _onOverlayClick(event) {
-    event.preventDefault();
-    this.hide();
-  }
-
-  _onMenuButtonClick(event) {
-    event.preventDefault();
-    this.show();
-  }
-
   _onTextInputChange() {
     const value = this._pasteInput.value;
     if (!value.includes('</svg>')) return;
@@ -98,12 +82,6 @@ export default class MainMenu {
     });
   }
 
-  _onLoadFileClick(event) {
-    event.preventDefault();
-    event.target.blur();
-    this.showFilePicker();
-  }
-
   async _onFileInputChange() {
     const file = this._loadFileInput.files[0];
 
@@ -118,9 +96,7 @@ export default class MainMenu {
     });
   }
 
-  async _onLoadDemoClick(event) {
-    event.preventDefault();
-    event.target.blur();
+  async _onLoadDemoClick() {
     this._loadDemoBtn.append(this._spinner.container);
     this._spinner.show();
 

@@ -56,7 +56,7 @@ export default class MainController {
     );
     window.addEventListener('keydown', (event) => this._onGlobalKeyDown(event));
     window.addEventListener('paste', (event) => this._onGlobalPaste(event));
-    window.addEventListener('copy', (event) => this._onGlobalCopy(event));
+    window.addEventListener('copy', () => this._onGlobalCopy());
 
     // state
     this._inputItem = null;
@@ -123,7 +123,9 @@ export default class MainController {
       if (false) {
         (async () => {
           const filename = 'car-lite.svg';
-          const data = await fetch(filename).then((response) => response.text());
+          const data = await fetch(filename).then((response) =>
+            response.text(),
+          );
           this._onInputChange({ data, filename });
         })();
       }
@@ -145,11 +147,10 @@ export default class MainController {
       this._toastsUi.show('Pasted value not an SVG', { duration: 2000 });
     } else {
       this._mainMenuUi.setPasteInput(value);
-      event.preventDefault();
     }
   }
 
-  _onGlobalCopy(event) {
+  _onGlobalCopy() {
     const selection = window.getSelection();
     if (!selection.isCollapsed) return;
 
@@ -157,8 +158,6 @@ export default class MainController {
       this._copyButtonUi.copyText() ? 'Copy successful' : 'Nothing to copy',
       { duration: 2000 },
     );
-
-    event.preventDefault();
   }
 
   _onUpdateFound(registration) {
