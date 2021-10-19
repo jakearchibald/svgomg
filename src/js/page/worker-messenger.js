@@ -45,20 +45,18 @@ export default class WorkerMessenger {
 
   _startWorker() {
     this._worker = new Worker(this._url);
-    this._worker.onmessage = (event) => this._onMessage(event);
-  }
+    this._worker.onmessage = (event) => {
+      if (!event.data.id) {
+        console.log('Unexpected message', event);
+        return;
+      }
 
-  _onMessage(event) {
-    if (!event.data.id) {
-      console.log('Unexpected message', event);
-      return;
-    }
-
-    this._fulfillPending(
-      event.data.id,
-      event.data.result,
-      event.data.error && new Error(event.data.error),
-    );
+      this._fulfillPending(
+        event.data.id,
+        event.data.result,
+        event.data.error && new Error(event.data.error),
+      );
+    };
   }
 
   _fulfillPending(id, result, error) {
