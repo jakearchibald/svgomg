@@ -18,6 +18,7 @@
     "@rollup/plugin-commonjs": "^23.0.2",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^5.0.1",
+    "@size-limit/file": "^8.1.0",
     "clean-css": "^5.3.1",
     "gulp": "^4.0.2",
     "gulp-htmlmin": "^5.0.1",
@@ -31,6 +32,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.55.0",
     "sirv-cli": "^2.0.2",
+    "size-limit": "^8.1.0",
     "stylelint": "^14.14.0",
     "stylelint-config-twbs-bootstrap": "^6.0.0",
     "svgo": "^3.0.0",
@@ -45,7 +47,8 @@
     "lint:css": "stylelint src/css/ --rd --risd",
     "lint:js": "xo",
     "fix": "xo --fix",
-    "test": "npm run lint && npm run build"
+    "test": "npm run lint && npm run build",
+    "size": "size-limit"
   },
   "prettier": {
     "bracketSpacing": true,
