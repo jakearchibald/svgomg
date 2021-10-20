@@ -101,18 +101,18 @@ export default class Settings {
   }
 
   getSettings() {
-    // fingerprint is used for cache lookups
-    const fingerprint = [];
     const output = {
+      // fingerprint is used for cache lookups
+      fingerprint: [],
       plugins: {},
     };
 
     for (const inputEl of this._globalInputs) {
       if (inputEl.name !== 'gzip' && inputEl.name !== 'original') {
         if (inputEl.type === 'checkbox') {
-          fingerprint.push(Number(inputEl.checked));
+          output.fingerprint.push(Number(inputEl.checked));
         } else {
-          fingerprint.push(`|${inputEl.value}|`);
+          output.fingerprint.push(`|${inputEl.value}|`);
         }
       }
 
@@ -121,11 +121,11 @@ export default class Settings {
     }
 
     for (const inputEl of this._pluginInputs) {
-      fingerprint.push(Number(inputEl.checked));
+      output.fingerprint.push(Number(inputEl.checked));
       output.plugins[inputEl.name] = inputEl.checked;
     }
 
-    output.fingerprint = fingerprint.join(',');
+    output.fingerprint = output.fingerprint.join(',');
 
     return output;
   }
