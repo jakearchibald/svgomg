@@ -17,16 +17,10 @@ export default class BgFillButton extends FloatingActionButton {
   onClick(event) {
     super.onClick(event);
 
-    if (this.container.classList.contains('active')) {
-      this.container.classList.remove('active');
-    } else {
-      this.container.classList.add('active');
-    }
+    const hasActiveClass = this.container.classList.contains('active');
+    const hasDarkClass = document.documentElement.classList.contains('bg-dark');
 
-    if (document.documentElement.classList.contains('bg-dark')) {
-      document.documentElement.classList.remove('bg-dark');
-    } else {
-      document.documentElement.classList.add('bg-dark');
-    }
+    this.container.classList.toggle('active', !hasActiveClass);
+    document.documentElement.classList.toggle('bg-dark', !hasDarkClass);
   }
 }
