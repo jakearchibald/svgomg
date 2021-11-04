@@ -35,7 +35,6 @@ export default class Settings {
       this.container.addEventListener('input', (event) =>
         this._onChange(event),
       );
-      scroller.addEventListener('wheel', (event) => this._onMouseWheel(event));
       resetBtn.addEventListener('click', () => this._onReset());
 
       // TODO: revisit this
@@ -47,16 +46,6 @@ export default class Settings {
         event.preventDefault();
       });
     });
-  }
-
-  _onMouseWheel(event) {
-    // Prevents bounce effect on desktop.
-    // Firefox uses pixels on a mouse wheel, ignore it
-    // 1 is "lines", 0 is "pixels"
-    if (event.deltaMode === 0) {
-      event.preventDefault();
-      event.currentTarget.scrollTop += event.deltaY;
-    }
   }
 
   _onChange(event) {
