@@ -27,8 +27,11 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
-      - name: Test
-        run: npm test
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
 
       - name: Upload build files
         uses: actions/upload-artifact@v2
