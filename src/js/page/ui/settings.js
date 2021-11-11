@@ -47,7 +47,7 @@ export default class Settings {
       });
 
       const settingsOverride = this.getSettingsOverride();
-      settingsOverride && this.setSettings(settingsOverride);
+      if (settingsOverride) this.setSettings(settingsOverride);
     });
   }
 
@@ -97,7 +97,7 @@ export default class Settings {
     }
 
     const settingsOverride = this.getSettingsOverride();
-    settingsOverride && this.setSettings(settingsOverride);
+    if (settingsOverride) this.setSettings(settingsOverride);
 
     this.emitter.emit('reset', oldSettings);
     this.emitter.emit('change');
