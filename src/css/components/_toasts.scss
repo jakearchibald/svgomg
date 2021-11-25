@@ -34,6 +34,17 @@
     margin-right: 24px;
   }
 
+  pre {
+    margin: 0;
+
+    code {
+      font-size: 0.9rem;
+      line-height: 1;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+  }
+
   button {
     margin: 0 0 0 auto;
     color: #00bcd4;

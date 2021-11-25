@@ -1,16 +1,20 @@
 import { strToEl, transitionToClass } from '../utils.js';
 
 class Toast {
-  constructor(message, duration, buttons) {
+  constructor(message, duration, buttons, isError) {
     this.container = strToEl(
       '<div class="toast"><div class="toast-content"></div></div>',
     );
-
     const content = this.container.querySelector('.toast-content');
-    content.textContent = message;
-
     this._answerResolve = null;
     this._hideTimeout = null;
+
+    if (isError) {
+      content.insertAdjacentHTML('afterbegin', '<pre><code></code></pre>');
+      content.querySelector('code').textContent = message;
+    } else {
+      content.textContent = message;
+    }
 
     this.answer = new Promise((resolve) => {
       this._answerResolve = resolve;
@@ -44,8 +48,8 @@ export default class Toasts {
     this.container = strToEl('<div class="toasts"></div>');
   }
 
-  show(message, { duration = 0, buttons = ['dismiss'] } = {}) {
-    const toast = new Toast(message, duration, buttons);
+  show(message, { duration = 0, buttons = ['dismiss'], isError = false } = {}) {
+    const toast = new Toast(message, duration, buttons, isError);
     this.container.append(toast.container);
 
     toast.answer
