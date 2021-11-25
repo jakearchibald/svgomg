@@ -26,11 +26,6 @@
     outline: none;
   }
 
-  &.active {
-    background-color: #00bcd4;
-    color: #fff;
-  }
-
   .icon {
     display: block;
     width: 24px;
@@ -41,6 +36,15 @@
 
   .ripple {
     background-color: #00bcd4;
+  }
+
+  &.active {
+    background-color: #00bcd4;
+    color: #fff;
+
+    .ripple {
+      background-color: #fff;
+    }
   }
 
   &.major-floating-action-button {
