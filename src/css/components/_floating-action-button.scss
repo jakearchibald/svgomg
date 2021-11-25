@@ -38,6 +38,15 @@
     background-color: #00bcd4;
   }
 
+  &.active {
+    background-color: #00bcd4;
+    color: #fff;
+
+    .ripple {
+      background-color: #fff;
+    }
+  }
+
   &.major-floating-action-button {
     width: 56px;
     height: 56px;
