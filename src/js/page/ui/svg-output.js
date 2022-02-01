@@ -7,12 +7,8 @@ export default class SvgOutput {
     this.container = strToEl(
       '<div class="svg-output">' +
         '<div class="svg-container">' +
-          '<iframe class="svg-frame" sandbox="allow-scripts" scrolling="no"></iframe>' +
+          '<iframe class="svg-frame" sandbox="allow-scripts" scrolling="no" title="Loaded SVG file"></iframe>' +
         '</div>' +
-        // TODO: revisit this
-        // Stop touches going into the iframe.
-        // pointer-events + touch + iframe doesn't work in Chrome :(
-        '<div class="svg-clickjacker"></div>' +
       '</div>'
     );
 
