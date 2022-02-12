@@ -157,6 +157,7 @@ async function js(entry, outputPath) {
   await bundle.write({
     sourcemap: true,
     format: 'iife',
+    generatedCode: 'es2015',
     file: `build/${outputPath}/${name}.js`,
   });
 }
