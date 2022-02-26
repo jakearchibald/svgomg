@@ -24,7 +24,7 @@
     "gulp-sourcemaps": "^3.0.0",
     "nanoevents": "^6.0.1",
     "pako": "^2.0.4",
-    "prismjs": "^1.25.0",
+    "prismjs": "^1.27.0",
     "rollup": "^2.57.0",
     "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.42.1",
