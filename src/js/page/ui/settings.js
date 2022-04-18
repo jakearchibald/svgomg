@@ -1,4 +1,5 @@
 import { createNanoEvents } from 'nanoevents';
+import { download } from '../../utils/download.js';
 import { domReady } from '../utils.js';
 import MaterialSlider from './material-slider.js';
 import Ripple from './ripple.js';
@@ -18,11 +19,15 @@ export default class Settings {
       ];
 
       const scroller = this.container.querySelector('.settings-scroller');
+      const exportBtn = this.container.querySelector('.setting-export');
       const resetBtn = this.container.querySelector('.setting-reset');
       const ranges = this.container.querySelectorAll('input[type=range]');
 
       this._resetRipple = new Ripple();
       resetBtn.append(this._resetRipple.container);
+
+      this._exportRipple = new Ripple();
+      exportBtn.append(this._exportRipple.container);
 
       // map real range elements to Slider instances
       this._sliderMap = new WeakMap();
@@ -33,9 +38,10 @@ export default class Settings {
       }
 
       this.container.addEventListener('input', (event) =>
-        this._onChange(event),
+        this._onChange(event)
       );
       resetBtn.addEventListener('click', () => this._onReset());
+      exportBtn.addEventListener('click', () => this._onExport());
 
       // TODO: revisit this
       // Stop double-tap text selection.
@@ -55,7 +61,7 @@ export default class Settings {
     if (event.target.type === 'range') {
       this._throttleTimeout = setTimeout(
         () => this.emitter.emit('change'),
-        150,
+        150
       );
     } else {
       this.emitter.emit('change');
@@ -81,6 +87,41 @@ export default class Settings {
 
     this.emitter.emit('reset', oldSettings);
     this.emitter.emit('change');
+  }
+
+  _onExport() {
+    this._exportRipple.animate();
+
+    const { fingerprint, multipass, pretty, ...settings } = this.getSettings();
+    const floatPrecision = Number(settings.floatPrecision);
+    const plugins = [];
+
+    for (const [name, active] of Object.entries(settings.plugins)) {
+      if (!active) continue;
+
+      const plugin = {
+        name,
+        params: {},
+      };
+
+      plugin.params.floatPrecision =
+        plugin.name === 'cleanupNumericValues' && floatPrecision === 0
+          ? 1
+          : floatPrecision;
+
+      plugins.push(plugin);
+    }
+
+    const file = 'module.exports = ' + JSON.stringify({
+      multipass,
+      plugins,
+      js2svg: {
+        indent: '  ',
+        pretty,
+      },
+    }, null, 2)
+
+    download('svgo.config.js', file)
   }
 
   setSettings(settings) {
