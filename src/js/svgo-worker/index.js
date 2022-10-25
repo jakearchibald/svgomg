@@ -5,11 +5,11 @@ const createDimensionsExtractor = () => {
   const plugin = {
     type: 'visitor',
     name: 'extract-dimensions',
-    fn: () => {
+    fn() {
       return {
         element: {
           // Node, parentNode
-          enter: ({ name, attributes }, { type }) => {
+          enter({ name, attributes }, { type }) {
             if (name === 'svg' && type === 'root') {
               if (
                 attributes.width !== undefined &&
