@@ -38,7 +38,7 @@ export default class Settings {
       }
 
       this.container.addEventListener('input', (event) =>
-        this._onChange(event)
+        this._onChange(event),
       );
       resetBtn.addEventListener('click', () => this._onReset());
       exportBtn.addEventListener('click', () => this._onExport());
@@ -61,7 +61,7 @@ export default class Settings {
     if (event.target.type === 'range') {
       this._throttleTimeout = setTimeout(
         () => this.emitter.emit('change'),
-        150
+        150,
       );
     } else {
       this.emitter.emit('change');
