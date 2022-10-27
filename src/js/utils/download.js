@@ -1,5 +1,6 @@
 export function download(filename, text) {
   const element = document.createElement('a');
+
   element.setAttribute(
     'href',
     `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`,
@@ -10,6 +11,5 @@ export function download(filename, text) {
   document.body.append(element);
 
   element.click();
-
   element.remove();
 }
