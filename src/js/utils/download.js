@@ -1,4 +1,4 @@
-export function download(filename, text) {
+export function downloadSvgoConfig(filename, text) {
   const element = document.createElement('a');
 
   element.setAttribute(
