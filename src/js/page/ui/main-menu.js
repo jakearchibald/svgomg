@@ -135,11 +135,7 @@ export default class MainMenu {
     } catch {
       this.stopSpinner();
 
-      const error = new Error(
-        'serviceWorker' in navigator && navigator.serviceWorker.controller
-          ? 'Demo not available offline' // TODO: revisit this
-          : "Couldn't fetch demo SVG",
-      );
+      const error = new Error("Couldn't fetch demo SVG");
 
       this.emitter.emit('error', { error });
     }
