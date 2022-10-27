@@ -150,7 +150,7 @@
                 <label class="setting-item-toggle">
                   <input type="checkbox"
                          name="{{ plugin.id }}"
-                         {% if plugin.active %}checked{% endif %}>
+                         {% if plugin.enabledByDefault %}checked{% endif %}>
                   {% include "partials/material-switch.html" %}
                   {{ plugin.name }}
                 </label>

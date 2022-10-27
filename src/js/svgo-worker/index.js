@@ -38,8 +38,8 @@ function compress(svgInput, settings) {
   const transformPrecision = Number(settings.transformPrecision);
   const plugins = [];
 
-  for (const [name, active] of Object.entries(settings.plugins)) {
-    if (!active) continue;
+  for (const [name, enabled] of Object.entries(settings.plugins)) {
+    if (!enabled) continue;
 
     const plugin = {
       name,
