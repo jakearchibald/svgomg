@@ -1,5 +1,5 @@
 import { createNanoEvents } from 'nanoevents';
-import { download } from '../../utils/download.js';
+import { downloadSvgoConfig } from '../../utils/download.js';
 import { domReady } from '../utils.js';
 import MaterialSlider from './material-slider.js';
 import Ripple from './ripple.js';
@@ -128,7 +128,7 @@ export default class Settings {
       2,
     )}`;
 
-    download('svgo.config.js', file);
+    downloadSvgoConfig('svgo.config.js', file);
   }
 
   setSettings(settings) {
