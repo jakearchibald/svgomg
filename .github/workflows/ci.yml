@@ -54,7 +54,7 @@ jobs:
         run: npm run build
 
       - name: Upload build files
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: github.repository == 'jakearchibald/svgomg' && github.ref == 'refs/heads/live'
         with:
           name: build
@@ -72,7 +72,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Download build files
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: build
           path: ./build
