@@ -57,7 +57,11 @@ const buildConfig = {
     outputStyle: IS_DEV_TASK ? 'expanded' : 'compressed',
   },
   terser: {
-    mangle: true,
+    mangle: {
+      properties: {
+        regex: /^_/,
+      },
+    },
     compress: {
       passes: 2,
     },
@@ -135,20 +139,7 @@ async function js(entry, outputPath) {
       rollupResolve({ browser: true }),
       rollupCommon({ include: /node_modules/ }),
       // Don't use terser on development
-      IS_DEV_TASK
-        ? ''
-        : rollupTerser(
-            name === 'page'
-              ? {
-                  ...buildConfig.terser,
-                  mangle: {
-                    properties: {
-                      regex: /^_/,
-                    },
-                  },
-                }
-              : buildConfig.terser,
-          ),
+      IS_DEV_TASK ? '' : rollupTerser(buildConfig.terser),
     ],
   });
 
