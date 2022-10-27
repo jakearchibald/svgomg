@@ -113,8 +113,7 @@ export default class Settings {
     }
 
     const file =
-      'module.exports = ' +
-      JSON.stringify(
+      `module.exports = ${JSON.stringify(
         {
           multipass,
           plugins,
@@ -125,7 +124,7 @@ export default class Settings {
         },
         null,
         2,
-      );
+      )}`;
 
     download('svgo.config.js', file);
   }
