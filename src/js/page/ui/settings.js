@@ -96,8 +96,8 @@ export default class Settings {
     const floatPrecision = Number(settings.floatPrecision);
     const plugins = [];
 
-    for (const [name, active] of Object.entries(settings.plugins)) {
-      if (!active) continue;
+    for (const [name, enabled] of Object.entries(settings.plugins)) {
+      if (!enabled) continue;
 
       const plugin = {
         name,
@@ -109,22 +109,23 @@ export default class Settings {
           ? 1
           : floatPrecision;
 
+      plugin.params.transformPrecision = transformPrecision;
+
       plugins.push(plugin);
     }
 
-    const file =
-      `module.exports = ${JSON.stringify(
-        {
-          multipass,
-          plugins,
-          js2svg: {
-            indent: '  ',
-            pretty,
-          },
+    const file = `module.exports = ${JSON.stringify(
+      {
+        multipass,
+        plugins,
+        js2svg: {
+          indent: 2,
+          pretty,
         },
-        null,
-        2,
-      )}`;
+      },
+      null,
+      2,
+    )}`;
 
     download('svgo.config.js', file);
   }
