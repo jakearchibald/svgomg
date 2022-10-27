@@ -56,7 +56,7 @@
       "active": false
     },
     {
-      "id": "cleanupIds",
+      "id": "cleanupIDs",
       "name": "Clean up IDs",
       "active": true
     },
