@@ -94,6 +94,7 @@ export default class Settings {
 
     const { fingerprint, multipass, pretty, ...settings } = this.getSettings();
     const floatPrecision = Number(settings.floatPrecision);
+    const transformPrecision = Number(settings.transformPrecision);
     const plugins = [];
 
     for (const [name, enabled] of Object.entries(settings.plugins)) {
