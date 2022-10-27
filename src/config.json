@@ -214,6 +214,11 @@
       "id": "removeScriptElement",
       "name": "Remove script elements",
       "active": false
+    },
+    {
+      "id": "removeOffCanvasPaths",
+      "name": "Remove out-of-bounds paths",
+      "active": false
     }
   ]
 }

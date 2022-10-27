@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.16.0",
+    "changes": [
+      "Update to SVGO v3.0.0",
+      "Add transform precision option",
+      "Many codebase fixes/tidyups (thanks XhmikosR)"
+    ]
+  },
+  {
     "version": "1.15.1",
     "changes": [
       "Various performance improvements",
