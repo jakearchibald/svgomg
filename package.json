@@ -55,7 +55,6 @@
       "browser"
     ],
     "rules": {
-      "arrow-body-style": "off",
       "capitalized-comments": "off",
       "no-multi-assign": "off",
       "no-negated-condition": "off",
