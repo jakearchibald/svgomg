@@ -183,7 +183,7 @@
     {
       "id": "sortAttrs",
       "name": "Sort attrs",
-      "active": false
+      "active": true
     },
     {
       "id": "sortDefsChildren",
