@@ -3,217 +3,222 @@
     {
       "id": "removeDoctype",
       "name": "Remove doctype",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeXMLProcInst",
       "name": "Remove XML instructions",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeComments",
       "name": "Remove comments",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeMetadata",
       "name": "Remove <metadata>",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeXMLNS",
       "name": "Remove xmlns",
-      "active": false
+      "enabledByDefault": false
     },
     {
       "id": "removeEditorsNSData",
       "name": "Remove editor data",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "cleanupAttrs",
       "name": "Clean up attribute whitespace",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "mergeStyles",
       "name": "Merge styles",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "inlineStyles",
       "name": "Inline styles",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "minifyStyles",
       "name": "Minify styles",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "convertStyleToAttrs",
       "name": "Style to attributes",
-      "active": false
+      "enabledByDefault": false
     },
     {
       "id": "cleanupIDs",
       "name": "Clean up IDs",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeRasterImages",
       "name": "Remove raster images",
-      "active": false
+      "enabledByDefault": false
     },
     {
       "id": "removeUselessDefs",
       "name": "Remove unused defs",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "cleanupNumericValues",
       "name": "Round/rewrite numbers",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "cleanupListOfValues",
       "name": "Round/rewrite number lists",
-      "active": false
+      "enabledByDefault": false
     },
     {
       "id": "convertColors",
       "name": "Minify colours",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeUnknownsAndDefaults",
       "name": "Remove unknowns & defaults",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeNonInheritableGroupAttrs",
       "name": "Remove unneeded group attrs",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeUselessStrokeAndFill",
       "name": "Remove useless stroke & fill",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeViewBox",
       "name": "Remove viewBox",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "cleanupEnableBackground",
       "name": "Remove/tidy enable-background",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeHiddenElems",
       "name": "Remove hidden elements",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeEmptyText",
       "name": "Remove empty text",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "convertShapeToPath",
       "name": "Shapes to (smaller) paths",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "moveElemsAttrsToGroup",
       "name": "Move attrs to parent group",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "moveGroupAttrsToElems",
       "name": "Move group attrs to elements",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "collapseGroups",
       "name": "Collapse useless groups",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "convertPathData",
       "name": "Round/rewrite paths",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "convertEllipseToCircle",
       "name": "Convert non-eccentric <ellipse> to <circle>",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "convertTransform",
       "name": "Round/rewrite transforms",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeEmptyAttrs",
       "name": "Remove empty attrs",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeEmptyContainers",
       "name": "Remove empty containers",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "mergePaths",
       "name": "Merge paths",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeUnusedNS",
       "name": "Remove unused namespaces",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "reusePaths",
       "name": "Replace duplicate elements with links",
-      "active": false
+      "enabledByDefault": false
     },
     {
       "id": "sortAttrs",
       "name": "Sort attrs",
-      "active": false
+      "enabledByDefault": true
     },
     {
       "id": "sortDefsChildren",
       "name": "Sort children of <defs>",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeTitle",
       "name": "Remove <title>",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeDesc",
       "name": "Remove <desc>",
-      "active": true
+      "enabledByDefault": true
     },
     {
       "id": "removeDimensions",
       "name": "Prefer viewBox to width/height",
-      "active": false
+      "enabledByDefault": false
     },
     {
       "id": "removeStyleElement",
       "name": "Remove style elements",
-      "active": false
+      "enabledByDefault": false
     },
     {
       "id": "removeScriptElement",
       "name": "Remove script elements",
-      "active": false
+      "enabledByDefault": false
+    },
+    {
+      "id": "removeOffCanvasPaths",
+      "name": "Remove out-of-bounds paths",
+      "enabledByDefault": false
     }
   ]
 }

@@ -35,10 +35,11 @@ const createDimensionsExtractor = () => {
 function compress(svgInput, settings) {
   // setup plugin list
   const floatPrecision = Number(settings.floatPrecision);
+  const transformPrecision = Number(settings.transformPrecision);
   const plugins = [];
 
-  for (const [name, active] of Object.entries(settings.plugins)) {
-    if (!active) continue;
+  for (const [name, enabled] of Object.entries(settings.plugins)) {
+    if (!enabled) continue;
 
     const plugin = {
       name,
@@ -53,6 +54,8 @@ function compress(svgInput, settings) {
         ? 1
         : floatPrecision;
 
+    plugin.params.transformPrecision = transformPrecision;
+
     plugins.push(plugin);
   }
 
@@ -62,7 +65,7 @@ function compress(svgInput, settings) {
     multipass: settings.multipass,
     plugins: [...plugins, extractDimensionsPlugin],
     js2svg: {
-      indent: '  ',
+      indent: 2,
       pretty: settings.pretty,
     },
   });
