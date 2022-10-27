@@ -4,7 +4,8 @@
     "changes": [
       "Update to SVGO v3.0.0",
       "Add transform precision option",
-      "Many codebase fixes/tidyups (thanks XhmikosR)"
+      "New optimisation: Remove out-of-bounds paths",
+      "Many codebase fixes/tidyups/optimisations (thanks XhmikosR)"
     ]
   },
   {
