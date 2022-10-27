@@ -15,7 +15,7 @@ const rollup = require('rollup');
 const { nodeResolve: rollupResolve } = require('@rollup/plugin-node-resolve');
 const rollupCommon = require('@rollup/plugin-commonjs');
 const rollupReplace = require('@rollup/plugin-replace');
-const { terser: rollupTerser } = require('rollup-plugin-terser');
+const rollupTerser = require('@rollup/plugin-terser');
 
 const IS_DEV_TASK =
   process.argv.includes('dev') || process.argv.includes('--dev');
