@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.16.0",
+    "changes": [
+      "Update to SVGO v3.0.0",
+      "Add transform precision option",
+      "New optimisation: Remove out-of-bounds paths",
+      "Many codebase fixes/tidyups/optimisations (thanks XhmikosR)"
+    ]
+  },
+  {
     "version": "1.15.1",
     "changes": [
       "Various performance improvements",
