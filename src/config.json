@@ -103,7 +103,7 @@
     {
       "id": "removeViewBox",
       "name": "Remove viewBox",
-      "enabledByDefault": true
+      "enabledByDefault": false
     },
     {
       "id": "cleanupEnableBackground",
