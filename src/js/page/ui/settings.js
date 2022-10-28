@@ -117,11 +117,11 @@ export default class Settings {
 
     const svgoConfig = {
       multipass,
-      plugins,
       js2svg: {
         indent: 2,
         pretty,
       },
+      plugins,
     };
     const fileString = `module.exports = ${JSON.stringify(
       svgoConfig,
