@@ -115,20 +115,21 @@ export default class Settings {
       plugins.push(plugin);
     }
 
-    const file = `module.exports = ${JSON.stringify(
-      {
-        multipass,
-        plugins,
-        js2svg: {
-          indent: 2,
-          pretty,
-        },
+    const svgoConfig = {
+      multipass,
+      plugins,
+      js2svg: {
+        indent: 2,
+        pretty,
       },
+    };
+    const fileString = `module.exports = ${JSON.stringify(
+      svgoConfig,
       null,
       2,
     )}`;
 
-    downloadSvgoConfig('svgo.config.js', file);
+    downloadSvgoConfig('svgo.config.js', fileString);
   }
 
   setSettings(settings) {
