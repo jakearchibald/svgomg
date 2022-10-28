@@ -31,7 +31,10 @@ export default class MaterialSlider {
     this._setPosition();
   }
 
-  // eslint-disable-next-line accessor-pairs
+  get value() {
+    return this._range.value;
+  }
+
   set value(newValue) {
     this._range.value = newValue;
     this._update();
