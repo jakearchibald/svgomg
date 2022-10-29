@@ -87,7 +87,6 @@ function copy() {
       // Copy the demo SVG to the root
       'test-svgs/car-lite.svg',
       'src/*.json',
-      '!src/imgs/maskable.svg',
     ])
     .pipe(gulp.dest('build'));
 }
