@@ -62,45 +62,7 @@ export default class Settings {
     }
   }
 
-  _onReset() {
-    this._resetRipple.animate();
-    const oldSettings = this.getSettings();
-
-    // Set all inputs according to their initial attributes
-    for (const inputEl of this._globalInputs) {
-      if (inputEl.type === 'checkbox') {
-        inputEl.checked = inputEl.hasAttribute('checked');
-      } else if (inputEl.type === 'range') {
-        this._sliderMap.get(inputEl).value = inputEl.getAttribute('value');
-      }
-    }
-
-    for (const inputEl of this._pluginInputs) {
-      inputEl.checked = inputEl.hasAttribute('checked');
-    }
-
-    this.emitter.emit('reset', oldSettings);
-    this.emitter.emit('change');
-  }
-
-  setSettings(settings) {
-    for (const inputEl of this._globalInputs) {
-      if (!(inputEl.name in settings)) continue;
-
-      if (inputEl.type === 'checkbox') {
-        inputEl.checked = settings[inputEl.name];
-      } else if (inputEl.type === 'range') {
-        this._sliderMap.get(inputEl).value = settings[inputEl.name];
-      }
-    }
-
-    for (const inputEl of this._pluginInputs) {
-      if (!(inputEl.name in settings.plugins)) continue;
-      inputEl.checked = settings.plugins[inputEl.name];
-    }
-  }
-
-  getSettings() {
+  get settings() {
     // fingerprint is used for cache lookups
     const fingerprint = [];
     const output = {
@@ -128,5 +90,42 @@ export default class Settings {
     output.fingerprint = fingerprint.join(',');
 
     return output;
+  }
+
+  set settings(settings) {
+    for (const inputEl of this._globalInputs) {
+      if (!(inputEl.name in settings)) continue;
+
+      if (inputEl.type === 'checkbox') {
+        inputEl.checked = settings[inputEl.name];
+      } else if (inputEl.type === 'range') {
+        this._sliderMap.get(inputEl).value = settings[inputEl.name];
+      }
+    }
+
+    for (const inputEl of this._pluginInputs) {
+      if (!(inputEl.name in settings.plugins)) continue;
+      inputEl.checked = settings.plugins[inputEl.name];
+    }
+  }
+
+  _onReset() {
+    this._resetRipple.animate();
+
+    // Set all inputs according to their initial attributes
+    for (const inputEl of this._globalInputs) {
+      if (inputEl.type === 'checkbox') {
+        inputEl.checked = inputEl.hasAttribute('checked');
+      } else if (inputEl.type === 'range') {
+        this._sliderMap.get(inputEl).value = inputEl.getAttribute('value');
+      }
+    }
+
+    for (const inputEl of this._pluginInputs) {
+      inputEl.checked = inputEl.hasAttribute('checked');
+    }
+
+    this.emitter.emit('reset', this.settings);
+    this.emitter.emit('change');
   }
 }

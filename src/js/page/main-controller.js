@@ -202,7 +202,7 @@ export default class MainController {
   }
 
   _onSettingsChange() {
-    const settings = this._settingsUi.getSettings();
+    const settings = this._settingsUi.settings;
     this._saveSettings(settings);
     this._compressSvg(settings);
   }
@@ -215,13 +215,13 @@ export default class MainController {
     const answer = await toast.answer;
 
     if (answer === 'undo') {
-      this._settingsUi.setSettings(oldSettings);
+      this._settingsUi.settings = oldSettings;
       this._onSettingsChange();
     }
   }
 
   async _onInputChange({ data, filename }) {
-    const settings = this._settingsUi.getSettings();
+    const settings = this._settingsUi.settings;
     this._userHasInteracted = true;
 
     try {
@@ -249,7 +249,9 @@ export default class MainController {
 
   async _loadSettings() {
     const settings = await storage.get('settings');
-    if (settings) this._settingsUi.setSettings(settings);
+    if (settings) {
+      this._settingsUi.settings = settings;
+    }
   }
 
   _saveSettings(settings) {
