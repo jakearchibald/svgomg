@@ -1,15 +1,5 @@
-export function downloadSvgoConfig(filename, text) {
-  const element = document.createElement('a');
-
-  element.setAttribute(
-    'href',
-    `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`,
+export function createFileURL(data, type) {
+  return window.URL.createObjectURL(
+    new Blob([data], { type })
   );
-  element.setAttribute('download', filename);
-
-  element.style.display = 'none';
-  document.body.append(element);
-
-  element.click();
-  element.remove();
 }

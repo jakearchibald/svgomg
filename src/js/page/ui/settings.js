@@ -1,5 +1,5 @@
 import { createNanoEvents } from 'nanoevents';
-import { downloadSvgoConfig } from '../../utils/download.js';
+import { createFileURL } from '../../utils/download.js';
 import { collectPlugins } from '../../utils/settings.js';
 import { domReady } from '../utils.js';
 import MaterialSlider from './material-slider.js';
@@ -27,6 +27,7 @@ export default class Settings {
       this._resetRipple = new Ripple();
       resetBtn.append(this._resetRipple.container);
 
+      this._exportLink = exportBtn;
       this._exportRipple = new Ripple();
       exportBtn.append(this._exportRipple.container);
 
@@ -39,10 +40,10 @@ export default class Settings {
       }
 
       this.container.addEventListener('input', (event) =>
-        this._onChange(event),
+        this._onChange(event)
       );
       resetBtn.addEventListener('click', () => this._onReset());
-      exportBtn.addEventListener('click', () => this._onExport());
+      // exportBtn.addEventListener('click', () => this._onExport());
 
       // TODO: revisit this
       // Stop double-tap text selection.
@@ -52,6 +53,8 @@ export default class Settings {
         if (event.target.closest('input[type=range]')) return;
         event.preventDefault();
       });
+
+      this.emitter.on('change', () => this._onUpdateExportLink());
     });
   }
 
@@ -62,7 +65,7 @@ export default class Settings {
     if (event.target.type === 'range') {
       this._throttleTimeout = setTimeout(
         () => this.emitter.emit('change'),
-        150,
+        150
       );
     } else {
       this.emitter.emit('change');
@@ -90,7 +93,7 @@ export default class Settings {
     this.emitter.emit('change');
   }
 
-  _onExport() {
+  _onUpdateExportLink() {
     this._exportRipple.animate();
 
     const { fingerprint, multipass, pretty, ...settings } = this.getSettings();
@@ -105,13 +108,13 @@ export default class Settings {
       },
       plugins,
     };
-    const fileString = `module.exports = ${JSON.stringify(
-      svgoConfig,
-      null,
-      2,
-    )}`;
 
-    downloadSvgoConfig('svgo.config.js', fileString);
+    this._exportLink.setAttribute(
+      'href',
+      createFileURL(`module.exports = ${JSON.stringify(svgoConfig, null, 2)}`),
+      'data:text/plain'
+    );
+    this._exportLink.setAttribute('download', 'svgo.config.js');
   }
 
   setSettings(settings) {
@@ -129,6 +132,8 @@ export default class Settings {
       if (!(inputEl.name in settings.plugins)) continue;
       inputEl.checked = settings.plugins[inputEl.name];
     }
+
+    this._onUpdateExportLink();
   }
 
   getSettings() {
