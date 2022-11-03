@@ -1,5 +1,6 @@
 import { createNanoEvents } from 'nanoevents';
 import { downloadSvgoConfig } from '../../utils/download.js';
+import { collectPlugins } from '../../utils/settings.js';
 import { domReady } from '../utils.js';
 import MaterialSlider from './material-slider.js';
 import Ripple from './ripple.js';
@@ -93,27 +94,8 @@ export default class Settings {
     this._exportRipple.animate();
 
     const { fingerprint, multipass, pretty, ...settings } = this.getSettings();
-    const floatPrecision = Number(settings.floatPrecision);
-    const transformPrecision = Number(settings.transformPrecision);
-    const plugins = [];
 
-    for (const [name, enabled] of Object.entries(settings.plugins)) {
-      if (!enabled) continue;
-
-      const plugin = {
-        name,
-        params: {},
-      };
-
-      plugin.params.floatPrecision =
-        plugin.name === 'cleanupNumericValues' && floatPrecision === 0
-          ? 1
-          : floatPrecision;
-
-      plugin.params.transformPrecision = transformPrecision;
-
-      plugins.push(plugin);
-    }
+    const plugins = collectPlugins(settings);
 
     const svgoConfig = {
       multipass,
