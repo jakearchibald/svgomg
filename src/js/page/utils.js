@@ -80,10 +80,10 @@ export function trackFocusMethod() {
     'focus',
     (event) => {
       event.target.classList.add(
-        focusMethod === 'key' ? 'key-focused' : 'mouse-focused'
+        focusMethod === 'key' ? 'key-focused' : 'mouse-focused',
       );
     },
-    true
+    true,
   );
 
   document.body.addEventListener(
@@ -91,7 +91,7 @@ export function trackFocusMethod() {
     (event) => {
       event.target.classList.remove('key-focused', 'mouse-focused');
     },
-    true
+    true,
   );
 
   document.body.addEventListener(
@@ -99,7 +99,7 @@ export function trackFocusMethod() {
     () => {
       focusMethod = 'key';
     },
-    true
+    true,
   );
 
   document.body.addEventListener(
@@ -107,6 +107,6 @@ export function trackFocusMethod() {
     () => {
       focusMethod = 'mouse';
     },
-    true
+    true,
   );
 }
