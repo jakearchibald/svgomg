@@ -43,7 +43,6 @@ export default class Settings {
         this._onChange(event),
       );
       resetBtn.addEventListener('click', () => this._onReset());
-      // exportBtn.addEventListener('click', () => this._onExport());
 
       // TODO: revisit this
       // Stop double-tap text selection.
