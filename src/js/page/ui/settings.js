@@ -1,9 +1,12 @@
 import { createNanoEvents } from 'nanoevents';
-import { createFileURL } from '../../utils/download.js';
 import { collectPlugins } from '../../utils/settings.js';
 import { domReady } from '../utils.js';
 import MaterialSlider from './material-slider.js';
 import Ripple from './ripple.js';
+
+function createFileURL(data, type) {
+  return window.URL.createObjectURL(new Blob([data], { type }));
+}
 
 export default class Settings {
   constructor() {
