@@ -46,6 +46,7 @@ export default class Settings {
         this._onChange(event),
       );
       resetBtn.addEventListener('click', () => this._onReset());
+      exportBtn.addEventListener('click', () => this._onExport());
 
       // TODO: revisit this
       // Stop double-tap text selection.
@@ -96,9 +97,11 @@ export default class Settings {
     this.emitter.emit('change');
   }
 
-  _onUpdateExportLink() {
-    this._exportRipple.animate();
+  _onExport() {
+    this._exportRipple.animate()
+  }
 
+  _onUpdateExportLink() {
     const { fingerprint, multipass, pretty, ...settings } = this.getSettings();
 
     const plugins = collectPlugins(settings);
