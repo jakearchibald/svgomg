@@ -65,6 +65,8 @@
 }
 
 .setting-actions {
+  display: flex;
+  justify-content: space-around;
   padding: 12px 16px 16px;
   text-align: right;
 }
