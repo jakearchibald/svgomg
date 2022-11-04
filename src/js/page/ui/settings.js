@@ -56,7 +56,7 @@ export default class Settings {
         event.preventDefault();
       });
 
-      this._onUpdateExportLink()
+      this._onUpdateExportLink();
       this.emitter.on('change', () => this._onUpdateExportLink());
     });
   }
