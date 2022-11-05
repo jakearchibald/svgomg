@@ -98,7 +98,7 @@ export default class Settings {
   }
 
   _onExport() {
-    this._exportRipple.animate()
+    this._exportRipple.animate();
   }
 
   _onUpdateExportLink() {
