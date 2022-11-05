@@ -1,5 +1,5 @@
 import { optimize } from 'svgo/dist/svgo.browser.js';
-import { collectPlugins } from '../utils/settings.js';
+import { getActivePlugins } from '../utils/settings.js';
 
 const createDimensionsExtractor = () => {
   const dimensions = {};
@@ -35,7 +35,7 @@ const createDimensionsExtractor = () => {
 
 function compress(svgInput, settings) {
   // setup plugin list
-  const plugins = collectPlugins(settings);
+  const plugins = getActivePlugins(settings);
 
   // multipass optimization
   const [dimensions, extractDimensionsPlugin] = createDimensionsExtractor();

@@ -1,4 +1,4 @@
-export function collectPlugins(settings) {
+export function getActivePlugins(settings) {
   const floatPrecision = Number(settings.floatPrecision);
   const transformPrecision = Number(settings.transformPrecision);
   const plugins = [];
