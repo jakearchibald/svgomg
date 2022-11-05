@@ -1,5 +1,5 @@
 import { createNanoEvents } from 'nanoevents';
-import { collectPlugins } from '../../utils/settings.js';
+import { getActivePlugins } from '../../utils/settings.js';
 import { domReady } from '../utils.js';
 import MaterialSlider from './material-slider.js';
 import Ripple from './ripple.js';
@@ -104,7 +104,7 @@ export default class Settings {
   _onUpdateExportLink() {
     const { fingerprint, multipass, pretty, ...settings } = this.getSettings();
 
-    const plugins = collectPlugins(settings);
+    const plugins = getActivePlugins(settings);
 
     const svgoConfig = {
       multipass,
