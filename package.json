@@ -38,7 +38,8 @@
   },
   "scripts": {
     "build": "gulp clean-build",
-    "start": "sirv build --port 8080 --dev --no-clear",
+    "start": "npm run dev",
+    "serve": "sirv build --port 8080 --dev --no-clear",
     "dev": "gulp dev",
     "lint": "npm run lint:js && npm run lint:css",
     "lint:css": "stylelint src/css/ --rd --risd",
