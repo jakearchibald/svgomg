@@ -10,19 +10,19 @@
   62.5% { transform: rotate(675deg); } // 2.5 * ARCSIZE
   75%   { transform: rotate(810deg); } // 3   * ARCSIZE
   87.5% { transform: rotate(945deg); } // 3.5 * ARCSIZE
-  to    { transform: rotate(1080deg); } // 4   * ARCSIZE
+  100%  { transform: rotate(1080deg); } // 4   * ARCSIZE
 }
 
 @keyframes left-spin {
-  from { transform: rotate(130deg); }
-  50% { transform: rotate(-5deg); }
-  to { transform: rotate(130deg); }
+  0%   { transform: rotate(130deg); }
+  50%  { transform: rotate(-5deg); }
+  100% { transform: rotate(130deg); }
 }
 
 @keyframes right-spin {
-  from { transform: rotate(-130deg); }
-  50% { transform: rotate(5deg); }
-  to { transform: rotate(-130deg); }
+  0%   { transform: rotate(-130deg); }
+  50%  { transform: rotate(5deg); }
+  100% { transform: rotate(-130deg); }
 }
 
 @keyframes fade-in {
