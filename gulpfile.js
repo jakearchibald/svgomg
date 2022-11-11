@@ -1,6 +1,6 @@
-const fs = require('fs/promises');
-const path = require('path');
-const process = require('process');
+const fs = require('node:fs/promises');
+const path = require('node:path');
+const process = require('node:process');
 const sirv = require('sirv-cli');
 const { version: SVGO_VERSION } = require('svgo/package.json');
 const sass = require('sass');
