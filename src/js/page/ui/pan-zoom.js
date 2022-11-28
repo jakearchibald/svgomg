@@ -56,25 +56,25 @@ export default class PanZoom {
       event.preventDefault();
       const points = getPoints(event);
       /* eslint-disable unicorn/no-array-reduce */
-      const averagePoint = points.reduce((prev, next) =>
+      const [averagePointX, averagePointY] = points.reduce((prev, next) =>
         getMidpoint(prev, next),
       );
-      const averageLastPoint = this._lastPoints.reduce((prev, next) =>
-        getMidpoint(prev, next),
+      const [averageLastPointX, averageLastPointY] = this._lastPoints.reduce(
+        (prev, next) => getMidpoint(prev, next),
       );
       /* eslint-enable unicorn/no-array-reduce */
       const { left, top } = this._target.getBoundingClientRect();
 
-      this._dx += averagePoint.x - averageLastPoint.x;
-      this._dy += averagePoint.y - averageLastPoint.y;
+      this._dx += averagePointX - averageLastPointX;
+      this._dy += averagePointY - averageLastPointY;
 
       if (points[1]) {
         const scaleDiff =
           touchDistance(points[0], points[1]) /
           touchDistance(this._lastPoints[0], this._lastPoints[1]);
         this._scale *= scaleDiff;
-        this._dx -= (averagePoint.x - left) * (scaleDiff - 1);
-        this._dy -= (averagePoint.y - top) * (scaleDiff - 1);
+        this._dx -= (averagePointX - left) * (scaleDiff - 1);
+        this._dy -= (averagePointY - top) * (scaleDiff - 1);
       }
 
       this._update();
