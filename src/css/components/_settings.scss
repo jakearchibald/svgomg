@@ -7,7 +7,7 @@
 
 .settings-scroller {
   overflow: hidden auto;
-  -webkit-overflow-scrolling: touch; // TODO: revisit this later
+  -webkit-overflow-scrolling: touch;
   flex: 1;
   transform: translateZ(0);
 }
