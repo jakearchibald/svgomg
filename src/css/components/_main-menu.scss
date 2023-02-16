@@ -5,6 +5,7 @@
   bottom: 0;
   right: 0;
   z-index: 3;
+  user-select: none;
 
   &.hidden {
     pointer-events: none;
