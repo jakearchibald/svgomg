@@ -30,7 +30,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.55.0",
     "sirv-cli": "^2.0.2",
-    "stylelint": "^14.14.0",
+    "stylelint": "^15.10.1",
     "stylelint-config-twbs-bootstrap": "^6.0.0",
     "svgo": "^3.0.0",
     "vinyl-map": "^1.0.2",
