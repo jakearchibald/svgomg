@@ -56,7 +56,7 @@
       "enabledByDefault": false
     },
     {
-      "id": "cleanupIDs",
+      "id": "cleanupIds",
       "name": "Clean up IDs",
       "enabledByDefault": true
     },
@@ -181,16 +181,6 @@
       "enabledByDefault": false
     },
     {
-      "id": "sortAttrs",
-      "name": "Sort attrs",
-      "enabledByDefault": true
-    },
-    {
-      "id": "sortDefsChildren",
-      "name": "Sort children of <defs>",
-      "enabledByDefault": true
-    },
-    {
       "id": "removeTitle",
       "name": "Remove <title>",
       "enabledByDefault": true
@@ -219,6 +209,26 @@
       "id": "removeOffCanvasPaths",
       "name": "Remove out-of-bounds paths",
       "enabledByDefault": false
+    },
+    {
+      "id": "convertOneStopGradients",
+      "name": "Convert one-stop gradients",
+      "enabledByDefault": false
+    },
+    {
+      "id": "removeXlink",
+      "name": "Remove XLink namespace",
+      "enabledByDefault": false
+    },
+    {
+      "id": "sortAttrs",
+      "name": "Sort attrs",
+      "enabledByDefault": true
+    },
+    {
+      "id": "sortDefsChildren",
+      "name": "Sort children of <defs>",
+      "enabledByDefault": true
     }
   ]
 }
