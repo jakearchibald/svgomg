@@ -1,75 +1,31 @@
 {
   "name": "svgomg",
   "private": true,
-  "version": "1.16.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jakearchibald/svgomg.git"
-  },
-  "keywords": [],
-  "author": "Jake Archibald",
-  "bugs": {
-    "url": "https://github.com/jakearchibald/svgomg/issues"
-  },
-  "homepage": "https://jakearchibald.github.io/svgomg/",
-  "license": "MIT",
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^23.0.2",
-    "@rollup/plugin-node-resolve": "^15.0.1",
-    "@rollup/plugin-replace": "^5.0.1",
-    "clean-css": "^5.3.1",
-    "gulp": "^4.0.2",
-    "gulp-htmlmin": "^5.0.1",
-    "gulp-if": "^3.0.0",
-    "gulp-nunjucks": "^5.1.0",
-    "gulp-sass": "^5.1.0",
-    "nanoevents": "^7.0.1",
-    "pako": "^2.0.4",
-    "prismjs": "^1.29.0",
-    "rollup": "^2.79.1",
-    "rollup-plugin-terser": "^7.0.2",
-    "sass": "^1.55.0",
-    "sirv-cli": "^2.0.2",
-    "stylelint": "^14.14.0",
-    "stylelint-config-twbs-bootstrap": "^6.0.0",
-    "svgo": "^3.0.0",
-    "vinyl-map": "^1.0.2",
-    "xo": "^0.52.4"
-  },
+  "version": "2.0.0",
+  "type": "module",
   "scripts": {
-    "build": "gulp clean-build",
-    "start": "sirv build --port 8080 --dev --no-clear",
-    "dev": "gulp dev",
-    "lint": "npm run lint:js && npm run lint:css",
-    "lint:css": "stylelint src/css/ --rd --risd",
-    "lint:js": "xo",
-    "fix": "xo --fix",
-    "test": "npm run lint && npm run build"
+    "dev": "node server",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "vite build --ssrManifest --outDir dist/client",
+    "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
+    "preview": "cross-env NODE_ENV=production node server"
   },
-  "prettier": {
-    "bracketSpacing": true,
-    "singleQuote": true
+  "devDependencies": {
+    "@preact/preset-vite": "^2.7.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.5",
+    "compression": "^1.7.4",
+    "cross-env": "^7.0.3",
+    "express": "^4.18.2",
+    "preact": "^10.19.3",
+    "preact-render-to-string": "^6.3.1",
+    "prettier": "^3.1.1",
+    "sirv": "^2.0.4",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10",
+    "xo": "^0.56.0"
   },
   "xo": {
-    "space": true,
-    "prettier": true,
-    "envs": [
-      "browser"
-    ],
-    "rules": {
-      "capitalized-comments": "off",
-      "no-multi-assign": "off",
-      "no-negated-condition": "off",
-      "no-shadow": "error",
-      "prefer-template": "error",
-      "spaced-comment": "off",
-      "unicorn/explicit-length-check": "off",
-      "unicorn/no-unused-properties": "error",
-      "unicorn/numeric-separators-style": "off",
-      "unicorn/prefer-add-event-listener": "off",
-      "unicorn/prefer-module": "off",
-      "unicorn/prevent-abbreviations": "off",
-      "unicorn/require-post-message-target-origin": "off"
-    }
+    "space": true
   }
 }

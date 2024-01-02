@@ -1,1 +1,0 @@
-self.Prism = { disableWorkerMessageHandler: true };
