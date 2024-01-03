@@ -34,30 +34,54 @@ if (!isProduction) {
   app.use(base, sirv('./dist/client', { extensions: [] }));
 }
 
+async function serveHTML(url, result, res) {
+  let template;
+
+  if (!isProduction) {
+    // Always read fresh template in development
+    template = await fs.readFile('./index.html', 'utf-8');
+    template = await vite.transformIndexHtml(url, template);
+  } else {
+    template = templateHtml;
+  }
+
+  const html = template
+    .replace(`<!--app-head-->`, result.head ?? '')
+    .replace(`<!--app-html-->`, result.html ?? '');
+
+  res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
+}
+
+async function serveJSON(body, res) {
+  res.status(200).set({ 'Content-Type': 'application/json' }).end(body);
+}
+
 // Serve HTML
 app.use('*', async (req, res) => {
   try {
     const url = req.originalUrl.replace(base, '');
 
-    let template;
     let render;
     if (!isProduction) {
       // Always read fresh template in development
-      template = await fs.readFile('./index.html', 'utf-8');
-      template = await vite.transformIndexHtml(url, template);
-      render = (await vite.ssrLoadModule('/src/entry-server.tsx')).render;
+      render = (await vite.ssrLoadModule('/src/server/index.tsx')).render;
     } else {
-      template = templateHtml;
-      render = (await import('./dist/server/entry-server.js')).render;
+      render = (await import('./dist/server/index.js')).render;
     }
 
-    const rendered = await render(url, ssrManifest);
+    const result = await render(url);
 
-    const html = template
-      .replace(`<!--app-head-->`, rendered.head ?? '')
-      .replace(`<!--app-html-->`, rendered.html ?? '');
+    if (result.type === 'html') {
+      await serveHTML(url, result, res);
+      return;
+    }
 
-    res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
+    if (result.type === 'json') {
+      await serveJSON(result.body, res);
+      return;
+    }
+
+    throw new Error(`Unsupported result type: ${result.type}`);
   } catch (e) {
     vite?.ssrFixStacktrace(e);
     console.log(e.stack);
