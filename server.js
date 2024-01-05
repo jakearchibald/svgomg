@@ -97,9 +97,10 @@ app.use('*', async (req, res) => {
 
 // Start http server
 const server = app.listen(port, async () => {
-  console.log(`Server started at http://localhost:${port}`);
-
-  if (!isStaticBuild) return;
+  if (!isStaticBuild) {
+    console.log(`Server started at http://localhost:${port}`);
+    return;
+  }
 
   const base = `http://localhost:${port}/`;
   const paths = ['', 'manifest.json'];
@@ -121,7 +122,11 @@ const server = app.listen(port, async () => {
     }),
   );
 
-  console.log(await glob('./dist/server/assets/**/*'));
+  await fs.cp(
+    new URL('./dist/server/assets', import.meta.url),
+    new URL('./dist/client/assets', import.meta.url),
+    { recursive: true, overwrite: true },
+  );
 
   server.close();
 });

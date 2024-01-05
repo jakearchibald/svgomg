@@ -16,5 +16,6 @@ export default defineConfig({
     assetsInlineLimit: 0,
     modulePreload: { polyfill: false },
     ssrEmitAssets: true,
+    //minify: false,
   },
 });
