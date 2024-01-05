@@ -8,6 +8,7 @@
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build --ssrManifest --outDir dist/client",
     "build:server": "vite build --ssr src/server/index.tsx --outDir dist/server",
+    "build:static": "cross-env NODE_ENV=production node server --static",
     "preview": "cross-env NODE_ENV=production node server"
   },
   "devDependencies": {
@@ -17,6 +18,9 @@
     "compression": "^1.7.4",
     "cross-env": "^7.0.3",
     "express": "^4.18.2",
+    "fast-glob": "^3.3.2",
+    "minimist": "^1.2.8",
+    "node-fetch": "^3.3.2",
     "preact": "^10.19.3",
     "preact-render-to-string": "^6.3.1",
     "prettier": "^3.1.1",

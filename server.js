@@ -1,8 +1,14 @@
 import fs from 'node:fs/promises';
 import express from 'express';
+import minimist from 'minimist';
+import fetch from 'node-fetch';
+import glob from 'fast-glob';
+
+const argv = minimist(process.argv.slice(2));
 
 // Constants
 const isProduction = process.env.NODE_ENV === 'production';
+const isStaticBuild = argv.static;
 const port = process.env.PORT || 5173;
 const base = process.env.BASE || '/';
 
@@ -90,6 +96,33 @@ app.use('*', async (req, res) => {
 });
 
 // Start http server
-app.listen(port, () => {
+const server = app.listen(port, async () => {
   console.log(`Server started at http://localhost:${port}`);
+
+  if (!isStaticBuild) return;
+
+  const base = `http://localhost:${port}/`;
+  const paths = ['', 'manifest.json'];
+
+  const fetchedResources = await Promise.all(
+    paths.map(async (path) => {
+      const response = await fetch(base + path);
+      return [path, await response.text()];
+    }),
+  );
+
+  await Promise.all(
+    fetchedResources.map(async ([path, body]) => {
+      const filePath = `./dist/client/${path || 'index.html'}`;
+      await fs.mkdir(filePath.replace(/\/[^/]+$/, ''), {
+        recursive: true,
+      });
+      await fs.writeFile(filePath, body);
+    }),
+  );
+
+  console.log(await glob('./dist/server/assets/**/*'));
+
+  server.close();
 });
+
