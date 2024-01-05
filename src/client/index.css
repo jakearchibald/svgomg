@@ -61,3 +61,10 @@ textarea {
     padding: 0;
   }
 }
+
+.app-output {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-flow: column;
+}
