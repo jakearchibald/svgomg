@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import preact from '@preact/preset-vite';
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [
     preact({
       babel: {
@@ -12,10 +12,11 @@ export default defineConfig({
       },
     }),
   ],
+  base: '/svgomg/',
   build: {
     assetsInlineLimit: 0,
     modulePreload: { polyfill: false },
     ssrEmitAssets: true,
     //minify: false,
   },
-});
+}));
