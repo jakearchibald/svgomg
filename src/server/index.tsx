@@ -1,5 +1,5 @@
 import renderToString from 'preact-render-to-string';
-import { App } from '../client/app';
+import App from '../client/App';
 import { AppHead } from './app-head';
 import { manifestJSON } from './manifest.json';
 

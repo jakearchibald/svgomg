@@ -13,6 +13,11 @@ export default defineConfig(({ command }) => ({
     }),
   ],
   base: '/svgomg/',
+  css: {
+    modules: {
+      localsConvention: 'camelCaseOnly',
+    },
+  },
   build: {
     assetsInlineLimit: 0,
     modulePreload: { polyfill: false },

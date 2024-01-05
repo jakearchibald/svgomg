@@ -1,0 +1,89 @@
+.mainMenu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 3;
+
+  &.hidden {
+    pointer-events: none;
+  }
+}
+
+.mainMenu.hidden {
+  pointer-events: none;
+
+  & .overlay {
+    opacity: 0;
+  }
+
+  & .menu {
+    transform: translateX(calc(-100% - 19px));
+  }
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgb(0 0 0 / 0.4);
+  will-change: opacity;
+}
+
+.menu {
+  position: absolute;
+  inset: 0 auto 0 0;
+  min-width: 264px;
+  width: 40%;
+  max-width: 340px;
+  background-color: #fff;
+  box-shadow: 3px 0 16px rgba(0, 0, 0, 0.4);
+  will-change: transform;
+  overflow: hidden auto;
+  display: grid;
+  grid-auto-flow: row;
+  align-items: start;
+}
+
+.appTitle {
+  padding-right: 16px;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  align-items: center;
+  gap: 1rem;
+  background-color: #f3f3f3;
+  font-size: 0.9rem;
+
+  & h1 {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  & p {
+    margin: 0;
+  }
+
+  & a:link,
+  & a:visited {
+    color: inherit;
+    text-decoration: underline;
+    white-space: nowrap;
+  }
+
+  & a:hover,
+  & a:active {
+    color: #000;
+  }
+}
+
+.titleText {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 0.2em;
+}
+
+.logo {
+  width: 100%;
+  height: auto;
+}
