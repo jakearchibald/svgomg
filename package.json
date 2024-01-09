@@ -12,7 +12,8 @@
     "preview": "cross-env NODE_ENV=production node server"
   },
   "devDependencies": {
-    "@preact/preset-vite": "^2.7.0",
+    "@preact/preset-vite": "^2.8.1",
+    "@preact/signals": "^1.2.2",
     "@types/express": "^4.17.21",
     "@types/node": "^20.10.5",
     "compression": "^1.7.4",
