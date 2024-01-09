@@ -2,7 +2,7 @@ import { useSignal } from '@preact/signals';
 import {} from 'preact/hooks';
 import useSignalLayoutEffect from './useSignalLayoutEffect';
 
-export default function useIsClient() {
+export default function useClientJSReady() {
   const isClient = useSignal(false);
 
   useSignalLayoutEffect(() => {

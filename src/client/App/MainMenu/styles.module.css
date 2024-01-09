@@ -42,7 +42,7 @@
   overflow: hidden auto;
   display: grid;
   grid-auto-flow: row;
-  align-items: start;
+  align-content: start;
 }
 
 .appTitle {
@@ -86,7 +86,107 @@
 .logo {
   width: 100%;
   height: auto;
-& svg {
+
+  & svg {
     display: block;
+  }
+}
+
+.menuList {
+  margin: 0;
+  padding: 0;
+
+  & > li {
+    list-style: none;
+  }
+}
+
+.menuItem {
+  composes: unbutton from '../../utils.module.css';
+  padding: 0 16px;
+  min-height: 48px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: center;
+  width: 100%;
+
+  &:link,
+  &:visited {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  &:focus-visible,
+  &:hover {
+    outline: none;
+    background-color: rgb(0 0 0 / 0.1);
+  }
+
+  /*.spinner {
+    flex: none;
+    margin: 0 0 0 auto;
+  }*/
+}
+
+.menuLogo {
+  width: 24px;
+  height: 24px;
+  margin-right: 32px;
+  opacity: 0.54;
+
+  svg {
+    display: block;
+  }
+}
+
+.loadFileInput {
+  display: none;
+}
+
+.menuItemText {
+  margin-right: 28px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.menuInput {
+  composes: menuItem;
+  cursor: pointer;
+}
+
+.labelText {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.inputArea {
+  position: relative;
+  white-space: nowrap;
+}
+
+.pasteInput {
+  display: block;
+  font: inherit;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+  resize: none;
+  width: 100%;
+  height: 1.3em;
+  overflow: hidden;
+
+  &:focus {
+    outline: none;
+    opacity: 1;
+
+    + .labelText {
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 }
