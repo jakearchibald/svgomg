@@ -1,10 +1,11 @@
 import { FunctionComponent } from 'preact';
-import { useRef } from 'preact/hooks';
+import { useEffect, useRef } from 'preact/hooks';
 import { Signal, useComputed, useSignal } from '@preact/signals';
 import { version as svgoVersion } from 'svgo/package.json';
 
 import * as styles from './styles.module.css';
 import useClientJSReady from '../../hooks/useClientJSReady';
+import Spinner from '../Spinner';
 
 const logoSVG = `<svg viewBox="0 0 600 600"><path fill="#0097a7" d="M0 1.995h600V600H0z"/><path fill="#00bcd4" d="M0 0h600v395.68H0z"/><path d="M269.224 530.33 519 395.485H269.224V530.33zM214.35 91.847H519v303.638H214.35V91.847z" opacity=".22"/><path fill="#fff" d="M80 341.735h189.224V530.33H80z"/></svg>
 `;
@@ -19,12 +20,20 @@ interface Props {
   onOpenSVG: (data: string, filename: string) => void;
 }
 
+const enum SpinnerPosition {
+  Open,
+  Paste,
+  Demo,
+}
+
 const MainMenu: FunctionComponent<Props> = ({ show, onOpenSVG }) => {
   const menuElRef = useRef<HTMLElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const pasteInputRef = useRef<HTMLTextAreaElement>(null);
   const clientJSReady = useClientJSReady();
   const pasteInputValue = useSignal('');
+  const spinnerPosition = useSignal<SpinnerPosition>(SpinnerPosition.Open);
+  const spinnerShow = useSignal(false);
 
   const mainMenuClassName = useComputed(() => {
     const classNames = [styles.mainMenu];
@@ -85,6 +94,9 @@ const MainMenu: FunctionComponent<Props> = ({ show, onOpenSVG }) => {
                   dangerouslySetInnerHTML={{ __html: openSVG }}
                 />
                 <span class={styles.menuItemText}>Open SVG</span>
+                {spinnerPosition.value === SpinnerPosition.Open && (
+                  <Spinner show={spinnerShow} />
+                )}
               </button>
               <input
                 ref={fileInputRef}
@@ -109,6 +121,9 @@ const MainMenu: FunctionComponent<Props> = ({ show, onOpenSVG }) => {
                   ></textarea>
                   <span class={styles.labelText}>Paste markup</span>
                 </span>
+                {spinnerPosition.value === SpinnerPosition.Paste && (
+                  <Spinner show={spinnerShow} />
+                )}
               </label>
             </li>
             <li>
@@ -118,6 +133,9 @@ const MainMenu: FunctionComponent<Props> = ({ show, onOpenSVG }) => {
                   dangerouslySetInnerHTML={{ __html: demoSVG }}
                 />
                 <span class={styles.menuItemText}>Demo</span>
+                {spinnerPosition.value === SpinnerPosition.Demo && (
+                  <Spinner show={spinnerShow} />
+                )}
               </button>
             </li>
             <li>
@@ -135,6 +153,7 @@ const MainMenu: FunctionComponent<Props> = ({ show, onOpenSVG }) => {
             </li>
           </ul>
         )}
+        <div />
       </nav>
     </div>
   );

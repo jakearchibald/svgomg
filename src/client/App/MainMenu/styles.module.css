@@ -109,7 +109,7 @@
   min-height: 48px;
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: max-content 1fr;
+  grid-template-columns: max-content 1fr max-content;
   align-items: center;
   width: 100%;
 
