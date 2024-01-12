@@ -8,7 +8,6 @@ import {
 } from '@preact/signals';
 
 import * as styles from './styles.module.css';
-import usePreviousSignalValue from '../../hooks/usePreviousSignalValue';
 
 interface Props {
   show: Signal<boolean>;
@@ -16,8 +15,7 @@ interface Props {
 }
 
 const Spinner: FunctionComponent<Props> = ({ delay = 300, show }) => {
-  const previousShow = usePreviousSignalValue(show);
-  const displayNone = useSignal(false);
+  const displayNone = useSignal(true);
   const containerStyle = useComputed(() =>
     displayNone.value ? 'display: none;' : '',
   );
@@ -25,13 +23,6 @@ const Spinner: FunctionComponent<Props> = ({ delay = 300, show }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useSignalEffect(() => {
-    if (previousShow.value === null) {
-      if (show.value === false) {
-        displayNone.value = true;
-      }
-      return;
-    }
-
     if (show.value === true) {
       const timeout = setTimeout(() => {
         displayNone.value = false;
