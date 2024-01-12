@@ -1,6 +1,11 @@
 import { FunctionComponent } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
-import { Signal, useComputed, useSignal } from '@preact/signals';
+import {
+  Signal,
+  useComputed,
+  useSignal,
+  useSignalEffect,
+} from '@preact/signals';
 import { version as svgoVersion } from 'svgo/package.json';
 
 import * as styles from './styles.module.css';
@@ -17,7 +22,9 @@ const contributeSVG = `<svg class="icon" viewBox="0 0 512 512"><path d="M7 266.8
 
 interface Props {
   show: Signal<boolean>;
-  onOpenSVG: (data: string, filename: string) => void;
+  showSpinner: Signal<boolean>;
+  onOpenSVG: (data: string | Blob | URL, filename: string) => void;
+  onHideIntent: () => void;
 }
 
 const enum SpinnerPosition {
@@ -26,14 +33,18 @@ const enum SpinnerPosition {
   Demo,
 }
 
-const MainMenu: FunctionComponent<Props> = ({ show, onOpenSVG }) => {
+const MainMenu: FunctionComponent<Props> = ({
+  show,
+  onOpenSVG,
+  showSpinner,
+  onHideIntent,
+}) => {
   const menuElRef = useRef<HTMLElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const pasteInputRef = useRef<HTMLTextAreaElement>(null);
   const clientJSReady = useClientJSReady();
   const pasteInputValue = useSignal('');
   const spinnerPosition = useSignal<SpinnerPosition>(SpinnerPosition.Open);
-  const spinnerShow = useSignal(false);
 
   const mainMenuClassName = useComputed(() => {
     const classNames = [styles.mainMenu];
@@ -50,9 +61,9 @@ const MainMenu: FunctionComponent<Props> = ({ show, onOpenSVG }) => {
     const file = fileInputRef.current!.files?.[0];
     if (!file) return;
 
-    file.text().then((data) => {
-      onOpenSVG(data, file.name);
-    });
+    spinnerPosition.value = SpinnerPosition.Open;
+
+    onOpenSVG(file, file.name);
   };
 
   const onPasteInput = () => {
@@ -60,13 +71,15 @@ const MainMenu: FunctionComponent<Props> = ({ show, onOpenSVG }) => {
 
     if (!pasteInputValue.value.includes('</svg>')) return;
 
+    spinnerPosition.value = SpinnerPosition.Paste;
+
     onOpenSVG(pasteInputValue.value, 'image.svg');
     pasteInputValue.value = '';
   };
 
   return (
     <div class={mainMenuClassName}>
-      <div class={styles.overlay}></div>
+      <div onClick={() => onHideIntent()} class={styles.overlay}></div>
       <nav ref={menuElRef} class={styles.menu} tabIndex={0}>
         <div class={styles.appTitle}>
           <div
@@ -95,7 +108,7 @@ const MainMenu: FunctionComponent<Props> = ({ show, onOpenSVG }) => {
                 />
                 <span class={styles.menuItemText}>Open SVG</span>
                 {spinnerPosition.value === SpinnerPosition.Open && (
-                  <Spinner show={spinnerShow} />
+                  <Spinner show={showSpinner} />
                 )}
               </button>
               <input
@@ -122,7 +135,7 @@ const MainMenu: FunctionComponent<Props> = ({ show, onOpenSVG }) => {
                   <span class={styles.labelText}>Paste markup</span>
                 </span>
                 {spinnerPosition.value === SpinnerPosition.Paste && (
-                  <Spinner show={spinnerShow} />
+                  <Spinner show={showSpinner} />
                 )}
               </label>
             </li>
@@ -134,7 +147,7 @@ const MainMenu: FunctionComponent<Props> = ({ show, onOpenSVG }) => {
                 />
                 <span class={styles.menuItemText}>Demo</span>
                 {spinnerPosition.value === SpinnerPosition.Demo && (
-                  <Spinner show={spinnerShow} />
+                  <Spinner show={showSpinner} />
                 )}
               </button>
             </li>
