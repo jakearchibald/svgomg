@@ -11,6 +11,7 @@ import { version as svgoVersion } from 'svgo/package.json';
 import * as styles from './styles.module.css';
 import useClientJSReady from '../../hooks/useClientJSReady';
 import Spinner from '../Spinner';
+import demoImageURL from '../../imgs/car-demo.svg';
 
 const logoSVG = `<svg viewBox="0 0 600 600"><path fill="#0097a7" d="M0 1.995h600V600H0z"/><path fill="#00bcd4" d="M0 0h600v395.68H0z"/><path d="M269.224 530.33 519 395.485H269.224V530.33zM214.35 91.847H519v303.638H214.35V91.847z" opacity=".22"/><path fill="#fff" d="M80 341.735h189.224V530.33H80z"/></svg>
 `;
@@ -77,6 +78,11 @@ const MainMenu: FunctionComponent<Props> = ({
     pasteInputValue.value = '';
   };
 
+  const onDemoClick = () => {
+    spinnerPosition.value = SpinnerPosition.Demo;
+    onOpenSVG(new URL(demoImageURL, location.href), 'demo.svg');
+  };
+
   return (
     <div class={mainMenuClassName}>
       <div onClick={() => onHideIntent()} class={styles.overlay}></div>
@@ -140,7 +146,11 @@ const MainMenu: FunctionComponent<Props> = ({
               </label>
             </li>
             <li>
-              <button class={styles.menuItem} type="button">
+              <button
+                onClick={onDemoClick}
+                class={styles.menuItem}
+                type="button"
+              >
                 <div
                   class={styles.menuLogo}
                   dangerouslySetInnerHTML={{ __html: demoSVG }}
