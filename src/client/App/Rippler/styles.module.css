@@ -1,0 +1,19 @@
+.rippler {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple {
+  border-radius: 50%;
+  background: #000;
+  --size: 0;
+  width: var(--size);
+  height: var(--size);
+  position: absolute;
+  translate: -50% -50%;
+  opacity: 0;
+}
+
+.content {
+  position: relative;
+}

@@ -14,7 +14,7 @@ interface Props {
   delay?: number;
 }
 
-const Spinner: FunctionComponent<Props> = ({ delay = 300, show }) => {
+const Spinner: FunctionComponent<Props> = ({ delay = 500, show }) => {
   const displayNone = useSignal(true);
   const containerStyle = useComputed(() =>
     displayNone.value ? 'display: none;' : '',
