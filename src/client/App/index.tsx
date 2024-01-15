@@ -1,24 +1,64 @@
 import { FunctionComponent } from 'preact';
-import { useSignal } from '@preact/signals';
+import { useComputed, useSignal } from '@preact/signals';
 
 import MainMenu from './MainMenu';
 
 interface Props {}
 
+export interface Input {
+  body: string;
+  filename: string;
+}
+
 const App: FunctionComponent<Props> = ({}) => {
+  // Model
+  const input = useSignal<Input | null>(null);
+
+  // View
   const showMenu = useSignal(true);
   const showMenuSpinner = useSignal(false);
-
-  // TODO: Make rest of app inert when showMenu is true
+  const appInert = useComputed(() => !showMenu.value);
 
   function onOpenSVG(data: string | Blob | URL, filename: string) {
     showMenuSpinner.value = true;
-    // TODO: load the SVG, then hide the spinner and hide the menu
-    console.log('open svg', data, filename);
+
+    if (typeof data === 'string') {
+      input.value = {
+        body: data,
+        filename,
+      };
+      return;
+    }
+
+    if (data instanceof Blob) {
+      data.text().then((body) => {
+        input.value = {
+          body,
+          filename,
+        };
+      });
+      return;
+    }
+
+    if (data instanceof URL) {
+      fetch(data).then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch ${data}`);
+        }
+
+        const body = await response.text();
+
+        input.value = {
+          body,
+          filename,
+        };
+      });
+      return;
+    }
   }
 
   function onMenuHideIntent() {
-    // TODO: ignore if no SVG loaded
+    if (!input.value) return;
     showMenu.value = false;
   }
 
@@ -30,7 +70,7 @@ const App: FunctionComponent<Props> = ({}) => {
         onOpenSVG={onOpenSVG}
         onHideIntent={onMenuHideIntent}
       />
-      <p>Hello</p>
+      <div inert={appInert}></div>
     </div>
   );
 };
