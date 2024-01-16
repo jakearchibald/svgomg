@@ -9,7 +9,7 @@
     "build:client": "vite build --ssrManifest --outDir dist/client",
     "build:server": "vite build --ssr src/server/index.tsx --outDir dist/server",
     "build:static": "cross-env NODE_ENV=production node server --static",
-    "preview": "cross-env NODE_ENV=production node server"
+    "preview": "cross-env BASE=/svgomg/ NODE_ENV=production node server"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.8.1",
