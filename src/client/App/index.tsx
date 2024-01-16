@@ -2,6 +2,7 @@ import { FunctionComponent } from 'preact';
 import { useComputed, useSignal } from '@preact/signals';
 
 import MainMenu from './MainMenu';
+import FileDrop from './FileDrop';
 
 interface Props {}
 
@@ -62,15 +63,20 @@ const App: FunctionComponent<Props> = ({}) => {
     showMenu.value = false;
   }
 
+  function onDrop(file: File) {
+    onOpenSVG(file, file.name);
+  }
+
   return (
     <div>
+      <div inert={appInert}></div>
       <MainMenu
         show={showMenu}
         showSpinner={showMenuSpinner}
         onOpenSVG={onOpenSVG}
         onHideIntent={onMenuHideIntent}
       />
-      <div inert={appInert}></div>
+      <FileDrop onDrop={onDrop} />
     </div>
   );
 };

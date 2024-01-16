@@ -1,0 +1,14 @@
+.dropOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgb(0 0 0 / 0.7);
+  color: #fff;
+  font-size: 17vw;
+  pointer-events: none;
+  opacity: 0;
+  display: grid;
+  text-align: center;
+  align-items: center;
+  will-change: opacity;
+  transition: opacity 0.2s ease-out;
+}
