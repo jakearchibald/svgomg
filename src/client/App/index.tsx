@@ -3,6 +3,29 @@ import { useComputed, useSignal } from '@preact/signals';
 
 import MainMenu from './MainMenu';
 import FileDrop from './FileDrop';
+import useLazyComponent from '../hooks/useLazyComponent';
+
+const optimizerPromise = import('./lazy').then((module) => module.Optimizer);
+
+async function loadSVGBody(
+  signal: AbortSignal,
+  svgInput: Blob | string | URL,
+): Promise<string> {
+  signal.throwIfAborted();
+
+  if (typeof svgInput === 'string') return svgInput;
+
+  if (svgInput instanceof Blob) {
+    const text = await svgInput.text();
+    signal.throwIfAborted();
+    return text;
+  }
+
+  // svgInput instanceof URL:
+  const response = await fetch(svgInput, { signal });
+  if (!response.ok) throw new Error(`Failed to fetch ${svgInput}`);
+  return response.text();
+}
 
 interface Props {}
 
@@ -14,47 +37,44 @@ export interface Input {
 const App: FunctionComponent<Props> = ({}) => {
   // Model
   const input = useSignal<Input | null>(null);
+  const currentOpenController = useSignal<AbortController | null>(null);
 
   // View
   const showMenu = useSignal(true);
   const showMenuSpinner = useSignal(false);
-  const appInert = useComputed(() => !showMenu.value);
+  const appInert = useComputed(() => showMenu.value);
+  const Optimizer = useLazyComponent(optimizerPromise);
 
-  function onOpenSVG(data: string | Blob | URL, filename: string) {
+  async function onOpenSVG(data: string | Blob | URL, filename: string) {
+    currentOpenController.value?.abort();
+
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    currentOpenController.value = controller;
+
     showMenuSpinner.value = true;
 
-    if (typeof data === 'string') {
-      input.value = {
-        body: data,
+    try {
+      const newInput = {
+        body: await loadSVGBody(signal, data),
         filename,
       };
-      return;
-    }
 
-    if (data instanceof Blob) {
-      data.text().then((body) => {
-        input.value = {
-          body,
-          filename,
-        };
-      });
-      return;
-    }
+      // Wait for the main app to be ready.
+      await optimizerPromise;
 
-    if (data instanceof URL) {
-      fetch(data).then(async (response) => {
-        if (!response.ok) {
-          throw new Error(`Failed to fetch ${data}`);
-        }
+      signal.throwIfAborted();
 
-        const body = await response.text();
+      input.value = newInput;
+      showMenu.value = false;
+    } catch (err: any) {
+      if (err.name === 'AbortError') return;
 
-        input.value = {
-          body,
-          filename,
-        };
-      });
-      return;
+      // TODO:
+      console.error(err);
+    } finally {
+      showMenuSpinner.value = false;
     }
   }
 
@@ -69,7 +89,9 @@ const App: FunctionComponent<Props> = ({}) => {
 
   return (
     <div>
-      <div inert={appInert}></div>
+      <div inert={appInert}>
+        {Optimizer && input.value && <Optimizer input={input.value} />}
+      </div>
       <MainMenu
         show={showMenu}
         showSpinner={showMenuSpinner}
