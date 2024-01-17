@@ -125,7 +125,11 @@ const server = app.listen(port, async () => {
   await fs.cp(
     new URL('./dist/server/assets', import.meta.url),
     new URL('./dist/client/assets', import.meta.url),
-    { recursive: true, overwrite: true },
+    {
+      recursive: true,
+      overwrite: true,
+      filter: (path) => /\.(svg|woff2|png|jpg|gif)$/.test(path),
+    },
   );
 
   server.close();
