@@ -3,17 +3,22 @@ import {} from 'preact/hooks';
 import {} from '@preact/signals';
 import { Input } from '../..';
 
-//import * as styles from './styles.module.css';
+import * as styles from './styles.module.css';
+import Toolbar from './Toolbar';
 
 interface Props {
   input: Input;
+  onMenuClick?: () => void;
 }
 
-const Optimizer: FunctionComponent<Props> = ({ input }) => {
+const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick }) => {
   return (
-    <div>
-      <p>Optimizer</p>
-      <div dangerouslySetInnerHTML={{ __html: input.body }} />
+    <div class={styles.optimizer}>
+      <Toolbar
+        tabNames={['image', 'markup'] as const}
+        activeTab="image"
+        onMenuClick={onMenuClick}
+      />
     </div>
   );
 };

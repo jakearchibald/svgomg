@@ -87,10 +87,16 @@ const App: FunctionComponent<Props> = ({}) => {
     onOpenSVG(file, file.name);
   }
 
+  function onMenuClick() {
+    showMenu.value = true;
+  }
+
   return (
     <div>
       <div inert={appInert}>
-        {Optimizer && input.value && <Optimizer input={input.value} />}
+        {Optimizer && input.value && (
+          <Optimizer input={input.value} onMenuClick={onMenuClick} />
+        )}
       </div>
       <MainMenu
         show={showMenu}

@@ -103,7 +103,8 @@
 }
 
 .menuItem {
-  composes: unbutton from '../../utils.module.css';
+  all: unset;
+  cursor: pointer;
   padding: 0 16px;
   min-height: 48px;
   box-sizing: border-box;
