@@ -68,3 +68,7 @@ textarea {
   display: flex;
   flex-flow: column;
 }
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}

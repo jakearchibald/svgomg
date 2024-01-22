@@ -3,16 +3,56 @@
   color: #fff;
   display: flex;
   align-items: center;
+  height: 48px;
 }
 
 .menuBtn {
   all: unset;
   cursor: pointer;
-  padding: 10px 12px;
+  height: 100%;
+  aspect-ratio: 1/1;
+  display: grid;
+  justify-content: center;
+  align-items: center;
 
   svg {
+    display: block;
     width: 24px;
-    height: 24px;
+    aspect-ratio: 1/1;
     fill: #fff;
   }
+}
+
+.tabs {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  height: 100%;
+}
+
+.tab {
+  display: grid;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+
+  input {
+    display: none;
+  }
+
+  &.selected .tabText::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 3px;
+    background: #fff;
+    border-radius: 100px 100px 0 0;
+  }
+}
+
+.tabText {
+  position: relative;
+  display: grid;
+  align-content: center;
+  margin: 0 20px;
 }

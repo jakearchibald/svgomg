@@ -3,6 +3,7 @@ import {} from 'preact/hooks';
 import {} from '@preact/signals';
 
 import * as styles from './styles.module.css';
+import Rippler from '../../../Rippler';
 
 interface Props<T extends readonly string[]> {
   tabNames: T;
@@ -28,17 +29,26 @@ const Toolbar = <T extends readonly string[]>({
         dangerouslySetInnerHTML={{ __html: menuSVG }}
         onClick={() => onMenuClick?.()}
       />
-      <form class="material-tabs view-toggler">
-        <label class="material-tab">
-          <input type="radio" name="output" value="image" checked />
-          <span class="selected"></span>
-          Image
-        </label>
-        <label class="material-tab">
-          <input type="radio" name="output" value="code" />
-          <span class="selected"></span>
-          Markup
-        </label>
+      <form class={styles.tabs}>
+        {tabNames.map((tabName) => (
+          <Rippler class={styles.rippler}>
+            <label
+              class={[styles.tab, tabName === activeTab && styles.selected]
+                .filter(Boolean)
+                .join(' ')}
+            >
+              <input
+                class={styles.tab}
+                type="radio"
+                name="tab"
+                value={tabName}
+                checked={tabName === activeTab}
+                onInput={() => onTabChange?.(tabName)}
+              />
+              <span class={styles.tabText}>{tabName}</span>
+            </label>
+          </Rippler>
+        ))}
       </form>
     </div>
   );

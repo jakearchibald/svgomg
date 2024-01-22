@@ -48,7 +48,7 @@ const Rippler: FunctionComponent<Props> = ({ children }) => {
   return (
     <div onPointerDown={onPointerDown} ref={ripplerRef} class={styles.rippler}>
       <div ref={rippleRef} class={styles.ripple} />
-      <div class={styles.content}>{children}</div>
+      {children}
     </div>
   );
 };

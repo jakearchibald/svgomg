@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'preact';
 import {} from 'preact/hooks';
-import {} from '@preact/signals';
+import { useSignal } from '@preact/signals';
 import { Input } from '../..';
 
 import * as styles from './styles.module.css';
@@ -11,13 +11,18 @@ interface Props {
   onMenuClick?: () => void;
 }
 
+const tabNames = ['Image', 'Markup'] as const;
+
 const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick }) => {
+  const activeTab = useSignal<(typeof tabNames)[number]>(tabNames[0]);
+
   return (
     <div class={styles.optimizer}>
       <Toolbar
-        tabNames={['image', 'markup'] as const}
-        activeTab="image"
+        tabNames={tabNames}
+        activeTab={activeTab.value}
         onMenuClick={onMenuClick}
+        onTabChange={(tab) => (activeTab.value = tab)}
       />
     </div>
   );

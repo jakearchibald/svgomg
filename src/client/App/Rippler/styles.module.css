@@ -1,6 +1,11 @@
 .rippler {
   position: relative;
   overflow: hidden;
+  display: grid;
+
+  > * {
+    position: relative;
+  }
 }
 
 .ripple {
@@ -12,8 +17,4 @@
   position: absolute;
   translate: -50% -50%;
   opacity: 0;
-}
-
-.content {
-  position: relative;
 }
