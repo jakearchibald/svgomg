@@ -5,6 +5,7 @@ import { Input } from '../..';
 
 import * as styles from './styles.module.css';
 import Toolbar from './Toolbar';
+import { useViewTransition } from '../../../hooks/useViewTransition';
 
 interface Props {
   input: Input;
@@ -15,6 +16,16 @@ const tabNames = ['Image', 'Markup'] as const;
 
 const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick }) => {
   const activeTab = useSignal<(typeof tabNames)[number]>(tabNames[0]);
+  const startViewTransition = useViewTransition([activeTab.value]);
+
+  function onTabChange(newTab: (typeof tabNames)[number]) {
+    startViewTransition({
+      rootClassNames: ['tabChange'],
+      update() {
+        activeTab.value = newTab;
+      },
+    });
+  }
 
   return (
     <div class={styles.optimizer}>
@@ -22,7 +33,7 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick }) => {
         tabNames={tabNames}
         activeTab={activeTab.value}
         onMenuClick={onMenuClick}
-        onTabChange={(tab) => (activeTab.value = tab)}
+        onTabChange={onTabChange}
       />
     </div>
   );

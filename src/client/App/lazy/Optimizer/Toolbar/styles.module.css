@@ -50,6 +50,10 @@
   }
 }
 
+:global(.tabChange) .tab.selected .tabText::after {
+  view-transition-name: tab-select;
+}
+
 .tabText {
   position: relative;
   display: grid;

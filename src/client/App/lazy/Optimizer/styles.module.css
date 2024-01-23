@@ -2,3 +2,7 @@
   display: grid;
   grid-template-rows: max-content 1fr;
 }
+
+:global(.tabChange) {
+  view-transition-name: none;
+}

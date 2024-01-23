@@ -31,7 +31,7 @@ const Toolbar = <T extends readonly string[]>({
       />
       <form class={styles.tabs}>
         {tabNames.map((tabName) => (
-          <Rippler class={styles.rippler}>
+          <Rippler>
             <label
               class={[styles.tab, tabName === activeTab && styles.selected]
                 .filter(Boolean)
