@@ -6,6 +6,7 @@ import { Input } from '../..';
 import * as styles from './styles.module.css';
 import Toolbar from './Toolbar';
 import { useViewTransition } from '../../../hooks/useViewTransition';
+import SafeIframe from './SafeIframe';
 
 interface Props {
   input: Input;
@@ -17,6 +18,9 @@ const tabNames = ['Image', 'Markup'] as const;
 const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick }) => {
   const activeTab = useSignal<(typeof tabNames)[number]>(tabNames[0]);
   const startViewTransition = useViewTransition([activeTab.value]);
+  const activeSource = useSignal(input.body);
+  const activeWidth = useSignal(500);
+  const activeHeight = useSignal(500);
 
   function onTabChange(newTab: (typeof tabNames)[number]) {
     startViewTransition({
@@ -34,6 +38,11 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick }) => {
         activeTab={activeTab.value}
         onMenuClick={onMenuClick}
         onTabChange={onTabChange}
+      />
+      <SafeIframe
+        svgSource={activeSource}
+        width={activeWidth}
+        height={activeHeight}
       />
     </div>
   );
