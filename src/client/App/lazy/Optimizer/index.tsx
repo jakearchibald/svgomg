@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'preact';
-import {} from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import { Input } from '../..';
 
@@ -7,6 +7,7 @@ import * as styles from './styles.module.css';
 import Toolbar from './Toolbar';
 import { useViewTransition } from '../../../hooks/useViewTransition';
 import SafeIframe from './SafeIframe';
+import { getDimensions } from './svgoProcessor';
 
 interface Props {
   input: Input;
@@ -19,8 +20,8 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick }) => {
   const activeTab = useSignal<(typeof tabNames)[number]>(tabNames[0]);
   const startViewTransition = useViewTransition([activeTab.value]);
   const activeSource = useSignal(input.body);
-  const activeWidth = useSignal(500);
-  const activeHeight = useSignal(500);
+  const activeWidth = useSignal(0);
+  const activeHeight = useSignal(0);
 
   function onTabChange(newTab: (typeof tabNames)[number]) {
     startViewTransition({
@@ -30,6 +31,15 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick }) => {
       },
     });
   }
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
+    getDimensions(signal, input.body).then(({ width, height }) => {
+      activeWidth.value = width;
+      activeHeight.value = height;
+    });
+  }, [input]);
 
   return (
     <div class={styles.optimizer}>

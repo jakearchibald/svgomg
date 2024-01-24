@@ -66,3 +66,11 @@ function workerCall<R>(
 export function ready() {
   return workerCall<string>(new AbortController().signal, 'ready');
 }
+
+export function getDimensions(signal: AbortSignal, source: string) {
+  return workerCall<{ width: number; height: number }>(
+    signal,
+    'getDimensions',
+    { source },
+  );
+}
