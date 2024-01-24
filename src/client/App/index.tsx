@@ -6,6 +6,11 @@ import FileDrop from './FileDrop';
 import useLazyComponent from '../hooks/useLazyComponent';
 
 const optimizerPromise = import('./lazy').then((module) => module.Optimizer);
+const svgoWorkerReady = import.meta.env.SSR
+  ? Promise.resolve()
+  : import('./lazy').then((module) => module.svgoWorkerReady());
+
+const mainAppReady = Promise.all([optimizerPromise, svgoWorkerReady]);
 
 async function loadSVGBody(
   signal: AbortSignal,
@@ -61,8 +66,7 @@ const App: FunctionComponent<Props> = ({}) => {
         filename,
       };
 
-      // Wait for the main app to be ready.
-      await optimizerPromise;
+      await mainAppReady;
 
       signal.throwIfAborted();
 
