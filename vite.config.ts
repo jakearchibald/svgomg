@@ -18,6 +18,9 @@ export default defineConfig(({ command }) => ({
       localsConvention: 'camelCaseOnly',
     },
   },
+  worker: {
+    format: 'es',
+  },
   build: {
     assetsInlineLimit: 0,
     modulePreload: { polyfill: false },
