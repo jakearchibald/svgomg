@@ -1,0 +1,12 @@
+.pinchZoom {
+  touch-action: none;
+  position: relative;
+}
+
+.mover {
+  pointer-events: none;
+  transform-origin: 0 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}

@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'preact';
 import { useEffect } from 'preact/hooks';
-import { useSignal } from '@preact/signals';
+import { Signal, useSignal } from '@preact/signals';
 import { Input } from '../..';
 
 import * as styles from './styles.module.css';
@@ -8,15 +8,17 @@ import Toolbar from './Toolbar';
 import { useViewTransition } from '../../../hooks/useViewTransition';
 import SafeIframe from './SafeIframe';
 import { getDimensions } from './svgoProcessor';
+import PinchZoom from './PinchZoom';
 
 interface Props {
   input: Input;
+  inert: Signal<boolean>;
   onMenuClick?: () => void;
 }
 
 const tabNames = ['Image', 'Markup'] as const;
 
-const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick }) => {
+const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
   const activeTab = useSignal<(typeof tabNames)[number]>(tabNames[0]);
   const startViewTransition = useViewTransition([activeTab.value]);
   const activeSource = useSignal(input.body);
@@ -42,18 +44,24 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick }) => {
   }, [input]);
 
   return (
-    <div class={styles.optimizer}>
+    <div inert={inert} class={styles.optimizer}>
       <Toolbar
         tabNames={tabNames}
         activeTab={activeTab.value}
         onMenuClick={onMenuClick}
         onTabChange={onTabChange}
       />
-      <SafeIframe
-        svgSource={activeSource}
-        width={activeWidth}
-        height={activeHeight}
-      />
+      <div class={styles.previewArea}>
+        {activeWidth.value && activeHeight.value && (
+          <PinchZoom>
+            <SafeIframe
+              svgSource={activeSource}
+              width={activeWidth}
+              height={activeHeight}
+            />
+          </PinchZoom>
+        )}
+      </div>
     </div>
   );
 };

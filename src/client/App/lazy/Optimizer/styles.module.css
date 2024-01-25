@@ -6,3 +6,8 @@
 :global(.tabChange) {
   view-transition-name: none;
 }
+
+.previewArea {
+  overflow: clip;
+  display: grid;
+}

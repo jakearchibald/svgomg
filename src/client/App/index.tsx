@@ -96,12 +96,14 @@ const App: FunctionComponent<Props> = ({}) => {
   }
 
   return (
-    <div>
-      <div inert={appInert}>
-        {Optimizer && input.value && (
-          <Optimizer input={input.value} onMenuClick={onMenuClick} />
-        )}
-      </div>
+    <>
+      {Optimizer && input.value && (
+        <Optimizer
+          inert={appInert}
+          input={input.value}
+          onMenuClick={onMenuClick}
+        />
+      )}
       <MainMenu
         show={showMenu}
         showSpinner={showMenuSpinner}
@@ -109,7 +111,7 @@ const App: FunctionComponent<Props> = ({}) => {
         onHideIntent={onMenuHideIntent}
       />
       <FileDrop onDrop={onDrop} />
-    </div>
+    </>
   );
 };
 
