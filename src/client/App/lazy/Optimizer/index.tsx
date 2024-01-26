@@ -9,6 +9,7 @@ import { useViewTransition } from '../../../hooks/useViewTransition';
 import SafeIframe from './SafeIframe';
 import { getDimensions } from './svgoProcessor';
 import PinchZoom from './PinchZoom';
+import Config from './Config';
 
 interface Props {
   input: Input;
@@ -51,8 +52,8 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
         onMenuClick={onMenuClick}
         onTabChange={onTabChange}
       />
-      <div class={styles.previewArea}>
-        {activeWidth.value && activeHeight.value && (
+      <div class={styles.editArea}>
+        {activeWidth.value && activeHeight.value ? (
           <PinchZoom>
             <SafeIframe
               svgSource={activeSource}
@@ -60,7 +61,10 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
               height={activeHeight}
             />
           </PinchZoom>
+        ) : (
+          <div />
         )}
+        <Config />
       </div>
     </div>
   );

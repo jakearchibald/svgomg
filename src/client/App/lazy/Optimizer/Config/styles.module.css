@@ -1,0 +1,9 @@
+.config {
+  background: white;
+  position: relative;
+
+  @media (min-width: 900px) {
+    margin: 30px;
+    margin-left: 0;
+  }
+}

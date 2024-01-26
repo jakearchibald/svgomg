@@ -7,7 +7,17 @@
   view-transition-name: none;
 }
 
-.previewArea {
+.editArea {
   overflow: clip;
   display: grid;
+  grid-template-rows: 1fr 0.9fr;
+
+  @media (min-width: 640px) {
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 340px;
+  }
+
+  @media (min-width: 900px) {
+    grid-template-columns: 1fr 370px;
+  }
 }
