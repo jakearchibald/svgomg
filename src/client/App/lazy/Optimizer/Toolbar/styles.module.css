@@ -9,28 +9,9 @@
   &::after {
     content: '';
     position: absolute;
-    inset: 100% 0 auto 0;
-    height: 15px;
-    opacity: 0.2;
-    background: linear-gradient(
-      to bottom,
-      hsl(0, 0%, 0%) 0%,
-      hsla(0, 0%, 0%, 0.987) 8.1%,
-      hsla(0, 0%, 0%, 0.951) 15.5%,
-      hsla(0, 0%, 0%, 0.896) 22.5%,
-      hsla(0, 0%, 0%, 0.825) 29%,
-      hsla(0, 0%, 0%, 0.741) 35.3%,
-      hsla(0, 0%, 0%, 0.648) 41.2%,
-      hsla(0, 0%, 0%, 0.55) 47.1%,
-      hsla(0, 0%, 0%, 0.45) 52.9%,
-      hsla(0, 0%, 0%, 0.352) 58.8%,
-      hsla(0, 0%, 0%, 0.259) 64.7%,
-      hsla(0, 0%, 0%, 0.175) 71%,
-      hsla(0, 0%, 0%, 0.104) 77.5%,
-      hsla(0, 0%, 0%, 0.049) 84.5%,
-      hsla(0, 0%, 0%, 0.013) 91.9%,
-      hsla(0, 0%, 0%, 0) 100%
-    );
+    inset: 0 -11px;
+    pointer-events: none;
+    box-shadow: 0 4px 11px rgba(0, 0, 0, 0.3);
   }
 }
 
