@@ -84,86 +84,88 @@ const MainMenu: FunctionComponent<Props> = ({
   return (
     <div class={mainMenuClassName} inert={menuInert}>
       <div onClick={() => onHideIntent()} class={styles.overlay}></div>
-      <nav ref={menuElRef} class={styles.menu} tabIndex={0}>
-        <div class={styles.appTitle}>
-          <div
-            class={styles.logo}
-            dangerouslySetInnerHTML={{ __html: logoSVG }}
-          />
-          <div class={styles.titleText}>
-            <h1>SVGOMG</h1>
-            <p>
-              Powered by{' '}
-              <a href="https://github.com/svg/svgo">SVGO v{svgoVersion}</a>
-            </p>
+      <div class={styles.menuContainer}>
+        <nav ref={menuElRef} class={styles.menu} tabIndex={0}>
+          <div class={styles.appTitle}>
+            <div
+              class={styles.logo}
+              dangerouslySetInnerHTML={{ __html: logoSVG }}
+            />
+            <div class={styles.titleText}>
+              <h1>SVGOMG</h1>
+              <p>
+                Powered by{' '}
+                <a href="https://github.com/svg/svgo">SVGO v{svgoVersion}</a>
+              </p>
+            </div>
           </div>
-        </div>
-        {clientJSReady.value && (
-          <ul class={styles.menuList}>
-            <MenuRow>
-              <button
-                onClick={onOpenSVGClick}
-                class={styles.menuItem}
-                type="button"
-              >
-                <MenuIcon icon={openIcon} />
-                <span class={styles.menuItemText}>Open SVG</span>
-                {spinnerPosition.value === SpinnerPosition.Open && (
-                  <Spinner show={showSpinner} />
-                )}
-              </button>
-              <input
-                ref={fileInputRef}
-                onChange={onFileInputChange}
-                type="file"
-                class={styles.loadFileInput}
-                accept=".svg"
-              />
-            </MenuRow>
-            <MenuRow>
-              <label class={styles.menuInput}>
-                <MenuIcon icon={pasteIcon} />
-                <span class={styles.inputArea}>
-                  <textarea
-                    ref={pasteInputRef}
-                    class={styles.pasteInput}
-                    onInput={onPasteInput}
-                    value={pasteInputValue}
-                  ></textarea>
-                  <span class={styles.labelText}>Paste markup</span>
-                </span>
-                {spinnerPosition.value === SpinnerPosition.Paste && (
-                  <Spinner show={showSpinner} />
-                )}
-              </label>
-            </MenuRow>
-            <MenuRow>
-              <button
-                onClick={onDemoClick}
-                class={styles.menuItem}
-                type="button"
-              >
-                <MenuIcon icon={demoIcon} />
-                <span class={styles.menuItemText}>Demo</span>
-                {spinnerPosition.value === SpinnerPosition.Demo && (
-                  <Spinner show={showSpinner} />
-                )}
-              </button>
-            </MenuRow>
-            <MenuRow>
-              <a
-                href="https://github.com/jakearchibald/svgomg"
-                class={styles.menuItem}
-                target="_blank"
-              >
-                <MenuIcon icon={contributeIcon} />
-                <span class={styles.menuItemText}>Contribute</span>
-              </a>
-            </MenuRow>
-          </ul>
-        )}
-        <div />
-      </nav>
+          {clientJSReady.value && (
+            <ul class={styles.menuList}>
+              <MenuRow>
+                <button
+                  onClick={onOpenSVGClick}
+                  class={styles.menuItem}
+                  type="button"
+                >
+                  <MenuIcon icon={openIcon} />
+                  <span class={styles.menuItemText}>Open SVG</span>
+                  {spinnerPosition.value === SpinnerPosition.Open && (
+                    <Spinner show={showSpinner} />
+                  )}
+                </button>
+                <input
+                  ref={fileInputRef}
+                  onChange={onFileInputChange}
+                  type="file"
+                  class={styles.loadFileInput}
+                  accept=".svg"
+                />
+              </MenuRow>
+              <MenuRow>
+                <label class={styles.menuInput}>
+                  <MenuIcon icon={pasteIcon} />
+                  <span class={styles.inputArea}>
+                    <textarea
+                      ref={pasteInputRef}
+                      class={styles.pasteInput}
+                      onInput={onPasteInput}
+                      value={pasteInputValue}
+                    ></textarea>
+                    <span class={styles.labelText}>Paste markup</span>
+                  </span>
+                  {spinnerPosition.value === SpinnerPosition.Paste && (
+                    <Spinner show={showSpinner} />
+                  )}
+                </label>
+              </MenuRow>
+              <MenuRow>
+                <button
+                  onClick={onDemoClick}
+                  class={styles.menuItem}
+                  type="button"
+                >
+                  <MenuIcon icon={demoIcon} />
+                  <span class={styles.menuItemText}>Demo</span>
+                  {spinnerPosition.value === SpinnerPosition.Demo && (
+                    <Spinner show={showSpinner} />
+                  )}
+                </button>
+              </MenuRow>
+              <MenuRow>
+                <a
+                  href="https://github.com/jakearchibald/svgomg"
+                  class={styles.menuItem}
+                  target="_blank"
+                >
+                  <MenuIcon icon={contributeIcon} />
+                  <span class={styles.menuItemText}>Contribute</span>
+                </a>
+              </MenuRow>
+            </ul>
+          )}
+          <div />
+        </nav>
+      </div>
     </div>
   );
 };

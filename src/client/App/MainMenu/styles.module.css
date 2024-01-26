@@ -1,9 +1,6 @@
 .mainMenu {
   position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+  inset: 0;
 
   &.hidden {
     pointer-events: none;
@@ -17,7 +14,7 @@
     opacity: 0;
   }
 
-  & .menu {
+  & .menuContainer {
     transform: translateX(calc(-100% - 19px));
   }
 }
@@ -30,20 +27,50 @@
   transition: opacity 0.2s ease-in-out;
 }
 
-.menu {
+.menuContainer {
   position: absolute;
   inset: 0 auto 0 0;
   min-width: 264px;
   width: 40%;
   max-width: 340px;
-  background-color: #fff;
-  box-shadow: 3px 0 16px rgba(0, 0, 0, 0.4);
   will-change: transform;
+  display: grid;
+  transition: transform 0.2s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 100%;
+    width: 16px;
+    opacity: 0.15;
+    background: linear-gradient(
+      to right,
+      hsl(0, 0%, 0%) 0%,
+      hsla(0, 0%, 0%, 0.987) 8.1%,
+      hsla(0, 0%, 0%, 0.951) 15.5%,
+      hsla(0, 0%, 0%, 0.896) 22.5%,
+      hsla(0, 0%, 0%, 0.825) 29%,
+      hsla(0, 0%, 0%, 0.741) 35.3%,
+      hsla(0, 0%, 0%, 0.648) 41.2%,
+      hsla(0, 0%, 0%, 0.55) 47.1%,
+      hsla(0, 0%, 0%, 0.45) 52.9%,
+      hsla(0, 0%, 0%, 0.352) 58.8%,
+      hsla(0, 0%, 0%, 0.259) 64.7%,
+      hsla(0, 0%, 0%, 0.175) 71%,
+      hsla(0, 0%, 0%, 0.104) 77.5%,
+      hsla(0, 0%, 0%, 0.049) 84.5%,
+      hsla(0, 0%, 0%, 0.013) 91.9%,
+      hsla(0, 0%, 0%, 0) 100%
+    );
+  }
+}
+
+.menu {
+  background-color: #fff;
   overflow: hidden auto;
   display: grid;
   grid-auto-flow: row;
   align-content: start;
-  transition: transform 0.2s ease;
 }
 
 .appTitle {
