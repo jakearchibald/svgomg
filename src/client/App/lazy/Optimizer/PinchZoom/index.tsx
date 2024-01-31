@@ -81,51 +81,58 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
 
       scaleDiff = Math.max(minScaleDiff, scaleDiff);
 
-      const matrix = new DOMMatrix()
+      let applyMatrix = new DOMMatrix()
         // Translate according to panning.
-        .translate(panX, panY)
-        // Scale about the origin.
-        .translate(originX, originY)
-        // Apply current translate
-        .translate(x.value, y.value)
-        .scale(scaleDiff)
-        .translate(-originX, -originY)
-        // Apply current scale.
-        .scale(scale.value);
-
-      let newX = matrix.e;
-      let newY = matrix.f;
+        .translateSelf(panX, panY)
+        // Scale about the origin:
+        .translateSelf(originX, originY)
+        .scaleSelf(scaleDiff)
+        .translateSelf(-originX, -originY);
 
       const tl = new DOMPoint(
         currentRect.left,
         currentRect.top,
-      ).matrixTransform(matrix);
+      ).matrixTransform(applyMatrix);
 
       const br = new DOMPoint(
         currentRect.right,
         currentRect.bottom,
-      ).matrixTransform(matrix);
+      ).matrixTransform(applyMatrix);
 
       // Adjust for bounds
-      /*if (tl.x > containerRect.left) {
-        newX -= tl.x - containerRect.left;
+      if (br.x < containerRect.left) {
+        applyMatrix = new DOMMatrix()
+          .translateSelf(containerRect.left - br.x, 0)
+          .multiplySelf(applyMatrix);
       }
 
-      if (tl.y > containerRect.top) {
-        newY -= tl.y - containerRect.top;
+      if (br.y < containerRect.top) {
+        applyMatrix = new DOMMatrix()
+          .translateSelf(0, containerRect.top - br.y)
+          .multiplySelf(applyMatrix);
       }
 
-      if (br.x < containerRect.right) {
-        newX += containerRect.right - br.x;
+      if (tl.x > containerRect.right) {
+        applyMatrix = new DOMMatrix()
+          .translateSelf(containerRect.right - tl.x, 0)
+          .multiplySelf(applyMatrix);
       }
 
-      if (br.y < containerRect.bottom) {
-        newY += containerRect.bottom - br.y;
-      }*/
+      if (tl.y > containerRect.bottom) {
+        applyMatrix = new DOMMatrix()
+          .translateSelf(0, containerRect.bottom - tl.y)
+          .multiplySelf(applyMatrix);
+      }
 
-      x.value = newX;
-      y.value = newY;
-      scale.value = matrix.a;
+      const finalMatrix = new DOMMatrix()
+        .multiplySelf(applyMatrix)
+        // Apply current transforms:
+        .translateSelf(x.value, y.value)
+        .scaleSelf(scale.value);
+
+      x.value = finalMatrix.e;
+      y.value = finalMatrix.f;
+      scale.value = finalMatrix.a;
     };
 
     const tracker = new PointerTracker(containerRef.current!, {
@@ -137,9 +144,7 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
       },
       move(previousPointers) {
         const currentPointers = tracker.currentPointers;
-
-        // Combine next points with previous points
-        const currentRect = moverRef.current!.getBoundingClientRect();
+        const containerRect = containerRef.current!.getBoundingClientRect();
 
         // For calculating panning movement
         const prevMidpoint = getMidpoint(
@@ -148,9 +153,9 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
         );
         const newMidpoint = getMidpoint(currentPointers[0], currentPointers[1]);
 
-        // Midpoint within the element
-        const originX = prevMidpoint.clientX - currentRect.left;
-        const originY = prevMidpoint.clientY - currentRect.top;
+        // Midpoint
+        const originX = prevMidpoint.clientX - containerRect.left;
+        const originY = prevMidpoint.clientY - containerRect.top;
 
         // Calculate the desired change in scale
         const prevDistance = getDistance(
@@ -178,7 +183,7 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
       (event) => {
         event.preventDefault();
 
-        const currentRect = moverRef.current!.getBoundingClientRect();
+        const containerRect = containerRef.current!.getBoundingClientRect();
         let { deltaY } = event;
         const { ctrlKey, deltaMode } = event;
 
@@ -194,8 +199,8 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
 
         applyChange({
           scaleDiff,
-          originX: event.clientX - currentRect.left,
-          originY: event.clientY - currentRect.top,
+          originX: event.clientX - containerRect.left,
+          originY: event.clientY - containerRect.top,
         });
       },
       { signal },
