@@ -5,7 +5,7 @@ import { useComputed, useSignal } from '@preact/signals';
 import * as styles from './styles.module.css';
 import PointerTracker from '../../../../utils/PointerTracker';
 
-const MIN_SCALE = 0.05;
+const MIN_SIZE = 30;
 
 interface Point {
   clientX: number;
@@ -71,6 +71,16 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
       originY = 0,
       scaleDiff = 1,
     }: ApplyChangeOpts = {}) => {
+      const currentRect = moverRef.current!.getBoundingClientRect();
+      const containerRect = containerRef.current!.getBoundingClientRect();
+
+      // Ensure we never go smaller than MIN_SIZExMIN_SIZE
+      const minScaleDiff =
+        1 /
+        Math.max(currentRect.width / MIN_SIZE, currentRect.height / MIN_SIZE);
+
+      scaleDiff = Math.max(minScaleDiff, scaleDiff);
+
       const matrix = new DOMMatrix()
         // Translate according to panning.
         .translate(panX, panY)
@@ -83,9 +93,39 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
         // Apply current scale.
         .scale(scale.value);
 
-      x.value = matrix.e;
-      y.value = matrix.f;
-      scale.value = Math.max(matrix.a, MIN_SCALE);
+      let newX = matrix.e;
+      let newY = matrix.f;
+
+      const tl = new DOMPoint(
+        currentRect.left,
+        currentRect.top,
+      ).matrixTransform(matrix);
+
+      const br = new DOMPoint(
+        currentRect.right,
+        currentRect.bottom,
+      ).matrixTransform(matrix);
+
+      // Adjust for bounds
+      /*if (tl.x > containerRect.left) {
+        newX -= tl.x - containerRect.left;
+      }
+
+      if (tl.y > containerRect.top) {
+        newY -= tl.y - containerRect.top;
+      }
+
+      if (br.x < containerRect.right) {
+        newX += containerRect.right - br.x;
+      }
+
+      if (br.y < containerRect.bottom) {
+        newY += containerRect.bottom - br.y;
+      }*/
+
+      x.value = newX;
+      y.value = newY;
+      scale.value = matrix.a;
     };
 
     const tracker = new PointerTracker(containerRef.current!, {
