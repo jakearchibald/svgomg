@@ -2,8 +2,28 @@
   background: white;
   position: relative;
 
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0 -11px;
+    pointer-events: none;
+    box-shadow: 0 0 11px rgba(0,0,0,.4);
+  }
+
+  @media (min-width: 640px) {
+    &::after {
+      inset: -15px 0;
+      box-shadow: 0 4px 11px rgba(0,0,0,.3);
+    }
+  }
+
   @media (min-width: 900px) {
     margin: 30px;
     margin-left: 0;
+    border-radius: 2px;
+
+    &::after {
+      inset: 0;
+    }
   }
 }
