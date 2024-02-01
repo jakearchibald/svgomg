@@ -12,6 +12,12 @@ interface Point {
   clientY: number;
 }
 
+interface MoverTransform {
+  x: number;
+  y: number;
+  scale: number;
+}
+
 function getDistance(a: Point, b?: Point): number {
   if (!b) return 0;
   return Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY);
@@ -42,24 +48,55 @@ interface Props {}
 const PinchZoom: FunctionComponent<Props> = ({ children }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const moverRef = useRef<HTMLDivElement>(null);
-  const x = useSignal(0);
-  const y = useSignal(0);
-  const scale = useSignal(1);
+  const transform = useSignal<Readonly<MoverTransform>>({
+    x: 0,
+    y: 0,
+    scale: 1,
+  });
 
   const moverStyle = useComputed(
     () =>
-      `transform: translate(${x.value}px, ${y.value}px) scale(${scale.value});`,
+      `transform: translate(${transform.value.x}px, ${transform.value.y}px) scale(${transform.value.scale});`,
   );
 
+  // Initial centering
   useLayoutEffect(() => {
     const container = containerRef.current!;
     const mover = moverRef.current!;
     const containerRect = container.getBoundingClientRect();
     const moverRect = mover.getBoundingClientRect();
 
-    // Center the mover
-    x.value = (containerRect.width - moverRect.width) / 2;
-    y.value = (containerRect.height - moverRect.height) / 2;
+    transform.value = {
+      x: (containerRect.width - moverRect.width) / 2,
+      y: (containerRect.height - moverRect.height) / 2,
+      scale: transform.value.scale,
+    };
+  }, []);
+
+  // Handle resizing
+  useLayoutEffect(() => {
+    let previousRect: ResizeObserverSize | undefined;
+
+    const observer = new ResizeObserver(([entry]) => {
+      const currentRect = entry.borderBoxSize[0];
+
+      if (previousRect) {
+        const xPosDiff = (currentRect.inlineSize - previousRect.inlineSize) / 2;
+        const yPosDiff = (currentRect.blockSize - previousRect.blockSize) / 2;
+
+        transform.value = {
+          x: transform.value.x + xPosDiff,
+          y: transform.value.y + yPosDiff,
+          scale: transform.value.scale,
+        };
+      }
+
+      previousRect = currentRect;
+    });
+
+    observer.observe(containerRef.current!);
+
+    return () => observer.disconnect();
   }, []);
 
   // Pointer and scroll handling
@@ -127,12 +164,14 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
       const finalMatrix = new DOMMatrix()
         .multiplySelf(applyMatrix)
         // Apply current transforms:
-        .translateSelf(x.value, y.value)
-        .scaleSelf(scale.value);
+        .translateSelf(transform.value.x, transform.value.y)
+        .scaleSelf(transform.value.scale);
 
-      x.value = finalMatrix.e;
-      y.value = finalMatrix.f;
-      scale.value = finalMatrix.a;
+      transform.value = {
+        x: finalMatrix.e,
+        y: finalMatrix.f,
+        scale: finalMatrix.a,
+      };
     };
 
     const tracker = new PointerTracker(containerRef.current!, {

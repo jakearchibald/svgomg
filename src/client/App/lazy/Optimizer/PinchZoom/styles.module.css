@@ -1,6 +1,7 @@
 .pinchZoom {
   touch-action: none;
   position: relative;
+  contain: layout;
 }
 
 .mover {
