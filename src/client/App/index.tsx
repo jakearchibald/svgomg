@@ -4,6 +4,7 @@ import { useComputed, useSignal } from '@preact/signals';
 import MainMenu from './MainMenu';
 import FileDrop from './FileDrop';
 import useLazyComponent from '../hooks/useLazyComponent';
+import CheckeredBG from './CheckeredBG';
 
 const optimizerPromise = import('./lazy').then((module) => module.Optimizer);
 const svgoWorkerReady = import.meta.env.SSR
@@ -45,6 +46,7 @@ const App: FunctionComponent<Props> = ({}) => {
   const currentOpenController = useSignal<AbortController | null>(null);
 
   // View
+  const darkBG = useSignal(false);
   const showMenu = useSignal(true);
   const showMenuSpinner = useSignal(false);
   const appInert = useComputed(() => showMenu.value);
@@ -97,6 +99,7 @@ const App: FunctionComponent<Props> = ({}) => {
 
   return (
     <>
+      <CheckeredBG dark={darkBG} />
       {Optimizer && input.value && (
         <Optimizer
           inert={appInert}
