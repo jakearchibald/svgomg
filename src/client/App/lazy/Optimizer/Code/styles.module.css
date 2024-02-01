@@ -1,0 +1,36 @@
+.code {
+  position: relative;
+  color: #fff;
+  max-width: 100%;
+  background: rgb(20% 20% 20%);
+  overflow: hidden auto;
+
+  @media (min-width: 900px) {
+    display: grid;
+    grid-area: 1 / 1 / -1 / -1;
+    grid-template-columns: subgrid;
+  }
+
+  pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  code {
+    display: block;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    padding: 14px;
+
+    @media (min-width: 640px) {
+      margin-bottom: 380px;
+    }
+
+    @media (min-width: 900px) {
+      font-size: 1rem;
+      padding: 30px;
+      padding-left: 14px;
+    }
+  }
+}

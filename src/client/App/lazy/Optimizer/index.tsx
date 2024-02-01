@@ -10,6 +10,7 @@ import SafeIframe from './SafeIframe';
 import { getDimensions } from './svgoProcessor';
 import PinchZoom from './PinchZoom';
 import Config from './Config';
+import Code from './Code';
 
 interface Props {
   input: Input;
@@ -27,9 +28,6 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
 
   // View
   const activeTab = useSignal<(typeof tabNames)[number]>(tabNames[0]);
-  const codeBgStyle = useComputed(
-    () => `opacity: ${activeTab.value === 'Markup' ? 1 : 0};`,
-  );
   const startViewTransition = useViewTransition([activeTab.value]);
 
   function onTabChange(newTab: (typeof tabNames)[number]) {
@@ -59,9 +57,8 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
         onTabChange={onTabChange}
       />
       <div class={styles.editArea}>
-        <div class={styles.codeBg} style={codeBgStyle} />
         {activeTab.value === 'Markup' ? (
-          <div />
+          <Code source={activeSource} />
         ) : (
           <>
             {activeWidth.value && activeHeight.value ? (

@@ -1,6 +1,7 @@
 .config {
   background: white;
   position: relative;
+  grid-area: config;
 
   &::after {
     content: '';

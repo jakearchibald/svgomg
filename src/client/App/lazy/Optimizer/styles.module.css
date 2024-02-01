@@ -1,26 +1,22 @@
 .optimizer {
   display: grid;
-  grid-template-rows: max-content 1fr;
+  grid-template-rows: max-content minmax(0, 1fr);
+  min-height: 0;
 }
 
 .editArea {
   position: relative;
   overflow: clip;
   display: grid;
-  grid-template-rows: 1fr 0.9fr;
+  grid-template-rows: [content] minmax(0, 1fr) [config] minmax(0, 0.9fr);
+  grid-template-columns: [config] auto;
 
   @media (min-width: 640px) {
-    grid-template-rows: auto;
-    grid-template-columns: 1fr 340px;
+    grid-template-rows: [config] auto;
+    grid-template-columns: [content] minmax(0, 1fr) [config] 340px;
   }
 
   @media (min-width: 900px) {
-    grid-template-columns: 1fr 370px;
+    grid-template-columns: [content] minmax(0, 1fr) [config] 370px;
   }
-}
-
-.codeBg {
-  position: absolute;
-  inset: 0;
-  background: rgb(20% 20% 20%);
 }
