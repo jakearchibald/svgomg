@@ -11,6 +11,9 @@ interface Props {
 }
 
 const SafeIframe: FunctionComponent<Props> = ({ svgSource, width, height }) => {
+  const ceilWidth = useComputed(() => Math.ceil(width.value));
+  const ceilHeight = useComputed(() => Math.ceil(height.value));
+
   const docSource = useComputed(
     () =>
       '<!DOCTYPE html><style>body{margin:0;}svg{display:block}</style>' +
@@ -20,8 +23,8 @@ const SafeIframe: FunctionComponent<Props> = ({ svgSource, width, height }) => {
   return (
     <iframe
       class={styles.iframe}
-      width={width}
-      height={height}
+      width={ceilWidth}
+      height={ceilHeight}
       srcDoc={docSource}
       sandbox="allow-scripts"
     />
