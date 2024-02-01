@@ -3,11 +3,8 @@
   grid-template-rows: max-content 1fr;
 }
 
-:global(.tabChange) {
-  view-transition-name: none;
-}
-
 .editArea {
+  position: relative;
   overflow: clip;
   display: grid;
   grid-template-rows: 1fr 0.9fr;
@@ -20,4 +17,10 @@
   @media (min-width: 900px) {
     grid-template-columns: 1fr 370px;
   }
+}
+
+.codeBg {
+  position: absolute;
+  inset: 0;
+  background: rgb(20% 20% 20%);
 }

@@ -21,6 +21,26 @@
   }
 }
 
+:global(.tabChange) .toolbar {
+  view-transition-name: toolbar;
+}
+
+:global(.tabChange)::view-transition-group(toolbar) {
+  animation: none;
+}
+
+:global(.tabChange)::view-transition-image-pair(toolbar) {
+  isolation: auto;
+}
+
+:global(.tabChange)::view-transition-old(toolbar) {
+  display: none;
+}
+
+:global(.tabChange)::view-transition-new(toolbar) {
+  animation: none;
+}
+
 .menuBtn {
   all: unset;
   cursor: pointer;

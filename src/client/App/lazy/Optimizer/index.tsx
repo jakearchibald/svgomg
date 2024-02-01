@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'preact';
 import { useEffect } from 'preact/hooks';
-import { Signal, useSignal } from '@preact/signals';
+import { Signal, useComputed, useSignal } from '@preact/signals';
 import { Input } from '../..';
 
 import * as styles from './styles.module.css';
@@ -20,11 +20,17 @@ interface Props {
 const tabNames = ['Image', 'Markup'] as const;
 
 const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
-  const activeTab = useSignal<(typeof tabNames)[number]>(tabNames[0]);
-  const startViewTransition = useViewTransition([activeTab.value]);
+  // Model
   const activeSource = useSignal(input.body);
   const activeWidth = useSignal(0);
   const activeHeight = useSignal(0);
+
+  // View
+  const activeTab = useSignal<(typeof tabNames)[number]>(tabNames[0]);
+  const codeBgStyle = useComputed(
+    () => `opacity: ${activeTab.value === 'Markup' ? 1 : 0};`,
+  );
+  const startViewTransition = useViewTransition([activeTab.value]);
 
   function onTabChange(newTab: (typeof tabNames)[number]) {
     startViewTransition({
@@ -53,17 +59,25 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
         onTabChange={onTabChange}
       />
       <div class={styles.editArea}>
-        {activeWidth.value && activeHeight.value ? (
-          <PinchZoom>
-            <SafeIframe
-              svgSource={activeSource}
-              width={activeWidth}
-              height={activeHeight}
-            />
-          </PinchZoom>
-        ) : (
+        <div class={styles.codeBg} style={codeBgStyle} />
+        {activeTab.value === 'Markup' ? (
           <div />
+        ) : (
+          <>
+            {activeWidth.value && activeHeight.value ? (
+              <PinchZoom>
+                <SafeIframe
+                  svgSource={activeSource}
+                  width={activeWidth}
+                  height={activeHeight}
+                />
+              </PinchZoom>
+            ) : (
+              <div />
+            )}
+          </>
         )}
+
         <Config />
       </div>
     </div>
