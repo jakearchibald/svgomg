@@ -20,3 +20,10 @@ export function getDimensions(
     { signal },
   );
 }
+
+export function compress(
+  source: string,
+  { signal = new AbortController().signal } = {},
+) {
+  return callableWorker.call<string>('compress', { source }, { signal });
+}

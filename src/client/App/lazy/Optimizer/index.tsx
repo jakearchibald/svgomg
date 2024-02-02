@@ -1,13 +1,18 @@
 import { FunctionComponent } from 'preact';
 import { useEffect } from 'preact/hooks';
-import { Signal, useComputed, useSignal } from '@preact/signals';
+import {
+  Signal,
+  useComputed,
+  useSignal,
+  useSignalEffect,
+} from '@preact/signals';
 import { Input } from '../..';
 
 import * as styles from './styles.module.css';
 import Toolbar from './Toolbar';
 import { useViewTransition } from '../../../hooks/useViewTransition';
 import SafeIframe from './SafeIframe';
-import { getDimensions } from './svgoProcessor';
+import { getDimensions, compress } from './svgoProcessor';
 import PinchZoom from './PinchZoom';
 import Config from './Config';
 import Code from './Code';
@@ -23,6 +28,7 @@ const tabNames = ['Image', 'Markup'] as const;
 const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
   // Model
   const activeSource = useSignal(input.body);
+  const compressedSource = useSignal(input.body);
   const activeWidth = useSignal(0);
   const activeHeight = useSignal(0);
 
@@ -39,14 +45,40 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
     });
   }
 
+  // Read dimensions
   useEffect(() => {
     const controller = new AbortController();
     const { signal } = controller;
-    getDimensions(input.body, { signal }).then(({ width, height }) => {
-      activeWidth.value = width;
-      activeHeight.value = height;
-    });
+
+    getDimensions(input.body, { signal })
+      .then(({ width, height }) => {
+        activeWidth.value = width;
+        activeHeight.value = height;
+      })
+      .catch((err) => {
+        if (err.name === 'AbortError') return;
+        console.error(err);
+      });
+
+    return () => controller.abort();
   }, [input]);
+
+  // Compress
+  useSignalEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    compress(activeSource.value, { signal })
+      .then((result) => {
+        compressedSource.value = result;
+      })
+      .catch((err) => {
+        if (err.name === 'AbortError') return;
+        console.error(err);
+      });
+
+    return () => controller.abort();
+  });
 
   return (
     <div inert={inert} class={styles.optimizer}>
@@ -58,13 +90,13 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
       />
       <div class={styles.editArea}>
         {activeTab.value === 'Markup' ? (
-          <Code source={activeSource} />
+          <Code source={compressedSource} />
         ) : (
           <>
             {activeWidth.value && activeHeight.value ? (
               <PinchZoom>
                 <SafeIframe
-                  svgSource={activeSource}
+                  svgSource={compressedSource}
                   width={activeWidth}
                   height={activeHeight}
                 />

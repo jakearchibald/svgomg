@@ -1,4 +1,4 @@
-import { optimize, CustomPlugin } from 'svgo/dist/svgo.browser.js';
+import { optimize, CustomPlugin } from 'svgo';
 import exposeWorkerActions from '../../utils/exposeWorkerActions';
 
 const createDimensionsExtractor = () => {
@@ -34,6 +34,10 @@ const createDimensionsExtractor = () => {
 
 exposeWorkerActions({
   ready: () => true,
+
+  compress: ({ source }: { source: string }): string => {
+    return optimize(source).data;
+  },
 
   getDimensions: ({
     source,
