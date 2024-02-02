@@ -1,7 +1,3 @@
-import { FunctionComponent } from 'preact';
-import {} from 'preact/hooks';
-import {} from '@preact/signals';
-
 import * as styles from './styles.module.css';
 import Rippler from '../../../Rippler';
 

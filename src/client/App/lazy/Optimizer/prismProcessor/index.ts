@@ -2,21 +2,13 @@ import CallableWorker from '../utils/CallableWorker';
 import workerURL from './worker?worker&url';
 
 const callableWorker = new CallableWorker(workerURL, {
-  name: 'SVGO',
+  name: 'Prism',
   type: 'module',
 });
 
-export function ready() {
-  return callableWorker.call<string>('ready');
-}
-
-export function getDimensions(
+export function highlight(
   source: string,
   { signal = new AbortController().signal } = {},
 ) {
-  return callableWorker.call<{ width: number; height: number }>(
-    'getDimensions',
-    { source },
-    { signal },
-  );
+  return callableWorker.call<string>('highlight', { source }, { signal });
 }

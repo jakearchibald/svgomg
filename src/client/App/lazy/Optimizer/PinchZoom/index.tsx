@@ -3,7 +3,7 @@ import { useEffect, useLayoutEffect, useRef } from 'preact/hooks';
 import { useComputed, useSignal } from '@preact/signals';
 
 import * as styles from './styles.module.css';
-import PointerTracker from '../../../../utils/PointerTracker';
+import PointerTracker from '../utils/PointerTracker';
 
 const MIN_SIZE = 30;
 

@@ -2,7 +2,7 @@
   position: relative;
   color: #fff;
   max-width: 100%;
-  background: rgb(20% 20% 20%);
+  background: #1d1d1d;
   overflow: hidden auto;
 
   @media (min-width: 900px) {
@@ -22,6 +22,9 @@
     font-size: 0.9rem;
     line-height: 1.5;
     padding: 14px;
+    color: #d4d4d4;
+    tab-size: 2;
+    hyphens: none;
 
     @media (min-width: 640px) {
       margin-bottom: 380px;
@@ -32,5 +35,188 @@
       padding: 30px;
       padding-left: 14px;
     }
+  }
+
+  /* prism-vsc-dark-plus.css */
+  :global .namespace {
+    opacity: .7;
+  }
+
+  :global .token.doctype .token.doctype-tag {
+    color: #569CD6;
+  }
+
+  :global .token.doctype .token.name {
+    color: #9cdcfe;
+  }
+
+  :global .token.comment,
+  :global .token.prolog {
+    color: #6a9955;
+  }
+
+  :global .language-css .token.punctuation,
+  :global .language-javascript .token.punctuation {
+    color: #d4d4d4;
+  }
+
+  :global .token.property,
+  :global .token.tag,
+  :global .token.boolean,
+  :global .token.number,
+  :global .token.constant,
+  :global .token.symbol,
+  :global .token.inserted,
+  :global .token.unit {
+    color: #b5cea8;
+  }
+
+  :global .token.selector,
+  :global .token.attr-name,
+  :global .token.string,
+  :global .token.char,
+  :global .token.builtin,
+  :global .token.deleted {
+    color: #ce9178;
+  }
+
+  :global .language-css .token.string.url {
+    text-decoration: underline;
+  }
+
+  :global .token.operator,
+  :global .token.entity {
+    color: #d4d4d4;
+  }
+
+  :global .token.operator.arrow {
+    color: #569CD6;
+  }
+
+  :global .token.atrule {
+    color: #ce9178;
+  }
+
+  :global .token.atrule .token.rule {
+    color: #c586c0;
+  }
+
+  :global .token.atrule .token.url {
+    color: #9cdcfe;
+  }
+
+  :global .token.atrule .token.url .token.function {
+    color: #dcdcaa;
+  }
+
+  :global .token.atrule .token.url .token.punctuation {
+    color: #d4d4d4;
+  }
+
+  :global .token.keyword {
+    color: #569CD6;
+  }
+
+  :global .token.keyword.module,
+  :global .token.keyword.control-flow {
+    color: #c586c0;
+  }
+
+  :global .token.function,
+  :global .token.function .token.maybe-class-name {
+    color: #dcdcaa;
+  }
+
+  :global .token.regex {
+    color: #d16969;
+  }
+
+  :global .token.important {
+    color: #569cd6;
+  }
+
+  :global .token.italic {
+    font-style: italic;
+  }
+
+  :global .token.constant {
+    color: #9cdcfe;
+  }
+
+  :global .token.class-name,
+  :global .token.maybe-class-name {
+    color: #4ec9b0;
+  }
+
+  :global .token.console {
+    color: #9cdcfe;
+  }
+
+  :global .token.parameter {
+    color: #9cdcfe;
+  }
+
+  :global .token.interpolation {
+    color: #9cdcfe;
+  }
+
+  :global .token.punctuation.interpolation-punctuation {
+    color: #569cd6;
+  }
+
+  :global .token.boolean {
+    color: #569cd6;
+  }
+
+  :global .token.property,
+  :global .token.variable,
+  :global .token.imports .token.maybe-class-name,
+  :global .token.exports .token.maybe-class-name {
+    color: #9cdcfe;
+  }
+
+  :global .token.selector {
+    color: #d7ba7d;
+  }
+
+  :global .token.escape {
+    color: #d7ba7d;
+  }
+
+  :global .token.tag {
+    color: #569cd6;
+  }
+
+  :global .token.tag .token.punctuation {
+    color: #808080;
+  }
+
+  :global .token.cdata {
+    color: #808080;
+  }
+
+  :global .token.attr-name {
+    color: #9cdcfe;
+  }
+
+  :global .token.attr-value,
+  :global .token.attr-value .token.punctuation {
+    color: #ce9178;
+  }
+
+  :global .token.attr-value .token.punctuation.attr-equals {
+    color: #d4d4d4;
+  }
+
+  :global .token.entity {
+    color: #569cd6;
+  }
+
+  :global .token.namespace {
+    color: #4ec9b0;
+  }
+
+  :global .token.punctuation {
+    color: #808080;
   }
 }

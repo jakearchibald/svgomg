@@ -42,7 +42,7 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
   useEffect(() => {
     const controller = new AbortController();
     const { signal } = controller;
-    getDimensions(signal, input.body).then(({ width, height }) => {
+    getDimensions(input.body, { signal }).then(({ width, height }) => {
       activeWidth.value = width;
       activeHeight.value = height;
     });
