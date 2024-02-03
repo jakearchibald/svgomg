@@ -12,8 +12,10 @@ import PinchZoom from './PinchZoom';
 import Config from './Config';
 import Code from './Code';
 import pluginData from 'virtual:svgo-plugin-data';
-import { ClonablePluginConfig, PluginConfig } from './types';
+import { PluginConfig } from './types';
 import mapObject from './utils/mapObject';
+import useCompressSVG from './useCompressSVG';
+import useSVGDimensions from './useSVGDimensions';
 
 interface Props {
   input: Input;
@@ -26,9 +28,7 @@ const tabNames = ['Image', 'Markup'] as const;
 const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
   // Model
   const activeSource = useSignal(input.body);
-  const compressedSource = useSignal(input.body);
-  const activeWidth = useSignal(0);
-  const activeHeight = useSignal(0);
+  const [activeWidth, activeHeight] = useSVGDimensions(activeSource);
   const pluginConfig: PluginConfig = useMemo(
     () =>
       mapObject(pluginData, ([name, settings]) => [
@@ -37,6 +37,8 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
       ]),
     [],
   );
+
+  const compressedSource = useCompressSVG(activeSource, pluginConfig);
 
   // View
   const activeTab = useSignal<(typeof tabNames)[number]>(tabNames[0]);
@@ -50,45 +52,6 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
       },
     });
   }
-
-  // Read dimensions
-  useEffect(() => {
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    getDimensions(input.body, { signal })
-      .then(({ width, height }) => {
-        activeWidth.value = width;
-        activeHeight.value = height;
-      })
-      .catch((err) => {
-        if (err.name === 'AbortError') return;
-        console.error(err);
-      });
-
-    return () => controller.abort();
-  }, [input]);
-
-  // Compress
-  useSignalEffect(() => {
-    const controller = new AbortController();
-    const { signal } = controller;
-    const clonablePluginConfig: ClonablePluginConfig = mapObject(
-      pluginConfig,
-      ([name, settings]) => [name, { enabled: settings.enabled.value }],
-    );
-
-    compress(activeSource.value, clonablePluginConfig, { signal })
-      .then((result) => {
-        compressedSource.value = result;
-      })
-      .catch((err) => {
-        if (err.name === 'AbortError') return;
-        console.error(err);
-      });
-
-    return () => controller.abort();
-  });
 
   return (
     <div inert={inert} class={styles.optimizer}>
