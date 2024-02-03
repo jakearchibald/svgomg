@@ -1,4 +1,4 @@
-import { ClonablePluginConfig } from '../types';
+import { ProcessorPluginConfig } from '../types';
 import CallableWorker from '../utils/CallableWorker';
 import workerURL from './worker?worker&url';
 
@@ -24,7 +24,7 @@ export function getDimensions(
 
 export function compress(
   source: string,
-  pluginConfig: ClonablePluginConfig,
+  pluginConfig: ProcessorPluginConfig,
   { signal = new AbortController().signal } = {},
 ) {
   return callableWorker.call<string>(

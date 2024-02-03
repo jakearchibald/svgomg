@@ -1,7 +1,21 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals';
-import { ClonablePluginConfig, PluginConfig } from './types';
+import { ProcessorPluginConfig, PluginConfig } from './types';
 import mapObject from './utils/mapObject';
 import { compress } from './svgoProcessor';
+
+const CACHE_SIZE = 10;
+const compressCache = new Map<string, string>();
+
+function addToCache(key: string, value: string) {
+  compressCache.set(key, value);
+
+  if (compressCache.size > CACHE_SIZE) {
+    for (const key of compressCache.keys()) {
+      compressCache.delete(key);
+      if (compressCache.size <= CACHE_SIZE) break;
+    }
+  }
+}
 
 export default function useCompressSVG(
   source: Signal<string>,
@@ -10,15 +24,25 @@ export default function useCompressSVG(
   const compressedSource = useSignal(source.value);
 
   useSignalEffect(() => {
+    const clonablePluginConfig: ProcessorPluginConfig = mapObject(
+      pluginConfig,
+      ([name, settings]) => settings.enabled.value && [name, {}],
+    );
+
+    const cacheKey = JSON.stringify(clonablePluginConfig);
+    const cacheResult = compressCache.get(cacheKey);
+
+    if (cacheResult) {
+      compressedSource.value = cacheResult;
+      return;
+    }
+
     const controller = new AbortController();
     const { signal } = controller;
-    const clonablePluginConfig: ClonablePluginConfig = mapObject(
-      pluginConfig,
-      ([name, settings]) => [name, { enabled: settings.enabled.value }],
-    );
 
     compress(source.value, clonablePluginConfig, { signal })
       .then((result) => {
+        addToCache(cacheKey, result);
         compressedSource.value = result;
       })
       .catch((err) => {

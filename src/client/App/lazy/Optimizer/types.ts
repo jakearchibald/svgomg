@@ -6,8 +6,6 @@ export interface PluginConfig {
   };
 }
 
-export interface ClonablePluginConfig {
-  [name: string]: {
-    enabled: boolean;
-  };
+export interface ProcessorPluginConfig {
+  [name: string]: {};
 }

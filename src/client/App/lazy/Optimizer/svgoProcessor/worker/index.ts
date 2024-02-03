@@ -1,6 +1,6 @@
 import { optimize, CustomPlugin, PluginConfig } from 'svgo';
 import exposeWorkerActions from '../../utils/exposeWorkerActions';
-import { ClonablePluginConfig } from '../../types';
+import { ProcessorPluginConfig } from '../../types';
 
 const createDimensionsExtractor = () => {
   const dimensions = { width: 0, height: 0 };
@@ -34,7 +34,7 @@ const createDimensionsExtractor = () => {
 
 interface ExposeWorkerActionsArgs {
   source: string;
-  pluginConfig: ClonablePluginConfig;
+  pluginConfig: ProcessorPluginConfig;
 }
 
 exposeWorkerActions({
@@ -43,8 +43,7 @@ exposeWorkerActions({
   compress: ({ source, pluginConfig }: ExposeWorkerActionsArgs): string => {
     const plugins: PluginConfig[] = [];
 
-    for (const [name, settings] of Object.entries(pluginConfig)) {
-      if (!settings.enabled) continue;
+    for (const [name] of Object.entries(pluginConfig)) {
       plugins.push({
         // Bit of a cheat on the types here.
         name: name as 'cleanupAttrs',
