@@ -23,6 +23,9 @@ export default function useCompressSVG(
 ): Signal<string> {
   const compressedSource = useSignal(source.value);
 
+  // Clear the cache when the source changes.
+  source.subscribe(() => compressCache.clear());
+
   useSignalEffect(() => {
     const clonablePluginConfig: ProcessorPluginConfig = mapObject(
       pluginConfig,
