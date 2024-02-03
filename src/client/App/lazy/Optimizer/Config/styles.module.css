@@ -2,6 +2,11 @@
   background: white;
   position: relative;
   grid-area: config;
+  overflow: auto;
+
+  @media (min-width: 900px) {
+    box-shadow: 0 4px 11px rgba(0,0,0,.3);
+  }
 
   &::after {
     content: '';
@@ -24,7 +29,7 @@
     border-radius: 2px;
 
     &::after {
-      inset: 0;
+      display: none;
     }
   }
 }
