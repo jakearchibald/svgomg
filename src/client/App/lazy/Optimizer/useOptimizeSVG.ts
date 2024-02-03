@@ -1,5 +1,9 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals';
-import { ProcessorPluginConfig, PluginConfig, RenderableSVG } from './types';
+import {
+  ProcessorOptimizeConfig,
+  OptimizeConfig,
+  RenderableSVG,
+} from './types';
 import mapObject from './utils/mapObject';
 import { optimize } from './svgoProcessor';
 
@@ -19,7 +23,7 @@ function addToCache(key: string, value: RenderableSVG) {
 
 export default function useOptimizeSVG(
   input: Signal<RenderableSVG | null>,
-  pluginConfig: PluginConfig,
+  optimizeConfig: OptimizeConfig,
 ): Signal<RenderableSVG | null> {
   const optimizedSVG = useSignal<RenderableSVG | null>(null);
 
@@ -35,12 +39,15 @@ export default function useOptimizeSVG(
       return;
     }
 
-    const clonablePluginConfig: ProcessorPluginConfig = mapObject(
-      pluginConfig,
-      ([name, settings]) => settings.enabled.value && [name, {}],
-    );
+    const clonableOptimizeConfig: ProcessorOptimizeConfig = {
+      pretty: optimizeConfig.pretty.enabled.value ? {} : undefined,
+      plugins: mapObject(
+        optimizeConfig.plugins,
+        ([name, settings]) => settings.enabled.value && [name, {}],
+      ),
+    };
 
-    const cacheKey = JSON.stringify(clonablePluginConfig);
+    const cacheKey = JSON.stringify(clonableOptimizeConfig);
     const cacheResult = compressCache.get(cacheKey);
 
     if (cacheResult) {
@@ -51,7 +58,7 @@ export default function useOptimizeSVG(
     const controller = new AbortController();
     const { signal } = controller;
 
-    optimize(input.value.source, clonablePluginConfig, { signal })
+    optimize(input.value.source, clonableOptimizeConfig, { signal })
       .then((result) => {
         signal.throwIfAborted();
         addToCache(cacheKey, result);

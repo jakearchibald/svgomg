@@ -1,4 +1,4 @@
-import { ProcessorPluginConfig, RenderableSVG } from '../types';
+import { ProcessorOptimizeConfig, RenderableSVG } from '../types';
 import CallableWorker from '../utils/CallableWorker';
 import workerURL from './worker?worker&url';
 
@@ -24,12 +24,12 @@ export function getDimensions(
 
 export function optimize(
   source: string,
-  pluginConfig: ProcessorPluginConfig,
+  optimizeConfig: ProcessorOptimizeConfig,
   { signal = new AbortController().signal } = {},
 ) {
   return callableWorker.call<RenderableSVG>(
     'optimize',
-    { source, pluginConfig },
+    { source, optimizeConfig },
     { signal },
   );
 }

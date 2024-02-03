@@ -17,7 +17,7 @@ import PinchZoom from './PinchZoom';
 import Config from './Config';
 import Code from './Code';
 import pluginData from 'virtual:svgo-plugin-data';
-import { PluginConfig, RenderableSVG } from './types';
+import { OptimizeConfig, RenderableSVG } from './types';
 import mapObject from './utils/mapObject';
 import useOptimizeSVG from './useOptimizeSVG';
 import useRenderableSVG from './useRenderableSVG';
@@ -33,16 +33,18 @@ const tabNames = ['Image', 'Markup'] as const;
 const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
   // Model
   const inputSVG = useRenderableSVG(input.body);
-  const pluginConfig: PluginConfig = useMemo(
-    () =>
-      mapObject(pluginData, ([name, settings]) => [
+  const optimizeConfig: OptimizeConfig = useMemo(
+    () => ({
+      pretty: { enabled: signal(false) },
+      plugins: mapObject(pluginData, ([name, settings]) => [
         name,
         { enabled: signal(settings.default) },
       ]),
+    }),
     [],
   );
 
-  const optimizedSVG = useOptimizeSVG(inputSVG, pluginConfig);
+  const optimizedSVG = useOptimizeSVG(inputSVG, optimizeConfig);
 
   // View
   const showOriginal = useSignal(false);
@@ -84,7 +86,7 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
           )
         )}
 
-        <Config showOriginal={showOriginal} pluginConfig={pluginConfig} />
+        <Config showOriginal={showOriginal} optimizeConfig={optimizeConfig} />
       </div>
     </div>
   );

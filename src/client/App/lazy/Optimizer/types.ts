@@ -1,13 +1,17 @@
 import { Signal } from '@preact/signals';
 
-export interface PluginConfig {
-  [name: string]: {
-    enabled: Signal<boolean>;
+export interface OptimizeConfig {
+  pretty: { enabled: Signal<boolean> };
+  plugins: {
+    [name: string]: {
+      enabled: Signal<boolean>;
+    };
   };
 }
 
-export interface ProcessorPluginConfig {
-  [name: string]: {};
+export interface ProcessorOptimizeConfig {
+  pretty?: {};
+  plugins: { [name: string]: {} };
 }
 
 export interface RenderableSVG {

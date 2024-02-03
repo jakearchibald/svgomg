@@ -1,6 +1,6 @@
 import { optimize, CustomPlugin, PluginConfig } from 'svgo';
 import exposeWorkerActions from '../../utils/exposeWorkerActions';
-import { ProcessorPluginConfig, RenderableSVG } from '../../types';
+import { ProcessorOptimizeConfig, RenderableSVG } from '../../types';
 
 const createDimensionsExtractor = () => {
   const dimensions = { width: 0, height: 0 };
@@ -34,7 +34,7 @@ const createDimensionsExtractor = () => {
 
 interface ExposeWorkerActionsArgs {
   source: string;
-  pluginConfig: ProcessorPluginConfig;
+  optimizeConfig: ProcessorOptimizeConfig;
 }
 
 exposeWorkerActions({
@@ -42,11 +42,11 @@ exposeWorkerActions({
 
   optimize: ({
     source,
-    pluginConfig,
+    optimizeConfig,
   }: ExposeWorkerActionsArgs): RenderableSVG => {
     const plugins: PluginConfig[] = [];
 
-    for (const [name] of Object.entries(pluginConfig)) {
+    for (const [name] of Object.entries(optimizeConfig.plugins)) {
       plugins.push({
         // Bit of a cheat on the types here.
         name: name as 'cleanupAttrs',
@@ -58,7 +58,10 @@ exposeWorkerActions({
     plugins.push(dimensionsExtractor);
 
     return {
-      source: optimize(source, { plugins }).data,
+      source: optimize(source, {
+        plugins,
+        js2svg: { pretty: Boolean(optimizeConfig.pretty), indent: '\t' },
+      }).data,
       ...dimensions,
     };
   },
