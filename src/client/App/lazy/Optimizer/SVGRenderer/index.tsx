@@ -3,21 +3,19 @@ import {} from 'preact/hooks';
 import { Signal, useComputed } from '@preact/signals';
 
 import * as styles from './styles.module.css';
+import { RenderableSVG } from '../types';
 
 interface Props {
-  svgSource: Signal<string>;
-  width: Signal<number>;
-  height: Signal<number>;
+  svg: Signal<RenderableSVG>;
 }
 
-const SafeIframe: FunctionComponent<Props> = ({ svgSource, width, height }) => {
-  const ceilWidth = useComputed(() => Math.ceil(width.value));
-  const ceilHeight = useComputed(() => Math.ceil(height.value));
-
+const SVGRenderer: FunctionComponent<Props> = ({ svg }) => {
+  const ceilWidth = useComputed(() => Math.ceil(svg.value.width));
+  const ceilHeight = useComputed(() => Math.ceil(svg.value.height));
   const docSource = useComputed(
     () =>
       '<!DOCTYPE html><style>body{margin:0;}svg{display:block}</style>' +
-      svgSource.value,
+      svg.value.source,
   );
 
   return (
@@ -31,4 +29,4 @@ const SafeIframe: FunctionComponent<Props> = ({ svgSource, width, height }) => {
   );
 };
 
-export { SafeIframe as default };
+export { SVGRenderer as default };

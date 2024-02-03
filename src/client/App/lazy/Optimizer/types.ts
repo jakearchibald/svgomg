@@ -9,3 +9,9 @@ export interface PluginConfig {
 export interface ProcessorPluginConfig {
   [name: string]: {};
 }
+
+export interface RenderableSVG {
+  source: string;
+  width: number;
+  height: number;
+}

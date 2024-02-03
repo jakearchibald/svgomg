@@ -1,12 +1,12 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals';
-import { ProcessorPluginConfig, PluginConfig } from './types';
+import { ProcessorPluginConfig, PluginConfig, RenderableSVG } from './types';
 import mapObject from './utils/mapObject';
 import { compress } from './svgoProcessor';
 
 const CACHE_SIZE = 10;
-const compressCache = new Map<string, string>();
+const compressCache = new Map<string, RenderableSVG>();
 
-function addToCache(key: string, value: string) {
+function addToCache(key: string, value: RenderableSVG) {
   compressCache.set(key, value);
 
   if (compressCache.size > CACHE_SIZE) {
@@ -18,15 +18,23 @@ function addToCache(key: string, value: string) {
 }
 
 export default function useCompressSVG(
-  source: Signal<string>,
+  input: Signal<RenderableSVG | null>,
   pluginConfig: PluginConfig,
-): Signal<string> {
-  const compressedSource = useSignal(source.value);
-
-  // Clear the cache when the source changes.
-  source.subscribe(() => compressCache.clear());
+): Signal<RenderableSVG | null> {
+  const compressedSVG = useSignal<RenderableSVG | null>(null);
 
   useSignalEffect(() => {
+    input.valueOf();
+    // Clear the cache when the source changes.
+    return () => compressCache.clear();
+  });
+
+  useSignalEffect(() => {
+    if (!input.value) {
+      compressedSVG.value = null;
+      return;
+    }
+
     const clonablePluginConfig: ProcessorPluginConfig = mapObject(
       pluginConfig,
       ([name, settings]) => settings.enabled.value && [name, {}],
@@ -36,17 +44,18 @@ export default function useCompressSVG(
     const cacheResult = compressCache.get(cacheKey);
 
     if (cacheResult) {
-      compressedSource.value = cacheResult;
+      compressedSVG.value = cacheResult;
       return;
     }
 
     const controller = new AbortController();
     const { signal } = controller;
 
-    compress(source.value, clonablePluginConfig, { signal })
+    compress(input.value.source, clonablePluginConfig, { signal })
       .then((result) => {
+        signal.throwIfAborted();
         addToCache(cacheKey, result);
-        compressedSource.value = result;
+        compressedSVG.value = result;
       })
       .catch((err) => {
         if (err.name === 'AbortError') return;
@@ -56,5 +65,5 @@ export default function useCompressSVG(
     return () => controller.abort();
   });
 
-  return compressedSource;
+  return compressedSVG;
 }

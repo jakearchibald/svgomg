@@ -1,4 +1,4 @@
-import { ProcessorPluginConfig } from '../types';
+import { ProcessorPluginConfig, RenderableSVG } from '../types';
 import CallableWorker from '../utils/CallableWorker';
 import workerURL from './worker?worker&url';
 
@@ -27,7 +27,7 @@ export function compress(
   pluginConfig: ProcessorPluginConfig,
   { signal = new AbortController().signal } = {},
 ) {
-  return callableWorker.call<string>(
+  return callableWorker.call<RenderableSVG>(
     'compress',
     { source, pluginConfig },
     { signal },

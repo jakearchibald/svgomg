@@ -1,6 +1,6 @@
 import { optimize, CustomPlugin, PluginConfig } from 'svgo';
 import exposeWorkerActions from '../../utils/exposeWorkerActions';
-import { ProcessorPluginConfig } from '../../types';
+import { ProcessorPluginConfig, RenderableSVG } from '../../types';
 
 const createDimensionsExtractor = () => {
   const dimensions = { width: 0, height: 0 };
@@ -40,7 +40,10 @@ interface ExposeWorkerActionsArgs {
 exposeWorkerActions({
   ready: () => true,
 
-  compress: ({ source, pluginConfig }: ExposeWorkerActionsArgs): string => {
+  compress: ({
+    source,
+    pluginConfig,
+  }: ExposeWorkerActionsArgs): RenderableSVG => {
     const plugins: PluginConfig[] = [];
 
     for (const [name] of Object.entries(pluginConfig)) {
@@ -51,7 +54,13 @@ exposeWorkerActions({
       });
     }
 
-    return optimize(source, { plugins }).data;
+    const [dimensions, dimensionsExtractor] = createDimensionsExtractor();
+    plugins.push(dimensionsExtractor);
+
+    return {
+      source: optimize(source, { plugins }).data,
+      ...dimensions,
+    };
   },
 
   getDimensions: ({
@@ -59,8 +68,8 @@ exposeWorkerActions({
   }: {
     source: string;
   }): { width: number; height: number } => {
-    const [dimensions, plugin] = createDimensionsExtractor();
-    optimize(source, { plugins: [plugin] });
+    const [dimensions, dimensionsExtractor] = createDimensionsExtractor();
+    optimize(source, { plugins: [dimensionsExtractor] });
     return dimensions;
   },
 });

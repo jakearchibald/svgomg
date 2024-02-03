@@ -1,21 +1,26 @@
 import { FunctionComponent } from 'preact';
 import { useMemo } from 'preact/hooks';
-import { Signal, useSignal, signal, useComputed } from '@preact/signals';
+import {
+  Signal,
+  useSignal,
+  signal,
+  useComputed,
+  ReadonlySignal,
+} from '@preact/signals';
 import { Input } from '../..';
 
 import * as styles from './styles.module.css';
 import Toolbar from './Toolbar';
 import { useViewTransition } from '../../../hooks/useViewTransition';
-import SafeIframe from './SafeIframe';
+import SVGRenderer from './SVGRenderer';
 import PinchZoom from './PinchZoom';
 import Config from './Config';
 import Code from './Code';
 import pluginData from 'virtual:svgo-plugin-data';
-import { PluginConfig } from './types';
+import { PluginConfig, RenderableSVG } from './types';
 import mapObject from './utils/mapObject';
 import useCompressSVG from './useCompressSVG';
-import useSVGDimensions from './useSVGDimensions';
-import useToSignal from '../../../hooks/useToSignal';
+import useRenderableSVG from './useRenderableSVG';
 
 interface Props {
   input: Input;
@@ -27,8 +32,7 @@ const tabNames = ['Image', 'Markup'] as const;
 
 const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
   // Model
-  const inputSource = useToSignal(input.body);
-  const showOriginal = useSignal(false);
+  const inputSVG = useRenderableSVG(input.body);
   const pluginConfig: PluginConfig = useMemo(
     () =>
       mapObject(pluginData, ([name, settings]) => [
@@ -38,15 +42,19 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
     [],
   );
 
-  const compressedSource = useCompressSVG(inputSource, pluginConfig);
-  const activeSource = useComputed(() =>
-    showOriginal.value ? inputSource.value : compressedSource.value,
-  );
-  const [activeWidth, activeHeight] = useSVGDimensions(activeSource);
+  const compressedSVG = useCompressSVG(inputSVG, pluginConfig);
 
   // View
+  const showOriginal = useSignal(false);
   const activeTab = useSignal<(typeof tabNames)[number]>(tabNames[0]);
   const startViewTransition = useViewTransition([activeTab.value]);
+  const activeSVG = useComputed(() =>
+    showOriginal.value || !compressedSVG.value
+      ? inputSVG.value
+      : compressedSVG.value,
+  );
+  const activeSource = useComputed(() => activeSVG.value?.source ?? '');
+  const hasActiveSVG = useComputed(() => Boolean(activeSVG.value));
 
   function onTabChange(newTab: (typeof tabNames)[number]) {
     startViewTransition({
@@ -69,19 +77,11 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
         {activeTab.value === 'Markup' ? (
           <Code source={activeSource} />
         ) : (
-          <>
-            {activeWidth.value && activeHeight.value ? (
-              <PinchZoom>
-                <SafeIframe
-                  svgSource={activeSource}
-                  width={activeWidth}
-                  height={activeHeight}
-                />
-              </PinchZoom>
-            ) : (
-              <div />
-            )}
-          </>
+          hasActiveSVG.value && (
+            <PinchZoom>
+              <SVGRenderer svg={activeSVG as ReadonlySignal<RenderableSVG>} />
+            </PinchZoom>
+          )
         )}
 
         <Config showOriginal={showOriginal} pluginConfig={pluginConfig} />
