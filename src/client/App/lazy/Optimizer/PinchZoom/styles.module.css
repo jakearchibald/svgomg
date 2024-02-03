@@ -4,10 +4,20 @@
   contain: layout;
 }
 
+.origin {
+  position: absolute;
+  width: 0;
+  height: 0;
+  top: 50%;
+  left: 50%;
+}
+
 .mover {
+  position: absolute;
   pointer-events: none;
   transform-origin: 0 0;
-  position: absolute;
-  top: 0;
-  left: 0;
+}
+
+.content {
+  transform: translate(-50%, -50%);
 }

@@ -32,6 +32,10 @@ function getMidpoint(a: Point, b?: Point): Point {
   };
 }
 
+function relativeRect(from: DOMRect, to: DOMRect): DOMRect {
+  return new DOMRect(to.x - from.x, to.y - from.y, to.width, to.height);
+}
+
 interface ApplyChangeOpts {
   panX?: number;
   panY?: number;
@@ -46,8 +50,9 @@ interface ApplyChangeOpts {
 interface Props {}
 
 const PinchZoom: FunctionComponent<Props> = ({ children }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const moverRef = useRef<HTMLDivElement>(null);
+  const boundsRef = useRef<HTMLDivElement>(null);
+  const originRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const transform = useSignal<Readonly<MoverTransform>>({
     x: 0,
     y: 0,
@@ -59,78 +64,6 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
       `transform: translate(${transform.value.x}px, ${transform.value.y}px) scale(${transform.value.scale});`,
   );
 
-  // Initial centering
-  useLayoutEffect(() => {
-    const container = containerRef.current!;
-    const mover = moverRef.current!;
-    const containerRect = container.getBoundingClientRect();
-    const moverRect = mover.getBoundingClientRect();
-
-    transform.value = {
-      x: (containerRect.width - moverRect.width) / 2,
-      y: (containerRect.height - moverRect.height) / 2,
-      scale: transform.value.scale,
-    };
-  }, []);
-
-  // Handle container resizing
-  useLayoutEffect(() => {
-    let previousRect: ResizeObserverSize | undefined;
-
-    const observer = new ResizeObserver(([entry]) => {
-      const currentRect = entry.borderBoxSize[0];
-
-      if (previousRect) {
-        const xPosDiff = (currentRect.inlineSize - previousRect.inlineSize) / 2;
-        const yPosDiff = (currentRect.blockSize - previousRect.blockSize) / 2;
-
-        transform.value = {
-          x: transform.value.x + xPosDiff,
-          y: transform.value.y + yPosDiff,
-          scale: transform.value.scale,
-        };
-      }
-
-      previousRect = currentRect;
-    });
-
-    observer.observe(containerRef.current!);
-
-    return () => observer.disconnect();
-  }, []);
-
-  // Handle inner resizing
-  useLayoutEffect(() => {
-    let previousRect: ResizeObserverSize | undefined;
-
-    const observer = new ResizeObserver(([entry]) => {
-      const currentRect = entry.borderBoxSize[0];
-
-      if (previousRect) {
-        const xPosDiff =
-          (currentRect.inlineSize * transform.value.scale -
-            previousRect.inlineSize * transform.value.scale) /
-          2;
-        const yPosDiff =
-          (currentRect.blockSize * transform.value.scale -
-            previousRect.blockSize * transform.value.scale) /
-          2;
-
-        transform.value = {
-          x: transform.value.x - xPosDiff,
-          y: transform.value.y - yPosDiff,
-          scale: transform.value.scale,
-        };
-      }
-
-      previousRect = currentRect;
-    });
-
-    observer.observe(moverRef.current!);
-
-    return () => observer.disconnect();
-  }, []);
-
   // Pointer and scroll handling
   useEffect(() => {
     const applyChange = ({
@@ -140,13 +73,23 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
       originY = 0,
       scaleDiff = 1,
     }: ApplyChangeOpts = {}) => {
-      const currentRect = moverRef.current!.getBoundingClientRect();
-      const containerRect = containerRef.current!.getBoundingClientRect();
+      const originRect = originRef.current!.getBoundingClientRect();
+      const currentFromOrigin = relativeRect(
+        originRect,
+        contentRef.current!.getBoundingClientRect(),
+      );
+      const boundsFromOrigin = relativeRect(
+        originRect,
+        boundsRef.current!.getBoundingClientRect(),
+      );
 
       // Ensure we never go smaller than MIN_SIZExMIN_SIZE
       const minScaleDiff =
         1 /
-        Math.max(currentRect.width / MIN_SIZE, currentRect.height / MIN_SIZE);
+        Math.max(
+          currentFromOrigin.width / MIN_SIZE,
+          currentFromOrigin.height / MIN_SIZE,
+        );
 
       scaleDiff = Math.max(minScaleDiff, scaleDiff);
 
@@ -159,37 +102,37 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
         .translateSelf(-originX, -originY);
 
       const tl = new DOMPoint(
-        currentRect.left,
-        currentRect.top,
+        currentFromOrigin.left,
+        currentFromOrigin.top,
       ).matrixTransform(applyMatrix);
 
       const br = new DOMPoint(
-        currentRect.right,
-        currentRect.bottom,
+        currentFromOrigin.right,
+        currentFromOrigin.bottom,
       ).matrixTransform(applyMatrix);
 
       // Adjust for bounds
-      if (br.x < containerRect.left) {
+      if (br.x < boundsFromOrigin.left) {
         applyMatrix = new DOMMatrix()
-          .translateSelf(containerRect.left - br.x, 0)
+          .translateSelf(boundsFromOrigin.left - br.x, 0)
           .multiplySelf(applyMatrix);
       }
 
-      if (br.y < containerRect.top) {
+      if (br.y < boundsFromOrigin.top) {
         applyMatrix = new DOMMatrix()
-          .translateSelf(0, containerRect.top - br.y)
+          .translateSelf(0, boundsFromOrigin.top - br.y)
           .multiplySelf(applyMatrix);
       }
 
-      if (tl.x > containerRect.right) {
+      if (tl.x > boundsFromOrigin.right) {
         applyMatrix = new DOMMatrix()
-          .translateSelf(containerRect.right - tl.x, 0)
+          .translateSelf(boundsFromOrigin.right - tl.x, 0)
           .multiplySelf(applyMatrix);
       }
 
-      if (tl.y > containerRect.bottom) {
+      if (tl.y > boundsFromOrigin.bottom) {
         applyMatrix = new DOMMatrix()
-          .translateSelf(0, containerRect.bottom - tl.y)
+          .translateSelf(0, boundsFromOrigin.bottom - tl.y)
           .multiplySelf(applyMatrix);
       }
 
@@ -206,7 +149,7 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
       };
     };
 
-    const tracker = new PointerTracker(containerRef.current!, {
+    const tracker = new PointerTracker(boundsRef.current!, {
       start(event) {
         // We only want to track 2 pointers at most
         if (tracker.currentPointers.length === 2) return false;
@@ -215,7 +158,7 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
       },
       move(previousPointers) {
         const currentPointers = tracker.currentPointers;
-        const containerRect = containerRef.current!.getBoundingClientRect();
+        const centerRect = originRef.current!.getBoundingClientRect();
 
         // For calculating panning movement
         const prevMidpoint = getMidpoint(
@@ -225,8 +168,8 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
         const newMidpoint = getMidpoint(currentPointers[0], currentPointers[1]);
 
         // Midpoint
-        const originX = prevMidpoint.clientX - containerRect.left;
-        const originY = prevMidpoint.clientY - containerRect.top;
+        const originX = prevMidpoint.clientX - centerRect.left;
+        const originY = prevMidpoint.clientY - centerRect.top;
 
         // Calculate the desired change in scale
         const prevDistance = getDistance(
@@ -249,12 +192,12 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
     const abortController = new AbortController();
     const { signal } = abortController;
 
-    containerRef.current!.addEventListener(
+    boundsRef.current!.addEventListener(
       'wheel',
       (event) => {
         event.preventDefault();
 
-        const containerRect = containerRef.current!.getBoundingClientRect();
+        const centerRect = originRef.current!.getBoundingClientRect();
         let { deltaY } = event;
         const { ctrlKey, deltaMode } = event;
 
@@ -270,8 +213,8 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
 
         applyChange({
           scaleDiff,
-          originX: event.clientX - containerRect.left,
-          originY: event.clientY - containerRect.top,
+          originX: event.clientX - centerRect.left,
+          originY: event.clientY - centerRect.top,
         });
       },
       { signal },
@@ -284,9 +227,13 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
   }, []);
 
   return (
-    <div ref={containerRef} class={styles.pinchZoom}>
-      <div ref={moverRef} style={moverStyle} class={styles.mover}>
-        {children}
+    <div ref={boundsRef} class={styles.pinchZoom}>
+      <div ref={originRef} class={styles.origin}>
+        <div style={moverStyle} class={styles.mover}>
+          <div ref={contentRef} class={styles.content}>
+            {children}
+          </div>
+        </div>
       </div>
     </div>
   );
