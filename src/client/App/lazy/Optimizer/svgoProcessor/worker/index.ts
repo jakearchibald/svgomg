@@ -1,5 +1,6 @@
-import { optimize, CustomPlugin } from 'svgo';
+import { optimize, CustomPlugin, PluginConfig } from 'svgo';
 import exposeWorkerActions from '../../utils/exposeWorkerActions';
+import { ClonablePluginConfig } from '../../types';
 
 const createDimensionsExtractor = () => {
   const dimensions = { width: 0, height: 0 };
@@ -8,7 +9,6 @@ const createDimensionsExtractor = () => {
     fn() {
       return {
         element: {
-          // Node, parentNode
           enter({ name, attributes }, { type }) {
             if (name === 'svg' && type === 'root') {
               if (
@@ -32,11 +32,27 @@ const createDimensionsExtractor = () => {
   return [dimensions, plugin] as const;
 };
 
+interface ExposeWorkerActionsArgs {
+  source: string;
+  pluginConfig: ClonablePluginConfig;
+}
+
 exposeWorkerActions({
   ready: () => true,
 
-  compress: ({ source }: { source: string }): string => {
-    return optimize(source).data;
+  compress: ({ source, pluginConfig }: ExposeWorkerActionsArgs): string => {
+    const plugins: PluginConfig[] = [];
+
+    for (const [name, settings] of Object.entries(pluginConfig)) {
+      if (!settings.enabled) continue;
+      plugins.push({
+        // Bit of a cheat on the types here.
+        name: name as 'cleanupAttrs',
+        params: {},
+      });
+    }
+
+    return optimize(source, { plugins }).data;
   },
 
   getDimensions: ({

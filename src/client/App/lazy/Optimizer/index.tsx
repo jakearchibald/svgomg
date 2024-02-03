@@ -1,11 +1,6 @@
 import { FunctionComponent } from 'preact';
-import { useEffect } from 'preact/hooks';
-import {
-  Signal,
-  useComputed,
-  useSignal,
-  useSignalEffect,
-} from '@preact/signals';
+import { useEffect, useMemo } from 'preact/hooks';
+import { Signal, useSignal, useSignalEffect, signal } from '@preact/signals';
 import { Input } from '../..';
 
 import * as styles from './styles.module.css';
@@ -16,6 +11,9 @@ import { getDimensions, compress } from './svgoProcessor';
 import PinchZoom from './PinchZoom';
 import Config from './Config';
 import Code from './Code';
+import pluginData from 'virtual:svgo-plugin-data';
+import { ClonablePluginConfig, PluginConfig } from './types';
+import mapObject from './utils/mapObject';
 
 interface Props {
   input: Input;
@@ -31,6 +29,14 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
   const compressedSource = useSignal(input.body);
   const activeWidth = useSignal(0);
   const activeHeight = useSignal(0);
+  const pluginConfig: PluginConfig = useMemo(
+    () =>
+      mapObject(pluginData, ([name, settings]) => [
+        name,
+        { enabled: signal(settings.default) },
+      ]),
+    [],
+  );
 
   // View
   const activeTab = useSignal<(typeof tabNames)[number]>(tabNames[0]);
@@ -67,8 +73,12 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
   useSignalEffect(() => {
     const controller = new AbortController();
     const { signal } = controller;
+    const clonablePluginConfig: ClonablePluginConfig = mapObject(
+      pluginConfig,
+      ([name, settings]) => [name, { enabled: settings.enabled.value }],
+    );
 
-    compress(activeSource.value, { signal })
+    compress(activeSource.value, clonablePluginConfig, { signal })
       .then((result) => {
         compressedSource.value = result;
       })
@@ -107,7 +117,7 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
           </>
         )}
 
-        <Config />
+        <Config pluginConfig={pluginConfig} />
       </div>
     </div>
   );

@@ -13,3 +13,15 @@ interface Document {
 interface CSSStyleDeclaration {
   viewTransitionName: string;
 }
+
+interface SVGOPluginData {
+  [name: string]: {
+    title: string;
+    default: boolean;
+  };
+}
+
+declare module 'virtual:svgo-plugin-data' {
+  const value: SVGOPluginData;
+  export default value;
+}

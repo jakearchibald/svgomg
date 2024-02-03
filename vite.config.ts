@@ -1,6 +1,7 @@
 import { createRequire } from 'module';
 import { defineConfig } from 'vite';
 import preact from '@preact/preset-vite';
+import svgoPluginDataPlugin from './lib/svgoPluginDataPlugin.js';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => ({
@@ -11,6 +12,7 @@ export default defineConfig(({ command }) => ({
         cwd: createRequire(import.meta.url).resolve('@preact/preset-vite'),
       },
     }),
+    svgoPluginDataPlugin(),
   ],
   base: '/svgomg/',
   css: {
