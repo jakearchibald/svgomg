@@ -2,7 +2,7 @@ import fontURL from '../client/fonts/code-latin.woff2';
 import iconURL from '../client/imgs/icon.png';
 
 const title = `SVGOMG - SVGO's Missing GUI`;
-const description = 'Easy & visual compression of SVG images.';
+const description = 'Easy & visual optimization of SVG images.';
 const origin = import.meta.env.PROD ? 'https://jakearchibald.github.io' : '';
 
 export function AppHead() {

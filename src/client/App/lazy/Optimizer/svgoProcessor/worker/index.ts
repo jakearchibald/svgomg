@@ -40,7 +40,7 @@ interface ExposeWorkerActionsArgs {
 exposeWorkerActions({
   ready: () => true,
 
-  compress: ({
+  optimize: ({
     source,
     pluginConfig,
   }: ExposeWorkerActionsArgs): RenderableSVG => {

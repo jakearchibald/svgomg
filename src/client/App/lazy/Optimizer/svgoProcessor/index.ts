@@ -22,13 +22,13 @@ export function getDimensions(
   );
 }
 
-export function compress(
+export function optimize(
   source: string,
   pluginConfig: ProcessorPluginConfig,
   { signal = new AbortController().signal } = {},
 ) {
   return callableWorker.call<RenderableSVG>(
-    'compress',
+    'optimize',
     { source, pluginConfig },
     { signal },
   );

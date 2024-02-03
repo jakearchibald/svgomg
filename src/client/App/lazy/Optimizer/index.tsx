@@ -19,7 +19,7 @@ import Code from './Code';
 import pluginData from 'virtual:svgo-plugin-data';
 import { PluginConfig, RenderableSVG } from './types';
 import mapObject from './utils/mapObject';
-import useCompressSVG from './useCompressSVG';
+import useOptimizeSVG from './useOptimizeSVG';
 import useRenderableSVG from './useRenderableSVG';
 
 interface Props {
@@ -42,16 +42,16 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
     [],
   );
 
-  const compressedSVG = useCompressSVG(inputSVG, pluginConfig);
+  const optimizedSVG = useOptimizeSVG(inputSVG, pluginConfig);
 
   // View
   const showOriginal = useSignal(false);
   const activeTab = useSignal<(typeof tabNames)[number]>(tabNames[0]);
   const startViewTransition = useViewTransition([activeTab.value]);
   const activeSVG = useComputed(() =>
-    showOriginal.value || !compressedSVG.value
+    showOriginal.value || !optimizedSVG.value
       ? inputSVG.value
-      : compressedSVG.value,
+      : optimizedSVG.value,
   );
   const activeSource = useComputed(() => activeSVG.value?.source ?? '');
   const hasActiveSVG = useComputed(() => Boolean(activeSVG.value));

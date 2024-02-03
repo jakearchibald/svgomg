@@ -1,4 +1,4 @@
-import { Signal, useComputed, useSignal } from '@preact/signals';
+import { Signal, useSignal } from '@preact/signals';
 import { getDimensions } from './svgoProcessor';
 import useSignalLayoutEffect from '../../../hooks/useSignalLayoutEffect';
 import { RenderableSVG } from './types';

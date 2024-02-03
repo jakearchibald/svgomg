@@ -1,7 +1,7 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals';
 import { ProcessorPluginConfig, PluginConfig, RenderableSVG } from './types';
 import mapObject from './utils/mapObject';
-import { compress } from './svgoProcessor';
+import { optimize } from './svgoProcessor';
 
 const CACHE_SIZE = 10;
 const compressCache = new Map<string, RenderableSVG>();
@@ -17,11 +17,11 @@ function addToCache(key: string, value: RenderableSVG) {
   }
 }
 
-export default function useCompressSVG(
+export default function useOptimizeSVG(
   input: Signal<RenderableSVG | null>,
   pluginConfig: PluginConfig,
 ): Signal<RenderableSVG | null> {
-  const compressedSVG = useSignal<RenderableSVG | null>(null);
+  const optimizedSVG = useSignal<RenderableSVG | null>(null);
 
   useSignalEffect(() => {
     input.valueOf();
@@ -31,7 +31,7 @@ export default function useCompressSVG(
 
   useSignalEffect(() => {
     if (!input.value) {
-      compressedSVG.value = null;
+      optimizedSVG.value = null;
       return;
     }
 
@@ -44,18 +44,18 @@ export default function useCompressSVG(
     const cacheResult = compressCache.get(cacheKey);
 
     if (cacheResult) {
-      compressedSVG.value = cacheResult;
+      optimizedSVG.value = cacheResult;
       return;
     }
 
     const controller = new AbortController();
     const { signal } = controller;
 
-    compress(input.value.source, clonablePluginConfig, { signal })
+    optimize(input.value.source, clonablePluginConfig, { signal })
       .then((result) => {
         signal.throwIfAborted();
         addToCache(cacheKey, result);
-        compressedSVG.value = result;
+        optimizedSVG.value = result;
       })
       .catch((err) => {
         if (err.name === 'AbortError') return;
@@ -65,5 +65,5 @@ export default function useCompressSVG(
     return () => controller.abort();
   });
 
-  return compressedSVG;
+  return optimizedSVG;
 }
