@@ -73,7 +73,7 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
     };
   }, []);
 
-  // Handle resizing
+  // Handle container resizing
   useLayoutEffect(() => {
     let previousRect: ResizeObserverSize | undefined;
 
@@ -95,6 +95,38 @@ const PinchZoom: FunctionComponent<Props> = ({ children }) => {
     });
 
     observer.observe(containerRef.current!);
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Handle inner resizing
+  useLayoutEffect(() => {
+    let previousRect: ResizeObserverSize | undefined;
+
+    const observer = new ResizeObserver(([entry]) => {
+      const currentRect = entry.borderBoxSize[0];
+
+      if (previousRect) {
+        const xPosDiff =
+          (currentRect.inlineSize * transform.value.scale -
+            previousRect.inlineSize * transform.value.scale) /
+          2;
+        const yPosDiff =
+          (currentRect.blockSize * transform.value.scale -
+            previousRect.blockSize * transform.value.scale) /
+          2;
+
+        transform.value = {
+          x: transform.value.x - xPosDiff,
+          y: transform.value.y - yPosDiff,
+          scale: transform.value.scale,
+        };
+      }
+
+      previousRect = currentRect;
+    });
+
+    observer.observe(moverRef.current!);
 
     return () => observer.disconnect();
   }, []);
