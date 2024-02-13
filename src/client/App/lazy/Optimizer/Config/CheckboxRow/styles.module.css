@@ -1,0 +1,14 @@
+.checkboxRow {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  height: 56px;
+  gap: 16px;
+  padding: 0 16px;
+}
+
+.label {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: max-content 1fr;
+  align-items: center;
+}
