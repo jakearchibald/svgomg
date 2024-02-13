@@ -1,8 +1,9 @@
 .config {
+  display: grid;
   background: white;
   position: relative;
   grid-area: config;
-  overflow: auto;
+  min-height: 0;
 
   @media (min-width: 900px) {
     box-shadow: 0 4px 11px rgba(0,0,0,.3);
@@ -32,4 +33,8 @@
       display: none;
     }
   }
+}
+
+.configScroller {
+  overflow: auto;
 }
