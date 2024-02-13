@@ -1,9 +1,6 @@
 .toolbar {
   background-color: #3f51b5;
   color: #fff;
-  display: flex;
-  align-items: center;
-  height: 48px;
   position: relative;
 
   &::after {
@@ -21,24 +18,32 @@
   }
 }
 
+.toolbarContent {
+  height: 48px;
+  display: grid;
+  grid-auto-columns: max-content;
+  grid-auto-flow: column;
+  align-items: center;
+}
+
 :global(.tabChange) {
-  & .toolbar {
-    view-transition-name: toolbar;
+  & .toolbarContent {
+    view-transition-name: toolbarContent;
   }
 
-  &::view-transition-group(toolbar) {
+  &::view-transition-group(toolbarContent) {
     animation: none;
   }
 
-  &::view-transition-image-pair(toolbar) {
+  &::view-transition-image-pair(toolbarContent) {
     isolation: auto;
   }
 
-  &::view-transition-old(toolbar) {
+  &::view-transition-old(toolbarContent) {
     display: none;
   }
 
-  &::view-transition-new(toolbar) {
+  &::view-transition-new(toolbarContent) {
     animation: none;
   }
 }
@@ -46,8 +51,7 @@
 .menuBtn {
   all: unset;
   cursor: pointer;
-  height: 100%;
-  aspect-ratio: 1/1;
+  width: 48px;
   display: grid;
   justify-content: center;
   align-items: center;

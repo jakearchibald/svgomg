@@ -18,34 +18,36 @@ const Toolbar = <T extends readonly string[]>({
 }: Props<T>) => {
   return (
     <div class={styles.toolbar}>
-      <button
-        class={styles.menuBtn}
-        type="button"
-        title="Menu"
-        dangerouslySetInnerHTML={{ __html: menuSVG }}
-        onClick={() => onMenuClick?.()}
-      />
-      <form class={styles.tabs}>
-        {tabNames.map((tabName) => (
-          <Rippler>
-            <label
-              class={[styles.tab, tabName === activeTab && styles.selected]
-                .filter(Boolean)
-                .join(' ')}
-            >
-              <input
-                class={styles.tab}
-                type="radio"
-                name="tab"
-                value={tabName}
-                checked={tabName === activeTab}
-                onInput={() => onTabChange?.(tabName)}
-              />
-              <span class={styles.tabText}>{tabName}</span>
-            </label>
-          </Rippler>
-        ))}
-      </form>
+      <div class={styles.toolbarContent}>
+        <button
+          class={styles.menuBtn}
+          type="button"
+          title="Menu"
+          dangerouslySetInnerHTML={{ __html: menuSVG }}
+          onClick={() => onMenuClick?.()}
+        />
+        <form class={styles.tabs}>
+          {tabNames.map((tabName) => (
+            <Rippler>
+              <label
+                class={[styles.tab, tabName === activeTab && styles.selected]
+                  .filter(Boolean)
+                  .join(' ')}
+              >
+                <input
+                  class={styles.tab}
+                  type="radio"
+                  name="tab"
+                  value={tabName}
+                  checked={tabName === activeTab}
+                  onInput={() => onTabChange?.(tabName)}
+                />
+                <span class={styles.tabText}>{tabName}</span>
+              </label>
+            </Rippler>
+          ))}
+        </form>
+      </div>
     </div>
   );
 };
