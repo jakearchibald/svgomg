@@ -1,0 +1,63 @@
+.checkbox {
+  position: relative;
+  width: 18px;
+  height: 18px;
+
+  svg {
+    position: absolute;
+    inset: 0;
+  }
+
+  path {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 4px;
+    stroke-dasharray: 100% 100%;
+    stroke-dashoffset: 100%;
+  }
+
+  input {
+    pointer-events: none;
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  &:has(input:checked) {
+    .box {
+      border: none;
+      background: #3f51b5;
+    }
+
+    path {
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 0.3s ease;
+    }
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: 100%;
+    background: #3f51b5;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  &:hover,
+  &:has(input:focus-visible) {
+    &::before {
+      opacity: 0.08;
+    }
+  }
+}
+
+.box {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  border-radius: 2px;
+  border: 2px solid #49454F;
+}

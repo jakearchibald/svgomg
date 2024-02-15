@@ -4,6 +4,7 @@ import { Signal } from '@preact/signals';
 
 import * as styles from './styles.module.css';
 import Rippler from '../../../../Rippler';
+import Checkbox from '../Checkbox';
 
 interface Props {
   text: string;
@@ -15,12 +16,7 @@ const CheckboxRow: FunctionComponent<Props> = ({ text, checked }) => {
     <Rippler>
       <div class={styles.checkboxRow}>
         <label class={styles.label}>
-          <input
-            type="checkbox"
-            checked={checked}
-            onChange={(event) => (checked.value = event.currentTarget.checked)}
-          />{' '}
-          {text}
+          <Checkbox checked={checked} /> {text}
         </label>
       </div>
     </Rippler>
