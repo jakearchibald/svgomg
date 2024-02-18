@@ -44,12 +44,17 @@ addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
       // remove caches beginning "svgomg-" that aren't in expectedCaches
-      for (const cacheName of await caches.keys()) {
-        if (!cacheName.startsWith(cachePrefix)) continue;
-        // TODO: switch to Promise.all
-        // eslint-disable-next-line no-await-in-loop
-        if (!expectedCaches.has(cacheName)) await caches.delete(cacheName);
-      }
+      const cacheNames = await caches.keys();
+
+      await Promise.all(
+        cacheNames
+          .filter(
+            (cacheName) =>
+              cacheName.startsWith(cachePrefix) &&
+              !expectedCaches.has(cacheName),
+          )
+          .map((cacheName) => caches.delete(cacheName)),
+      );
 
       await storage.set('active-version', version);
     })(),
