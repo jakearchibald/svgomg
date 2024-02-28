@@ -6,6 +6,7 @@ import {
   signal,
   useComputed,
   ReadonlySignal,
+  useSignalEffect,
 } from '@preact/signals';
 import { Input } from '../..';
 
@@ -21,6 +22,7 @@ import { OptimizeConfig, RenderableSVG } from './types';
 import mapObject from './utils/mapObject';
 import useOptimizeSVG from './useOptimizeSVG';
 import useRenderableSVG from './useRenderableSVG';
+import { compress } from './brotliProcessor';
 
 interface Props {
   input: Input;
@@ -45,6 +47,19 @@ const Optimizer: FunctionComponent<Props> = ({ input, onMenuClick, inert }) => {
   );
 
   const optimizedSVG = useOptimizeSVG(inputSVG, optimizeConfig);
+
+  useSignalEffect(() => {
+    if (optimizedSVG.value === null) return;
+    const { source } = optimizedSVG.value;
+    compress(source).then((compressedSize) => {
+      console.log(
+        'Uncompressed size',
+        source.length,
+        'Compressed size:',
+        compressedSize,
+      );
+    });
+  });
 
   // View
   const showOriginal = useSignal(false);
