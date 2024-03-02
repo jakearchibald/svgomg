@@ -25,7 +25,6 @@ jobs:
       security-events: write
 
     steps:
-
       - name: Clone repository
         uses: actions/checkout@v4
         with:
