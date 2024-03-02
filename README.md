@@ -19,3 +19,17 @@ Run dev server:
 ```sh
 npm run dev
 ```
+
+## Docker
+
+build the Docker image:
+
+```bash
+docker build -t jakearchibald/svgomg .
+```
+
+Run the Docker container on the specified port (eg: `8080`):
+
+```bash
+docker run --rm -it -p 8080:80 jakearchibald/svgomg
+```
