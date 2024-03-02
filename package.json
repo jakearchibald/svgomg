@@ -48,7 +48,9 @@
   },
   "prettier": {
     "bracketSpacing": true,
-    "singleQuote": true
+    "printWidth": 80,
+    "singleQuote": true,
+    "trailingComma": "all"
   },
   "xo": {
     "space": true,
@@ -65,11 +67,9 @@
       "spaced-comment": "off",
       "unicorn/explicit-length-check": "off",
       "unicorn/no-unused-properties": "error",
-      "unicorn/numeric-separators-style": "off",
       "unicorn/prefer-add-event-listener": "off",
       "unicorn/prefer-module": "off",
-      "unicorn/prevent-abbreviations": "off",
-      "unicorn/require-post-message-target-origin": "off"
+      "unicorn/prevent-abbreviations": "off"
     }
   }
 }
