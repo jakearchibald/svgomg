@@ -64,13 +64,17 @@
   color: #767676;
 }
 
-.setting-reset-row {
+.settings-actions {
+  display: flex;
+  justify-content: space-around;
   padding: 12px 16px 16px;
   text-align: right;
 }
 
+.setting-export,
 .setting-reset {
   text-transform: uppercase;
+  text-decoration: none;
   color: #fff;
   background-color: #3f51b5;
   padding: 9px 14px;
