@@ -41,7 +41,7 @@
     "start": "sirv build --port 8080 --dev --no-clear",
     "dev": "gulp dev",
     "lint": "npm run lint:js && npm run lint:css",
-    "lint:css": "stylelint src/css/ --rd --risd",
+    "lint:css": "stylelint src/css/",
     "lint:js": "xo",
     "fix": "xo --fix",
     "test": "npm run lint && npm run build"
