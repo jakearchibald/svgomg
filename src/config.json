@@ -56,7 +56,7 @@
       "enabledByDefault": false
     },
     {
-      "id": "cleanupIDs",
+      "id": "cleanupIds",
       "name": "Clean up IDs",
       "enabledByDefault": true
     },
