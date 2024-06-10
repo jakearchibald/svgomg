@@ -1,4 +1,4 @@
-import { optimize } from 'svgo/dist/svgo.browser.js';
+import { optimize } from 'svgo/browser';
 
 const createDimensionsExtractor = () => {
   const dimensions = {};

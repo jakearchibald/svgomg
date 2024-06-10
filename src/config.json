@@ -193,7 +193,7 @@
     {
       "id": "removeTitle",
       "name": "Remove <title>",
-      "enabledByDefault": true
+      "enabledByDefault": false
     },
     {
       "id": "removeDesc",
