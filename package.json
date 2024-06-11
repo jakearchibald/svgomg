@@ -18,7 +18,7 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^5.0.1",
     "clean-css": "^5.3.1",
-    "gulp": "^4.0.2",
+    "gulp": "^5.0.0",
     "gulp-htmlmin": "^5.0.1",
     "gulp-if": "^3.0.0",
     "gulp-nunjucks": "^5.1.0",
