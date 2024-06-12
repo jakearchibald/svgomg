@@ -30,6 +30,7 @@ export default class Settings {
       // enhance ranges
       for (const range of ranges) {
         this._sliderMap.set(range, new MaterialSlider(range));
+        range.addEventListener('wheel', (event) => this._onWheel(event));
       }
 
       this.container.addEventListener('input', (event) =>
@@ -46,6 +47,33 @@ export default class Settings {
         event.preventDefault();
       });
     });
+  }
+
+  _onWheel(event) {
+    if (!event.target) return;
+    const { type, name, min, max } = event.target;
+
+    clearTimeout(this._throttleTimeout);
+
+    // throttle range
+    if (type === 'range') {
+      this._throttleTimeout = setTimeout(
+        () => this.emitter.emit('change'),
+        150
+      );
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      const settings = this.getSettings();
+      const oldValue = Number(settings[name]);
+      if (isNaN(oldValue)) return;
+      const value = Math.sign(event.deltaY) * -1 + oldValue;
+      const parsedValue = Math.min(Math.max(value, min), max);
+      if (isNaN(parsedValue)) return;
+
+      this._sliderMap.get(event.target).value = parsedValue;
+    }
   }
 
   _onChange(event) {
