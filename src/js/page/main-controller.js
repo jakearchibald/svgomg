@@ -30,8 +30,8 @@ export default class MainController {
     this._settingsUi = new Settings();
     this._mainMenuUi = new MainMenu();
     this._toastsUi = new Toasts();
+    this._bgFillUi = new BgFillButton();
 
-    const bgFillUi = new BgFillButton();
     const dropUi = new FileDrop();
     const preloaderUi = new Preloader();
     const changelogUi = new Changelog(self.version);
@@ -46,6 +46,9 @@ export default class MainController {
     );
     this._mainMenuUi.emitter.on('svgDataLoad', (event) =>
       this._onInputChange(event),
+    );
+    this._bgFillUi.emitter.on('change', (isBgDark) =>
+      this._onBgFillStateChange(isBgDark),
     );
     dropUi.emitter.on('svgDataLoad', (event) => this._onInputChange(event));
     this._mainMenuUi.emitter.on('error', ({ error }) =>
@@ -102,7 +105,7 @@ export default class MainController {
       );
 
       minorActionContainer.append(
-        bgFillUi.container,
+        this._bgFillUi.container,
         this._copyButtonUi.container,
       );
       actionContainer.append(this._downloadButtonUi.container);
@@ -209,6 +212,12 @@ export default class MainController {
     this._compressSvg(settings);
   }
 
+  _onBgFillStateChange(isBgDark) {
+    const settings = this._settingsUi.getSettings();
+    settings.bgFillState = isBgDark;
+    this._saveSettings(settings);
+  }
+
   async _onSettingsReset(oldSettings) {
     const toast = this._toastsUi.show('Settings reset', {
       buttons: ['undo', 'dismiss'],
@@ -251,7 +260,10 @@ export default class MainController {
 
   async _loadSettings() {
     const settings = await storage.get('settings');
-    if (settings) this._settingsUi.setSettings(settings);
+    if (settings) {
+      this._settingsUi.setSettings(settings);
+      this._bgFillUi.setBgFillState(settings.bgFillState || false);
+    }
   }
 
   _saveSettings(settings) {
