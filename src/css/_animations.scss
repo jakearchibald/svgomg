@@ -1,0 +1,58 @@
+@keyframes container-rotate {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fill-unfill-rotate {
+  12.5% { transform: rotate(135deg); } // 0.5 * ARCSIZE
+  25%   { transform: rotate(270deg); } // 1   * ARCSIZE
+  37.5% { transform: rotate(405deg); } // 1.5 * ARCSIZE
+  50%   { transform: rotate(540deg); } // 2   * ARCSIZE
+  62.5% { transform: rotate(675deg); } // 2.5 * ARCSIZE
+  75%   { transform: rotate(810deg); } // 3   * ARCSIZE
+  87.5% { transform: rotate(945deg); } // 3.5 * ARCSIZE
+  to    { transform: rotate(1080deg); } // 4  * ARCSIZE
+}
+
+@keyframes left-spin {
+  from { transform: rotate(130deg); }
+  50% { transform: rotate(-5deg); }
+  to { transform: rotate(130deg); }
+}
+
+@keyframes right-spin {
+  from { transform: rotate(-130deg); }
+  50% { transform: rotate(5deg); }
+  to { transform: rotate(-130deg); }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes ripple-pop {
+  from {
+    transform: scale(0);
+    opacity: 1;
+  }
+  20% {
+    opacity: 1;
+  }
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
