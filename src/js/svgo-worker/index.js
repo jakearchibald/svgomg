@@ -65,7 +65,7 @@ function compress(svgInput, settings) {
     multipass: settings.multipass,
     plugins: [...plugins, extractDimensionsPlugin],
     js2svg: {
-      indent: 2,
+      indent: '\t',
       pretty: settings.pretty,
     },
   });
