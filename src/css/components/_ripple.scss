@@ -1,3 +1,5 @@
+@use "../variables";
+
 .ripple {
   position: absolute;
   top: -2px;
@@ -11,6 +13,6 @@
   display: block;
 
   &.animate {
-    animation: ripple-pop 0.5s $easeOutQuint;
+    animation: ripple-pop 0.5s variables.$easeOutQuint;
   }
 }

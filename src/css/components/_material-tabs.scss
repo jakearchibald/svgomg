@@ -1,5 +1,8 @@
+@use "sass:color";
+@use "../mixins";
+
 .material-tabs {
-  @include user-select(none);
+  @include mixins.user-select(none);
   display: flex;
   align-self: stretch;
   text-transform: uppercase;
@@ -39,6 +42,6 @@
   }
 
   :focus + .selected {
-    background-color: transparentize(#fff, 0.9);
+    background-color: color.adjust(#fff, $alpha: -0.9);
   }
 }

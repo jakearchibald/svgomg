@@ -1,8 +1,10 @@
+@use "../mixins";
+
 .settings {
   background-color: #fff;
   display: flex;
   flex-flow: column;
-  @include user-select(none);
+  @include mixins.user-select(none);
 }
 
 .settings-scroller {

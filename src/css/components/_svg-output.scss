@@ -1,5 +1,7 @@
+@use "../mixins";
+
 .svg-output {
-  @include user-select(none);
+  @include mixins.user-select(none);
   position: absolute;
   top: 0;
   left: 0;

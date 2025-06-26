@@ -1,7 +1,7 @@
-@import 'variables';
-@import 'mixins';
-@import 'fonts';
-@import 'global';
-@import 'components/main-menu';
-@import 'components/preloader';
-@import 'utils';
+@use 'variables';
+@use 'mixins';
+@use 'fonts';
+@use 'global';
+@use 'components/main-menu';
+@use 'components/preloader';
+@use 'utils';
