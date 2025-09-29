@@ -42,17 +42,17 @@ export default class MainController {
     // ui events
     this._settingsUi.emitter.on('change', () => this._onSettingsChange());
     this._settingsUi.emitter.on('reset', (oldSettings) =>
-      this._onSettingsReset(oldSettings)
+      this._onSettingsReset(oldSettings),
     );
     this._mainMenuUi.emitter.on('svgDataLoad', (event) =>
-      this._onInputChange(event)
+      this._onInputChange(event),
     );
     dropUi.emitter.on('svgDataLoad', (event) => this._onInputChange(event));
     this._mainMenuUi.emitter.on('error', ({ error }) =>
-      this._handleError(error)
+      this._handleError(error),
     );
     viewTogglerUi.emitter.on('change', (event) =>
-      this._outputUi.set(event.value)
+      this._outputUi.set(event.value),
     );
     window.addEventListener('keydown', (event) => this._onGlobalKeyDown(event));
     window.addEventListener('paste', (event) => this._onGlobalPaste(event));
@@ -70,7 +70,7 @@ export default class MainController {
         .register('sw.js', { scope: './' })
         .then((registration) => {
           registration.addEventListener('updatefound', () =>
-            this._onUpdateFound(registration)
+            this._onUpdateFound(registration),
           );
         });
     }
@@ -84,10 +84,10 @@ export default class MainController {
     domReady.then(() => {
       const container = document.querySelector('.app-output');
       const actionContainer = container.querySelector(
-        '.action-button-container'
+        '.action-button-container',
       );
       const minorActionContainer = container.querySelector(
-        '.minor-action-container'
+        '.minor-action-container',
       );
       const toolbarElement = container.querySelector('.toolbar');
       const outputElement = container.querySelector('.output');
@@ -98,12 +98,12 @@ export default class MainController {
         toolbarElement,
         actionContainer,
         this._outputUi.container,
-        this._settingsUi.container
+        this._settingsUi.container,
       );
 
       minorActionContainer.append(
         bgFillUi.container,
-        this._copyButtonUi.container
+        this._copyButtonUi.container,
       );
       actionContainer.append(this._downloadButtonUi.container);
       outputElement.append(this._outputUi.container);
@@ -123,7 +123,7 @@ export default class MainController {
       if (false) {
         (async () => {
           const data = await fetch('test-svgs/car-lite.svg').then((response) =>
-            response.text()
+            response.text(),
           );
           this._onInputChange({ data, filename: 'car-lite.svg' });
         })();
@@ -156,7 +156,7 @@ export default class MainController {
 
     this._toastsUi.show(
       this._copyButtonUi.copyText() ? 'Copy successful' : 'Nothing to copy',
-      { duration: 2000 }
+      { duration: 2000 },
     );
 
     event.preventDefault();
