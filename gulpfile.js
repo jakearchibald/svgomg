@@ -112,10 +112,10 @@ async function html() {
         SVGOMG_VERSION: changelog[0].version,
         SVGO_VERSION,
         liveBaseUrl: 'https://jakearchibald.github.io/svgomg/',
-        title: `SVGOMG - SVGO's Missing GUI`,
+        title: `SVGOMG - SVGO's Missing GUI for minifying SVGs`,
         description: 'Easy & visual compression of SVG images.',
         iconPath: 'imgs/icon.png',
-      }),
+      })
     )
     .pipe(gulpif(!IS_DEV_TASK, gulpHtmlmin(buildConfig.htmlmin)))
     .pipe(gulp.dest('build'));
@@ -126,7 +126,7 @@ const rollupCaches = new Map();
 async function js(entry, outputPath) {
   const name = path.basename(path.dirname(entry));
   const changelog = await readJSON(
-    path.join(__dirname, 'src', 'changelog.json'),
+    path.join(__dirname, 'src', 'changelog.json')
   );
   const bundle = await rollup.rollup({
     cache: rollupCaches.get(entry),
@@ -151,7 +151,7 @@ async function js(entry, outputPath) {
                     },
                   },
                 }
-              : buildConfig.terser,
+              : buildConfig.terser
           ),
     ],
   });
@@ -174,7 +174,7 @@ const allJs = gulp.parallel(
   js.bind(null, 'js/gzip-worker/index.js', 'js/'),
   js.bind(null, 'js/svgo-worker/index.js', 'js/'),
   js.bind(null, 'js/sw/index.js', ''),
-  js.bind(null, 'js/page/index.js', 'js/'),
+  js.bind(null, 'js/page/index.js', 'js/')
 );
 
 const mainBuild = gulp.parallel(gulp.series(css, html), allJs, copy);
@@ -184,7 +184,7 @@ function watch() {
   gulp.watch(['src/js/**/*.js'], allJs);
   gulp.watch(
     ['src/**/*.{html,svg,woff2}', 'src/*.json'],
-    gulp.parallel(html, copy, allJs),
+    gulp.parallel(html, copy, allJs)
   );
 }
 

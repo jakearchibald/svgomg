@@ -219,6 +219,21 @@
       "id": "removeOffCanvasPaths",
       "name": "Remove out-of-bounds paths",
       "enabledByDefault": false
+    },
+    {
+      "id": "convertOneStopGradients",
+      "name": "Convert one-stop gradients to solid colours",
+      "enabledByDefault": false
+    },
+    {
+      "id": "removeDeprecatedAttrs",
+      "name": "Remove deprecated attributes",
+      "enabledByDefault": true
+    },
+    {
+      "id": "removeXlink",
+      "name": "Replace xlink with native SVG",
+      "enabledByDefault": false
     }
   ]
 }
