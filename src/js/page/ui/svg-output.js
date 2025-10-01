@@ -28,7 +28,11 @@ export default class SvgOutput {
     // All the internal refs break.
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1125667
     const nextLoad = this._nextLoadPromise();
-    this._svgFrame.src = `data:image/svg+xml,${encodeURIComponent(text)}`;
+    // Replacing the location instead of pushing to the history stack for every change to the settings.
+    // Context: https://stackoverflow.com/questions/29859048/updating-an-iframe-history-and-url-then-making-it-work-with-back-button
+    this._svgFrame.contentWindow.location.replace(
+      `data:image/svg+xml,${encodeURIComponent(text)}`,
+    );
     this._svgFrame.style.width = `${width}px`;
     this._svgFrame.style.height = `${height}px`;
     return nextLoad;
