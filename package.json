@@ -34,6 +34,7 @@
     "stylelint-config-twbs-bootstrap": "^6.0.0",
     "svgo": "^4.0.0",
     "vinyl-map": "^1.0.2",
+    "mini-svg-data-uri": "^1.0.0",
     "xo": "^0.52.4"
   },
   "scripts": {
