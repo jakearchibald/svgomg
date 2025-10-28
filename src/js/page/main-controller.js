@@ -4,6 +4,7 @@ import { domReady } from './utils.js';
 import Output from './ui/output.js';
 import DownloadButton from './ui/download-button.js';
 import CopyButton from './ui/copy-button.js';
+import CopyMinifiedDataUriButton from './ui/copy-minified-datauri-button.js';
 import BgFillButton from './ui/bg-fill-button.js';
 import Results from './ui/results.js';
 import Settings from './ui/settings.js';
@@ -26,6 +27,7 @@ export default class MainController {
     this._outputUi = new Output();
     this._downloadButtonUi = new DownloadButton();
     this._copyButtonUi = new CopyButton();
+    this._copyDataUriButtonUi = new CopyMinifiedDataUriButton();
     this._resultsUi = new Results();
     this._settingsUi = new Settings();
     this._mainMenuUi = new MainMenu();
@@ -104,6 +106,7 @@ export default class MainController {
       minorActionContainer.append(
         bgFillUi.container,
         this._copyButtonUi.container,
+        this._copyDataUriButtonUi.container,
       );
       actionContainer.append(this._downloadButtonUi.container);
       outputElement.append(this._outputUi.container);
@@ -312,6 +315,7 @@ export default class MainController {
     this._outputUi.update(svgFile);
     this._downloadButtonUi.setDownload(this._inputFilename, svgFile);
     this._copyButtonUi.setCopyText(svgFile.text);
+    this._copyDataUriButtonUi.setCopyText(svgFile.text);
 
     this._resultsUi.update({
       comparisonSize: compareToFile && (await compareToFile.size({ compress })),
