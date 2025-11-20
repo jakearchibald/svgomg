@@ -17,10 +17,14 @@ export default class BgFillButton extends FloatingActionButton {
   onClick(event) {
     super.onClick(event);
 
+    const title = this.container.getAttribute('title');
+
     if (this.container.classList.contains('active')) {
+      this.container.setAttribute('title', title.replace('light', 'vivid'));
       this.container.classList.remove('active');
       document.documentElement.classList.remove('bg-dark');
     } else {
+      this.container.setAttribute('title', title.replace('vivid', 'light'));
       this.container.classList.add('active');
       document.documentElement.classList.add('bg-dark');
     }
