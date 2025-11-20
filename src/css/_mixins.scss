@@ -1,0 +1,4 @@
+@mixin user-select($spec...) {
+  -webkit-user-select: $spec;
+  user-select: $spec;
+}
