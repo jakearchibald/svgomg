@@ -1,0 +1,143 @@
+.component-output {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-flow: column;
+  background-color: rgba(#000, 0.8);
+  color: #f8f8f2;
+  opacity: 0;
+  transform: translateZ(0);
+
+  &.transition {
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  &.active {
+    opacity: 1;
+  }
+}
+
+.component-output-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 14px;
+  border-bottom: 1px solid rgba(#fff, 0.1);
+  background-color: rgba(#000, 0.15);
+}
+
+.component-output-field {
+  display: flex;
+  flex-flow: column;
+  gap: 4px;
+}
+
+.component-output-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(#fff, 0.7);
+}
+
+.component-output-input {
+  height: 32px;
+  border-radius: 4px;
+  border: 1px solid rgba(#fff, 0.2);
+  background-color: rgba(#000, 0.25);
+  color: #fff;
+  padding: 0 10px;
+
+  &:focus {
+    outline: none;
+    border-color: rgba(#00bcd4, 0.9);
+  }
+}
+
+.component-output-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  margin-top: 18px;
+  font-size: 0.85rem;
+  color: rgba(#fff, 0.85);
+
+  input {
+    margin: 0;
+  }
+}
+
+.component-output-btn {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(#fff, 0.2);
+  background-color: rgba(#fff, 0.08);
+  color: #fff;
+
+  &:hover {
+    background-color: rgba(#fff, 0.12);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: rgba(#00bcd4, 0.9);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+}
+
+.component-output-messages {
+  padding: 10px 14px 0;
+  display: grid;
+  gap: 6px;
+  min-height: 44px;
+}
+
+.component-output-error {
+  font-size: 0.85rem;
+  color: #ff6b6b;
+}
+
+.component-output-status {
+  font-size: 0.85rem;
+  color: rgba(#fff, 0.85);
+}
+
+.component-output-text {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  border: none;
+  resize: none;
+  padding: 14px;
+  margin: 0;
+  color: #f8f8f2;
+  background: transparent;
+  font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  outline: none;
+
+  @media (min-width: 640px) {
+    padding-bottom: 200px;
+  }
+}
+
+@media (min-width: 900px) {
+  .component-output {
+    width: 100vw;
+    padding-right: 380px;
+  }
+
+  .component-output-text {
+    font-size: 1rem;
+  }
+}
