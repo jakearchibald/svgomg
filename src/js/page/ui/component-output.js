@@ -92,13 +92,14 @@ export default class ComponentOutput {
               '<option value="jsx">JSX</option>' +
             '</select>' +
           '</label>' +
-          '<label class="component-output-toggle">' +
-            '<input class="component-output-currentcolor" type="checkbox" />' +
-            'currentColor' +
-          '</label>' +
           '<button class="unbutton component-output-btn component-output-generate" type="button">Generate</button>' +
           '<button class="unbutton component-output-btn component-output-save" type="button" disabled>Save</button>' +
           '<button class="unbutton component-output-btn component-output-copy" type="button" disabled>Copy</button>' +
+          '<label class="component-output-toggle">' +
+            '<input class="component-output-currentcolor" type="checkbox" />' +
+            '<span class="component-output-toggle-title">currentColor</span>' +
+            '<span class="component-output-toggle-description">Only replaces explicit color values. Leaves none and missing values as-is.</span>' +
+          '</label>' +
         '</div>' +
         '<div class="component-output-messages">' +
           '<div class="component-output-error" role="status" aria-live="polite"></div>' +

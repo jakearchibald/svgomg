@@ -58,17 +58,26 @@
 }
 
 .component-output-toggle {
-  display: inline-flex;
+  flex-basis: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 6px;
+  row-gap: 4px;
   align-items: center;
-  gap: 6px;
-  height: 32px;
-  margin-top: 18px;
   font-size: 0.85rem;
   color: rgba(#fff, 0.85);
 
   input {
     margin: 0;
   }
+}
+
+.component-output-toggle-description {
+  grid-column: 2;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: rgba(#fff, 0.65);
 }
 
 .component-output-btn {
