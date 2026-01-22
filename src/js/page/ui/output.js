@@ -1,6 +1,7 @@
 import { strToEl, transitionToClass, transitionFromClass } from '../utils.js';
 import SvgOutput from './svg-output.js';
 import CodeOutput from './code-output.js';
+import ComponentOutput from './component-output.js';
 
 export default class Output {
   constructor() {
@@ -9,11 +10,17 @@ export default class Output {
     this._types = {
       image: new SvgOutput(),
       code: new CodeOutput(),
+      component: new ComponentOutput(),
     };
 
     this._svgFile = null;
     this._switchQueue = Promise.resolve();
     this.set('image', { noAnimate: true });
+  }
+
+  setInputFilename(filename) {
+    const componentOutput = this._types.component;
+    componentOutput.setInputFilename(filename);
   }
 
   update(svgFile) {

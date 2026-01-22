@@ -229,6 +229,7 @@ export default class MainController {
     try {
       this._inputItem = await svgo.wrapOriginal(data);
       this._inputFilename = filename;
+      this._outputUi.setInputFilename(filename);
     } catch (error) {
       this._mainMenuUi.stopSpinner();
       this._handleError(new Error(`Load failed: ${error.message}`));
