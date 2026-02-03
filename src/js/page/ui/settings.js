@@ -24,6 +24,7 @@ export default class Settings {
 
       const scroller = this.container.querySelector('.settings-scroller');
       const exportBtn = this.container.querySelector('.setting-export');
+      const copyBtn = this.container.querySelector('.setting-copy');
       const resetBtn = this.container.querySelector('.setting-reset');
       const ranges = this.container.querySelectorAll('input[type=range]');
 
@@ -33,6 +34,9 @@ export default class Settings {
       this._exportLink = exportBtn;
       this._exportRipple = new Ripple();
       exportBtn.append(this._exportRipple.container);
+
+      this._copyRipple = new Ripple();
+      copyBtn.append(this._copyRipple.container);
 
       // map real range elements to Slider instances
       this._sliderMap = new WeakMap();
@@ -47,6 +51,7 @@ export default class Settings {
       );
       resetBtn.addEventListener('click', () => this._onReset());
       exportBtn.addEventListener('click', () => this._onExport());
+      copyBtn.addEventListener('click', () => this._onCopy());
 
       // TODO: revisit this
       // Stop double-tap text selection.
@@ -101,6 +106,13 @@ export default class Settings {
     this._exportRipple.animate();
   }
 
+  _onCopy() {
+    this._copyRipple.animate();
+    if (this._currentConfigString) {
+      navigator.clipboard.writeText(this._currentConfigString);
+    }
+  }
+
   _onUpdateExportLink() {
     const { fingerprint, multipass, pretty, ...settings } = this.getSettings();
 
@@ -115,9 +127,12 @@ export default class Settings {
       plugins,
     };
 
+    const configString = `module.exports = ${JSON.stringify(svgoConfig, null, 2)}`;
+    this._currentConfigString = configString;
+
     this._exportLink.setAttribute(
       'href',
-      createFileURL(`module.exports = ${JSON.stringify(svgoConfig, null, 2)}`),
+      createFileURL(configString),
       'data:text/plain',
     );
     this._exportLink.setAttribute('download', 'svgo.config.js');
