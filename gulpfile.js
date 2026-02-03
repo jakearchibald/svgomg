@@ -2,7 +2,7 @@ const fs = require('fs/promises');
 const path = require('path');
 const process = require('process');
 const sirv = require('sirv-cli');
-const { version: SVGO_VERSION } = require('svgo/package.json');
+const { VERSION: SVGO_VERSION } = require('svgo');
 const sass = require('sass');
 const CleanCSS = require('clean-css');
 const vinylMap = require('vinyl-map');
@@ -112,7 +112,7 @@ async function html() {
         SVGOMG_VERSION: changelog[0].version,
         SVGO_VERSION,
         liveBaseUrl: 'https://jakearchibald.github.io/svgomg/',
-        title: `SVGOMG - SVGO's Missing GUI`,
+        title: `SVGOMG - SVGO's Missing GUI for minifying SVGs`,
         description: 'Easy & visual compression of SVG images.',
         iconPath: 'imgs/icon.png',
       }),

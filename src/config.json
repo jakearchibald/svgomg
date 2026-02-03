@@ -103,7 +103,7 @@
     {
       "id": "removeViewBox",
       "name": "Remove viewBox",
-      "enabledByDefault": true
+      "enabledByDefault": false
     },
     {
       "id": "cleanupEnableBackground",
@@ -193,7 +193,7 @@
     {
       "id": "removeTitle",
       "name": "Remove <title>",
-      "enabledByDefault": true
+      "enabledByDefault": false
     },
     {
       "id": "removeDesc",
@@ -211,13 +211,28 @@
       "enabledByDefault": false
     },
     {
-      "id": "removeScriptElement",
-      "name": "Remove script elements",
+      "id": "removeScripts",
+      "name": "Remove scripts",
       "enabledByDefault": false
     },
     {
       "id": "removeOffCanvasPaths",
       "name": "Remove out-of-bounds paths",
+      "enabledByDefault": false
+    },
+    {
+      "id": "convertOneStopGradients",
+      "name": "Convert one-stop gradients to solid colours",
+      "enabledByDefault": false
+    },
+    {
+      "id": "removeDeprecatedAttrs",
+      "name": "Remove deprecated attributes",
+      "enabledByDefault": true
+    },
+    {
+      "id": "removeXlink",
+      "name": "Replace xlink with native SVG",
       "enabledByDefault": false
     }
   ]
