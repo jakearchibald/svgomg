@@ -1,7 +1,12 @@
 import { createNanoEvents } from 'nanoevents';
+import { getActivePlugins } from '../../utils/settings.js';
 import { domReady } from '../utils.js';
 import MaterialSlider from './material-slider.js';
 import Ripple from './ripple.js';
+
+function createFileURL(data, type) {
+  return window.URL.createObjectURL(new Blob([data], { type }));
+}
 
 export default class Settings {
   constructor() {
@@ -18,11 +23,20 @@ export default class Settings {
       ];
 
       const scroller = this.container.querySelector('.settings-scroller');
+      const exportBtn = this.container.querySelector('.setting-export');
+      const copyBtn = this.container.querySelector('.setting-copy');
       const resetBtn = this.container.querySelector('.setting-reset');
       const ranges = this.container.querySelectorAll('input[type=range]');
 
       this._resetRipple = new Ripple();
       resetBtn.append(this._resetRipple.container);
+
+      this._exportLink = exportBtn;
+      this._exportRipple = new Ripple();
+      exportBtn.append(this._exportRipple.container);
+
+      this._copyRipple = new Ripple();
+      copyBtn.append(this._copyRipple.container);
 
       // map real range elements to Slider instances
       this._sliderMap = new WeakMap();
@@ -36,6 +50,8 @@ export default class Settings {
         this._onChange(event),
       );
       resetBtn.addEventListener('click', () => this._onReset());
+      exportBtn.addEventListener('click', () => this._onExport());
+      copyBtn.addEventListener('click', () => this._onCopy());
 
       // TODO: revisit this
       // Stop double-tap text selection.
@@ -45,6 +61,9 @@ export default class Settings {
         if (event.target.closest('input[type=range]')) return;
         event.preventDefault();
       });
+
+      this._onUpdateExportLink();
+      this.emitter.on('change', () => this._onUpdateExportLink());
     });
   }
 
@@ -83,6 +102,46 @@ export default class Settings {
     this.emitter.emit('change');
   }
 
+  _onExport() {
+    this._exportRipple.animate();
+  }
+
+  _onCopy() {
+    this._copyRipple.animate();
+    if (this._currentConfigString) {
+      navigator.clipboard.writeText(this._currentConfigString);
+    }
+  }
+
+  _onUpdateExportLink() {
+    const { fingerprint, multipass, pretty, ...settings } = this.getSettings();
+
+    const plugins = getActivePlugins(settings);
+
+    const svgoConfig = {
+      multipass,
+      js2svg: {
+        indent: 2,
+        pretty,
+      },
+      plugins,
+    };
+
+    const configString = `module.exports = ${JSON.stringify(
+      svgoConfig,
+      null,
+      2,
+    )}`;
+    this._currentConfigString = configString;
+
+    this._exportLink.setAttribute(
+      'href',
+      createFileURL(configString),
+      'data:text/plain',
+    );
+    this._exportLink.setAttribute('download', 'svgo.config.js');
+  }
+
   setSettings(settings) {
     for (const inputEl of this._globalInputs) {
       if (!(inputEl.name in settings)) continue;
@@ -98,6 +157,8 @@ export default class Settings {
       if (!(inputEl.name in settings.plugins)) continue;
       inputEl.checked = settings.plugins[inputEl.name];
     }
+
+    this._onUpdateExportLink();
   }
 
   getSettings() {
