@@ -127,7 +127,11 @@ export default class Settings {
       plugins,
     };
 
-    const configString = `module.exports = ${JSON.stringify(svgoConfig, null, 2)}`;
+    const configString = `module.exports = ${JSON.stringify(
+      svgoConfig,
+      null,
+      2,
+    )}`;
     this._currentConfigString = configString;
 
     this._exportLink.setAttribute(
